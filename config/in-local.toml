@@ -1,0 +1,11 @@
+mode="debug"
+[logger]
+    [logger.console]
+        color=true
+        prefix="[zeus]"
+        level="Debug"
+    [logger.zap]
+        path="zeus.log"
+        level="Debug"
+[db]
+    default="user:password@tcp(host:port)/zeus?charset=utf8&parseTime=True&loc=Local"
