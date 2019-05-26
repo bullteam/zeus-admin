@@ -3,41 +3,42 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"io/ioutil"
 	"os"
-	"os/signal"
-	"syscall"
+	"strings"
+	"zeus/pkg/api/dao"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/router"
-	"zeus/pkg/api/util"
 )
 
 var (
+	config   string
+	port     string
+	loglevel uint8
+	//StartCmd : set up restful api server
 	StartCmd = &cobra.Command{
-		Use:     "start",
+		Use:     "server",
 		Short:   "Start zeus API server",
-		Example: "zeus start -c config/in-local.toml",
-		RunE:    start,
+		Example: "zeus server -c config/in-local.toml",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			usage()
+			setup()
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return run()
+		},
 	}
 )
 
 func init() {
-	StartCmd.PersistentFlags().StringVarP(&components.Args.ConfigFile, "config", "c", "config/in-local.toml", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&config, "config", "c", "config/in-local.toml", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&port, "port", "p", "80", "Tcp port server listening on")
+	StartCmd.PersistentFlags().Uint8VarP(&loglevel, "loglevel", "l", 0, "Log level")
 }
 
-func start(_ *cobra.Command, _ []string) error {
-	usage()
-	parseConfig()
-	components.Init()
-	mode := viper.GetString("mode")
-	gin.SetMode(mode)
-	components.SetDebug(mode)
-	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-	engine := gin.Default()
-	router.Init(engine)
-	return nil
-}
 func usage() {
 	usageStr := `
   ______              
@@ -50,12 +51,29 @@ func usage() {
 	fmt.Printf("%s\n", usageStr)
 }
 
-func parseConfig() {
-	viper.SetConfigFile(components.Args.ConfigFile)
-	err := viper.ReadInConfig()
+func setup() {
+	//1.Set up log level
+	zerolog.SetGlobalLevel(zerolog.Level(loglevel))
+	//2.Set up configuration
+	viper.SetConfigFile(config)
+	content, err := ioutil.ReadFile(config)
 	if err != nil {
-		panic(fmt.Errorf("parse config file fail: %s", err))
+		log.Fatal(fmt.Sprintf("Read config file fail: %s", err.Error()))
 	}
-	components.Info("[Args]", "ConfigFile", components.Args.ConfigFile)
-	println()
+	//Replace environment variables
+	err = viper.ReadConfig(strings.NewReader(os.ExpandEnv(string(content))))
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Parse config file fail: %s", err.Error()))
+	}
+	//3.Set up run mode
+	mode := viper.GetString("mode")
+	gin.SetMode(mode)
+	//4.Set up database connection
+	dao.Setup()
+}
+
+func run() error {
+	engine := gin.Default()
+	router.Init(engine)
+	return engine.Run(":" + port)
 }
