@@ -6,9 +6,9 @@ import (
 	"zeus/pkg/api/model"
 )
 
-type UserController struct {}
+type UserController struct{}
 
-func (u UserController) Info(c *gin.Context){
+func (u UserController) Info(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	user, _ := c.Get("id")
 	c.JSON(200, gin.H{

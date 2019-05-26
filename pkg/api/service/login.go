@@ -1,8 +1,8 @@
 package service
 
-type LoginService struct{
-
+type LoginService struct {
 }
-func (ls LoginService) Verify(username , password string){
+
+func (ls LoginService) Verify(username, password string) {
 
 }

@@ -9,21 +9,22 @@ import (
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
 )
+
 //todo : 用单独的claims model去掉user model
 func JwtAuth() *jwt.GinJWTMiddleware {
-	jwtMiddleware , err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:       "zeus jwt",
-		SigningAlgorithm:"RS256",
-		PubKeyFile:viper.GetString("jwt.key.public"),
-		PrivKeyFile:viper.GetString("jwt.key.private"),
-		Timeout:time.Hour * 24,
-		MaxRefresh:time.Hour * 24 * 90,
-		IdentityKey: "id",
+	jwtMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
+		Realm:            "zeus jwt",
+		SigningAlgorithm: "RS256",
+		PubKeyFile:       viper.GetString("jwt.key.public"),
+		PrivKeyFile:      viper.GetString("jwt.key.private"),
+		Timeout:          time.Hour * 24,
+		MaxRefresh:       time.Hour * 24 * 90,
+		IdentityKey:      "id",
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*model.User); ok {
 				return jwt.MapClaims{
-					"id": v.Id,
-					"name" : v.UserName,
+					"id":   v.Id,
+					"name": v.UserName,
 				}
 			}
 			return jwt.MapClaims{}

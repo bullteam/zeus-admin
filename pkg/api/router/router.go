@@ -14,10 +14,10 @@ func Init(e *gin.Engine) {
 
 	v1 := e.Group("/v1")
 
-	auth := v1.Group("/auth",gin.BasicAuth(gin.Accounts{
-		"zeus":"2019@win",
+	auth := v1.Group("/auth", gin.BasicAuth(gin.Accounts{
+		"zeus": "2019@win",
 	}))
-	auth.POST("/token",middleware.JwtAuth().LoginHandler)
+	auth.POST("/token", middleware.JwtAuth().LoginHandler)
 
 	api := v1.Group("/api")
 	api.Use(middleware.JwtAuth().MiddlewareFunc())
