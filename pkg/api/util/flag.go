@@ -5,7 +5,7 @@ var debug bool
 var Args args
 
 type args struct {
-	ConfigFile     string
+	ConfigFile string
 }
 
 // SetDebug sets application running mode.

@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	apiserver "zeus/cmd/api"
 	"github.com/spf13/cobra"
 	"os"
+	"zeus/cmd/api"
 )
 
 var rootCmd = &cobra.Command{
@@ -16,9 +16,10 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(apiserver.StartCmd)
+	rootCmd.AddCommand(api.StartCmd)
 }
 
+//Execute -- run commands
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(-1)

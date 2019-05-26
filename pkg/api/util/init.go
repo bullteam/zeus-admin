@@ -1,9 +1,9 @@
 package components
 
 import (
+	"github.com/spf13/viper"
 	"os"
 	"strings"
-	"github.com/spf13/viper"
 )
 
 type Config struct {
@@ -35,7 +35,7 @@ func (this *Config) initConfig() error {
 	}
 	viper.SetConfigType("toml") // 设置配置文件格式为YAML
 	viper.AutomaticEnv()        // 读取匹配的环境变量
-	viper.SetEnvPrefix("in")   // 读取环境变量的前缀为WEB
+	viper.SetEnvPrefix("in")    // 读取环境变量的前缀为WEB
 	replacer := strings.NewReplacer(".", "-")
 	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil { // viper解析配置文件

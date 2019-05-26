@@ -10,5 +10,4 @@ func Init(e *gin.Engine) {
 		gin.Recovery(),
 	)
 	e.GET("/test", controllers.Healthy)
-	e.Run(":88")
 }
