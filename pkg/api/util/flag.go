@@ -16,6 +16,6 @@ func SetDebug(mode string) {
 }
 
 // Debug returns application running mode.
-func Debugs() bool {
+func Debug() bool {
 	return debug
 }
