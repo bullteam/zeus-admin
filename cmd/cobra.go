@@ -19,7 +19,7 @@ func init() {
 	rootCmd.AddCommand(api.StartCmd)
 }
 
-//Execute -- run commands
+//Execute : run commands
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(-1)
