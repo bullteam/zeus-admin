@@ -1,0 +1,61 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Zeus 宙斯权限后台",
+        "title": "Zeus 宙斯权限后台 API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "support@bullteam.cn"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "V0.1"
+    },
+    "host": "api.bullteam.cn",
+    "paths": {
+        "/test": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "测试",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/api/info": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"userID\":1,\"userName\":\"test\",\"text\":\"hello\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

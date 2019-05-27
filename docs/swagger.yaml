@@ -1,0 +1,40 @@
+host: api.bullteam.cn
+info:
+  contact:
+    email: support@bullteam.cn
+    name: API Support
+  description: Zeus 宙斯权限后台
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Zeus 宙斯权限后台 API
+  version: V0.1
+paths:
+  /test:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{""}}'
+          schema:
+            type: string
+      summary: 测试
+  /v1/api/info:
+    get:
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"userID":1,"userName":"test","text":"hello"}}'
+          schema:
+            type: string
+      summary: 用户信息
+swagger: "2.0"
