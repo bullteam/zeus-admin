@@ -4,9 +4,12 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.39.0 // indirect
+	github.com/Unknwon/goconfig v0.0.0-20190425194916-3dba17dd7b9e // indirect
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/appleboy/gin-jwt v2.6.0+incompatible
+	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
 	github.com/denisenkom/go-mssqldb v0.0.0-20190515213511-eb9f6a1743f3 // indirect
+	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-openapi/jsonpointer v0.19.0 // indirect
 	github.com/go-openapi/jsonreference v0.19.0 // indirect
@@ -20,6 +23,7 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/rs/zerolog v1.14.3
+	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.4
 	github.com/spf13/viper v1.3.2
 	github.com/swaggo/gin-swagger v1.1.0
