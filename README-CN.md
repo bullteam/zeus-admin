@@ -77,7 +77,7 @@ mysql> source ./script/init.sql;
 
 ## Git 工作流
 
-[Git 协作工作流](docs/zh/Cooperation.md)
+[Git 协作工作流](docs/zh/CONTRIBUTING.md)
 
 # openssl jwt 密钥生成
 [openssl jwt 密钥](docs/zh/GenrsaKey.md)
