@@ -7,12 +7,14 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "zeus/docs"
+	"github.com/gin-contrib/cors"
 )
 
 func Init(e *gin.Engine) {
 	e.Use(
 		gin.Recovery(),
 	)
+	e.Use(cors.Default()) // CORS
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/test", controllers.Healthy)
 

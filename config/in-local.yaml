@@ -9,3 +9,6 @@ jwt:
   key:
     private: keys/jwt_private_key.pem
     public: keys/jwt_public_key.pem
+lang:
+  types: zh-CN|en-US
+  names: 简体中文|English
