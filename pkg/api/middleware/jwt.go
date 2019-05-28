@@ -46,12 +46,12 @@ func JwtAuth() *jwt.GinJWTMiddleware {
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginDto dto.LoginDto
 			if err := c.ShouldBind(&loginDto); err != nil {
-				if err2,ok := err.(validator.ValidationErrors);ok{
+				if err2, ok := err.(validator.ValidationErrors); ok {
 					tag := []string{}
-					for _,v := range err2{
-						tag = append(tag,fmt.Sprintf(dto.ValidateErrorMessage[v.Tag],v.Field,v.Value))
+					for _, v := range err2 {
+						tag = append(tag, fmt.Sprintf(dto.ValidateErrorMessage[v.Tag], v.Field, v.Value))
 					}
-					return "",errors.New(strings.Join(tag,","))
+					return "", errors.New(strings.Join(tag, ","))
 				}
 				return "", err
 			}
