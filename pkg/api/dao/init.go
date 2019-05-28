@@ -42,3 +42,7 @@ func Setup() {
 	}
 	log.Info("Successfully connect to database")
 }
+
+func GetDb() *gorm.DB {
+	return db
+}

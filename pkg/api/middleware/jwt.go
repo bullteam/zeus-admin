@@ -1,14 +1,21 @@
 package middleware
 
 import (
+	"errors"
+	"fmt"
 	"github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"gopkg.in/go-playground/validator.v8"
+	"strings"
 	"time"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
+	"zeus/pkg/api/service"
 )
+
+var accountService = service.AccountService{}
 
 //todo : 用单独的claims model去掉user model
 func JwtAuth() *jwt.GinJWTMiddleware {
@@ -21,41 +28,48 @@ func JwtAuth() *jwt.GinJWTMiddleware {
 		MaxRefresh:       time.Hour * 24 * 90,
 		IdentityKey:      "id",
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*model.User); ok {
+			if v, ok := data.(*model.UserClaims); ok {
 				return jwt.MapClaims{
 					"id":   v.Id,
-					"name": v.UserName,
+					"name": v.Name,
 				}
 			}
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return &model.User{
-				UserName: claims["name"].(string),
-				Id:       int(claims["id"].(float64)),
+			return &model.UserClaims{
+				Name: claims["name"].(string),
+				Id:   int(claims["id"].(float64)),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var loginDto dto.LoginDto
 			if err := c.ShouldBind(&loginDto); err != nil {
-				return "", jwt.ErrMissingLoginValues
+				if err2,ok := err.(validator.ValidationErrors);ok{
+					tag := []string{}
+					for _,v := range err2{
+						tag = append(tag,fmt.Sprintf(dto.ValidateErrorMessage[v.Tag],v.Field,v.Value))
+					}
+					return "",errors.New(strings.Join(tag,","))
+				}
+				return "", err
 			}
 			userID := loginDto.Username
 			password := loginDto.Password
 
 			//todo : 实现登陆验证
 			if (userID == "admin" && password == "admin") || (userID == "test" && password == "test") {
-				return &model.User{
-					Id:       250,
-					UserName: loginDto.Username,
+				return &model.UserClaims{
+					Id:   250,
+					Name: loginDto.Username,
 				}, nil
 			}
 
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			if v, ok := data.(*model.User); ok && v.UserName == "admin" {
+			if v, ok := data.(*model.UserClaims); ok && v.Name == "admin" {
 				return true
 			}
 			return false

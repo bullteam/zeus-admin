@@ -11,9 +11,9 @@ type UserController struct{}
 func (u UserController) Info(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	user, _ := c.Get("id")
-	c.JSON(200, gin.H{
-		"userID":   claims["id"],
-		"userName": user.(*model.User).UserName,
-		"text":     "Hello World.",
+	resp(c, gin.H{
+		"id":   claims["id"],
+		"name": user.(*model.UserClaims).Name,
+		"text": "Hello World.",
 	})
 }

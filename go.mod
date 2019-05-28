@@ -11,6 +11,7 @@ require (
 	github.com/jinzhu/gorm v1.9.8
 	github.com/lib/pq v1.1.1 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
+	github.com/pkg/errors v0.8.1
 	github.com/rs/zerolog v1.14.3
 	github.com/sevenNt/wzap v1.0.0
 	github.com/spf13/cobra v0.0.4
@@ -18,11 +19,12 @@ require (
 	go.uber.org/atomic v1.4.0 // indirect
 	go.uber.org/multierr v1.1.0 // indirect
 	go.uber.org/zap v1.10.0 // indirect
-	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
+	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect
 	golang.org/x/sys v0.0.0-20190526031047-e44a3b55db15 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
+	gopkg.in/go-playground/validator.v8 v8.18.2
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 )
 

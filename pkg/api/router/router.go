@@ -11,14 +11,18 @@ func Init(e *gin.Engine) {
 		gin.Recovery(),
 	)
 	e.GET("/test", controllers.Healthy)
-
+	//version fragment
 	v1 := e.Group("/v1")
 
+	//auth handlers
 	auth := v1.Group("/auth", gin.BasicAuth(gin.Accounts{
 		"zeus": "2019@win",
 	}))
-	auth.POST("/token", middleware.JwtAuth().LoginHandler)
+	jwtAuth := middleware.JwtAuth()
+	auth.POST("/token", jwtAuth.LoginHandler)
+	auth.GET("/refresh_token", jwtAuth.RefreshHandler)
 
+	//api handlers
 	api := v1.Group("/api")
 	api.Use(middleware.JwtAuth().MiddlewareFunc())
 	//demo

@@ -1,12 +1,10 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type User struct {
-	gorm.Model
 	Id            int        `json:"id"`
 	UserName      string     `json:"username"`
 	Mobile        string     `json:"mobile"`
@@ -20,7 +18,16 @@ type User struct {
 	Email         string     `json:"email"`
 	Title         string     `json:"title"`
 	Status        int        `json:"status"`
-	CreateTime    time.Time  `orm:"auto_now_add;type(datetime)" json:"create_time"`
-	LastLoginTime time.Time  `orm:"auto_now_add;type(datetime)" json:"-"`
+	CreateTime    time.Time  `type(datetime)" json:"create_time"`
+	LastLoginTime time.Time  `type(datetime)" json:"-"`
 	//Roles         int     `orm:"rel(m2m);rel_through(zeus/pkg/models.UserRole)"`
+}
+
+func (User) TableName() string {
+	return "user"
+}
+
+type UserClaims struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
