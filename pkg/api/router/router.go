@@ -1,13 +1,13 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"zeus/pkg/api/controllers"
-	"zeus/pkg/api/middleware"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "zeus/docs"
-	"github.com/gin-contrib/cors"
+	"zeus/pkg/api/controllers"
+	"zeus/pkg/api/middleware"
 )
 
 func Init(e *gin.Engine) {
@@ -30,7 +30,7 @@ func Init(e *gin.Engine) {
 
 	//api handlers
 	api := v1.Group("/api")
-	api.Use(middleware.JwtAuth().MiddlewareFunc())
+	api.Use(jwtAuth.MiddlewareFunc(),middleware.JwtPrepare)
 	//demo
 	userController := controllers.UserController{}
 	api.GET("/info", userController.Info)

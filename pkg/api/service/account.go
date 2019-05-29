@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/scrypt"
 	"io"
 	"zeus/pkg/api/dao"
+	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
 )
 
@@ -14,10 +15,10 @@ const pwHashBytes = 64
 type AccountService struct {
 }
 
-func (as AccountService) VerifyAndReturnUserInfo(username, password string) (bool, model.User) {
+func (as AccountService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
 	userDao := dao.User{}
-	userModel := userDao.GetByUserName(username)
-	if pwd, err := as.hashPassword(password, userModel.Salt); err == nil && pwd == userModel.Password {
+	userModel := userDao.GetByUserName(dto.Username)
+	if pwd, err := as.hashPassword(dto.Password, userModel.Salt); err == nil && pwd == userModel.Password {
 		return true, userModel
 	}
 	return false, model.User{}
