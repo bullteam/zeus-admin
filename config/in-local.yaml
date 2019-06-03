@@ -12,3 +12,4 @@ jwt:
 lang:
   types: zh-CN|en-US
   names: 简体中文|English
+domain: bullteam.local

@@ -70,6 +70,7 @@ func setup() {
 	gin.SetMode(mode)
 	//4.Set up database connection
 	dao.Setup()
+	router.InitLang()
 }
 
 func run() error {

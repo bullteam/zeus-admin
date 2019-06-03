@@ -15,6 +15,7 @@ func Init(e *gin.Engine) {
 		gin.Recovery(),
 	)
 	e.Use(cors.Default()) // CORS
+	e.Use(setLangVer())
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/test", controllers.Healthy)
 	//version fragment
