@@ -1,4 +1,4 @@
-package router
+package middleware
 
 import (
 	"github.com/beego/i18n"
@@ -37,7 +37,7 @@ func InitLang() {
 /**
   设置语言
 */
-func setLangVer() gin.HandlerFunc {
+func SetLangVer() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		langs := strings.Split(viper.GetString("lang.types"), "|")
 		names := strings.Split(viper.GetString("lang.names"), "|")
@@ -99,4 +99,8 @@ func setLangVer() gin.HandlerFunc {
 		// Set language properties.
 		CurrentLang = curLang.Lang
 	}
+}
+
+func GetLang() string {
+	return CurrentLang
 }

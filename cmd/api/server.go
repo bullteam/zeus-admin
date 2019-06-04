@@ -11,6 +11,7 @@ import (
 	"strings"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/log"
+	"zeus/pkg/api/middleware"
 	"zeus/pkg/api/router"
 )
 
@@ -70,7 +71,7 @@ func setup() {
 	gin.SetMode(mode)
 	//4.Set up database connection
 	dao.Setup()
-	router.InitLang()
+	middleware.InitLang()
 }
 
 func run() error {
