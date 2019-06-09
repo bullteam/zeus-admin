@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/viper"
 	"testing"
 	"zeus/pkg/api/dao"
+	"zeus/pkg/api/dto"
 )
 
 func initDb() {
@@ -15,9 +16,20 @@ func initDb() {
 func TestAccountService_Verify(t *testing.T) {
 	initDb()
 	accountService := AccountService{}
-	if ok, _ := accountService.VerifyAndReturnUserInfo("admin", "123456"); ok {
+	if ok, _ := accountService.VerifyAndReturnUserInfo(dto.LoginDto{"admin","123456"}); ok {
 		t.Log("ok")
 	} else {
 		t.Error("fail")
 	}
+}
+func TestAccountService_Create(t *testing.T) {
+	initDb()
+	accountService := AccountService{}
+	m := accountService.Create(dto.UserCreateDto{
+		Username:"lake",
+		Password:"123456",
+		DepartmentId:1,
+		Mobile:"135123345678",
+	})
+	t.Log(m)
 }
