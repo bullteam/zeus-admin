@@ -35,5 +35,5 @@ func Init(e *gin.Engine) {
 	//demo
 	userController := controllers.UserController{}
 	api.GET("/info", userController.Info)
-	api.GET("/users",userController.List)
+	api.GET("/users", userController.List)
 }

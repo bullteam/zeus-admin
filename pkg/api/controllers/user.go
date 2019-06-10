@@ -22,7 +22,11 @@ func (u UserController) Info(c *gin.Context) {
 	})
 }
 
-//List - r of crud
+// @Summary 用户列表[分页+搜索]
+// @Produce  json
+// @Success 200 {string} json "{"code":0,"data":{"result":[...],"total":1}}"
+// @Router /v1/api/info [get]
+// List - r of crud
 func (u UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	dto.Bind(c, &listDto)
