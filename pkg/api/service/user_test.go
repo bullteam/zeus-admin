@@ -15,8 +15,8 @@ func initDb() {
 }
 func TestAccountService_Verify(t *testing.T) {
 	initDb()
-	accountService := AccountService{}
-	if ok, _ := accountService.VerifyAndReturnUserInfo(dto.LoginDto{"admin","123456"}); ok {
+	accountService := UserService{}
+	if ok, _ := accountService.VerifyAndReturnUserInfo(dto.LoginDto{"admin", "123456"}); ok {
 		t.Log("ok")
 	} else {
 		t.Error("fail")
@@ -24,12 +24,12 @@ func TestAccountService_Verify(t *testing.T) {
 }
 func TestAccountService_Create(t *testing.T) {
 	initDb()
-	accountService := AccountService{}
+	accountService := UserService{}
 	m := accountService.Create(dto.UserCreateDto{
-		Username:"lake",
-		Password:"123456",
-		DepartmentId:1,
-		Mobile:"135123345678",
+		Username:     "lake",
+		Password:     "123456",
+		DepartmentId: 1,
+		Mobile:       "135123345678",
 	})
 	t.Log(m)
 }

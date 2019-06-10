@@ -11,12 +11,12 @@ import (
 	"zeus/pkg/api/service"
 )
 
-var accountService = service.AccountService{}
+var accountService = service.UserService{}
 
 //todo : 用单独的claims model去掉user model
 func JwtAuth() *jwt.GinJWTMiddleware {
 	jwtMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:            "zeus jwt",
+		Realm:            "Jwt",
 		SigningAlgorithm: "RS256",
 		PubKeyFile:       viper.GetString("jwt.key.public"),
 		PrivKeyFile:      viper.GetString("jwt.key.private"),

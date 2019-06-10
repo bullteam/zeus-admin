@@ -31,8 +31,9 @@ func Init(e *gin.Engine) {
 
 	//api handlers
 	api := v1.Group("/api")
-	api.Use(jwtAuth.MiddlewareFunc(),middleware.JwtPrepare)
+	api.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
 	//demo
 	userController := controllers.UserController{}
 	api.GET("/info", userController.Info)
+	api.GET("/users",userController.List)
 }

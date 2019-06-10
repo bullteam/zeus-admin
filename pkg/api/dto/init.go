@@ -9,12 +9,14 @@ import (
 	"strings"
 )
 
-//Register custom validate methods
+// Register custom validate methods
 func init() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("customValidate", customValidate)
 	}
 }
+
+// Bind : bind request dto and auto verify parameters
 func Bind(c *gin.Context, obj interface{}) error {
 	if err := c.ShouldBind(obj); err != nil {
 		if fieldErr, ok := err.(validator.ValidationErrors); ok {
@@ -32,6 +34,7 @@ func Bind(c *gin.Context, obj interface{}) error {
 	return nil
 }
 
+//ValidateErrorMessage : customize error messages
 var ValidateErrorMessage = map[string]string{
 	"customValidate": "%s can not be %s",
 	"required":       "%s is required,got empty%s",

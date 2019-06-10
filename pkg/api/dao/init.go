@@ -43,6 +43,13 @@ func Setup() {
 	log.Info("Successfully connect to database")
 }
 
+// Shutdown - close database connection
+func Shutdown() error {
+	log.Info("Closing database's connections")
+	return db.Close()
+}
+
+// GetDb - get a database connection
 func GetDb() *gorm.DB {
 	return db
 }

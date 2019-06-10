@@ -2,13 +2,13 @@ package middleware
 
 import (
 	"github.com/beego/i18n"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"strings"
 	"zeus/pkg/api/log"
-	"github.com/gin-gonic/gin"
 )
 
-var CurrentLang string
+var currentLang string
 var langTypes []*langType
 
 type langType struct {
@@ -85,7 +85,7 @@ func SetLangVer() gin.HandlerFunc {
 
 		// Save language information in cookies.
 		if !hasCookie {
-			c.SetCookie("lang", curLang.Lang, 1<<31-1, "/",viper.GetString("domain"),false,false)
+			c.SetCookie("lang", curLang.Lang, 1<<31-1, "/", viper.GetString("domain"), false, false)
 		}
 
 		restLangs := make([]*langType, 0, len(langTypes)-1)
@@ -97,10 +97,10 @@ func SetLangVer() gin.HandlerFunc {
 			}
 		}
 		// Set language properties.
-		CurrentLang = curLang.Lang
+		currentLang = curLang.Lang
 	}
 }
 
 func GetLang() string {
-	return CurrentLang
+	return currentLang
 }

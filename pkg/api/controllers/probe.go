@@ -12,5 +12,5 @@ func Healthy(c *gin.Context) {
 	//resp(c, gin.H{
 	//	"data":   true,
 	//})
-	Fail(c,Err404)
+	fail(c, Err404)
 }

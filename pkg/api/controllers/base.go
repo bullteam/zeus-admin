@@ -48,21 +48,32 @@ var (
 	ErrUnBindDingtalk    = &ControllerError{13008, "err.ErrUnBindDingtalk", "", ""}
 	ErrGoogleBindCode    = &ControllerError{13009, "err.ErrGoogleBindCode", "", ""}
 	ErrSendMail          = &ControllerError{13010, "err.ErrSendMail", "", ""}
+	ErrValidation        = &ControllerError{13011, "err.ErrValidate", "", ""}
 )
 
 func resp(c *gin.Context, data map[string]interface{}) {
 	c.JSON(200, gin.H{
-		"code" : 0,
-		"data" : data,
+		"code": 0,
+		"data": data,
 	})
 }
 
-func Fail(c *gin.Context,errs *ControllerError) {
-	//CurrentLang,_ := c.Cookie("lang")
-	//CurrentLang := GetLang
+func fail(c *gin.Context, errs *ControllerError) {
+	//currentLang,_ := c.Cookie("lang")
+	//currentLang := GetLang
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
 	c.JSON(200, gin.H{
-		"code" : errs.Code,
-		"msg" : errs.Message,
+		"code": errs.Code,
+		"msg":  errs.Message,
+	})
+}
+
+func failValidate(c *gin.Context, msg string) {
+	errs := ErrValidation
+	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
+	c.JSON(200, gin.H{
+		"code":   errs.Code,
+		"msg":    errs.Message,
+		"detail": msg,
 	})
 }
