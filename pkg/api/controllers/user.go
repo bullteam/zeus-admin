@@ -25,7 +25,7 @@ func (u UserController) Info(c *gin.Context) {
 // @Summary 用户列表[分页+搜索]
 // @Produce  json
 // @Success 200 {string} json "{"code":0,"data":{"result":[...],"total":1}}"
-// @Router /v1/api/info [get]
+// @Router /v1/api/users?limit=20&offset=0 [get]
 // List - r of crud
 func (u UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
