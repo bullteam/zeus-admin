@@ -9,10 +9,11 @@ import (
 	"strings"
 )
 
-// Register custom validate methods
 func init() {
+	// Register custom validate methods
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("customValidate", customValidate)
+		_ = v.RegisterValidation("pwdValidate", pwdValidate)
 	}
 }
 
@@ -38,4 +39,5 @@ func Bind(c *gin.Context, obj interface{}) error {
 var ValidateErrorMessage = map[string]string{
 	"customValidate": "%s can not be %s",
 	"required":       "%s is required,got empty%s",
+	"pwdValidate":    "%s is not a valid password",
 }

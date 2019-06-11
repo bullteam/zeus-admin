@@ -6,3 +6,7 @@ type Department struct {
 	OrderNum int    `json:"order_num"`
 	ParentId int    `json:"parent_id"`
 }
+
+func (Department) TableName() string {
+	return "department"
+}

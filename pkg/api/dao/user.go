@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
@@ -10,11 +11,15 @@ type User struct {
 }
 
 // List - users list
-func (u User) List(dto dto.GeneralListDto) ([]model.User, int64) {
+func (u User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	var users []model.User
 	var total int64
-	GetDb().Offset(dto.Offset).Limit(dto.Limit).Find(&users)
-	GetDb().Model(&model.User{}).Count(&total)
+	db := GetDb()
+	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
+		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	}
+	db.Preload("Department").Offset(listDto.Offset).Limit(listDto.Limit).Find(&users)
+	db.Model(&model.User{}).Count(&total)
 	return users, total
 }
 

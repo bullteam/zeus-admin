@@ -13,7 +13,7 @@ type UserController struct {
 
 // @Summary 用户信息
 // @Produce  json
-// @Success 200 {string} json "{"code":0,"data":{"id":1,"name":"test"}}"
+// @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
 // @Router /v1/api/info [get]
 func (u UserController) Info(c *gin.Context) {
 	resp(c, gin.H{
@@ -24,7 +24,7 @@ func (u UserController) Info(c *gin.Context) {
 
 // @Summary 用户列表[分页+搜索]
 // @Produce  json
-// @Success 200 {string} json "{"code":0,"data":{"result":[...],"total":1}}"
+// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/api/users?limit=20&offset=0 [get]
 // List - r of crud
 func (u UserController) List(c *gin.Context) {
@@ -37,6 +37,10 @@ func (u UserController) List(c *gin.Context) {
 	})
 }
 
+// @Summary 新增用户
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/api/users?limit=20&offset=0 [get]
 //Create - c of crud
 func (u UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
