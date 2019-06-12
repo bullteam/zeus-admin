@@ -14,33 +14,33 @@ var UserListSearchMapping = map[string]string{
 //UserCreateDto - binding user creation params
 type UserCreateDto struct {
 	Id            int       `json:"id"`
-	Username      string    `json:"username" binding:"required"`
-	Mobile        string    `json:"mobile"`
-	Sex           int       `json:"sex"`
-	Realname      string    `json:"realname"`
-	Password      string    `json:"password" binding:"required,pwdValidate"`
+	Username      string    `form:"username" json:"username" binding:"required"`
+	Mobile        string    `form:"mobile" json:"mobile"`
+	Sex           int       `form:"sex" json:"sex"`
+	Realname      string    `form:"realname" json:"realname"`
+	Password      string    `form:"password" json:"password" binding:"required,pwdValidate"`
 	Salt          string    `json:"-"`
-	DepartmentId  int       `json:"department_id"`
+	DepartmentId  int       `form:"department_id" json:"department_id"`
 	Faceicon      string    `json:"faceicon"`
-	Email         string    `json:"email"`
-	Title         string    `json:"title"`
-	Status        int       `json:"status"`
+	Email         string    `form:"email" json:"email"`
+	Title         string    `form:"title" json:"title"`
+	Status        int       `form:"status" json:"status"`
 	CreateTime    time.Time `type(datetime)" json:"create_time"`
 	LastLoginTime time.Time `type(datetime)" json:"-"`
 }
 
 //UserCreateDto - binding user edition params
 type UserEditDto struct {
-	Id           int    `json:"id" binding:"required"`
-	Username     string `json:"username" binding:"required"`
-	Mobile       string `json:"mobile"`
-	Sex          int    `json:"sex"`
-	Realname     string `json:"realname"`
-	DepartmentId int    `json:"department_id"`
-	Faceicon     string `json:"faceicon"`
-	Email        string `json:"email"`
-	Title        string `json:"title"`
-	Status       int    `json:"status"`
+	Id            int       `uri:"id" json:"id" binding:"required"`
+	Username      string    `form:"username" json:"username" binding:"required"`
+	Mobile        string    `form:"mobile" json:"mobile"`
+	Sex           int       `form:"sex" json:"sex"`
+	Realname      string    `form:"realname" json:"realname"`
+	DepartmentId  int       `form:"department_id" json:"department_id"`
+	Faceicon      string    `json:"faceicon"`
+	Email         string    `form:"email" json:"email"`
+	Title         string    `form:"title" json:"title"`
+	Status        int       `form:"status" json:"status"`
 }
 
 // password validator

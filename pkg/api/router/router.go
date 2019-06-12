@@ -36,4 +36,5 @@ func Init(e *gin.Engine) {
 	userController := controllers.UserController{}
 	api.GET("/info", userController.Info)
 	api.GET("/users", userController.List)
+	api.PATCH("/users/:id",userController.Edit)
 }

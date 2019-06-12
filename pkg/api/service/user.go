@@ -41,6 +41,18 @@ func (us UserService) Create(dto dto.UserCreateDto) model.User {
 	return userModel
 }
 
+// Update - update user's information
+func (us UserService) Update(dto dto.UserEditDto) int64 {
+	userModel := model.User{
+		Id: dto.Id,
+		Username:     dto.Username,
+		Mobile:       dto.Mobile,
+		DepartmentId: dto.DepartmentId,
+	}
+	c := userDao.Update(&userModel)
+	return c.RowsAffected
+}
+
 //VerifyAndReturnUserInfo - login and return user info
 func (us UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
 	userModel := userDao.GetByUserName(dto.Username)

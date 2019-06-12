@@ -23,16 +23,22 @@ func (u User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	return users, total
 }
 
+// Create - new user
+func (u User) Create(user *model.User) *gorm.DB {
+	db := GetDb()
+	return db.Save(user)
+}
+
+// Create - new user
+func (u User) Update(user *model.User) *gorm.DB {
+	db := GetDb()
+	return db.Save(user)
+}
+
 // GetByUserName - get user from name
 func (u User) GetByUserName(username string) model.User {
 	db := GetDb()
 	m := model.User{}
 	db.Where("username = ?", username).First(&m)
 	return m
-}
-
-// Create - new user
-func (u User) Create(user *model.User) *gorm.DB {
-	db := GetDb()
-	return db.Save(user)
 }

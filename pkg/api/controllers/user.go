@@ -56,3 +56,21 @@ func (u UserController) Create(c *gin.Context) {
 		"id": created.Id,
 	})
 }
+
+// @Summary 编辑用户
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/api/users/:id [put]
+//Create - c of crud
+func (u UserController) Edit(c *gin.Context) {
+	var userDto  dto.UserEditDto
+	if err := dto.Bind(c, &userDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	affected := userService.Update(userDto)
+	if affected <= 0 {
+		//todo : maybe more precision?
+	}
+	ok(c,"ok.UpdateDone")
+}
