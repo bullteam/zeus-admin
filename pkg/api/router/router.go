@@ -37,4 +37,5 @@ func Init(e *gin.Engine) {
 	api.GET("/info", userController.Info)
 	api.GET("/users", userController.List)
 	api.PATCH("/users/:id",userController.Edit)
+	api.DELETE("/users/:id",userController.Delete)
 }

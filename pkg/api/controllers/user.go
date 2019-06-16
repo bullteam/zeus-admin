@@ -74,3 +74,18 @@ func (u UserController) Edit(c *gin.Context) {
 	}
 	ok(c,"ok.UpdateDone")
 }
+
+func (u UserController) Delete(c *gin.Context){
+	var userDto dto.GeneralDelDto
+	if err := dto.Bind(c, &userDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	affected := userService.Delete(userDto)
+	if affected <= 0 {
+		//todo : maybe more precision?
+		fail(c,ErrDelFail)
+		return
+	}
+	ok(c,"ok.DeletedDone")
+}

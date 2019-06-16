@@ -53,6 +53,15 @@ func (us UserService) Update(dto dto.UserEditDto) int64 {
 	return c.RowsAffected
 }
 
+// Delete - delete user
+func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
+	userModel := model.User{
+		Id: dto.Id,
+	}
+	c := userDao.Delete(&userModel)
+	return c.RowsAffected
+}
+
 //VerifyAndReturnUserInfo - login and return user info
 func (us UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
 	userModel := userDao.GetByUserName(dto.Username)

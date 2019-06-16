@@ -35,6 +35,12 @@ func (u User) Update(user *model.User) *gorm.DB {
 	return db.Save(user)
 }
 
+// Create - new user
+func (u User) Delete(user *model.User) *gorm.DB {
+	db := GetDb()
+	return db.Delete(user)
+}
+
 // GetByUserName - get user from name
 func (u User) GetByUserName(username string) model.User {
 	db := GetDb()

@@ -9,7 +9,9 @@ type GeneralListDto struct {
 	Order  string `form:"order" json:"order"`
 	Q      string `form:"q" json:"q"`
 }
-
+type GeneralDelDto struct {
+	Id     int       `uri:"id" json:"id" binding:"required"`
+}
 // TransformSearch - transform search query
 func (gl GeneralListDto) TransformSearch(mapping map[string]string) (ss map[string]string) {
 	ss = make(map[string]string)
