@@ -5,6 +5,9 @@ mysql:
   pool:
     min: 5
     max: 20
+redis:
+  host: 127.0.0.1:6379
+  auth:
 jwt:
   key:
     private: keys/jwt_private_key.pem

@@ -16,6 +16,7 @@ require (
 	github.com/go-openapi/jsonreference v0.19.0 // indirect
 	github.com/go-openapi/spec v0.19.0 // indirect
 	github.com/go-openapi/swag v0.19.0 // indirect
+	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/jinzhu/gorm v1.9.8
 	github.com/lib/pq v1.1.1 // indirect

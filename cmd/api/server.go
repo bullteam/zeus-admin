@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"zeus/pkg/api/dao"
+	"zeus/pkg/api/cache"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/middleware"
 	"zeus/pkg/api/router"
@@ -71,6 +72,8 @@ func setup() {
 	gin.SetMode(mode)
 	//4.Set up database connection
 	dao.Setup()
+	//5.Set up cache
+	cache.SetUp()
 	middleware.InitLang()
 }
 
