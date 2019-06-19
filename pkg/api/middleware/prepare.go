@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/appleboy/gin-jwt"
+	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/model"
 )

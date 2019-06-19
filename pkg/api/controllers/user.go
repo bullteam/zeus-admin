@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 )
 
@@ -30,6 +32,7 @@ func (u UserController) Info(c *gin.Context) {
 func (u UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	dto.Bind(c, &listDto)
+	log.Info(fmt.Sprintf("%#v",listDto))
 	data, total := userService.List(listDto)
 	resp(c, map[string]interface{}{
 		"result": data,
@@ -75,6 +78,11 @@ func (u UserController) Edit(c *gin.Context) {
 	ok(c,"ok.UpdateDone")
 }
 
+// @Summary 删除用户
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/api/users/:id [delete]
+//Create - d of crud
 func (u UserController) Delete(c *gin.Context){
 	var userDto dto.GeneralDelDto
 	if err := dto.Bind(c, &userDto); err != nil {
