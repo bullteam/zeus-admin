@@ -13,6 +13,7 @@ type Adapter interface {
 	RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error
 }
 
+// NewMysqlAdapter : delegate of adapter
 func NewMysqlAdapter() *mysqlAdapter {
 	ad := &mysqlAdapter{
 		a: mysql.NewGormAdapter(),

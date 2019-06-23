@@ -18,6 +18,7 @@ func SetUp() {
 	//Distributed watcher
 	w, _ := rediswatcher.NewWatcher(viper.GetString("redis.host"), rediswatcher.Password(viper.GetString("redis.auth")))
 	enforcer.SetWatcher(w)
+	// @Overwrite
 	// See if policy changed and do distributed notification
 	_ = w.SetUpdateCallback(func(s string) {
 		log.Info("Casbin policies changed")
@@ -25,42 +26,41 @@ func SetUp() {
 	})
 }
 
+// AddGroup : method for group policy adding
 //first : user
 //second : group
 func AddGroup(params ...interface{}) bool {
 	return enforcer.AddGroupingPolicy(params...)
 }
 
+// AddPerm : method for permission policy adding
 //sub,obj,act,domain
 func AddPerm(params ...interface{}) bool {
 	return enforcer.AddPolicy(params...)
 }
 
+// DelPerm : delete permission policy
 func DelPerm(params ...interface{}) bool {
 	return enforcer.RemovePolicy(params...)
 }
 
-func Check(params ...interface{}) bool {
+// CheckPerm : check permission
+func CheckPerm(params ...interface{}) bool {
 	return enforcer.Enforce(params...)
 }
 
-func DeleteRoleByDomain(role string, domain string) {
+// DelRoleByName : delete all specific role policy of domain
+func DelRoleByDomain(role string, domain string) {
 	enforcer.RemoveFilteredNamedPolicy("p", 0, role, "", "", domain)
 }
 
-func DeleteRole(role string) {
+// DelRole : delete specific role
+func DelRole(role string) {
 	enforcer.RemoveFilteredNamedPolicy("p", 0, role)
 }
 
-// 通过角色和域获取权限列表 并载入到内存
-func GetAllPermByRole(role string, domain string) [][]string {
-	enforcer.LoadPolicy()
-	roles := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", domain)
-	return roles
-}
-
-// 通过角色和域获取权限列表 不载入内存
-func GetAllPermByRoleName(role string, domain string) [][]string {
+// GetAllPermByRoleDomain : get policies by role and domain
+func GetAllPermByRoleDomain(role string, domain string) [][]string {
 	roles := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", domain)
 	return roles
 }
