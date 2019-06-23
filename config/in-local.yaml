@@ -8,10 +8,16 @@ mysql:
 redis:
   host: 127.0.0.1:6379
   auth:
+  pool:
+    min: 3
+    max: 20
 jwt:
   key:
     private: keys/jwt_private_key.pem
     public: keys/jwt_public_key.pem
+casbin:
+  model:
+    rule_0: config/casbin/rbac_model_0.conf
 lang:
   types: zh-CN|en-US
   names: 简体中文|English

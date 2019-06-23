@@ -5,7 +5,20 @@ mysql:
   pool:
     min: 5
     max: 20
+redis:
+  host: ${REDIS_HOST}:${REDIS_PORT}
+  auth: ${REDIS_PASSWORD}
+  pool:
+    min: 3
+    max: 20
 jwt:
   key:
     private: /keys/jwt_private_key.pem
     public: /keys/jwt_public_key.pem
+casbin:
+  model:
+    rule_0: config/rbac_model_0.conf
+lang:
+  types: zh-CN|en-US
+  names: 简体中文|English
+domain: bullteam.local

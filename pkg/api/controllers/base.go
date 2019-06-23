@@ -57,7 +57,7 @@ func resp(c *gin.Context, data map[string]interface{}) {
 		"data": data,
 	})
 }
-func ok(c *gin.Context,langKey string) {
+func ok(c *gin.Context, langKey string) {
 	c.JSON(200, gin.H{
 		"code": 200,
 		"msg":  i18n.Tr(middleware.GetLang(), langKey),

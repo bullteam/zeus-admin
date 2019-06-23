@@ -14,27 +14,27 @@ type Redis struct {
 }
 
 // Setup connection
-func (r Redis) Connect(){
+func (r Redis) Connect() {
 	r.client = redis.NewClient(&redis.Options{
-		Addr: viper.GetString("redis.host"),
-		Password:viper.GetString("redis.auth"),
-		DB:0,
-		MaxConnAge:20,
-		MinIdleConns:3,
+		Addr:         viper.GetString("redis.host"),
+		Password:     viper.GetString("redis.auth"),
+		DB:           0,
+		PoolSize:     viper.GetInt("redis.pool.max"),
+		MinIdleConns: viper.GetInt("redis.pool.min"),
 	})
-	_,err := r.client.Ping().Result()
+	_, err := r.client.Ping().Result()
 	if err != nil {
-		log.Fatal(fmt.Sprintf("Could not connected to redis : %s",err.Error()))
+		log.Fatal(fmt.Sprintf("Could not connected to redis : %s", err.Error()))
 	}
 	log.Info("Successfully connected to redis")
 }
 
 // Get from key
-func (r Redis) Get(key string) (string,error) {
+func (r Redis) Get(key string) (string, error) {
 	return r.client.Get(key).Result()
 }
 
 // Set value with key and expire time
-func (r Redis) Set(key string , val string ,expire int ) error {
-	return r.client.Set(key,val,time.Duration(expire)).Err()
+func (r Redis) Set(key string, val string, expire int) error {
+	return r.client.Set(key, val, time.Duration(expire)).Err()
 }

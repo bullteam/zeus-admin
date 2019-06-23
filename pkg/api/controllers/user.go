@@ -1,10 +1,8 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
-	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 )
 
@@ -13,14 +11,36 @@ var userService = service.UserService{}
 type UserController struct {
 }
 
+// @Summary 登录用户信息
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
+// @Router /v1/api/users/info [get]
+func (u UserController) Info(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
+	resp(c, map[string]interface{}{
+		"result": data,
+	})
+}
+
 // @Summary 用户信息
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
 // @Router /v1/api/info [get]
-func (u UserController) Info(c *gin.Context) {
-	resp(c, gin.H{
-		"id":   c.Value("userId"),
-		"name": c.Value("userName"),
+func (u UserController) Get(c *gin.Context) {
+	var gDto dto.GeneralGetDto
+	if err := dto.Bind(c, &gDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	data := userService.InfoOfId(gDto)
+	//user not found
+	if data.Id < 1 {
+		fail(c, ErrNoUser)
+		return
+	}
+	resp(c, map[string]interface{}{
+		"result": data,
 	})
 }
 
@@ -31,8 +51,7 @@ func (u UserController) Info(c *gin.Context) {
 // List - r of crud
 func (u UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
-	dto.Bind(c, &listDto)
-	log.Info(fmt.Sprintf("%#v",listDto))
+	_ = dto.Bind(c, &listDto)
 	data, total := userService.List(listDto)
 	resp(c, map[string]interface{}{
 		"result": data,
@@ -66,7 +85,7 @@ func (u UserController) Create(c *gin.Context) {
 // @Router /v1/api/users/:id [put]
 //Create - c of crud
 func (u UserController) Edit(c *gin.Context) {
-	var userDto  dto.UserEditDto
+	var userDto dto.UserEditDto
 	if err := dto.Bind(c, &userDto); err != nil {
 		failValidate(c, err.Error())
 		return
@@ -75,7 +94,7 @@ func (u UserController) Edit(c *gin.Context) {
 	if affected <= 0 {
 		//todo : maybe more precision?
 	}
-	ok(c,"ok.UpdateDone")
+	ok(c, "ok.UpdateDone")
 }
 
 // @Summary 删除用户
@@ -83,7 +102,7 @@ func (u UserController) Edit(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/api/users/:id [delete]
 //Create - d of crud
-func (u UserController) Delete(c *gin.Context){
+func (u UserController) Delete(c *gin.Context) {
 	var userDto dto.GeneralDelDto
 	if err := dto.Bind(c, &userDto); err != nil {
 		failValidate(c, err.Error())
@@ -92,8 +111,8 @@ func (u UserController) Delete(c *gin.Context){
 	affected := userService.Delete(userDto)
 	if affected <= 0 {
 		//todo : maybe more precision?
-		fail(c,ErrDelFail)
+		fail(c, ErrDelFail)
 		return
 	}
-	ok(c,"ok.DeletedDone")
+	ok(c, "ok.DeletedDone")
 }

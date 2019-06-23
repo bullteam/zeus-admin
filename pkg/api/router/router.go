@@ -32,10 +32,13 @@ func Init(e *gin.Engine) {
 	//api handlers
 	api := v1.Group("/api")
 	api.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
-	//demo
+
 	userController := controllers.UserController{}
-	api.GET("/info", userController.Info)
+	//login
+	api.GET("/login/info", userController.Info)
+	//user
 	api.GET("/users", userController.List)
-	api.PATCH("/users/:id",userController.Edit)
-	api.DELETE("/users/:id",userController.Delete)
+	api.GET("/users/:id", userController.Get)
+	api.PATCH("/users/:id", userController.Edit)
+	api.DELETE("/users/:id", userController.Delete)
 }

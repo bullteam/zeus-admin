@@ -9,8 +9,9 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"zeus/pkg/api/dao"
 	"zeus/pkg/api/cache"
+	"zeus/pkg/api/dao"
+	"zeus/pkg/api/domain/perm"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/middleware"
 	"zeus/pkg/api/router"
@@ -74,6 +75,8 @@ func setup() {
 	dao.Setup()
 	//5.Set up cache
 	cache.SetUp()
+	//6.Set up permission handler
+	perm.SetUp()
 	middleware.InitLang()
 }
 

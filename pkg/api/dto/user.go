@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"time"
 )
+
 // UserListSearchMapping - define search query keys in user list page
 var UserListSearchMapping = map[string]string{
 	"n": "username",
@@ -31,16 +32,16 @@ type UserCreateDto struct {
 
 //UserCreateDto - binding user edition params
 type UserEditDto struct {
-	Id            int       `uri:"id" json:"id" binding:"required"`
-	Username      string    `form:"username" json:"username" binding:"required"`
-	Mobile        string    `form:"mobile" json:"mobile"`
-	Sex           int       `form:"sex" json:"sex"`
-	Realname      string    `form:"realname" json:"realname"`
-	DepartmentId  int       `form:"department_id" json:"department_id"`
-	Faceicon      string    `json:"faceicon"`
-	Email         string    `form:"email" json:"email"`
-	Title         string    `form:"title" json:"title"`
-	Status        int       `form:"status" json:"status"`
+	Id           int    `uri:"id" json:"id" binding:"required"`
+	Username     string `form:"username" json:"username" binding:"required"`
+	Mobile       string `form:"mobile" json:"mobile"`
+	Sex          int    `form:"sex" json:"sex"`
+	Realname     string `form:"realname" json:"realname"`
+	DepartmentId int    `form:"department_id" json:"department_id"`
+	Faceicon     string `json:"faceicon"`
+	Email        string `form:"email" json:"email"`
+	Title        string `form:"title" json:"title"`
+	Status       int    `form:"status" json:"status"`
 }
 
 // password validator

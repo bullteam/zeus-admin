@@ -19,7 +19,7 @@ func init() {
 
 // Bind : bind request dto and auto verify parameters
 func Bind(c *gin.Context, obj interface{}) error {
-	c.ShouldBindUri(obj)
+	_ = c.ShouldBindUri(obj)
 	if err := c.ShouldBind(obj); err != nil {
 		if fieldErr, ok := err.(validator.ValidationErrors); ok {
 			var tagErrorMsg []string

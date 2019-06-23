@@ -9,7 +9,10 @@ require (
 	github.com/appleboy/gin-jwt v2.5.0+incompatible
 	github.com/appleboy/gin-jwt/v2 v2.6.2
 	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
+	github.com/billcobbler/casbin-redis-watcher v0.0.0-20180829182704-69cab1cdcf44
+	github.com/casbin/casbin v1.8.3
 	github.com/denisenkom/go-mssqldb v0.0.0-20190515213511-eb9f6a1743f3 // indirect
+	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-openapi/jsonpointer v0.19.0 // indirect
@@ -21,10 +24,12 @@ require (
 	github.com/jinzhu/gorm v1.9.8
 	github.com/lib/pq v1.1.1 // indirect
 	github.com/pkg/errors v0.8.1
+	github.com/rafaeljusto/redigomock v0.0.0-20190202135759-257e089e14a1 // indirect
 	github.com/rs/zerolog v1.14.3
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2
+	github.com/stretchr/testify v1.3.0
 	github.com/swaggo/gin-swagger v1.1.0
 	github.com/swaggo/swag v1.5.0
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f

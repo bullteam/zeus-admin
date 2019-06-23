@@ -10,3 +10,7 @@ type CasbinRule struct {
 	V4    string
 	V5    string
 }
+
+func (CasbinRule) TableName() string {
+	return "casbin_rule"
+}

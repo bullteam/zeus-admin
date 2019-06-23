@@ -18,6 +18,10 @@ var userDao = dao.User{}
 type UserService struct {
 }
 
+func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
+	return userDao.Get(dto.Id)
+}
+
 // List - users list with pagination
 func (us UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
 	return userDao.List(dto)
@@ -44,7 +48,7 @@ func (us UserService) Create(dto dto.UserCreateDto) model.User {
 // Update - update user's information
 func (us UserService) Update(dto dto.UserEditDto) int64 {
 	userModel := model.User{
-		Id: dto.Id,
+		Id:           dto.Id,
 		Username:     dto.Username,
 		Mobile:       dto.Mobile,
 		DepartmentId: dto.DepartmentId,

@@ -10,6 +10,13 @@ import (
 type User struct {
 }
 
+//Get - get single user info
+func (u User) Get(id int) model.User {
+	var user model.User
+	db.Where("id = ?", id).First(&user)
+	return user
+}
+
 // List - users list
 func (u User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	var users []model.User

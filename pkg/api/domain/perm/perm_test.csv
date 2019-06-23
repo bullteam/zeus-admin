@@ -1,0 +1,5 @@
+p,role-1,zone-1,manage-all-things,department-1
+p,role-1,zone-2,manage-some-stuff,department-1
+p,role-1,zone-3,can-not-do-anything,department-2
+p,role-2,zone-1,see-report,department-1
+p,role-2,zone-2,can-not-do-anything,department-3
