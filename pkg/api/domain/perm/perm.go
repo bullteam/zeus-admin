@@ -25,7 +25,10 @@ func SetUp() {
 		_ = enforcer.LoadPolicy()
 	})
 }
-
+// SetUpForTest : for unit tests
+func SetUpForTest(dir string){
+	enforcer = casbin.NewEnforcer(dir+"/rbac_model_0.conf",dir+"/perm_test.csv")
+}
 // AddGroup : method for group policy adding
 //first : user
 //second : group
@@ -44,8 +47,8 @@ func DelPerm(params ...interface{}) bool {
 	return enforcer.RemovePolicy(params...)
 }
 
-// CheckPerm : check permission
-func CheckPerm(params ...interface{}) bool {
+// Enforce : check permission
+func Enforce(params ...interface{}) bool {
 	return enforcer.Enforce(params...)
 }
 

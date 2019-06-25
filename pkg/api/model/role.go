@@ -1,13 +1,14 @@
 package model
 
-//for列表,有关联关系
+// Role model
 type Role struct {
 	Id         int     `json:"id"`
 	Name       string  `json:"name"`
-	Domain     *Domain `json:"domain" orm:"rel(one)"`
+	DomainId   int `json:"domain_id"`
+	Domain     Domain  `json:"domain"`
 	RoleName   string  `json:"role_name"`
 	Remark     string  `json:"remark"`
-	Users      []*User `json:"users" orm:"reverse(many)"`
+	//Users      []*User `json:"users" orm:"reverse(many)"`
 	MenuIds    string  `json:"menu_ids"`
 	MenuIdsEle string  `json:"menu_ids_ele"`
 }
