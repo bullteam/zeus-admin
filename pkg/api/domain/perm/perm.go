@@ -25,10 +25,12 @@ func SetUp() {
 		_ = enforcer.LoadPolicy()
 	})
 }
+
 // SetUpForTest : for unit tests
-func SetUpForTest(dir string){
-	enforcer = casbin.NewEnforcer(dir+"/rbac_model_0.conf",dir+"/perm_test.csv")
+func SetUpForTest(dir string) {
+	enforcer = casbin.NewEnforcer(dir+"/rbac_model_0.conf", dir+"/perm_test.csv")
 }
+
 // AddGroup : method for group policy adding
 //first : user
 //second : group

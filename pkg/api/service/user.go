@@ -1,11 +1,8 @@
 package service
 
 import (
-	"crypto/rand"
-	"fmt"
-	"golang.org/x/crypto/scrypt"
-	"io"
 	"zeus/pkg/api/dao"
+	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
@@ -29,8 +26,8 @@ func (us UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
 
 // Create - create a new account
 func (us UserService) Create(dto dto.UserCreateDto) model.User {
-	salt, _ := makeSalt()
-	pwd, _ := hashPassword(dto.Password, salt)
+	salt, _ := account.MakeSalt()
+	pwd, _ := account.HashPassword(dto.Password, salt)
 	userModel := model.User{
 		Username:     dto.Username,
 		Mobile:       dto.Mobile,
@@ -69,24 +66,8 @@ func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
 //VerifyAndReturnUserInfo - login and return user info
 func (us UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
 	userModel := userDao.GetByUserName(dto.Username)
-	if pwd, err := hashPassword(dto.Password, userModel.Salt); err == nil && pwd == userModel.Password {
+	if account.VerifyPassword(dto.Password, userModel) {
 		return true, userModel
 	}
 	return false, model.User{}
-}
-
-func makeSalt() (salt string, err error) {
-	buf := make([]byte, pwHashBytes)
-	if _, err := io.ReadFull(rand.Reader, buf); err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%x", buf), nil
-}
-
-func hashPassword(password string, salt string) (hash string, err error) {
-	h, err := scrypt.Key([]byte(password), []byte(salt), 16384, 8, 1, pwHashBytes)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%x", h), nil
 }
