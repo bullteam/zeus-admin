@@ -4,10 +4,10 @@ const TableUserRole = "user_role"
 
 type UserRole struct {
 	Id   int
-	User *User `orm:"rel(fk)"`
-	Role *Role `orm:"rel(fk)"`
+	UserId int `sql:"index"`
+	RoleId int `sql:"index"`
 }
 
-func (ur *UserRole) TableName() string {
+func (UserRole) TableName() string {
 	return TableUserRole
 }

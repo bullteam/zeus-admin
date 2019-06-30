@@ -3,6 +3,7 @@ package service
 import (
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
+	"zeus/pkg/api/domain/account/login"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
@@ -66,7 +67,7 @@ func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
 //VerifyAndReturnUserInfo - login and return user info
 func (us UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
 	userModel := userDao.GetByUserName(dto.Username)
-	if account.VerifyPassword(dto.Password, userModel) {
+	if login.VerifyPassword(dto.Password, userModel) {
 		return true, userModel
 	}
 	return false, model.User{}

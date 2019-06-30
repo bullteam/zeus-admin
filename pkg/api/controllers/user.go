@@ -26,7 +26,7 @@ func (u UserController) Info(c *gin.Context) {
 // @Summary 用户信息
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/api/info [get]
+// @Router /v1/api/users/:id [get]
 func (u UserController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if err := dto.Bind(c, &gDto); err != nil {

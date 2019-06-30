@@ -4,8 +4,6 @@ import (
 	"time"
 )
 
-const TableDomain = "domain"
-
 type Domain struct {
 	Id             int       `json:"id"`
 	Name           string    `json:"name"`
@@ -17,5 +15,5 @@ type Domain struct {
 }
 
 func (d *Domain) TableName() string {
-	return TableDomain
+	return "domain"
 }

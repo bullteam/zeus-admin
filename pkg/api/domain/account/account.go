@@ -18,14 +18,6 @@ type Permission struct {
 	Domain string
 }
 
-// VerifyPassword : verify password by salt
-func VerifyPassword(password string, userModel model.User) bool {
-	if pwd, err := HashPassword(password, userModel.Salt); err == nil && pwd == userModel.Password {
-		return true
-	}
-	return false
-}
-
 // HashPassword : password hashing
 func HashPassword(password string, salt string) (hash string, err error) {
 	h, err := scrypt.Key([]byte(password), []byte(salt), 16384, 8, 1, pwHashBytes)

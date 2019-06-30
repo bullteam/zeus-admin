@@ -18,8 +18,9 @@ type User struct {
 	Email         string     `json:"email"`
 	Title         string     `json:"title"`
 	Status        int        `json:"status"`
-	CreateTime    time.Time  `type(datetime)" json:"create_time"`
-	LastLoginTime time.Time  `type(datetime)" json:"-"`
+	CreateTime    time.Time  `json:"created_time"`
+	LastLoginTime time.Time  `json:"updated_time"`
+	Roles []Role `gorm:"many2many:user_role;" json:"roles"`
 	//Roles         int     `orm:"rel(m2m);rel_through(zeus/pkg/models.UserRole)"`
 }
 

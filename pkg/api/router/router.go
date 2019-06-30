@@ -34,6 +34,7 @@ func Init(e *gin.Engine) {
 	api.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
 
 	userController := controllers.UserController{}
+
 	//login
 	api.GET("/login/info", userController.Info)
 	//user
@@ -41,4 +42,8 @@ func Init(e *gin.Engine) {
 	api.GET("/users/:id", userController.Get)
 	api.PATCH("/users/:id", userController.Edit)
 	api.DELETE("/users/:id", userController.Delete)
+
+	roleController := controllers.RoleController{}
+	//role
+	api.GET("roles/:id",roleController.Get)
 }

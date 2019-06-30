@@ -13,7 +13,9 @@ type User struct {
 //Get - get single user info
 func (u User) Get(id int) model.User {
 	var user model.User
-	db.Where("id = ?", id).First(&user)
+	//var role model.Role
+	//db.Model(&user).Related(&role,"UserRole")
+	db.Where("id = ?", id).Preload("Department").First(&user)
 	return user
 }
 

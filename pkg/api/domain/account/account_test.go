@@ -17,13 +17,6 @@ func init() {
 	perm.SetUpForTest("../perm")
 }
 
-type verifyCases struct {
-	sourcePwd string
-	targetPwd string
-	salt      string
-	expected  bool
-}
-
 func TestMakeSalt(t *testing.T) {
 	salt, err = MakeSalt()
 	assert.Equal(t, nil, err)
@@ -32,24 +25,6 @@ func TestHashPassword(t *testing.T) {
 	pwd, err = HashPassword(pwd, salt)
 	assert.Equal(t, nil, err)
 }
-func TestVerifyPassword(t *testing.T) {
-	for _, cs := range []verifyCases{{
-		"zeus", pwd, salt, true,
-	}, {
-		"zeus0", pwd, salt, false,
-	}, {
-		"zeus", pwd, "wrong", false,
-	}, {
-		"zeus", "wrong", salt, false,
-	},
-	} {
-		assert.Equal(t, cs.expected, VerifyPassword(cs.sourcePwd, model.User{
-			Password: cs.targetPwd,
-			Salt:     cs.salt,
-		}), "Cases of password verification")
-	}
-}
-
 func TestCheckPermission(t *testing.T) {
 	assert.Equal(t, true, CheckPermission([]model.Role{{
 		RoleName: "role-1",
