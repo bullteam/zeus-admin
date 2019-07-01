@@ -32,3 +32,18 @@ func (u RoleController) Get(c *gin.Context) {
 		"result": data,
 	})
 }
+
+// @Summary 角色列表[分页+搜索]
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
+// @Router /v1/api/roles?limit=20&offset=0 [get]
+// List - r of crud
+func (u RoleController) List(c *gin.Context) {
+	var listDto dto.GeneralListDto
+	_ = dto.Bind(c, &listDto)
+	data, total := roleService.List(listDto)
+	resp(c, map[string]interface{}{
+		"result": data,
+		"total":  total,
+	})
+}

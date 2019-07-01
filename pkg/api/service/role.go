@@ -17,3 +17,8 @@ type RoleService struct {
 func (us RoleService) InfoOfId(dto dto.GeneralGetDto) model.Role {
 	return roleDao.Get(dto.Id)
 }
+
+// List - users list with pagination
+func (us RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
+	return roleDao.List(dto)
+}

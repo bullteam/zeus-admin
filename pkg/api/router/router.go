@@ -45,5 +45,6 @@ func Init(e *gin.Engine) {
 
 	roleController := controllers.RoleController{}
 	//role
-	api.GET("roles/:id",roleController.Get)
+	api.GET("/roles",roleController.List)
+	api.GET("/roles/:id",roleController.Get)
 }
