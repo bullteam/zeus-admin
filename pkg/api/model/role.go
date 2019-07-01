@@ -12,6 +12,7 @@ type Role struct {
 	MenuIds    string `json:"menu_ids"`
 	MenuIdsEle string `json:"menu_ids_ele"`
 }
+
 func (Role) TableName() string {
 	return "role"
 }

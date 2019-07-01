@@ -20,7 +20,7 @@ type User struct {
 	Status        int        `json:"status"`
 	CreateTime    time.Time  `json:"created_time"`
 	LastLoginTime time.Time  `json:"updated_time"`
-	Roles []Role `gorm:"many2many:user_role;" json:"roles"`
+	Roles         []Role     `gorm:"many2many:user_role;" json:"roles"`
 	//Roles         int     `orm:"rel(m2m);rel_through(zeus/pkg/models.UserRole)"`
 }
 

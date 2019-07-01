@@ -39,9 +39,13 @@ func runTestCases(t *testing.T, cases []permissionCases) {
 	}
 }
 func TestGetAllPermByRoleName(t *testing.T) {
-	perms := GetAllPermByRoleDomain("role-1", "department-1")
+	perms := GetAllPermsByRoleDomain("role-1", "department-1")
 	assert.Equal(t, 2, len(perms), "Got 2 polices with role1 in department-1")
 	assert.Equal(t, "role-1", perms[0][0], "Match in results")
+}
+func TestGetAllPermsByRole(t *testing.T) {
+	perms := GetAllPermsByRole("role-1")
+	assert.Equal(t, 3, len(perms), "Got 3 polices of role")
 }
 func TestEnforce(t *testing.T) {
 	runTestCases(t, pcases)

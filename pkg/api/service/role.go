@@ -10,7 +10,6 @@ var roleDao = dao.Role{}
 
 // RoleService
 type RoleService struct {
-
 }
 
 // InfoOfId - get role info by id

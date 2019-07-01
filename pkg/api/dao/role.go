@@ -7,7 +7,6 @@ import (
 )
 
 type Role struct {
-
 }
 
 //Get - get single roel infoD

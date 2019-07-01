@@ -64,9 +64,15 @@ func DelRole(role string) {
 	enforcer.RemoveFilteredNamedPolicy("p", 0, role)
 }
 
-// GetAllPermByRoleDomain : get policies by role and domain
-func GetAllPermByRoleDomain(role string, domain string) [][]string {
+// GetAllPermsByRoleDomain : get policies by role and domain
+func GetAllPermsByRoleDomain(role string, domain string) [][]string {
 	roles := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", domain)
+	return roles
+}
+
+// GetAllPermsByRole : get all permission across domains
+func GetAllPermsByRole(role string) [][]string {
+	roles := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", "")
 	return roles
 }
 

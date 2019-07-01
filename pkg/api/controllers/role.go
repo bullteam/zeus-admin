@@ -9,7 +9,6 @@ import (
 var roleService = service.RoleService{}
 
 type RoleController struct {
-
 }
 
 // @Summary 角色信息

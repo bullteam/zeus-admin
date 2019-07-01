@@ -3,7 +3,7 @@ package model
 const TableUserRole = "user_role"
 
 type UserRole struct {
-	Id   int
+	Id     int
 	UserId int `sql:"index"`
 	RoleId int `sql:"index"`
 }
