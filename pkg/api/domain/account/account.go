@@ -5,18 +5,9 @@ import (
 	"fmt"
 	"golang.org/x/crypto/scrypt"
 	"io"
-	"zeus/pkg/api/domain/perm"
-	"zeus/pkg/api/model"
 )
 
 const pwHashBytes = 64
-
-// Permission : where ,do what ,in which domain
-type Permission struct {
-	Zone   string
-	Action string
-	Domain string
-}
 
 // HashPassword : password hashing
 func HashPassword(password string, salt string) (hash string, err error) {
@@ -34,14 +25,4 @@ func MakeSalt() (salt string, err error) {
 		return "", err
 	}
 	return fmt.Sprintf("%x", buf), nil
-}
-
-// CheckPermission : check permission in all roles of account
-func CheckPermission(roles []model.Role, p Permission) bool {
-	for _, r := range roles {
-		if perm.Enforce(r.RoleName, p.Zone, p.Action, p.Domain) {
-			return true
-		}
-	}
-	return false
 }

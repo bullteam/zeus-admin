@@ -31,11 +31,21 @@ func SetUpForTest(dir string) {
 	enforcer = casbin.NewEnforcer(dir+"/rbac_model_0.conf", dir+"/perm_test.csv")
 }
 
-// AddGroup : method for group policy adding
+// AddGroup : method of group policy adding
 //first : user
 //second : group
 func AddGroup(params ...interface{}) bool {
 	return enforcer.AddGroupingPolicy(params...)
+}
+
+// DelGroup : method of group policy deleting
+func DelGroup(params ...interface{}) bool {
+	return enforcer.RemoveGroupingPolicy(params...)
+}
+
+// GetGroupsByUser : get groups by specific user
+func GetGroupsByUser(userId string) [][]string{
+	return enforcer.GetFilteredGroupingPolicy(0,userId)
 }
 
 // AddPerm : method for permission policy adding

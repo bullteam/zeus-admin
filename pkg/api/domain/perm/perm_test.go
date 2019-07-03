@@ -64,7 +64,32 @@ func TestAddGroup(t *testing.T) {
 	})
 	runTestCases(t, ps)
 }
-
+func TestDelGroup(t *testing.T) {
+	AddGroup("lake", "role-2")
+	runTestCases(t,[]permissionCases{
+		{
+			args:[]interface{}{"lake","zone-1","see-report","department-1"},
+			want:true,
+			label:"Enforce with defined policy - add group",
+		},
+	})
+	DelGroup("lake","role-2")
+	runTestCases(t,[]permissionCases{
+		{
+			args:[]interface{}{"lake","zone-1","see-report","department-1"},
+			want:false,
+			label:"Enforce with defined policy - del group",
+		},
+	})
+}
+func TestGetGroupsByUser(t *testing.T) {
+	AddGroup("1","role-1")
+	AddGroup("1","role-2")
+	var expected  [][]string
+	expected = append(expected,[]string{"1","role-1"})
+	expected = append(expected,[]string{"1","role-2"})
+	assert.Equal(t, expected,GetGroupsByUser("1"),"Receive groups by user")
+}
 func TestAddPerm(t *testing.T) {
 	AddPerm("role-4", "zone-1", "action-1", "department-1")
 	ps := append(pcases, permissionCases{

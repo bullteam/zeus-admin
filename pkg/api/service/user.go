@@ -65,10 +65,15 @@ func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
 }
 
 //VerifyAndReturnUserInfo - login and return user info
-func (us UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
+func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
 	userModel := userDao.GetByUserName(dto.Username)
 	if login.VerifyPassword(dto.Password, userModel) {
 		return true, userModel
 	}
 	return false, model.User{}
+}
+
+//AssignRole - assign roles to specific user
+func (UserService) AssignRole(userId int,roleNames []string){
+
 }

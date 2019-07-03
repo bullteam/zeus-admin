@@ -1,6 +1,9 @@
 package role
 
-import "zeus/pkg/api/domain/perm"
+import (
+	"zeus/pkg/api/domain/perm"
+	"zeus/pkg/api/utils"
+)
 
 // CheckPerm : check permission by role with domain
 func CheckPerm(roleName, zone, action, domain string) bool {
@@ -22,8 +25,8 @@ func OverwritePerm(roleName ,domainCode string, polices [][]string) {
 				newPerm[1] == currentPerm[1] &&
 				newPerm[2] == currentPerm[2] &&
 				newPerm[3] == currentPerm[3] {
-				remove(polices, k1)
-				remove(currentPerms, k2)
+				utils.StringSliceRemove(polices, k1)
+				utils.StringSliceRemove(currentPerms, k2)
 			}
 		}
 	}
@@ -33,8 +36,4 @@ func OverwritePerm(roleName ,domainCode string, polices [][]string) {
 	for _, rem := range currentPerms {
 		perm.DelPerm(rem)
 	}
-}
-func remove(slice [][]string, i int) [][]string {
-	copy(slice[i:], slice[i+1:])
-	return slice[:len(slice)-1]
 }
