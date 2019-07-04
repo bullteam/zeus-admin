@@ -4,6 +4,7 @@ import (
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/login"
+	"zeus/pkg/api/domain/user"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
@@ -74,6 +75,10 @@ func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) 
 }
 
 //AssignRole - assign roles to specific user
-func (UserService) AssignRole(userId int, roleNames []string) {
-
+func (UserService) AssignRole(userId string, roleNames []string) {
+	var groups [][]string
+	for _, role := range roleNames {
+		groups = append(groups, []string{userId, role})
+	}
+	user.OverwritePermissions(userId, groups)
 }
