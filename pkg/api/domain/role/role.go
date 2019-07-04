@@ -17,8 +17,8 @@ func ClearPerm(roleName, domain string) {
 
 // OverwritePerm : overwrite permissions
 // remove or create policy
-func OverwritePerm(roleName ,domainCode string, polices [][]string) {
-	currentPerms := perm.GetAllPermsByRoleDomain(roleName,domainCode)
+func OverwritePerm(roleName, domainCode string, polices [][]string) {
+	currentPerms := perm.GetAllPermsByRoleDomain(roleName, domainCode)
 	for k1, newPerm := range polices {
 		for k2, currentPerm := range currentPerms {
 			if newPerm[0] == currentPerm[0] &&

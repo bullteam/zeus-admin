@@ -25,14 +25,14 @@ func (us RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
 }
 
 // AssignPermission - assign permissions
-func (us RoleService) AssignPermission(roleId int , menuIds string){
+func (us RoleService) AssignPermission(roleId int, menuIds string) {
 	roleData := roleDao.Get(roleId)
 	menus := menuDao.GetMenusByIds(menuIds)
 	if len(menus) > 0 {
 		var policies [][]string
-		for _,m := range menus{
-			policies = append(policies,[]string{"p",m.Perms,"*",roleData.Domain.Code})
+		for _, m := range menus {
+			policies = append(policies, []string{"p", m.Perms, "*", roleData.Domain.Code})
 		}
-		role.OverwritePerm(roleData.RoleName,roleData.Domain.Code,policies)
+		role.OverwritePerm(roleData.RoleName, roleData.Domain.Code, policies)
 	}
 }

@@ -18,7 +18,7 @@ func TestClearPerm(t *testing.T) {
 	assert.Equal(t, false, CheckPerm("role-1", "zone-1", "manage-all-things", "department-1"), "Check clear perm")
 }
 func TestOverwritePerm(t *testing.T) {
-	OverwritePerm("role-1","department-1", [][]string{
+	OverwritePerm("role-1", "department-1", [][]string{
 		{"role-1", "zone-1", "*", "department-1"},
 		{"role-1", "zone-2", "manage-some-stuff", "department-1"},
 	})

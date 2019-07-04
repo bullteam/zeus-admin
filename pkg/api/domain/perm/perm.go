@@ -44,8 +44,8 @@ func DelGroup(params ...interface{}) bool {
 }
 
 // GetGroupsByUser : get groups by specific user
-func GetGroupsByUser(userId string) [][]string{
-	return enforcer.GetFilteredGroupingPolicy(0,userId)
+func GetGroupsByUser(userId string) [][]string {
+	return enforcer.GetFilteredGroupingPolicy(0, userId)
 }
 
 // AddPerm : method for permission policy adding

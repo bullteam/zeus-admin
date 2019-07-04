@@ -74,6 +74,6 @@ func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) 
 }
 
 //AssignRole - assign roles to specific user
-func (UserService) AssignRole(userId int,roleNames []string){
+func (UserService) AssignRole(userId int, roleNames []string) {
 
 }
