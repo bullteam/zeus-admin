@@ -49,5 +49,5 @@ docs/
 
 ```
 http://127.0.0.1/swagger/index.html
-
+http://api.bullteam.cn/swagger/index.html
 ```

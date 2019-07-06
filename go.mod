@@ -15,12 +15,22 @@ require (
 	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-openapi/analysis v0.19.0 // indirect
+	github.com/go-openapi/errors v0.19.0 // indirect
+	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.0 // indirect
 	github.com/go-openapi/jsonreference v0.19.0 // indirect
+	github.com/go-openapi/loads v0.19.0 // indirect
+	github.com/go-openapi/runtime v0.19.0 // indirect
 	github.com/go-openapi/spec v0.19.0 // indirect
+	github.com/go-openapi/strfmt v0.19.0 // indirect
 	github.com/go-openapi/swag v0.19.0 // indirect
+	github.com/go-openapi/validate v0.19.0 // indirect
 	github.com/go-redis/redis v6.15.2+incompatible
+	github.com/go-swagger/go-swagger v0.19.0 // indirect
 	github.com/google/go-cmp v0.3.0 // indirect
+	github.com/gorilla/handlers v1.4.0 // indirect
+	github.com/jessevdk/go-flags v1.4.0 // indirect
 	github.com/jinzhu/gorm v1.9.8
 	github.com/lib/pq v1.1.1 // indirect
 	github.com/pkg/errors v0.8.1
@@ -32,6 +42,7 @@ require (
 	github.com/stretchr/testify v1.3.0
 	github.com/swaggo/gin-swagger v1.1.0
 	github.com/swaggo/swag v1.5.0
+	github.com/toqueteos/webbrowser v1.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect
 	golang.org/x/text v0.3.2 // indirect
