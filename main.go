@@ -1,6 +1,9 @@
 package main
 
-import "zeus/cmd"
+import (
+	"zeus/cmd"
+	"zeus/pkg/api/dao"
+)
 
 // @title Zeus 宙斯权限后台 API
 // @version V0.1
@@ -14,4 +17,5 @@ import "zeus/cmd"
 // @BasePath
 func main() {
 	cmd.Execute()
+	dao.Shutdown()
 }

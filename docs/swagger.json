@@ -32,24 +32,107 @@
                 }
             }
         },
-        "/v1/api/info": {
+        "/v1/api/roles": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "角色列表[分页+搜索]",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/api/roles/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "角色信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/api/users": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "新增用户",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/api/users/": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "summary": "用户信息",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":200,\"data\":{\"userID\":1,\"userName\":\"test\",\"text\":\"hello\"}}",
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "编辑用户",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "删除用户",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/api/users/info": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "登录用户信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
                         "schema": {
                             "type": "string"
                         }

@@ -1,14 +1,14 @@
 # 如何使用SWaggo 开发
 
-
-
 ## 安装SWAG
 
-1、go get
 ```
 $ go get -u github.com/swaggo/swag/cmd/swag
 ```
-
+国内网络如果无法安装，请使用代理。
+```
+export GOPROXY=https://goproxy.io
+```
 若 `$GOPATH/bin` 没有加入`$PATH`中，你需要执行将其可执行文件移动到`$GOBIN`下
 
 ```
@@ -48,6 +48,6 @@ docs/
 ## 验证访问
 
 ```
-http://api.bullteam.local/swagger/index.html
-
+http://127.0.0.1/swagger/index.html
+http://api.bullteam.cn/swagger/index.html
 ```
