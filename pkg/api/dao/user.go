@@ -11,11 +11,12 @@ type User struct {
 }
 
 //Get - get single user info
-func (User) Get(id int) model.User {
+func (User) Get(id int,preload bool) model.User {
 	var user model.User
-	//var role model.Role
-	//db.Model(&user).Related(&role,"UserRole")
-	db.Where("id = ?", id).Preload("Department").First(&user)
+	if preload {
+		db = db.Preload("Department")
+	}
+	db.Where("id = ?", id).First(&user)
 	return user
 }
 
@@ -38,7 +39,7 @@ func (u User) Create(user *model.User) *gorm.DB {
 	return db.Save(user)
 }
 
-// Create - new user
+// Update - update user
 func (u User) Update(user *model.User) *gorm.DB {
 	db := GetDb()
 	return db.Save(user)

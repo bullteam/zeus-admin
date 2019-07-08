@@ -83,7 +83,7 @@ func (u UserController) Create(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/api/users/:id [put]
-//Create - c of crud
+// Edit - u of crud
 func (u UserController) Edit(c *gin.Context) {
 	var userDto dto.UserEditDto
 	if err := dto.Bind(c, &userDto); err != nil {
@@ -92,7 +92,46 @@ func (u UserController) Edit(c *gin.Context) {
 	}
 	affected := userService.Update(userDto)
 	if affected <= 0 {
-		//todo : maybe more precision?
+		//fail(c,ErrEditFail)
+		//return
+	}
+	ok(c, "ok.UpdateDone")
+}
+
+// @Summary 更新用户状态
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/api/users/:id/status [put]
+// Edit - u of crud
+func (u UserController) EditStatus(c *gin.Context) {
+	var userDto dto.UserEditStatusDto
+	if err := dto.Bind(c, &userDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	affected := userService.UpdateStatus(userDto)
+	if affected <= 0 {
+		//fail(c,ErrEditFail)
+		//return
+	}
+	ok(c, "ok.UpdateDone")
+}
+
+// @Summary 更新用户密码
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/api/users/:id/password [put]
+// Edit - u of crud
+func (u UserController) EditPassword(c *gin.Context) {
+	var userDto dto.UserEditPasswordDto
+	if err := dto.Bind(c, &userDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	affected := userService.UpdatePassword(userDto)
+	if affected <= 0 {
+		//fail(c,ErrEditFail)
+		//return
 	}
 	ok(c, "ok.UpdateDone")
 }
@@ -110,7 +149,6 @@ func (u UserController) Delete(c *gin.Context) {
 	}
 	affected := userService.Delete(userDto)
 	if affected <= 0 {
-		//todo : maybe more precision?
 		fail(c, ErrDelFail)
 		return
 	}

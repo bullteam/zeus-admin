@@ -41,7 +41,20 @@ type UserEditDto struct {
 	Faceicon     string `json:"faceicon"`
 	Email        string `form:"email" json:"email"`
 	Title        string `form:"title" json:"title"`
-	Status       int    `form:"status" json:"status"`
+	Status       int    `form:"status,default=1" json:"status"`
+}
+
+// UserEditStatusDto - User update status only
+type UserEditStatusDto struct {
+	Id           int    `uri:"id" json:"id" binding:"required,min=1"`
+	Status 		 int    `form:"status" json:"status" binding:"exists"`
+}
+
+// UserEditPasswordDto - User update password only
+type UserEditPasswordDto struct {
+	Id           int    `uri:"id" json:"id" binding:"required"`
+	Password 	 string    `form:"password" json:"password" binding:"required,pwdValidate"`
+	Salt string
 }
 
 // password validator

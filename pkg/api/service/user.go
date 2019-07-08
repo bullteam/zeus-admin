@@ -18,7 +18,7 @@ type UserService struct {
 }
 
 func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
-	return userDao.Get(dto.Id)
+	return userDao.Get(dto.Id,true)
 }
 
 // List - users list with pagination
@@ -51,8 +51,32 @@ func (us UserService) Update(dto dto.UserEditDto) int64 {
 		Username:     dto.Username,
 		Mobile:       dto.Mobile,
 		DepartmentId: dto.DepartmentId,
+		Status: dto.Status,
+		Title: dto.Title,
+		Realname: dto.Realname,
+		Email: dto.Email,
 	}
+
 	c := userDao.Update(&userModel)
+	return c.RowsAffected
+}
+
+// UpdateStatus - update user's status only
+func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64  {
+	user := userDao.Get(dto.Id,false)
+	user.Status = dto.Status
+	c := userDao.Update(&user)
+	return c.RowsAffected
+}
+
+// UpdatePassword - update password only
+func (UserService) UpdatePassword(dto dto.UserEditPasswordDto) int64 {
+	salt,_ := account.MakeSalt()
+	pwd,_ := account.HashPassword(dto.Password,salt)
+	user := userDao.Get(dto.Id,false)
+	user.Password = pwd
+	user.Salt = salt
+	c := userDao.Update(&user)
 	return c.RowsAffected
 }
 
