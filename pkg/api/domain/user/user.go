@@ -17,8 +17,8 @@ func CheckPermission(userId string, p Permission) bool {
 	return perm.Enforce(userId, p.Zone, p.Action, p.Domain)
 }
 
-// OverwritePermissions : assign roles to specific user
-func OverwritePermissions(userId string, newRoles [][]string) {
+// OverwriteRoles : assign roles to specific user
+func OverwriteRoles(userId string, newRoles [][]string) {
 	currentRoles := perm.GetGroupsByUser(userId)
 	for k1, newRole := range newRoles {
 		for k2, currentRole := range currentRoles {

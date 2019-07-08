@@ -80,5 +80,5 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 	for _, role := range roleNames {
 		groups = append(groups, []string{userId, role})
 	}
-	user.OverwritePermissions(userId, groups)
+	user.OverwriteRoles(userId, groups)
 }
