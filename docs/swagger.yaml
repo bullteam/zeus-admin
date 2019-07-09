@@ -1,3 +1,43 @@
+definitions:
+  model.User:
+    properties:
+      created_time:
+        example: 2019-07-10 0:39
+        type: string
+      department_id:
+        example: 1
+        type: integer
+      email:
+        example: xxxx@hotmail.com
+        type: string
+      faceicon:
+        example: http://xxx.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      mobile:
+        example: "186000000"
+        type: string
+      realname:
+        example: 黄梧桐
+        type: string
+      sex:
+        example: 1
+        type: integer
+      status:
+        example: 1
+        type: integer
+      title:
+        example: title
+        type: string
+      updated_time:
+        example: 2019-07-10 0:39
+        type: string
+      username:
+        example: wutongci
+        type: string
+    type: object
 host: api.bullteam.cn
 info:
   contact:
@@ -62,11 +102,19 @@ paths:
             type: string
       summary: 删除用户
     get:
+      consumes:
+      - application/json
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: '{"code":10004,"msg": "用户信息不存在"}'
           schema:
             type: string
       summary: 用户信息
@@ -78,15 +126,26 @@ paths:
           description: '{"code":200,"data":{"id":1}}'
           schema:
             type: string
-      summary: 编辑用户
+      summary: 更新用户密码
   /v1/api/users/info:
     get:
+      consumes:
+      - application/json
+      description: 登陆用户信息接口
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
           schema:
-            type: string
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
       summary: 登录用户信息
 swagger: "2.0"

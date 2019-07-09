@@ -82,13 +82,25 @@
         },
         "/v1/api/users/": {
             "get": {
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "summary": "用户信息",
                 "responses": {
                     "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "{\"code\":10004,\"msg\": \"用户信息不存在\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -99,7 +111,7 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "编辑用户",
+                "summary": "更新用户密码",
                 "responses": {
                     "200": {
                         "description": "{\"code\":200,\"data\":{\"id\":1}}",
@@ -126,17 +138,88 @@
         },
         "/v1/api/users/info": {
             "get": {
+                "description": "登陆用户信息接口",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "summary": "登录用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "created_time": {
+                    "type": "string",
+                    "example": "2019-07-10 0:39"
+                },
+                "department_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "email": {
+                    "type": "string",
+                    "example": "xxxx@hotmail.com"
+                },
+                "faceicon": {
+                    "type": "string",
+                    "example": "http://xxx.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "mobile": {
+                    "type": "string",
+                    "example": "186000000"
+                },
+                "realname": {
+                    "type": "string",
+                    "example": "黄梧桐"
+                },
+                "sex": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "type": "string",
+                    "example": "title"
+                },
+                "updated_time": {
+                    "type": "string",
+                    "example": "2019-07-10 0:39"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "wutongci"
                 }
             }
         }

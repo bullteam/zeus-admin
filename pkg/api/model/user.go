@@ -5,23 +5,22 @@ import (
 )
 
 type User struct {
-	Id            int        `json:"id"`
-	Username      string     `json:"username"`
-	Mobile        string     `json:"mobile"`
-	Sex           int        `json:"sex"`
-	Realname      string     `json:"realname"`
+	Id            int        `json:"id" example:"1"`
+	Username      string     `json:"username" example:"wutongci"`
+	Mobile        string     `json:"mobile" example:"186000000"`
+	Sex           int        `json:"sex" example:"1"`
+	Realname      string     `json:"realname" example:"黄梧桐"`
 	Password      string     `json:"-"`
 	Salt          string     `json:"-"`
-	DepartmentId  int        `json:"department_id"`
-	Department    Department `json:"department"`
-	Faceicon      string     `json:"faceicon"`
-	Email         string     `json:"email"`
-	Title         string     `json:"title"`
-	Status        int        `json:"status"`
-	CreateTime    time.Time  `json:"created_time"`
-	LastLoginTime time.Time  `json:"updated_time"`
-	Roles         []Role     `gorm:"many2many:user_role;" json:"roles"`
-	//Roles         int     `orm:"rel(m2m);rel_through(zeus/pkg/models.UserRole)"`
+	DepartmentId  int        `json:"department_id" example:"1"`
+	Department    Department `json:"department" example:"1"`
+	Faceicon      string     `json:"faceicon" example:"http://xxx.com"`
+	Email         string     `json:"email" example:"xxxx@hotmail.com"`
+	Title         string     `json:"title" example:"title"`
+	Status        int        `json:"status" example:"1"`
+	CreateTime    time.Time  `json:"created_time" example:"2019-07-10 0:39"`
+	LastLoginTime time.Time  `json:"updated_time" example:"2019-07-10 0:39"`
+	Roles         []Role     `gorm:"many2many:user_role;" json:"roles" example:"roles"`
 }
 
 func (User) TableName() string {

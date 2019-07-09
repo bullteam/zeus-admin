@@ -14,8 +14,11 @@ type UserController struct {
 }
 
 // @Summary 登录用户信息
+// @Description 登陆用户信息接口
+// @Accept  json
 // @Produce  json
-// @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
+// @Param userId path int true "用户ID"
+// @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
 // @Router /v1/api/users/info [get]
 func (u UserController) Info(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
@@ -26,8 +29,10 @@ func (u UserController) Info(c *gin.Context) {
 }
 
 // @Summary 用户信息
+// @Accept  json
 // @Produce  json
-// @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
+// @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
+// @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
 // @Router /v1/api/users/:id [get]
 func (u UserController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
