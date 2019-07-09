@@ -47,7 +47,7 @@ type UserEditDto struct {
 // UserEditStatusDto - User update status only
 type UserEditStatusDto struct {
 	Id           int    `uri:"id" json:"id" binding:"required,min=1"`
-	Status 		 int    `form:"status" json:"status" binding:"exists"`
+	Status 		 int    `form:"status" json:"status" binding:"gte=0"`
 }
 
 // UserEditPasswordDto - User update password only

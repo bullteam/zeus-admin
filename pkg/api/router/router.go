@@ -37,12 +37,13 @@ func Init(e *gin.Engine) {
 
 	//login
 	api.GET("/login/info", userController.Info)
+	api.PUT("/login/password",userController.EditLoginUserPassword)
 	//user
 	api.GET("/users", userController.List)
 	api.GET("/users/:id", userController.Get)
 	api.PUT("/users/:id", userController.Edit)
-	api.PATCH("/users/:id/status", userController.EditStatus)
-	api.PATCH("/users/:id/password", userController.EditPassword)
+	api.PUT("/users/:id/status", userController.EditStatus)
+	api.PUT("/users/:id/password", userController.EditPassword)
 	api.DELETE("/users/:id", userController.Delete)
 
 	roleController := controllers.RoleController{}

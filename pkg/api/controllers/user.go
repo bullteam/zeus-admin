@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 )
 
@@ -123,6 +125,28 @@ func (u UserController) EditStatus(c *gin.Context) {
 // @Router /v1/api/users/:id/password [put]
 // Edit - u of crud
 func (u UserController) EditPassword(c *gin.Context) {
+	var userDto dto.UserEditPasswordDto
+	if err := dto.Bind(c, &userDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	affected := userService.UpdatePassword(userDto)
+	if affected <= 0 {
+		//fail(c,ErrEditFail)
+		//return
+	}
+	ok(c, "ok.UpdateDone")
+}
+
+func (u UserController) EditLoginUserPassword(c *gin.Context){
+	// simulate value in query
+	c.Params = []gin.Param{
+		{
+			Key:"id",
+			Value:fmt.Sprintf("%d",int(c.Value("userId").(float64))),
+		},
+	}
+	log.Info(fmt.Sprintf("%#v",c.Params))
 	var userDto dto.UserEditPasswordDto
 	if err := dto.Bind(c, &userDto); err != nil {
 		failValidate(c, err.Error())
