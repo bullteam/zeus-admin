@@ -20,34 +20,32 @@ func Init(e *gin.Engine) {
 	e.GET("/test", controllers.Healthy)
 	//version fragment
 	v1 := e.Group("/v1")
-
-	//auth handlers
-	auth := v1.Group("/auth", gin.BasicAuth(gin.Accounts{
-		"zeus": "2019@win",
-	}))
 	jwtAuth := middleware.JwtAuth()
-	auth.POST("/token", jwtAuth.LoginHandler)
-	auth.GET("/refresh_token", jwtAuth.RefreshHandler)
+	//auth.POST("/token", jwtAuth.LoginHandler)
+	//auth.GET("/refresh_token", jwtAuth.RefreshHandler)
+
 
 	//api handlers
-	api := v1.Group("/api")
-	api.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
+	v1.POST("/users/login",jwtAuth.LoginHandler)
+	v1.POST("/users/login/refresh",jwtAuth.RefreshHandler)
 
+	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
 	userController := controllers.UserController{}
 
-	//login
-	api.GET("/login/info", userController.Info)
-	api.PUT("/login/password",userController.EditLoginUserPassword)
+	v1.GET("/login/info", userController.Info)
+	//update login user's password
+	v1.PUT("/login/password",userController.EditLoginUserPassword)
 	//user
-	api.GET("/users", userController.List)
-	api.GET("/users/:id", userController.Get)
-	api.PUT("/users/:id", userController.Edit)
-	api.PUT("/users/:id/status", userController.EditStatus)
-	api.PUT("/users/:id/password", userController.EditPassword)
-	api.DELETE("/users/:id", userController.Delete)
+	v1.GET("/users", userController.List)
+	v1.GET("/users/:id", userController.Get)
+	v1.PUT("/users/:id", userController.Edit)
+	v1.PUT("/users/:id/status", userController.EditStatus)
+	v1.PUT("/users/:id/password", userController.EditPassword)
+	v1.DELETE("/users/:id", userController.Delete)
+
 
 	roleController := controllers.RoleController{}
 	//role
-	api.GET("/roles", roleController.List)
-	api.GET("/roles/:id", roleController.Get)
+	v1.GET("/roles", roleController.List)
+	v1.GET("/roles/:id", roleController.Get)
 }
