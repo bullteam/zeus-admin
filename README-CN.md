@@ -68,6 +68,10 @@ go build -o zeus
 ./zeus start -c ./config/in-local.yaml
 
 ````
+通过Makefile 安装
+```
+wget -O - https://raw.githubusercontent.com/bullteam/zeus-admin/master/tool/getlatest.sh | bash
+```
 # 数据移值
 
 ```bash
