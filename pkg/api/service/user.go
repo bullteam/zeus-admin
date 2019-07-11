@@ -4,6 +4,7 @@ import (
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/login"
+	"zeus/pkg/api/domain/perm"
 	"zeus/pkg/api/domain/user"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
@@ -18,7 +19,7 @@ type UserService struct {
 }
 
 func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
-	return userDao.Get(dto.Id,true)
+	return userDao.Get(dto.Id, true)
 }
 
 // List - users list with pagination
@@ -51,10 +52,10 @@ func (us UserService) Update(dto dto.UserEditDto) int64 {
 		Username:     dto.Username,
 		Mobile:       dto.Mobile,
 		DepartmentId: dto.DepartmentId,
-		Status: dto.Status,
-		Title: dto.Title,
-		Realname: dto.Realname,
-		Email: dto.Email,
+		Status:       dto.Status,
+		Title:        dto.Title,
+		Realname:     dto.Realname,
+		Email:        dto.Email,
 	}
 
 	c := userDao.Update(&userModel)
@@ -62,8 +63,8 @@ func (us UserService) Update(dto dto.UserEditDto) int64 {
 }
 
 // UpdateStatus - update user's status only
-func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64  {
-	user := userDao.Get(dto.Id,false)
+func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64 {
+	user := userDao.Get(dto.Id, false)
 	user.Status = dto.Status
 	c := userDao.Update(&user)
 	return c.RowsAffected
@@ -71,9 +72,9 @@ func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64  {
 
 // UpdatePassword - update password only
 func (UserService) UpdatePassword(dto dto.UserEditPasswordDto) int64 {
-	salt,_ := account.MakeSalt()
-	pwd,_ := account.HashPassword(dto.Password,salt)
-	user := userDao.Get(dto.Id,false)
+	salt, _ := account.MakeSalt()
+	pwd, _ := account.HashPassword(dto.Password, salt)
+	user := userDao.Get(dto.Id, false)
 	user.Password = pwd
 	user.Salt = salt
 	c := userDao.Update(&user)
@@ -105,4 +106,17 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 		groups = append(groups, []string{userId, role})
 	}
 	user.OverwriteRoles(userId, groups)
+}
+
+//GetRelatedDomains - get related domains
+func (UserService) GetRelatedDomains(uid string)[]model.Domain{
+	var domains []model.Domain
+	//1.get roles by user
+	roles := perm.GetGroupsByUser(uid)
+	//2.get domains by roles
+	for _ ,rn := range roles {
+		role := roleDao.GetByName(rn[1])
+		domains = append(domains,role.Domain)
+	}
+	return domains
 }

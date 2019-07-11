@@ -1,31 +1,14 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
-	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 )
 
 var userService = service.UserService{}
 
 type UserController struct {
-}
-
-// @Summary 登录用户信息
-// @Description 登陆用户信息接口
-// @Accept  json
-// @Produce  json
-// @Param userId path int true "用户ID"
-// @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
-// @Router /v1/api/users/info [get]
-func (u UserController) Info(c *gin.Context) {
-	userId := int(c.Value("userId").(float64))
-	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
-	resp(c, map[string]interface{}{
-		"result": data,
-	})
 }
 
 // @Summary 用户信息
@@ -130,28 +113,6 @@ func (u UserController) EditStatus(c *gin.Context) {
 // @Router /v1/api/users/:id/password [put]
 // Edit - u of crud
 func (u UserController) EditPassword(c *gin.Context) {
-	var userDto dto.UserEditPasswordDto
-	if err := dto.Bind(c, &userDto); err != nil {
-		failValidate(c, err.Error())
-		return
-	}
-	affected := userService.UpdatePassword(userDto)
-	if affected <= 0 {
-		//fail(c,ErrEditFail)
-		//return
-	}
-	ok(c, "ok.UpdateDone")
-}
-
-func (u UserController) EditLoginUserPassword(c *gin.Context){
-	// simulate value in query
-	c.Params = []gin.Param{
-		{
-			Key:"id",
-			Value:fmt.Sprintf("%d",int(c.Value("userId").(float64))),
-		},
-	}
-	log.Info(fmt.Sprintf("%#v",c.Params))
 	var userDto dto.UserEditPasswordDto
 	if err := dto.Bind(c, &userDto); err != nil {
 		failValidate(c, err.Error())

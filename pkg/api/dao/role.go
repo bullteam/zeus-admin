@@ -16,6 +16,14 @@ func (u Role) Get(id int) model.Role {
 	return role
 }
 
+//Get - get single roel infoD
+func (u Role) GetByName(name string) model.Role {
+	var role model.Role
+	db.Where("role_name = ?", name).Preload("Domain").First(&role)
+	return role
+}
+
+
 // List - users list
 func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	var roles []model.Role

@@ -24,17 +24,14 @@ func Init(e *gin.Engine) {
 	//auth.POST("/token", jwtAuth.LoginHandler)
 	//auth.GET("/refresh_token", jwtAuth.RefreshHandler)
 
-
 	//api handlers
-	v1.POST("/users/login",jwtAuth.LoginHandler)
-	v1.POST("/users/login/refresh",jwtAuth.RefreshHandler)
+	v1.POST("/users/login", jwtAuth.LoginHandler)
+	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
 	userController := controllers.UserController{}
+	accountController := controllers.AccountController{}
 
-	v1.GET("/login/info", userController.Info)
-	//update login user's password
-	v1.PUT("/login/password",userController.EditLoginUserPassword)
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
@@ -42,7 +39,11 @@ func Init(e *gin.Engine) {
 	v1.PUT("/users/:id/status", userController.EditStatus)
 	v1.PUT("/users/:id/password", userController.EditPassword)
 	v1.DELETE("/users/:id", userController.Delete)
-
+	//account - login user
+	v1.GET("/account/info", accountController.Info)
+	//update login user's password
+	v1.PUT("/account/password", accountController.EditPassword)
+	v1.GET("/account/domains", accountController.GetDomains)
 
 	roleController := controllers.RoleController{}
 	//role

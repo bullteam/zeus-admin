@@ -11,7 +11,7 @@ type User struct {
 }
 
 //Get - get single user info
-func (User) Get(id int,preload bool) model.User {
+func (User) Get(id int, preload bool) model.User {
 	var user model.User
 	if preload {
 		db = db.Preload("Department")
