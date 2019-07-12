@@ -5,7 +5,7 @@ TITLE := $(shell basename $(BASE_PATH))
 SHORT_REV := $(shell git rev-parse HEAD | cut -c1-8)
 BUILD_TIME := $(shell date +%Y-%m-%d--%T)
 APP_PKG := $(shell $(BASE_PATH)/scripts/apppkg.sh)
-UI := $(BASE_PATH)/src/ui
+UI := $(BASE_PATH)/pkg/ui
 TAG := $(shell $(BASE_PATH)/scripts/tag.sh)
 export BIN_OUT := $(BASE_PATH)/bin
 
