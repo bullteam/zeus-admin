@@ -109,14 +109,14 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 }
 
 //GetRelatedDomains - get related domains
-func (UserService) GetRelatedDomains(uid string)[]model.Domain{
+func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	var domains []model.Domain
 	//1.get roles by user
 	roles := perm.GetGroupsByUser(uid)
 	//2.get domains by roles
-	for _ ,rn := range roles {
+	for _, rn := range roles {
 		role := roleDao.GetByName(rn[1])
-		domains = append(domains,role.Domain)
+		domains = append(domains, role.Domain)
 	}
 	return domains
 }
@@ -124,13 +124,13 @@ func (UserService) GetRelatedDomains(uid string)[]model.Domain{
 // GetAllPermissions - get all permission by specific user
 func (UserService) GetAllPermissions(uid string) []string {
 	perms := []string{}
-	for _,p := range perm.GetAllPermsByUser(uid){
-		perms = append(perms,p[1])
+	for _, p := range perm.GetAllPermsByUser(uid) {
+		perms = append(perms, p[1])
 	}
 	return perms
 }
 
 // MoveToAnotherDepartment - move users to another department
-func (UserService) MoveToAnotherDepartment(uids []string,target int) error {
-	return userDao.UpdateDepartment(uids,target)
+func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
+	return userDao.UpdateDepartment(uids, target)
 }

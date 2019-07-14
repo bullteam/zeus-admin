@@ -90,9 +90,9 @@ func GetAllPermsByRole(role string) [][]string {
 func GetAllPermsByUser(uid string) [][]string {
 	perms := enforcer.GetFilteredNamedGroupingPolicy("g", 0, uid, "", "", "")
 	var policies [][]string
-	for _,policy := range perms {
+	for _, policy := range perms {
 		rp := GetAllPermsByRole(policy[1])
-		policies = append(policies, rp ...)
+		policies = append(policies, rp...)
 	}
 	return policies
 }

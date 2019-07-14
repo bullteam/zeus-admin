@@ -61,9 +61,9 @@ func (u User) GetByUserName(username string) model.User {
 }
 
 // UpdateDepartment - update user's department
-func (User) UpdateDepartment(uids []string,deparmentId int) error {
+func (User) UpdateDepartment(uids []string, deparmentId int) error {
 	db := GetDb()
-	return db.Model(&User{}).Where("id in (?)",uids).Updates(map[string]interface{}{
-		"department_id" : deparmentId,
+	return db.Model(&User{}).Where("id in (?)", uids).Updates(map[string]interface{}{
+		"department_id": deparmentId,
 	}).Error
 }

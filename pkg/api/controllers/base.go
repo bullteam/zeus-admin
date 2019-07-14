@@ -54,10 +54,9 @@ var (
 )
 
 type BaseController struct {
-
 }
 
-func (bc *BaseController) BindAndValidate(c *gin.Context,obj interface{}) bool {
+func (bc *BaseController) BindAndValidate(c *gin.Context, obj interface{}) bool {
 	if err := dto.Bind(c, obj); err != nil {
 		failValidate(c, err.Error())
 		return false
@@ -90,7 +89,7 @@ func fail(c *gin.Context, errs *ControllerError) {
 func failValidate(c *gin.Context, msg string) {
 	errs := ErrValidation
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
-	c.AbortWithStatusJSON(http.StatusOK,gin.H{
+	c.AbortWithStatusJSON(http.StatusOK, gin.H{
 		"code":   errs.Code,
 		"msg":    errs.Message,
 		"detail": msg,
@@ -101,4 +100,3 @@ func failValidate(c *gin.Context, msg string) {
 	//	"detail": msg,
 	//})
 }
-

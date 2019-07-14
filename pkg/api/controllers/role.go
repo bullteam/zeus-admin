@@ -18,7 +18,7 @@ type RoleController struct {
 // @Router /v1/api/roles/:id [get]
 func (r *RoleController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
-	if r.BindAndValidate(c,&gDto) {
+	if r.BindAndValidate(c, &gDto) {
 		data := roleService.InfoOfId(gDto)
 		//role not found
 		if data.Id < 1 {
@@ -38,7 +38,7 @@ func (r *RoleController) Get(c *gin.Context) {
 // List - r of crud
 func (r *RoleController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
-	if r.BindAndValidate(c,&listDto) {
+	if r.BindAndValidate(c, &listDto) {
 		data, total := roleService.List(listDto)
 		resp(c, map[string]interface{}{
 			"result": data,

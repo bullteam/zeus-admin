@@ -23,7 +23,6 @@ func (u Role) GetByName(name string) model.Role {
 	return role
 }
 
-
 // List - users list
 func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	var roles []model.Role

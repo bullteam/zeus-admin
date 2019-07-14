@@ -40,7 +40,7 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 		},
 	}
 	var userDto dto.UserEditPasswordDto
-	if a.BindAndValidate(c,&userDto) {
+	if a.BindAndValidate(c, &userDto) {
 		affected := userService.UpdatePassword(userDto)
 		if affected <= 0 {
 			//fail(c,ErrEditFail)
@@ -49,16 +49,17 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 		ok(c, "ok.UpdateDone")
 	}
 }
+
 // @Summary 获取用户管理域
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/domains [get]
 // GetDomains - get user managing domains
-func (AccountController) GetDomains(c *gin.Context){
+func (AccountController) GetDomains(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	domains := userService.GetRelatedDomains(strconv.Itoa(userId))
 	resp(c, map[string]interface{}{
-		"result" : domains,
+		"result": domains,
 	})
 }
 

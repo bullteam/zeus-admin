@@ -1,7 +1,6 @@
 package dao
 
 type Domain struct {
-
 }
 
 //func (Domain) GetByRole(role model.Role){
