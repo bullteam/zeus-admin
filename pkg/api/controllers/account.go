@@ -62,3 +62,9 @@ func (AccountController) GetDomains(c *gin.Context){
 		"result" : domains,
 	})
 }
+
+// @Summary 获取登录用户权限列表
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/domains [get]
+// GetDomains - get user managing domains

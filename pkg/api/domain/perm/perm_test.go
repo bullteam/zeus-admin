@@ -45,7 +45,13 @@ func TestGetAllPermByRoleName(t *testing.T) {
 }
 func TestGetAllPermsByRole(t *testing.T) {
 	perms := GetAllPermsByRole("role-1")
-	assert.Equal(t, 3, len(perms), "Got 3 polices of role")
+	assert.Len(t,perms,3,"Got 3 polices of role")
+	//assert.Equal(t, 3, len(perms), "Got 3 polices of role")
+}
+func TestGetAllPermsByUser (t *testing.T){
+	AddGroup("1","role-1")
+	perms := GetAllPermsByUser("1")
+	assert.Len(t,perms,3,"Got 3 polices of role")
 }
 func TestEnforce(t *testing.T) {
 	runTestCases(t, pcases)

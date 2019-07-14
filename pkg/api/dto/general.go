@@ -4,10 +4,10 @@ import "strings"
 
 // GeneralListDto - General list request params
 type GeneralListDto struct {
-	Offset int    `form:"offset,default=0" json:"offset"`
-	Limit  int    `form:"limit,default=20" json:"limit"`
-	Order  string `form:"order" json:"order"`
-	Q      string `form:"q" json:"q"`
+	Skip  int    `form:"skip,default=0" json:"skip"`
+	Limit int    `form:"limit,default=20" json:"limit" binding:"max=100"`
+	Order string `form:"order" json:"order"`
+	Q     string `form:"q" json:"q"`
 }
 type GeneralDelDto struct {
 	Id int `uri:"id" json:"id" binding:"required"`

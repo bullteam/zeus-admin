@@ -82,11 +82,22 @@ func GetAllPermsByRoleDomain(role string, domain string) [][]string {
 
 // GetAllPermsByRole : get all permission across domains
 func GetAllPermsByRole(role string) [][]string {
-	roles := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", "")
-	return roles
+	perms := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", "")
+	return perms
+}
+
+// GetAllPermsByUser : get all permission across domains
+func GetAllPermsByUser(uid string) [][]string {
+	perms := enforcer.GetFilteredNamedGroupingPolicy("g", 0, uid, "", "", "")
+	var policies [][]string
+	for _,policy := range perms {
+		rp := GetAllPermsByRole(policy[1])
+		policies = append(policies, rp ...)
+	}
+	return policies
 }
 
 //dangerous! do not call until you really need it
 func CommitChange() {
-	enforcer.SavePolicy()
+	_ = enforcer.SavePolicy()
 }

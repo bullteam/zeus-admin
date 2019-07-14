@@ -32,7 +32,7 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("Domain").Offset(listDto.Offset).Limit(listDto.Limit).Find(&roles)
+	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)
 	db.Model(&model.Role{}).Count(&total)
 	return roles, total
 }

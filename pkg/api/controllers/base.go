@@ -53,7 +53,7 @@ var (
 
 func resp(c *gin.Context, data map[string]interface{}) {
 	c.JSON(200, gin.H{
-		"code": 0,
+		"code": 200,
 		"data": data,
 	})
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
 )
@@ -143,4 +144,20 @@ func (u UserController) Delete(c *gin.Context) {
 		return
 	}
 	ok(c, "ok.DeletedDone")
+}
+
+// @Summary 获取用户权限列表
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/api/users/:id [delete]
+// GetUserPermissions - d of crud
+func (UserController) GetUserPermissions(c *gin.Context){
+	var gDto dto.GeneralGetDto
+	if err := dto.Bind(c, &gDto); err != nil {
+		failValidate(c, err.Error())
+		return
+	}
+	resp(c, map[string]interface{}{
+		"result" : userService.GetAllPermissions(strconv.Itoa(gDto.Id)),
+	})
 }

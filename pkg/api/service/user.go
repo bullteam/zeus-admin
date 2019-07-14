@@ -120,3 +120,12 @@ func (UserService) GetRelatedDomains(uid string)[]model.Domain{
 	}
 	return domains
 }
+
+// GetAllPermissions - get all permission by specific user
+func (UserService) GetAllPermissions(uid string) []string {
+	perms := []string{}
+	for _,p := range perm.GetAllPermsByUser(uid){
+		perms = append(perms,p[1])
+	}
+	return perms
+}
