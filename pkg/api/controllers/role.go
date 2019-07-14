@@ -49,16 +49,16 @@ func (r *RoleController) List(c *gin.Context) {
 
 func (r *RoleController) Create(c *gin.Context) {
 	var roleDto dto.RoleCreateDto
-	if r.BindAndValidate(c,&roleDto) {
-		newRole,err := roleService.Create(roleDto)
+	if r.BindAndValidate(c, &roleDto) {
+		newRole, err := roleService.Create(roleDto)
 		if err != nil {
 			ErrAddFail.Moreinfo = err.Error()
-			fail(c,ErrAddFail)
+			fail(c, ErrAddFail)
 			ErrAddFail.Moreinfo = ""
 			return
 		}
 		resp(c, map[string]interface{}{
-			"result" : newRole,
+			"result": newRole,
 		})
 	}
 }

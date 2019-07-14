@@ -41,7 +41,7 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 func (r Role) Create(role *model.Role) *gorm.DB {
 	var row model.Role
 	db := GetDb()
-	db.Where("name = ? or role_name = ?",role.Name,role.RoleName).First(&row)
+	db.Where("name = ? or role_name = ?", role.Name, role.RoleName).First(&row)
 	if row.Id > 0 {
 		return nil
 	}

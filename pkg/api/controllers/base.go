@@ -81,9 +81,9 @@ func fail(c *gin.Context, errs *ControllerError) {
 	//currentLang := GetLang
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
 	c.JSON(http.StatusOK, gin.H{
-		"code": errs.Code,
-		"msg":  errs.Message,
-		"moreinfo" : errs.Moreinfo,
+		"code":     errs.Code,
+		"msg":      errs.Message,
+		"moreinfo": errs.Moreinfo,
 	})
 }
 
