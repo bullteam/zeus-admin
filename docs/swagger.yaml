@@ -61,6 +61,47 @@ paths:
           schema:
             type: string
       summary: 测试
+  /v1/account/domains:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[]}}'
+          schema:
+            type: string
+      summary: 获取用户管理域
+  /v1/account/info:
+    get:
+      consumes:
+      - application/json
+      description: 登陆用户信息接口
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      summary: 登录用户信息
+  /v1/account/password:
+    put:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      summary: 更新个人密码
   /v1/api/roles:
     get:
       produces:
@@ -127,25 +168,24 @@ paths:
           schema:
             type: string
       summary: 更新用户密码
-  /v1/api/users/info:
+  /v1/domains:
     get:
-      consumes:
-      - application/json
-      description: 登陆用户信息接口
-      parameters:
-      - description: 用户ID
-        in: path
-        name: userId
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          description: '{"code":200,"data":{"id":1}}'
           schema:
-            items:
-              $ref: '#/definitions/model.User'
-            type: array
-      summary: 登录用户信息
+            type: string
+      summary: 新增应用
+  /v1/domains/:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          schema:
+            type: string
+      summary: 项目信息
 swagger: "2.0"

@@ -6,8 +6,8 @@ mysql:
     min: 5
     max: 20
 redis:
-  host: 127.0.0.1:6379
-  auth:
+  host: ${REDIS_HOST}:${REDIS_PORT}
+  auth: ${REDIS_PASSWORD}
   pool:
     min: 3
     max: 20
@@ -18,6 +18,12 @@ jwt:
 casbin:
   model:
     rule_0: config/casbin/rbac_model_0.conf
+cors:
+  enable: false
+  allow_origins: "*"
+  allow_headers: []
+  allow_credentials: true
+  max_age: 7200
 lang:
   types: zh-CN|en-US
   names: 简体中文|English

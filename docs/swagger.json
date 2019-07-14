@@ -32,6 +32,70 @@
                 }
             }
         },
+        "/v1/account/domains": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取用户管理域",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/account/info": {
+            "get": {
+                "description": "登陆用户信息接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "登录用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/account/password": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "更新个人密码",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/api/roles": {
             "get": {
                 "produces": [
@@ -136,33 +200,33 @@
                 }
             }
         },
-        "/v1/api/users/info": {
+        "/v1/domains": {
             "get": {
-                "description": "登陆用户信息接口",
-                "consumes": [
-                    "application/json"
-                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "登录用户信息",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "用户ID",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "新增应用",
                 "responses": {
                     "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.User"
-                            }
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/domains/": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "项目信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
