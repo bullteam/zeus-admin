@@ -8,6 +8,7 @@ import (
 )
 
 type AccountController struct {
+	BaseController
 }
 
 // @Summary 登录用户信息
@@ -30,7 +31,7 @@ func (u AccountController) Info(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/account/password [put]
 // EditPassword - update login user's password
-func (u AccountController) EditPassword(c *gin.Context) {
+func (a *AccountController) EditPassword(c *gin.Context) {
 	// simulate value in query
 	c.Params = []gin.Param{
 		{
@@ -39,16 +40,14 @@ func (u AccountController) EditPassword(c *gin.Context) {
 		},
 	}
 	var userDto dto.UserEditPasswordDto
-	if err := dto.Bind(c, &userDto); err != nil {
-		failValidate(c, err.Error())
-		return
+	if a.BindAndValidate(c,&userDto) {
+		affected := userService.UpdatePassword(userDto)
+		if affected <= 0 {
+			//fail(c,ErrEditFail)
+			//return
+		}
+		ok(c, "ok.UpdateDone")
 	}
-	affected := userService.UpdatePassword(userDto)
-	if affected <= 0 {
-		//fail(c,ErrEditFail)
-		//return
-	}
-	ok(c, "ok.UpdateDone")
 }
 // @Summary 获取用户管理域
 // @Produce  json

@@ -29,8 +29,8 @@ func Init(e *gin.Engine) {
 	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
-	userController := controllers.UserController{}
-	accountController := controllers.AccountController{}
+	userController := &controllers.UserController{}
+	accountController := &controllers.AccountController{}
 
 	//user
 	v1.GET("/users", userController.List)
@@ -40,13 +40,14 @@ func Init(e *gin.Engine) {
 	v1.PUT("/users/:id/status", userController.EditStatus)
 	v1.PUT("/users/:id/password", userController.EditPassword)
 	v1.DELETE("/users/:id", userController.Delete)
+	v1.POST("/users/department/move", userController.UpdateDepartment)
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
 	//update login user's password
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
 
-	roleController := controllers.RoleController{}
+	roleController := &controllers.RoleController{}
 	//role
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)

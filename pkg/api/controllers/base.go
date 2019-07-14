@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/beego/i18n"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"zeus/pkg/api/dto"
 	"zeus/pkg/api/middleware"
 )
 
@@ -51,14 +53,26 @@ var (
 	ErrValidation        = &ControllerError{13011, "err.ErrValidate", "", ""}
 )
 
+type BaseController struct {
+
+}
+
+func (bc *BaseController) BindAndValidate(c *gin.Context,obj interface{}) bool {
+	if err := dto.Bind(c, obj); err != nil {
+		failValidate(c, err.Error())
+		return false
+	}
+	return true
+}
+
 func resp(c *gin.Context, data map[string]interface{}) {
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"data": data,
 	})
 }
 func ok(c *gin.Context, langKey string) {
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  i18n.Tr(middleware.GetLang(), langKey),
 	})
@@ -67,7 +81,7 @@ func fail(c *gin.Context, errs *ControllerError) {
 	//currentLang,_ := c.Cookie("lang")
 	//currentLang := GetLang
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": errs.Code,
 		"msg":  errs.Message,
 	})
@@ -76,9 +90,15 @@ func fail(c *gin.Context, errs *ControllerError) {
 func failValidate(c *gin.Context, msg string) {
 	errs := ErrValidation
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
-	c.JSON(200, gin.H{
+	c.AbortWithStatusJSON(http.StatusOK,gin.H{
 		"code":   errs.Code,
 		"msg":    errs.Message,
 		"detail": msg,
 	})
+	//c.JSON(http.StatusOK, gin.H{
+	//	"code":   errs.Code,
+	//	"msg":    errs.Message,
+	//	"detail": msg,
+	//})
 }
+

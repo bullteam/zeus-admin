@@ -28,8 +28,8 @@ func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("Department").Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
-	db.Preload("Roles").Find(&users)
+	db.Preload("Department").Preload("Roles").Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
+	//db.Preload("Roles").Find(&users)
 	db.Model(&model.User{}).Count(&total)
 	return users, total
 }
@@ -58,4 +58,12 @@ func (u User) GetByUserName(username string) model.User {
 	m := model.User{}
 	db.Where("username = ?", username).First(&m)
 	return m
+}
+
+// UpdateDepartment - update user's department
+func (User) UpdateDepartment(uids []string,deparmentId int) error {
+	db := GetDb()
+	return db.Model(&User{}).Where("id in (?)",uids).Updates(map[string]interface{}{
+		"department_id" : deparmentId,
+	}).Error
 }

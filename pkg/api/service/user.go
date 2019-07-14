@@ -129,3 +129,8 @@ func (UserService) GetAllPermissions(uid string) []string {
 	}
 	return perms
 }
+
+// MoveToAnotherDepartment - move users to another department
+func (UserService) MoveToAnotherDepartment(uids []string,target int) error {
+	return userDao.UpdateDepartment(uids,target)
+}

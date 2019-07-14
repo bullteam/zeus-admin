@@ -50,6 +50,11 @@ type UserEditStatusDto struct {
 	Status int `form:"status" json:"status" binding:"gte=0"`
 }
 
+type UserMoveDepartmentDto struct {
+	Ids        string `form:"ids" json:"ids" binding:"required"`
+	Department int    `form:"department" json:"department" binding:"required,gte=1"`
+}
+
 // UserEditPasswordDto - User update password only
 type UserEditPasswordDto struct {
 	Id       int    `uri:"id" json:"id" binding:"required"`
