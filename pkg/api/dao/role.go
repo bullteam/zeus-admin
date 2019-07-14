@@ -2,6 +2,7 @@ package dao
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
 )
@@ -34,4 +35,15 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)
 	db.Model(&model.Role{}).Count(&total)
 	return roles, total
+}
+
+// Create - new role
+func (r Role) Create(role *model.Role) *gorm.DB {
+	var row model.Role
+	db := GetDb()
+	db.Where("name = ? or role_name = ?",role.Name,role.RoleName).First(&row)
+	if row.Id > 0 {
+		return nil
+	}
+	return db.Save(role)
 }

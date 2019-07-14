@@ -5,7 +5,6 @@ type RoleCreateDto struct {
 	DomainId int    `form:"domain_id" binding:"required"`
 	RoleName string `form:"role_name" binding:"required"`
 	Remark   string `form:"remark"`
-	//Users      []*User `json:"users" orm:"reverse(many)"`
 	MenuIds    string `form:"menu_ids"`
 	MenuIdsEle string `form:"menu_ids_ele"`
 }

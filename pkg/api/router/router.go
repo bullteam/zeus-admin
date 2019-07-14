@@ -51,4 +51,5 @@ func Init(e *gin.Engine) {
 	//role
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
+	v1.POST("/role", roleController.Create)
 }

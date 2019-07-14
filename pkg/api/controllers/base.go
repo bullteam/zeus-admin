@@ -83,6 +83,7 @@ func fail(c *gin.Context, errs *ControllerError) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": errs.Code,
 		"msg":  errs.Message,
+		"moreinfo" : errs.Moreinfo,
 	})
 }
 

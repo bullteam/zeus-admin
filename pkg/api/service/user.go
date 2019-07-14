@@ -64,9 +64,9 @@ func (us UserService) Update(dto dto.UserEditDto) int64 {
 
 // UpdateStatus - update user's status only
 func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64 {
-	user := userDao.Get(dto.Id, false)
-	user.Status = dto.Status
-	c := userDao.Update(&user)
+	u := userDao.Get(dto.Id, false)
+	u.Status = dto.Status
+	c := userDao.Update(&u)
 	return c.RowsAffected
 }
 
@@ -74,10 +74,10 @@ func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64 {
 func (UserService) UpdatePassword(dto dto.UserEditPasswordDto) int64 {
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(dto.Password, salt)
-	user := userDao.Get(dto.Id, false)
-	user.Password = pwd
-	user.Salt = salt
-	c := userDao.Update(&user)
+	u := userDao.Get(dto.Id, false)
+	u.Password = pwd
+	u.Salt = salt
+	c := userDao.Update(&u)
 	return c.RowsAffected
 }
 

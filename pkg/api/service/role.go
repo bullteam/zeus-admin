@@ -1,9 +1,11 @@
 package service
 
 import (
+	"github.com/pkg/errors"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/role"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
 )
 
@@ -35,4 +37,27 @@ func (us RoleService) AssignPermission(roleId int, menuIds string) {
 		}
 		role.OverwritePerm(roleData.RoleName, roleData.Domain.Code, policies)
 	}
+}
+
+// Create - create a new account
+func (us RoleService) Create(dto dto.RoleCreateDto) (model.Role,error){
+	roleModel := model.Role{
+		Name:     dto.Name,
+		RoleName:       dto.RoleName,
+		Remark:     dto.Remark,
+		DomainId: dto.DomainId,
+	}
+	c := roleDao.Create(&roleModel)
+	if c == nil {
+		return model.Role{},errors.New("The role has exists")
+	} else {
+		if c.Error != nil {
+			log.Error(c.Error.Error())
+			return model.Role{},c.Error
+		}
+		if dto.MenuIds != "" {
+			us.AssignPermission(roleModel.Id, dto.MenuIds)
+		}
+	}
+	return roleModel,nil
 }

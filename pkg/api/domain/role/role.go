@@ -30,8 +30,8 @@ func OverwritePerm(roleName, domainCode string, polices [][]string) {
 			}
 		}
 	}
-	for _, new := range polices {
-		perm.AddPerm(new)
+	for _, newPerm := range polices {
+		perm.AddPerm(newPerm)
 	}
 	for _, rem := range currentPerms {
 		perm.DelPerm(rem)
