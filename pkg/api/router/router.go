@@ -52,4 +52,18 @@ func Init(e *gin.Engine) {
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
 	v1.POST("/role", roleController.Create)
+
+	//domain
+	domainController := &controllers.DomainController{}
+	v1.GET("/domains", domainController.List)
+	v1.GET("/domains/:id", domainController.Get)
+	v1.POST("/domains", domainController.Create)
+	v1.DELETE("/domains/:id", domainController.Delete)
+
+	//dept
+	deptController := &controllers.DeptController{}
+	v1.GET("/depts", deptController.List)
+	v1.GET("/depts/:id", deptController.Get)
+	v1.POST("/depts", deptController.Create)
+	v1.DELETE("/depts/:id", deptController.Delete)
 }

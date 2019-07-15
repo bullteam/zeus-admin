@@ -7,7 +7,7 @@ type DomainCreateDto struct {
 	Id            int       `json:"id"`
 	Name          string    `form:"name" json:"name" binding:"required"`
 	Callbackurl   string    `form:"callbackurl" json:"callbackurl" binding:"required"`
-	Remark        string       `form:"remark" json:"remark"`
+	Remark        string    `form:"remark" json:"remark"`
 	Code          string    `form:"code" json:"code" binding:"required"`
 	CreateTime    time.Time `type(datetime)" json:"create_time"`
 	LastLoginTime time.Time `type(datetime)" json:"-"`
@@ -18,6 +18,6 @@ type DomainEditDto struct {
 	Id          int    `uri:"id" json:"id" binding:"required"`
 	Name        string `form:"name" json:"name" binding:"required"`
 	Callbackurl string `form:"callbackurl" json:"callbackurl"`
-	Remark      string    `form:"remark" json:"remark"`
+	Remark      string `form:"remark" json:"remark"`
 	Code        string `form:"code" json:"code"`
 }

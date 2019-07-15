@@ -136,26 +136,25 @@ func (u *UserController) Delete(c *gin.Context) {
 	}
 }
 
-func (u *UserController) GetUserPermissions(c *gin.Context){
+func (u *UserController) GetUserPermissions(c *gin.Context) {
 	var userDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &userDto) {
 		resp(c, map[string]interface{}{
-			"result" : userService.GetAllPermissions(c.GetString("userId")),
+			"result": userService.GetAllPermissions(c.GetString("userId")),
 		})
 	}
 }
 
-func (u *UserController) UpdateDepartment(c *gin.Context)  {
+func (u *UserController) UpdateDepartment(c *gin.Context) {
 	var userDto dto.UserMoveDepartmentDto
 	if u.BindAndValidate(c, &userDto) {
-		err := userService.MoveToAnotherDepartment(strings.Split(userDto.Ids,","),userDto.Department)
+		err := userService.MoveToAnotherDepartment(strings.Split(userDto.Ids, ","), userDto.Department)
 		if err != nil {
 			errInfo := ErrEditFail
 			errInfo.Moreinfo = err.Error()
-			fail(c,errInfo)
+			fail(c, errInfo)
 			return
 		}
-		ok(c,"ok.UpdateDone")
+		ok(c, "ok.UpdateDone")
 	}
 }
-
