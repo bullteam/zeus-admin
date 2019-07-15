@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
@@ -28,7 +29,7 @@ func (u Domain) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
 	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("Domain").Offset(listDto.Offset).Limit(listDto.Limit).Find(&domains)
+	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&domains)
 	db.Model(&model.Domain{}).Count(&total)
 	return domains, total
 }

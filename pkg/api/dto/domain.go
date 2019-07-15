@@ -6,9 +6,9 @@ import "time"
 type DomainCreateDto struct {
 	Id            int       `json:"id"`
 	Name          string    `form:"name" json:"name" binding:"required"`
-	Callbackurl   string    `form:"callbackurl" json:"callbackurl"`
+	Callbackurl   string    `form:"callbackurl" json:"callbackurl" binding:"required"`
 	Remark        string       `form:"remark" json:"remark"`
-	Code          string    `form:"code" json:"code"`
+	Code          string    `form:"code" json:"code" binding:"required"`
 	CreateTime    time.Time `type(datetime)" json:"create_time"`
 	LastLoginTime time.Time `type(datetime)" json:"-"`
 }
