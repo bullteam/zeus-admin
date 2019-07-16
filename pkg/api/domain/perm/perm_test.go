@@ -155,4 +155,25 @@ func TestDelRole(t *testing.T) {
 			label: "Enforce with undefined policy - from DelRole",
 		},
 	})
+	AddGroup("lake","role-3")
+	runTestCases(t,[]permissionCases{
+		{
+			args:  []interface{}{"lake", "zone-3", "*", "department-4"},
+			want:  true,
+			label: "Enforce with defined policy - from DelRole",
+		},
+	})
+	DelRole("role-3")
+	runTestCases(t,[]permissionCases{
+		{
+			args:  []interface{}{"role-3", "zone-3", "*", "department-4"},
+			want:  false,
+			label: "Enforce with defined policy - from DelRole",
+		},
+		{
+			args:  []interface{}{"lake", "zone-3", "*", "department-4"},
+			want:  false,
+			label: "Enforce with defined policy - from DelRole",
+		},
+	})
 }

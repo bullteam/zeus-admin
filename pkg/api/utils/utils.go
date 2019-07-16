@@ -1,6 +1,6 @@
 package utils
 
-func StringSliceRemove(slice [][]string, i int) [][]string {
-	copy(slice[i:], slice[i+1:])
-	return slice[:len(slice)-1]
+func StringSliceRemove(s [][]string, i int) [][]string {
+	s[i] = s[len(s)-1]
+	return s[:len(s)-1]
 }

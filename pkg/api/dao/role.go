@@ -10,10 +10,13 @@ import (
 type Role struct {
 }
 
-//Get - get single roel infoD
-func (u Role) Get(id int) model.Role {
+//Get - get single roel info
+func (u Role) Get(id int,preload bool) model.Role {
 	var role model.Role
-	db.Where("id = ?", id).Preload("Domain").First(&role)
+	if preload {
+		db = db.Preload("Domain")
+	}
+	db.Where("id = ?", id).First(&role)
 	return role
 }
 
@@ -46,4 +49,16 @@ func (r Role) Create(role *model.Role) *gorm.DB {
 		return nil
 	}
 	return db.Save(role)
+}
+
+// Update - update role
+func (r Role) Update(role *model.Role) *gorm.DB {
+	db := GetDb()
+	return db.Save(role)
+}
+
+// Delete - delete role
+func (r Role) Delete(role *model.Role) *gorm.DB {
+	db := GetDb()
+	return db.Delete(role)
 }

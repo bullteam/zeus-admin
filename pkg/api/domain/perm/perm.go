@@ -72,6 +72,7 @@ func DelRoleByDomain(role string, domain string) {
 // DelRole : delete specific role
 func DelRole(role string) {
 	enforcer.RemoveFilteredNamedPolicy("p", 0, role)
+	enforcer.RemoveFilteredGroupingPolicy(1,role)
 }
 
 // GetAllPermsByRoleDomain : get policies by role and domain

@@ -47,6 +47,11 @@ func (r *RoleController) List(c *gin.Context) {
 	}
 }
 
+// @Summary 创建角色
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
+// @Router /v1/roles [post]
+// Create - c of crud
 func (r *RoleController) Create(c *gin.Context) {
 	var roleDto dto.RoleCreateDto
 	if r.BindAndValidate(c, &roleDto) {
@@ -60,5 +65,38 @@ func (r *RoleController) Create(c *gin.Context) {
 		resp(c, map[string]interface{}{
 			"result": newRole,
 		})
+	}
+}
+
+// @Summary 更新角色信息
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
+// @Router /v1/roles/:id [put]
+// Edit - u of crud
+func (r *RoleController) Edit(c *gin.Context) {
+	var roleDto dto.RoleEditDto
+	if r.BindAndValidate(c, &roleDto) {
+		affected := roleService.Update(roleDto)
+		if affected < 0 {
+			fail(c,ErrNoRecord)
+			return
+		}
+		ok(c, "ok.UpdateDone")
+	}
+}
+
+// @Summary 删除角色信息
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
+// @Router /v1/roles/:id [delete]
+// Delete - d of crud
+func (r *RoleController) Delete(c *gin.Context) {
+	var roleDto dto.GeneralDelDto
+	if r.BindAndValidate(c,&roleDto) {
+		if roleService.Delete(roleDto) < 1 {
+			fail(c,ErrNoRecord)
+			return
+		}
+		ok(c,"ok.DeleteDone")
 	}
 }

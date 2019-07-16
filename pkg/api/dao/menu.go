@@ -8,8 +8,9 @@ import (
 type Menu struct {
 }
 
-func (Menu) GetMenusByIds(ids string) []model.Menu {
+func (m Menu) GetMenusByIds(ids string) []model.Menu {
 	var menus []model.Menu
+	db := GetDb()
 	db.Where("id in (?)", strings.Split(ids, ",")).Find(&menus)
 	return menus
 }

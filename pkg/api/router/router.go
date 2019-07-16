@@ -51,8 +51,9 @@ func Init(e *gin.Engine) {
 	//role
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
-	v1.POST("/role", roleController.Create)
-
+	v1.POST("/roles", roleController.Create)
+	v1.PUT("/roles/:id", roleController.Edit)
+	v1.DELETE("/roles/:id",roleController.Delete)
 	//domain
 	domainController := &controllers.DomainController{}
 	v1.GET("/domains", domainController.List)

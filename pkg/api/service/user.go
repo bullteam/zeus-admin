@@ -1,6 +1,7 @@
 package service
 
 import (
+	"strconv"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/login"
@@ -87,6 +88,9 @@ func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
 		Id: dto.Id,
 	}
 	c := userDao.Delete(&userModel)
+	if c.RowsAffected > 0 {
+		user.DeleteUser(strconv.Itoa(dto.Id))
+	}
 	return c.RowsAffected
 }
 
