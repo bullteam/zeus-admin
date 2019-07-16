@@ -66,4 +66,12 @@ func Init(e *gin.Engine) {
 	v1.GET("/depts/:id", deptController.Get)
 	v1.POST("/depts", deptController.Create)
 	v1.DELETE("/depts/:id", deptController.Delete)
+
+	// data permission
+	dataPermController := &controllers.DatePermController{}
+	v1.GET("/datas", dataPermController.List)
+	v1.GET("/datas/:id", dataPermController.Get)
+	v1.POST("/datas", dataPermController.Create)
+	v1.PUT("/datas/:id", dataPermController.Edit)
+	v1.DELETE("/datas/:id", dataPermController.Delete)
 }
