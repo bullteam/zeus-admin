@@ -61,7 +61,7 @@ func (u *UserController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/api/users?limit=20&offset=0 [get]
+// @Router /users?limit=20&offset=0 [get]
 func (u *UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
 	if u.BindAndValidate(c, &userDto) {
