@@ -32,6 +32,7 @@ func Init(e *gin.Engine) {
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 
+
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
@@ -52,7 +53,15 @@ func Init(e *gin.Engine) {
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
 	v1.POST("/roles", roleController.Create)
-
+	v1.PUT("/roles/:id", roleController.Edit)
+	v1.DELETE("/roles/:id",roleController.Delete)
+	//menu
+	menuController := &controllers.MenuController{}
+	v1.GET("/menus", menuController.List)
+	v1.GET("/menus/:id", menuController.Get)
+	v1.POST("/menus", menuController.Create)
+	v1.PUT("/menus/:id", menuController.Edit)
+	v1.DELETE("/menus/:id",menuController.Delete)
 	//domain
 	domainController := &controllers.DomainController{}
 	v1.GET("/domains", domainController.List)

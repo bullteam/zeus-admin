@@ -10,13 +10,10 @@ import (
 type Domain struct {
 }
 
-//func (Domain) GetByRole(role model.Role){
-//	db := GetDb()
-//	db.Where("code",role.Domain.Code)
-//}
 //Get - get single domain infoD
 func (u Domain) Get(id int) model.Domain {
 	var domain model.Domain
+	db := GetDb()
 	db.Where("id = ?", id).First(&domain)
 	return domain
 }
@@ -26,7 +23,7 @@ func (u Domain) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
 	var domains []model.Domain
 	var total int64
 	db := GetDb()
-	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q,dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&domains)

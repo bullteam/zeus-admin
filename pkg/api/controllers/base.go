@@ -51,6 +51,7 @@ var (
 	ErrGoogleBindCode    = &ControllerError{13009, "err.ErrGoogleBindCode", "", ""}
 	ErrSendMail          = &ControllerError{13010, "err.ErrSendMail", "", ""}
 	ErrValidation        = &ControllerError{13011, "err.ErrValidate", "", ""}
+	ErrNoRecord			 = &ControllerError{13012,"err.ErrNoRecord","",""}
 )
 
 type BaseController struct {
