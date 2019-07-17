@@ -1,5 +1,11 @@
 package dto
 
+// RoleListSearchMapping - define search query keys in role list page
+var RoleListSearchMapping = map[string]string{
+	"n": "name",
+	"d": "domain_id",
+	"r" : "role_name",
+}
 // RoleCreateDto - dto for role's creation
 type RoleCreateDto struct {
 	Name       string `form:"name" binding:"required"`

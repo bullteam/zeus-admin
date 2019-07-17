@@ -58,12 +58,9 @@ func (u *UserController) List(c *gin.Context) {
 func (u *UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
 	if u.BindAndValidate(c, &userDto) {
-		created := userService.Create(userDto)
-		if created.Id <= 0 {
-			fail(c, ErrAddFail)
-		}
+		user := userService.Create(userDto)
 		resp(c, map[string]interface{}{
-			"id": created.Id,
+			"result": user,
 		})
 	}
 }

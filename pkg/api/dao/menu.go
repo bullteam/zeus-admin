@@ -1,16 +1,59 @@
 package dao
 
 import (
+	"fmt"
+	"github.com/jinzhu/gorm"
 	"strings"
+	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
 )
 
 type Menu struct {
 }
-
+// GetMenusById
 func (m Menu) GetMenusByIds(ids string) []model.Menu {
 	var menus []model.Menu
 	db := GetDb()
 	db.Where("id in (?)", strings.Split(ids, ",")).Find(&menus)
 	return menus
+}
+
+//Get - get single menu info
+func (m Menu) Get(id int,preload bool) model.Menu {
+	var menu model.Menu
+	db := GetDb()
+	if preload {
+		db = db.Preload("Domain")
+	}
+	db.Where("id = ?", id).First(&menu)
+	return menu
+}
+// List
+func (m Menu) List(treeDto dto.GeneralTreeDto) ([]model.Menu, int64) {
+	var menus []model.Menu
+	var total int64
+	db := GetDb()
+	for sk, sv := range dto.TransformSearch(treeDto.Q,dto.MenuListSearchMapping) {
+		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	}
+	db.Preload("Domain").Order("order_num asc").Find(&menus)
+	db.Model(&model.Menu{}).Count(&total)
+	return menus, total
+}
+// Create - new menu
+func (m Menu) Create(menu *model.Menu) *gorm.DB {
+	db := GetDb()
+	return db.Save(menu)
+}
+
+// Update - update menu
+func (m Menu) Update(menu *model.Menu) *gorm.DB {
+	db := GetDb()
+	return db.Save(menu)
+}
+
+// Delete - delete menu
+func (m Menu) Delete(menu *model.Menu) *gorm.DB {
+	db := GetDb()
+	return db.Delete(menu)
 }

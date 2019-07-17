@@ -59,6 +59,10 @@ func DelPerm(params ...interface{}) bool {
 	return enforcer.RemovePolicy(params...)
 }
 
+// DeleteFilteredPerm
+func DelFilteredPerm(fieldIndex int,params ... string) bool{
+	return enforcer.RemoveFilteredPolicy(fieldIndex,params ...)
+}
 // Enforce : check permission
 func Enforce(params ...interface{}) bool {
 	return enforcer.Enforce(params...)

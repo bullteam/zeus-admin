@@ -10,7 +10,6 @@ import (
 )
 
 var roleDao = dao.Role{}
-var menuDao = dao.Menu{}
 
 // RoleService
 type RoleService struct {

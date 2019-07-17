@@ -177,3 +177,33 @@ func TestDelRole(t *testing.T) {
 		},
 	})
 }
+
+func TestDelFilteredPerm(t *testing.T) {
+	AddPerm("role-1","zone-1","action-1","domain-1")
+	AddPerm("role-2","zone-1","action-2","domain-1")
+	runTestCases(t,[]permissionCases{
+		{
+			args:  []interface{}{"role-1", "zone-1", "action-1", "domain-1"},
+			want:  true,
+			label: "Enforce with defined policy - from DelFilteredPerm before",
+		},
+		{
+			args:  []interface{}{"role-2", "zone-1", "action-2", "domain-1"},
+			want:  true,
+			label: "Enforce with defined policy - from DelFilteredPerm before",
+		},
+	})
+	DelFilteredPerm(1,"zone-1")
+	runTestCases(t,[]permissionCases{
+		{
+			args:  []interface{}{"role-1", "zone-1", "action-1", "domain-1"},
+			want:  false,
+			label: "Enforce with undefined policy - from DelFilteredPerm after",
+		},
+		{
+			args:  []interface{}{"role-2", "zone-1", "action-2", "domain-1"},
+			want:  false,
+			label: "Enforce with undefined policy - from DelFilteredPerm after",
+		},
+	})
+}
