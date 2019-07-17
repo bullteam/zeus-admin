@@ -13,12 +13,15 @@ type UserController struct {
 	BaseController
 }
 
+// @Tags Users
 // @Summary 用户信息
+// @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
+// @Param id path int true "用户id"
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
 // @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
-// @Router /v1/api/users/:id [get]
+// @Router /users/{id} [get]
 func (u *UserController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &gDto) {
@@ -34,11 +37,14 @@ func (u *UserController) Get(c *gin.Context) {
 	}
 }
 
+// @Tags Users
 // @Summary 用户列表[分页+搜索]
+// @Security ApiKeyAuth
+// @Param limit query int false "条数"
+// @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/api/users?limit=20&offset=0 [get]
-// List - r of crud
+// @Router /users?limit=20&offset=0 [get]
 func (u *UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if u.BindAndValidate(c, &listDto) {
@@ -50,11 +56,12 @@ func (u *UserController) List(c *gin.Context) {
 	}
 }
 
+// @Tags Users
 // @Summary 新增用户
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/api/users?limit=20&offset=0 [get]
-//Create - c of crud
 func (u *UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
 	if u.BindAndValidate(c, &userDto) {
@@ -68,11 +75,13 @@ func (u *UserController) Create(c *gin.Context) {
 	}
 }
 
+// @Tags Users
 // @Summary 编辑用户
+// @Security ApiKeyAuth
 // @Produce  json
+// @Param id path int true "用户id"
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/api/users/:id [put]
-// Edit - u of crud
+// @Router /users/{id} [put]
 func (u *UserController) Edit(c *gin.Context) {
 	var userDto dto.UserEditDto
 	if u.BindAndValidate(c, &userDto) {
@@ -85,11 +94,13 @@ func (u *UserController) Edit(c *gin.Context) {
 	}
 }
 
+// @Tags Users
 // @Summary 更新用户状态
+// @Security ApiKeyAuth
+// @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/api/users/:id/status [put]
-// Edit - u of crud
+// @Router /users/{id}/status [put]
 func (u *UserController) EditStatus(c *gin.Context) {
 	var userDto dto.UserEditStatusDto
 	if u.BindAndValidate(c, &userDto) {
@@ -102,11 +113,13 @@ func (u *UserController) EditStatus(c *gin.Context) {
 	}
 }
 
+// @Tags Users
 // @Summary 更新用户密码
+// @Security ApiKeyAuth
+// @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/api/users/:id/password [put]
-// Edit - u of crud
+// @Router /users/{id}/password [put]
 func (u *UserController) EditPassword(c *gin.Context) {
 	var userDto dto.UserEditPasswordDto
 	if u.BindAndValidate(c, &userDto) {
@@ -119,11 +132,13 @@ func (u *UserController) EditPassword(c *gin.Context) {
 	}
 }
 
+// @Tags Users
 // @Summary 删除用户
+// @Security ApiKeyAuth
+// @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/api/users/:id [delete]
-//Create - d of crud
+// @Router /users/{id} [delete]
 func (u *UserController) Delete(c *gin.Context) {
 	var userDto dto.GeneralDelDto
 	if u.BindAndValidate(c, &userDto) {
@@ -136,6 +151,13 @@ func (u *UserController) Delete(c *gin.Context) {
 	}
 }
 
+// @Tags Users
+// @Summary 获取用户权限列表
+// @Security ApiKeyAuth
+// @Param id path int true "用户id"
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /users/{id}/permissions [get]
 func (u *UserController) GetUserPermissions(c *gin.Context) {
 	var userDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &userDto) {
@@ -145,6 +167,12 @@ func (u *UserController) GetUserPermissions(c *gin.Context) {
 	}
 }
 
+// @Tags Users
+// @Summary 移动部门
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /users/department/move [post]
 func (u *UserController) UpdateDepartment(c *gin.Context) {
 	var userDto dto.UserMoveDepartmentDto
 	if u.BindAndValidate(c, &userDto) {
