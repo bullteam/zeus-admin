@@ -29,4 +29,20 @@ func TestOverwritePerm(t *testing.T) {
 	assert.Equal(t, true, CheckPerm("role-1", "zone-1", "*", "department-1"), "Permission check of role after overwrite")
 	assert.Equal(t, false, CheckPerm("role-1", "zone-1", "manage-all-things", "department-1"), "Permission check of role after overwrite")
 	assert.Equal(t, true, CheckPerm("role-1", "zone-2", "manage-some-stuff", "department-1"), "Permission check of role after overwrite")
+
+	OverwritePerm("role-1", "department-1", [][]string{
+		{"role-1", "zone-1", "*", "department-1"},
+	})
+
+	assert.Equal(t, true, CheckPerm("role-1", "zone-1", "*", "department-1"), "Permission check of role after overwrite")
+	assert.Equal(t, false, CheckPerm("role-1", "zone-1", "manage-all-things", "department-1"), "Permission check of role after overwrite")
+	assert.Equal(t, false, CheckPerm("role-1", "zone-2", "manage-some-stuff", "department-1"), "Permission check of role after overwrite")
+
+	OverwritePerm("role-1", "department-1", [][]string{
+		{"role-1", "zone-2", "manage-some-stuff", "department-1"},
+	})
+
+	assert.Equal(t, false, CheckPerm("role-1", "zone-1", "*", "department-1"), "Permission check of role after overwrite")
+	assert.Equal(t, false, CheckPerm("role-1", "zone-1", "manage-all-things", "department-1"), "Permission check of role after overwrite")
+	assert.Equal(t, true, CheckPerm("role-1", "zone-2", "manage-some-stuff", "department-1"), "Permission check of role after overwrite")
 }

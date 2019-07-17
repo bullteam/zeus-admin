@@ -1,9 +1,7 @@
 package role
 
 import (
-	"fmt"
 	"zeus/pkg/api/domain/perm"
-	"zeus/pkg/api/log"
 )
 
 // CheckPerm : check permission by role with domain
@@ -24,9 +22,6 @@ func DeletePerm(roleName string) {
 // remove or create policy
 func OverwritePerm(roleName, domainCode string, polices [][]string) {
 	currentPerms := perm.GetAllPermsByRoleDomain(roleName, domainCode)
-	log.Info(fmt.Sprintf("%#v",polices))
-	log.Info(fmt.Sprintf("%#v",currentPerms))
-	// TODO : has bug here
 	for k1, newPerm := range polices {
 		for k2, currentPerm := range currentPerms {
 			if newPerm[0] == currentPerm[0] &&
