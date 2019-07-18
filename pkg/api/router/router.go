@@ -67,6 +67,7 @@ func Init(e *gin.Engine) {
 	v1.GET("/domains", domainController.List)
 	v1.GET("/domains/:id", domainController.Get)
 	v1.POST("/domains", domainController.Create)
+	v1.PUT("/domains/:id", domainController.Edit)
 	v1.DELETE("/domains/:id", domainController.Delete)
 
 	//dept
@@ -74,6 +75,7 @@ func Init(e *gin.Engine) {
 	v1.GET("/depts", deptController.List)
 	v1.GET("/depts/:id", deptController.Get)
 	v1.POST("/depts", deptController.Create)
+	v1.PUT("/depts/:id", deptController.Edit)
 	v1.DELETE("/depts/:id", deptController.Delete)
 
 	// data permission

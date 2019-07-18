@@ -12,10 +12,13 @@ type RoleController struct {
 	BaseController
 }
 
+// @Tags Role
 // @Summary 角色信息
+// @Security ApiKeyAuth
+// @Param id path int true "角色id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/api/roles/:id [get]
+// @Router /roles/{id} [get]
 func (r *RoleController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if r.BindAndValidate(c, &gDto) {
@@ -31,11 +34,14 @@ func (r *RoleController) Get(c *gin.Context) {
 	}
 }
 
+// @Tags Role
 // @Summary 角色列表[分页+搜索]
+// @Security ApiKeyAuth
+// @Param limit query int false "条数"
+// @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/api/roles?limit=20&offset=0 [get]
-// List - r of crud
+// @Router /roles [get]
 func (r *RoleController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if r.BindAndValidate(c, &listDto) {
@@ -47,11 +53,12 @@ func (r *RoleController) List(c *gin.Context) {
 	}
 }
 
-// @Summary 创建角色
+// @Tags Role
+// @Summary 新增角色
+// @Security ApiKeyAuth
 // @Produce  json
-// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/roles [post]
-// Create - c of crud
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /roles [post]
 func (r *RoleController) Create(c *gin.Context) {
 	var roleDto dto.RoleCreateDto
 	if r.BindAndValidate(c, &roleDto) {
