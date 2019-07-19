@@ -7,10 +7,12 @@ require (
 	github.com/Unknwon/goconfig v0.0.0-20190425194916-3dba17dd7b9e // indirect
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/appleboy/gin-jwt/v2 v2.6.2
+	github.com/astaxie/beego v1.11.1
 	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
 	github.com/billcobbler/casbin-redis-watcher v0.0.0-20180829182704-69cab1cdcf44
 	github.com/casbin/casbin v1.8.3
 	github.com/denisenkom/go-mssqldb v0.0.0-20190515213511-eb9f6a1743f3 // indirect
+	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.4.0
@@ -20,6 +22,7 @@ require (
 	github.com/go-openapi/swag v0.19.0 // indirect
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/google/go-cmp v0.3.0 // indirect
+	github.com/icepy/go-dingtalk v0.0.0-20180430151047-e8997a391814
 	github.com/jinzhu/gorm v1.9.8
 	github.com/lib/pq v1.1.1 // indirect
 	github.com/onsi/ginkgo v1.8.0 // indirect
@@ -27,6 +30,7 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/rafaeljusto/redigomock v0.0.0-20190202135759-257e089e14a1 // indirect
 	github.com/rs/zerolog v1.14.3
+	github.com/skip2/go-qrcode v0.0.0-20190110000554-dc11ecdae0a9
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2

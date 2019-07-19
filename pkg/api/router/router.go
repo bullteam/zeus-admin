@@ -66,4 +66,8 @@ func Init(e *gin.Engine) {
 	v1.GET("/depts/:id", deptController.Get)
 	v1.POST("/depts", deptController.Create)
 	v1.DELETE("/depts/:id", deptController.Delete)
+
+	//myaccount
+	v1.GET("/account/accountinfo", accountController.AccountInfo)
+
 }

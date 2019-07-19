@@ -1,10 +1,20 @@
 package controllers
 
 import (
+	"bytes"
+	"encoding/base64"
 	"fmt"
+	"github.com/astaxie/beego/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"image/png"
+	"net/url"
 	"strconv"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/service"
+	"github.com/skip2/go-qrcode"
+	"github.com/dgryski/dgoogauth"
+	"zeus/pkg/api/utils/mailTemplate"
 )
 
 type AccountController struct {
@@ -68,3 +78,209 @@ func (AccountController) GetDomains(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/domains [get]
 // GetDomains - get user managing domains
+
+// @Summary 获取个人中心用户信息
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/accountinfo [get]
+func (a *AccountController) AccountInfo(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
+	resp(c, map[string]interface{}{
+		"result": data,
+	})
+
+	myAccountService := service.MyAccountService{}
+	userSecretQuery, err := myAccountService.GetSecret(userId)
+	if err != nil {
+		fail(c,ErrInvalidUser)
+		return
+	}
+	account := userSecretQuery.Account_name
+	issuer := "宙斯"
+	URL, err := url.Parse("otpauth://totp")
+	if err != nil {
+		fail(c,ErrInvalidParams)
+		return
+	}
+
+	URL.Path += "/" + url.PathEscape(issuer) + ":" + url.PathEscape(account)
+	params := url.Values{}
+	params.Add("secret", userSecretQuery.Secret)
+	params.Add("issuer", issuer)
+	URL.RawQuery = params.Encode()
+	p, errs := qrcode.New(URL.String(), qrcode.Medium)
+	img := p.Image(256)
+	if errs != nil {
+		fail(c,ErrInvalidParams)
+		return
+	}
+	out := new(bytes.Buffer)
+	errx := png.Encode(out, img)
+	if errx != nil {
+		fail(c,ErrInvalidParams)
+	}
+	base64Img := base64.StdEncoding.EncodeToString(out.Bytes())
+	result := map[string]string{
+		"code ":   "data:image/png;base64," + base64Img,
+		"account": account,
+		"secret":  userSecretQuery.Secret,
+	}
+	resp(c, map[string]interface{}{
+		"result": result,
+	})
+}
+
+// @Summary 绑定2fa goole 验证码
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/bindcode [get]
+func (a *AccountController) BindCode(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	myAccountService := service.MyAccountService{}
+	userSecretQuery, err := myAccountService.GetSecret(userId)
+	if err != nil {
+		fail(c,ErrInvalidUser)
+	}
+	secretBase32 := userSecretQuery.Secret
+	bindCodeDto := &dto.BindCodeDto{}
+	if !a.BindAndValidate(c, &bindCodeDto) {
+		fail(c,ErrInvalidParams)
+	}
+	otpc := &dgoogauth.OTPConfig{
+		Secret:      secretBase32,
+		WindowSize:  3,
+		HotpCounter: 0,
+		// UTC:         true,
+	}
+
+	val, err := otpc.Authenticate(bindCodeDto.Google2faToken)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if !val {
+		fail(c,ErrGoogleBindCode)
+		return
+	}
+	resp(c, map[string]interface{}{
+		"result": "Authenticated!",
+	})
+}
+
+// @Summary 第三方绑定列表
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/third [get]
+func (a *AccountController) Third(c *gin.Context) {
+	var listDto dto.GeneralListDto
+	//userId := int(c.Value("userId").(float64))
+	myAccountService := service.MyAccountService{}
+	resp(c, map[string]interface{}{
+		"result": myAccountService.GetThirdList(listDto),
+	})
+}
+
+// @Summary 验证邮件地址(发送邮件)
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/third [get]
+func (a *AccountController) Verifymail(c *gin.Context) {
+	verifyEmailDto := &dto.VerifyEmail{}
+	if a.BindAndValidate(c, &verifyEmailDto) {
+		username := viper.GetString("email.username")
+		password := viper.GetString("email.password")
+		host := viper.GetString("email.host")
+		port := viper.GetInt("email.port")
+		from := viper.GetString("email.from")
+		if port == 0 {
+			port = 25
+		}
+		config := fmt.Sprintf(`{"username":"%s","password":"%s","host":"%s","port":%d,"from":"%s"}`, username, password, host, port, from)
+		temail := utils.NewEMail(config)
+		temail.To = []string{verifyEmailDto.Email} //指定收件人邮箱地址
+		temail.From = from                         //指定发件人的邮箱地址
+		temail.Subject = "验证账号邮件"                  //指定邮件的标题
+		temail.HTML = mailTemplate.MailBody()
+		err := temail.Send()
+		if err != nil {
+			fail(c,ErrSendMail)
+			return
+		}
+		resp(c, map[string]interface{}{
+			"result": "email send success！",
+		})
+	}
+
+}
+
+// @Summary 验证邮件地址(验证)
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/EmailVerification [get]
+func (a *AccountController) EmailVerification(c *gin.Context) {
+	emailVerificationDto := &dto.EmailVerificationDto{}
+	if !a.BindAndValidate(c, &emailVerificationDto) {
+		fail(c,ErrInvalidParams)
+		return
+	}
+	resp(c, map[string]interface{}{
+		"result": "email verify success！",
+	})
+}
+
+// @Summary 解除绑定第三方应用
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/Thirdbind [get]
+func (a *AccountController) Thirdbind(c *gin.Context) {
+	bindThirdDto := &dto.BindThirdDto{}
+	if !a.BindAndValidate(c, &bindThirdDto) {
+		fail(c,ErrInvalidParams)
+		return
+	}
+	from := bindThirdDto.From
+	if from == 0 {
+		from = 1
+	}
+	userId := int(c.Value("userId").(float64))
+	myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
+	openid, err := myAccountService.BindByDingtalk(bindThirdDto.Code, userId, from)
+	if err != nil {
+		fail(c,ErrBindDingtalk)
+	}
+	data := map[string]string{
+		"openid": openid,
+	}
+	resp(c, map[string]interface{}{
+		"result": data,
+	})
+}
+
+// @Summary 解除绑定第三方应用
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/ThirdUnbind [get]
+func (a *AccountController) ThirdUnbind(c *gin.Context) {
+	UnBindDingtalkDto := &dto.UnBindThirdDto{}
+	if !a.BindAndValidate(c, &UnBindDingtalkDto) {
+		fail(c,ErrInvalidParams)
+		return
+	}
+	userId := int(c.Value("userId").(float64))
+	from := UnBindDingtalkDto.From
+	if from == 0 {
+		from = 1
+	}
+	userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
+	errs := userService.UnBindUserDingtalk(from, userId)
+	if errs != nil {
+		fail(c,ErrUnBindDingtalk)
+	}
+	data := map[string]bool{
+		"state": true,
+	}
+	resp(c, map[string]interface{}{
+		"result": data,
+	})
+}

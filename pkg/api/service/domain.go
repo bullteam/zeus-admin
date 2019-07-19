@@ -7,7 +7,7 @@ import (
 	"zeus/pkg/api/model"
 )
 
-var domainDao = dao.Domain{}
+var domainDao = dao.DomainDao{}
 
 // DomainService
 type DomainService struct {

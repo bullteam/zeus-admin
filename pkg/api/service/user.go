@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/spf13/viper"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/login"
@@ -9,6 +10,7 @@ import (
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
+	dingtalk "github.com/icepy/go-dingtalk/src"
 )
 
 const pwHashBytes = 64
@@ -16,7 +18,16 @@ const pwHashBytes = 64
 var userDao = dao.User{}
 
 type UserService struct {
+	userOAuthDao *dao.UserOAuthDao
 }
+
+type DingtalkUserInfo struct {
+	Openid  string
+	Unionid string
+	Nick    string
+	Dingid  string
+}
+
 
 func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
 	return userDao.Get(dto.Id, true)
@@ -133,4 +144,58 @@ func (UserService) GetAllPermissions(uid string) []string {
 // MoveToAnotherDepartment - move users to another department
 func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 	return userDao.UpdateDepartment(uids, target)
+}
+
+
+
+//钉钉登陆
+func (us UserService) LoginByDingtalk(code string) (user *model.UserOAuth, err error) {
+	Info, err := getUserInfo(code)
+	if err != nil {
+		return nil, err
+	}
+	User, err := us.userOAuthDao.GetUserByOpenId(Info.Openid, 1)
+	if err == nil {
+		return User, nil
+	}
+	return nil, err
+}
+
+func getUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
+	c := GetCompanyDingTalkClient()
+	c.RefreshSNSAccessToken()
+	perInfo, err := c.SNSGetPersistentCode(code)
+	if err != nil {
+		return nil, err
+	}
+	snstoken, err := c.SNSGetSNSToken(perInfo.OpenID, perInfo.PersistentCode)
+	if err != nil {
+		return nil, err
+	}
+	Info, _ := c.SNSGetUserInfo(snstoken.SnsToken)
+	userInfo := &DingtalkUserInfo{
+		Info.UserInfo.OpenID,
+		Info.UserInfo.UnionID,
+		Info.UserInfo.Nick,
+		Info.UserInfo.DingID,
+	}
+	return userInfo, nil
+}
+
+func (us UserService) UnBindUserDingtalk(from int, user_id int) error {
+	return us.userOAuthDao.DeleteByUseridAndFrom(from, user_id)
+}
+
+func GetCompanyDingTalkClient() *dingtalk.DingTalkClient {
+	SNSAppID := viper.GetString("dingtalk.SNSAppID")
+	SNSSecret := viper.GetString("dingtalk.SNSSecret")
+	config := &dingtalk.DTConfig{
+		SNSAppID:  SNSAppID,
+		SNSSecret: SNSSecret,
+	}
+	return dingtalk.NewDingTalkCompanyClient(config)
+}
+
+func (us UserService) GetBindOauthUserInfo(userid int) (UserInfo model.UserOAuth) {
+	return us.userOAuthDao.Get(userid)
 }
