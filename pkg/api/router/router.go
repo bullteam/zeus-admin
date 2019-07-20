@@ -46,7 +46,14 @@ func Init(e *gin.Engine) {
 	v1.GET("/account/info", accountController.Info)
 	//update login user's password
 	v1.PUT("/account/password", accountController.EditPassword)
-	v1.GET("/account/domains", accountController.GetDomains)
+	v1.GET("/account/getdomains", accountController.GetDomains)
+	v1.POST("/account/bindcode", accountController.BindCode)
+	v1.POST("/account/thirdbind", accountController.Thirdbind)
+	v1.POST("/account/thirdunbind", accountController.ThirdUnbind)
+	v1.GET("/account/third", accountController.Third)
+	v1.POST("/account/verifymail", accountController.Verifymail)
+	v1.GET("/account/emailverification", accountController.EmailVerification)
+
 
 	roleController := &controllers.RoleController{}
 	//role
