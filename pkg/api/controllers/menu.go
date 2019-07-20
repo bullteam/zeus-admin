@@ -91,7 +91,11 @@ func (m *MenuController) Delete(c *gin.Context) {
 	if m.BindAndValidate(c, &menuDto) {
 		affected := menuService.Delete(menuDto)
 		if affected <= 0 {
-			fail(c, ErrDelFail)
+			if affected == -2 {
+				fail(c, ErrHasSubRecord)
+			} else {
+				fail(c, ErrDelFail)
+			}
 			return
 		}
 		ok(c, "ok.DeletedDone")

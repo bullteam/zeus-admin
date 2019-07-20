@@ -11,7 +11,7 @@ type Role struct {
 }
 
 //Get - get single roel info
-func (u Role) Get(id int,preload bool) model.Role {
+func (u Role) Get(id int, preload bool) model.Role {
 	var role model.Role
 	db := GetDb()
 	if preload {
@@ -33,7 +33,7 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	var roles []model.Role
 	var total int64
 	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q,dto.RoleListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.RoleListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)

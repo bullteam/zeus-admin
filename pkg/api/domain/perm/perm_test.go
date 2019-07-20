@@ -155,8 +155,8 @@ func TestDelRole(t *testing.T) {
 			label: "Enforce with undefined policy - from DelRole",
 		},
 	})
-	AddGroup("lake","role-3")
-	runTestCases(t,[]permissionCases{
+	AddGroup("lake", "role-3")
+	runTestCases(t, []permissionCases{
 		{
 			args:  []interface{}{"lake", "zone-3", "*", "department-4"},
 			want:  true,
@@ -164,7 +164,7 @@ func TestDelRole(t *testing.T) {
 		},
 	})
 	DelRole("role-3")
-	runTestCases(t,[]permissionCases{
+	runTestCases(t, []permissionCases{
 		{
 			args:  []interface{}{"role-3", "zone-3", "*", "department-4"},
 			want:  false,
@@ -179,9 +179,9 @@ func TestDelRole(t *testing.T) {
 }
 
 func TestDelFilteredPerm(t *testing.T) {
-	AddPerm("role-1","zone-1","action-1","domain-1")
-	AddPerm("role-2","zone-1","action-2","domain-1")
-	runTestCases(t,[]permissionCases{
+	AddPerm("role-1", "zone-1", "action-1", "domain-1")
+	AddPerm("role-2", "zone-1", "action-2", "domain-1")
+	runTestCases(t, []permissionCases{
 		{
 			args:  []interface{}{"role-1", "zone-1", "action-1", "domain-1"},
 			want:  true,
@@ -193,8 +193,8 @@ func TestDelFilteredPerm(t *testing.T) {
 			label: "Enforce with defined policy - from DelFilteredPerm before",
 		},
 	})
-	DelFilteredPerm(1,"zone-1")
-	runTestCases(t,[]permissionCases{
+	DelFilteredPerm(1, "zone-1")
+	runTestCases(t, []permissionCases{
 		{
 			args:  []interface{}{"role-1", "zone-1", "action-1", "domain-1"},
 			want:  false,

@@ -142,8 +142,6 @@ func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 	return userDao.UpdateDepartment(uids, target)
 }
 
-
-
 //钉钉登陆
 func (us UserService) LoginByDingtalk(code string) (user *model.UserOAuth, err error) {
 	Info, err := getUserInfo(code)

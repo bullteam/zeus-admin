@@ -32,7 +32,6 @@ func Init(e *gin.Engine) {
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 
-
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
@@ -46,7 +45,13 @@ func Init(e *gin.Engine) {
 	v1.GET("/account/info", accountController.Info)
 	//update login user's password
 	v1.PUT("/account/password", accountController.EditPassword)
-	v1.GET("/account/domains", accountController.GetDomains)
+	v1.GET("/account/getdomains", accountController.GetDomains)
+	v1.POST("/account/bindcode", accountController.BindCode)
+	v1.POST("/account/thirdbind", accountController.Thirdbind)
+	v1.POST("/account/thirdunbind", accountController.ThirdUnbind)
+	v1.GET("/account/third", accountController.Third)
+	v1.POST("/account/verifymail", accountController.Verifymail)
+	v1.GET("/account/emailverification", accountController.EmailVerification)
 
 	roleController := &controllers.RoleController{}
 	//role
@@ -54,14 +59,14 @@ func Init(e *gin.Engine) {
 	v1.GET("/roles/:id", roleController.Get)
 	v1.POST("/roles", roleController.Create)
 	v1.PUT("/roles/:id", roleController.Edit)
-	v1.DELETE("/roles/:id",roleController.Delete)
+	v1.DELETE("/roles/:id", roleController.Delete)
 	//menu
 	menuController := &controllers.MenuController{}
 	v1.GET("/menus", menuController.List)
 	v1.GET("/menus/:id", menuController.Get)
 	v1.POST("/menus", menuController.Create)
 	v1.PUT("/menus/:id", menuController.Edit)
-	v1.DELETE("/menus/:id",menuController.Delete)
+	v1.DELETE("/menus/:id", menuController.Delete)
 	//domain
 	domainController := &controllers.DomainController{}
 	v1.GET("/domains", domainController.List)

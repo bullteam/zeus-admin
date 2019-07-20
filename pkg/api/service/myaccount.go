@@ -49,7 +49,7 @@ func (s *MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQ
 /**
 获取第三方账号绑定列表
 */
-func (s *MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAuth ) {
+func (s *MyAccountService) GetThirdList(dto dto.GeneralListDto) []model.UserOAuth {
 	return s.oauthdao.List(dto)
 }
 
