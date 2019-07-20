@@ -53,7 +53,6 @@ func Init(e *gin.Engine) {
 	v1.POST("/account/verifymail", accountController.Verifymail)
 	v1.GET("/account/emailverification", accountController.EmailVerification)
 
-
 	roleController := &controllers.RoleController{}
 	//role
 	v1.GET("/roles", roleController.List)

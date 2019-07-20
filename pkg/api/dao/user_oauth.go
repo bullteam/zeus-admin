@@ -27,11 +27,11 @@ func (u UserOAuthDao) Delete(UserOAuth *model.UserOAuth) *gorm.DB {
 }
 
 // List - userOAuth list
-func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth) {
+func (u UserOAuthDao) List(listDto dto.GeneralListDto) []model.UserOAuth {
 	var UserOAuth []model.UserOAuth
 	var total int64
 	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q,dto.UserListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&UserOAuth)
@@ -39,16 +39,15 @@ func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth) {
 	return UserOAuth
 }
 
-
 func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (*model.UserOAuth, error) {
 	var userOAuth *model.UserOAuth
-	db.Where("openid = ? and from = ?", openid,from).First(&userOAuth)
-	return userOAuth,nil
+	db.Where("openid = ? and from = ?", openid, from).First(&userOAuth)
+	return userOAuth, nil
 }
 
 func (dao *UserOAuthDao) DeleteByUseridAndFrom(from int, user_id int) error {
 	db := GetDb()
 	var userOAuth model.UserOAuth
-	db.Where("openid = ? and from = ?", from,user_id).Delete(userOAuth)
+	db.Where("openid = ? and from = ?", from, user_id).Delete(userOAuth)
 	return nil
 }

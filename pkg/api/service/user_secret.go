@@ -11,7 +11,6 @@ var userSecretDao = dao.UserSecretDao{}
 
 // DomainService
 type userSecretService struct {
-
 }
 
 // InfoOfId - get role info by id

@@ -5,15 +5,15 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/astaxie/beego/utils"
+	"github.com/dgryski/dgoogauth"
 	"github.com/gin-gonic/gin"
+	"github.com/skip2/go-qrcode"
 	"github.com/spf13/viper"
 	"image/png"
 	"net/url"
 	"strconv"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
-	"github.com/skip2/go-qrcode"
-	"github.com/dgryski/dgoogauth"
 	"zeus/pkg/api/utils/mailTemplate"
 )
 
@@ -93,14 +93,14 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 	myAccountService := service.MyAccountService{}
 	userSecretQuery, err := myAccountService.GetSecret(userId)
 	if err != nil {
-		fail(c,ErrInvalidUser)
+		fail(c, ErrInvalidUser)
 		return
 	}
 	account := userSecretQuery.Account_name
 	issuer := "宙斯"
 	URL, err := url.Parse("otpauth://totp")
 	if err != nil {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 		return
 	}
 
@@ -112,13 +112,13 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 	p, errs := qrcode.New(URL.String(), qrcode.Medium)
 	img := p.Image(256)
 	if errs != nil {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 		return
 	}
 	out := new(bytes.Buffer)
 	errx := png.Encode(out, img)
 	if errx != nil {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 	}
 	base64Img := base64.StdEncoding.EncodeToString(out.Bytes())
 	result := map[string]string{
@@ -140,12 +140,13 @@ func (a *AccountController) BindCode(c *gin.Context) {
 	myAccountService := service.MyAccountService{}
 	userSecretQuery, err := myAccountService.GetSecret(userId)
 	if err != nil {
-		fail(c,ErrInvalidUser)
+		fail(c, ErrInvalidUser)
+		return
 	}
 	secretBase32 := userSecretQuery.Secret
 	bindCodeDto := &dto.BindCodeDto{}
 	if !a.BindAndValidate(c, &bindCodeDto) {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 	}
 	otpc := &dgoogauth.OTPConfig{
 		Secret:      secretBase32,
@@ -160,7 +161,7 @@ func (a *AccountController) BindCode(c *gin.Context) {
 		return
 	}
 	if !val {
-		fail(c,ErrGoogleBindCode)
+		fail(c, ErrGoogleBindCode)
 		return
 	}
 	resp(c, map[string]interface{}{
@@ -186,7 +187,7 @@ func (a *AccountController) Third(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
 func (a *AccountController) Verifymail(c *gin.Context) {
-	verifyEmailDto := &dto.VerifyEmail{}
+	verifyEmailDto := &dto.VerifyEmailDto{}
 	if a.BindAndValidate(c, &verifyEmailDto) {
 		username := viper.GetString("email.username")
 		password := viper.GetString("email.password")
@@ -204,7 +205,7 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 		temail.HTML = mailTemplate.MailBody()
 		err := temail.Send()
 		if err != nil {
-			fail(c,ErrSendMail)
+			fail(c, ErrSendMail)
 			return
 		}
 		resp(c, map[string]interface{}{
@@ -221,7 +222,7 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 func (a *AccountController) EmailVerification(c *gin.Context) {
 	emailVerificationDto := &dto.EmailVerificationDto{}
 	if !a.BindAndValidate(c, &emailVerificationDto) {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 		return
 	}
 	resp(c, map[string]interface{}{
@@ -236,7 +237,7 @@ func (a *AccountController) EmailVerification(c *gin.Context) {
 func (a *AccountController) Thirdbind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
 	if !a.BindAndValidate(c, &bindThirdDto) {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 		return
 	}
 	from := bindThirdDto.From
@@ -247,7 +248,7 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 	myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
 	openid, err := myAccountService.BindByDingtalk(bindThirdDto.Code, userId, from)
 	if err != nil {
-		fail(c,ErrBindDingtalk)
+		fail(c, ErrBindDingtalk)
 	}
 	data := map[string]string{
 		"openid": openid,
@@ -264,7 +265,7 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	UnBindDingtalkDto := &dto.UnBindThirdDto{}
 	if !a.BindAndValidate(c, &UnBindDingtalkDto) {
-		fail(c,ErrInvalidParams)
+		fail(c, ErrInvalidParams)
 		return
 	}
 	userId := int(c.Value("userId").(float64))
@@ -275,7 +276,7 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
 	errs := userService.UnBindUserDingtalk(from, userId)
 	if errs != nil {
-		fail(c,ErrUnBindDingtalk)
+		fail(c, ErrUnBindDingtalk)
 	}
 	data := map[string]bool{
 		"state": true,
