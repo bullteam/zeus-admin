@@ -23,7 +23,7 @@ func (u Domain) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
 	var domains []model.Domain
 	var total int64
 	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q,dto.UserListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&domains)

@@ -60,9 +60,10 @@ func DelPerm(params ...interface{}) bool {
 }
 
 // DeleteFilteredPerm
-func DelFilteredPerm(fieldIndex int,params ... string) bool{
-	return enforcer.RemoveFilteredPolicy(fieldIndex,params ...)
+func DelFilteredPerm(fieldIndex int, params ...string) bool {
+	return enforcer.RemoveFilteredPolicy(fieldIndex, params...)
 }
+
 // Enforce : check permission
 func Enforce(params ...interface{}) bool {
 	return enforcer.Enforce(params...)
@@ -76,7 +77,7 @@ func DelRoleByDomain(role string, domain string) {
 // DelRole : delete specific role
 func DelRole(role string) {
 	enforcer.RemoveFilteredNamedPolicy("p", 0, role)
-	enforcer.RemoveFilteredGroupingPolicy(1,role)
+	enforcer.RemoveFilteredGroupingPolicy(1, role)
 }
 
 // GetAllPermsByRoleDomain : get policies by role and domain

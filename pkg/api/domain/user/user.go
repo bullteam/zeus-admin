@@ -25,7 +25,7 @@ func OverwriteRoles(userId string, newRoles [][]string) {
 				//utils.StringSliceRemove(newRoles, k1)
 				//utils.StringSliceRemove(currentRoles, k2)
 				newRoles[k1] = []string{"-skip"}
-				currentRoles[k2]= []string{"-skip"}
+				currentRoles[k2] = []string{"-skip"}
 			}
 		}
 	}
@@ -42,10 +42,11 @@ func OverwriteRoles(userId string, newRoles [][]string) {
 		perm.DelGroup(rmRole)
 	}
 }
+
 // Delete user's group policies
-func DeleteUser(uid string){
+func DeleteUser(uid string) {
 	groups := perm.GetGroupsByUser(uid)
-	for _,group := range groups {
+	for _, group := range groups {
 		perm.DelGroup(group)
 	}
 }

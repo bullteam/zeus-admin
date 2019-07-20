@@ -85,7 +85,7 @@ func (r *RoleController) Edit(c *gin.Context) {
 	if r.BindAndValidate(c, &roleDto) {
 		affected := roleService.Update(roleDto)
 		if affected < 0 {
-			fail(c,ErrNoRecord)
+			fail(c, ErrNoRecord)
 			return
 		}
 		ok(c, "ok.UpdateDone")
@@ -99,11 +99,11 @@ func (r *RoleController) Edit(c *gin.Context) {
 // Delete - d of crud
 func (r *RoleController) Delete(c *gin.Context) {
 	var roleDto dto.GeneralDelDto
-	if r.BindAndValidate(c,&roleDto) {
+	if r.BindAndValidate(c, &roleDto) {
 		if roleService.Delete(roleDto) < 1 {
-			fail(c,ErrNoRecord)
+			fail(c, ErrNoRecord)
 			return
 		}
-		ok(c,"ok.DeleteDone")
+		ok(c, "ok.DeleteDone")
 	}
 }
