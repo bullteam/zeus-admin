@@ -176,10 +176,14 @@ func (a *AccountController) BindCode(c *gin.Context) {
 func (a *AccountController) Third(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	//userId := int(c.Value("userId").(float64))
-	myAccountService := service.MyAccountService{}
-	resp(c, map[string]interface{}{
-		"result": myAccountService.GetThirdList(listDto),
-	})
+	if a.BindAndValidate(c, &listDto) {
+		myAccountService := service.MyAccountService{}
+		data,total := myAccountService.GetThirdList(listDto)
+		resp(c, map[string]interface{}{
+			"result": data,
+			"total":  total,
+		})
+	}
 }
 
 // @Summary 验证邮件地址(发送邮件)
@@ -221,13 +225,11 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 // @Router /v1/account/EmailVerification [get]
 func (a *AccountController) EmailVerification(c *gin.Context) {
 	emailVerificationDto := &dto.EmailVerificationDto{}
-	if !a.BindAndValidate(c, &emailVerificationDto) {
-		fail(c, ErrInvalidParams)
-		return
+	if a.BindAndValidate(c, &emailVerificationDto) {
+		resp(c, map[string]interface{}{
+			"result": "email verify success！",
+		})
 	}
-	resp(c, map[string]interface{}{
-		"result": "email verify success！",
-	})
 }
 
 // @Summary 解除绑定第三方应用
@@ -236,26 +238,24 @@ func (a *AccountController) EmailVerification(c *gin.Context) {
 // @Router /v1/account/Thirdbind [get]
 func (a *AccountController) Thirdbind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
-	if !a.BindAndValidate(c, &bindThirdDto) {
-		fail(c, ErrInvalidParams)
-		return
+	if a.BindAndValidate(c, &bindThirdDto) {
+		from := bindThirdDto.From
+		if from == 0 {
+			from = 1
+		}
+		userId := int(c.Value("userId").(float64))
+		myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
+		openid, err := myAccountService.BindByDingtalk(bindThirdDto.Code, userId, from)
+		if err != nil {
+			fail(c, ErrBindDingtalk)
+		}
+		data := map[string]string{
+			"openid": openid,
+		}
+		resp(c, map[string]interface{}{
+			"result": data,
+		})
 	}
-	from := bindThirdDto.From
-	if from == 0 {
-		from = 1
-	}
-	userId := int(c.Value("userId").(float64))
-	myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
-	openid, err := myAccountService.BindByDingtalk(bindThirdDto.Code, userId, from)
-	if err != nil {
-		fail(c, ErrBindDingtalk)
-	}
-	data := map[string]string{
-		"openid": openid,
-	}
-	resp(c, map[string]interface{}{
-		"result": data,
-	})
 }
 
 // @Summary 解除绑定第三方应用
@@ -264,24 +264,23 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 // @Router /v1/account/ThirdUnbind [get]
 func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	UnBindDingtalkDto := &dto.UnBindThirdDto{}
-	if !a.BindAndValidate(c, &UnBindDingtalkDto) {
-		fail(c, ErrInvalidParams)
-		return
+	if a.BindAndValidate(c, &UnBindDingtalkDto) {
+		userId := int(c.Value("userId").(float64))
+		from := UnBindDingtalkDto.From
+		if from == 0 {
+			from = 1
+		}
+		userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
+		errs := userService.UnBindUserDingtalk(from, userId)
+		if errs != nil {
+			fail(c, ErrUnBindDingtalk)
+		}
+		data := map[string]bool{
+			"state": true,
+		}
+		resp(c, map[string]interface{}{
+			"result": data,
+		})
 	}
-	userId := int(c.Value("userId").(float64))
-	from := UnBindDingtalkDto.From
-	if from == 0 {
-		from = 1
-	}
-	userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
-	errs := userService.UnBindUserDingtalk(from, userId)
-	if errs != nil {
-		fail(c, ErrUnBindDingtalk)
-	}
-	data := map[string]bool{
-		"state": true,
-	}
-	resp(c, map[string]interface{}{
-		"result": data,
-	})
+
 }

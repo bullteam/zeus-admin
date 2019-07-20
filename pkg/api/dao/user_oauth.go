@@ -27,7 +27,7 @@ func (u UserOAuthDao) Delete(UserOAuth *model.UserOAuth) *gorm.DB {
 }
 
 // List - userOAuth list
-func (u UserOAuthDao) List(listDto dto.GeneralListDto) []model.UserOAuth {
+func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth,int64) {
 	var UserOAuth []model.UserOAuth
 	var total int64
 	db := GetDb()
@@ -36,7 +36,8 @@ func (u UserOAuthDao) List(listDto dto.GeneralListDto) []model.UserOAuth {
 	}
 	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&UserOAuth)
 	db.Model(&model.UserOAuth{}).Count(&total)
-	return UserOAuth
+	fmt.Println(total)
+	return UserOAuth, total
 }
 
 func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (*model.UserOAuth, error) {
