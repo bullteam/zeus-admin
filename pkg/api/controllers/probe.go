@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Tags Test
 // @Summary 测试
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{""}}"

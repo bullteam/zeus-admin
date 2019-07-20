@@ -32,6 +32,7 @@ func Init(e *gin.Engine) {
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 
+
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
@@ -51,13 +52,22 @@ func Init(e *gin.Engine) {
 	//role
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
-	v1.POST("/role", roleController.Create)
-
+	v1.POST("/roles", roleController.Create)
+	v1.PUT("/roles/:id", roleController.Edit)
+	v1.DELETE("/roles/:id",roleController.Delete)
+	//menu
+	menuController := &controllers.MenuController{}
+	v1.GET("/menus", menuController.List)
+	v1.GET("/menus/:id", menuController.Get)
+	v1.POST("/menus", menuController.Create)
+	v1.PUT("/menus/:id", menuController.Edit)
+	v1.DELETE("/menus/:id",menuController.Delete)
 	//domain
 	domainController := &controllers.DomainController{}
 	v1.GET("/domains", domainController.List)
 	v1.GET("/domains/:id", domainController.Get)
 	v1.POST("/domains", domainController.Create)
+	v1.PUT("/domains/:id", domainController.Edit)
 	v1.DELETE("/domains/:id", domainController.Delete)
 
 	//dept
@@ -65,9 +75,14 @@ func Init(e *gin.Engine) {
 	v1.GET("/depts", deptController.List)
 	v1.GET("/depts/:id", deptController.Get)
 	v1.POST("/depts", deptController.Create)
+	v1.PUT("/depts/:id", deptController.Edit)
 	v1.DELETE("/depts/:id", deptController.Delete)
 
-	//myaccount
-	v1.GET("/account/accountinfo", accountController.AccountInfo)
-
+	// data permission
+	dataPermController := &controllers.DatePermController{}
+	v1.GET("/datas", dataPermController.List)
+	v1.GET("/datas/:id", dataPermController.Get)
+	v1.POST("/datas", dataPermController.Create)
+	v1.PUT("/datas/:id", dataPermController.Edit)
+	v1.DELETE("/datas/:id", dataPermController.Delete)
 }

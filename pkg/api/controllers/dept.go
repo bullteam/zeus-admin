@@ -12,15 +12,17 @@ type DeptController struct {
 	BaseController
 }
 
+// @Tags Department
 // @Summary 部门信息
+// @Security ApiKeyAuth
+// @Param id path int true "部门id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/depts/:id [get]
+// @Router /depts/{id} [get]
 func (d *DeptController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if d.BindAndValidate(c, &gDto) {
 		data := deptService.InfoOfId(gDto)
-		//role not found
 		if data.Id < 1 {
 			fail(c, ErrNoUser)
 			return
@@ -31,11 +33,14 @@ func (d *DeptController) Get(c *gin.Context) {
 	}
 }
 
+// @Tags Department
 // @Summary 部门列表[分页+搜索]
+// @Security ApiKeyAuth
+// @Param limit query int false "条数"
+// @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/depts?limit=20&offset=0 [get]
-// List - r of crud
+// @Router /depts [get]
 func (d *DeptController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if d.BindAndValidate(c, &listDto) {
@@ -47,11 +52,12 @@ func (d *DeptController) List(c *gin.Context) {
 	}
 }
 
-// @Summary 新增应用
+// @Tags Department
+// @Summary 新增部门
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/depts?limit=20&offset=0 [get]
-//Create - c of crud
+// @Router /depts [post]
 func (d *DeptController) Create(c *gin.Context) {
 	var deptDto dto.DeptCreateDto
 	if d.BindAndValidate(c, &deptDto) {
@@ -65,11 +71,13 @@ func (d *DeptController) Create(c *gin.Context) {
 	}
 }
 
+// @Tags Department
 // @Summary 删除部门
+// @Security ApiKeyAuth
+// @Param id path int true "部门id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router v1/depts/:id [delete]
-//Create - d of crud
+// @Router /depts/{id} [delete]
 func (d *DeptController) Delete(c *gin.Context) {
 	var deptDto dto.GeneralDelDto
 	if d.BindAndValidate(c, &deptDto) {
@@ -82,11 +90,13 @@ func (d *DeptController) Delete(c *gin.Context) {
 	}
 }
 
+// @Tags Department
 // @Summary 编辑部门
+// @Security ApiKeyAuth
+// @Param id path int true "部门id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router v1/depts/:id [put]
-// Edit - u of crud
+// @Router /depts/{id} [put]
 func (d *DeptController) Edit(c *gin.Context) {
 	var deptDto dto.DeptEditDto
 	if d.BindAndValidate(c, &deptDto) {

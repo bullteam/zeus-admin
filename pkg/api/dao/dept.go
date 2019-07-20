@@ -17,6 +17,7 @@ type Dept struct {
 //Get - get single Dept infoD
 func (u Dept) Get(id int) model.Department {
 	var Dept model.Department
+	db := GetDb()
 	db.Where("id = ?", id).First(&Dept)
 	return Dept
 }
@@ -26,7 +27,7 @@ func (u Dept) List(listDto dto.GeneralListDto) ([]model.Department, int64) {
 	var Depts []model.Department
 	var total int64
 	db := GetDb()
-	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q,dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Preload("department").Offset(listDto.Skip).Limit(listDto.Limit).Find(&Depts)
