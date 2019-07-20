@@ -1,6 +1,8 @@
 package service
 
 import (
+	dingtalk "github.com/icepy/go-dingtalk/src"
+	"github.com/spf13/viper"
 	"strconv"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
@@ -17,6 +19,7 @@ const pwHashBytes = 64
 var userDao = dao.User{}
 
 type UserService struct {
+	oauthdao *dao.UserOAuthDao
 }
 
 func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
@@ -137,4 +140,58 @@ func (UserService) GetAllPermissions(uid string) []string {
 // MoveToAnotherDepartment - move users to another department
 func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 	return userDao.UpdateDepartment(uids, target)
+}
+
+
+
+//钉钉登陆
+func (us UserService) LoginByDingtalk(code string) (user *model.UserOAuth, err error) {
+	Info, err := getUserInfo(code)
+	if err != nil {
+		return nil, err
+	}
+	User, err := us.oauthdao.GetUserByOpenId(Info.Openid, 1)
+	if err == nil {
+		return User, nil
+	}
+	return nil, err
+}
+
+func getUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
+	c := GetCompanyDingTalkClient()
+	c.RefreshSNSAccessToken()
+	perInfo, err := c.SNSGetPersistentCode(code)
+	if err != nil {
+		return nil, err
+	}
+	snstoken, err := c.SNSGetSNSToken(perInfo.OpenID, perInfo.PersistentCode)
+	if err != nil {
+		return nil, err
+	}
+	Info, _ := c.SNSGetUserInfo(snstoken.SnsToken)
+	userInfo := &DingtalkUserInfo{
+		Info.UserInfo.OpenID,
+		Info.UserInfo.UnionID,
+		Info.UserInfo.Nick,
+		Info.UserInfo.DingID,
+	}
+	return userInfo, nil
+}
+
+func (us UserService) UnBindUserDingtalk(from int, user_id int) error {
+	return us.oauthdao.DeleteByUseridAndFrom(from, user_id)
+}
+
+func GetCompanyDingTalkClient() *dingtalk.DingTalkClient {
+	SNSAppID := viper.GetString("dingtalk.SNSAppID")
+	SNSSecret := viper.GetString("dingtalk.SNSSecret")
+	config := &dingtalk.DTConfig{
+		SNSAppID:  SNSAppID,
+		SNSSecret: SNSSecret,
+	}
+	return dingtalk.NewDingTalkCompanyClient(config)
+}
+
+func (us UserService) GetBindOauthUserInfo(userid int) (UserInfo model.UserOAuth) {
+	return us.oauthdao.Get(userid)
 }

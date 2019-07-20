@@ -7,11 +7,11 @@ import (
 	"zeus/pkg/api/model"
 )
 
-type Domain struct {
+type DomainDao struct {
 }
 
 //Get - get single domain infoD
-func (u Domain) Get(id int) model.Domain {
+func (u DomainDao) Get(id int) model.Domain {
 	var domain model.Domain
 	db := GetDb()
 	db.Where("id = ?", id).First(&domain)
@@ -19,7 +19,7 @@ func (u Domain) Get(id int) model.Domain {
 }
 
 // List - Domains list
-func (u Domain) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
+func (u DomainDao) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
 	var domains []model.Domain
 	var total int64
 	db := GetDb()
@@ -32,19 +32,19 @@ func (u Domain) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
 }
 
 // Create - new Domain
-func (u Domain) Create(domain *model.Domain) *gorm.DB {
+func (u DomainDao) Create(domain *model.Domain) *gorm.DB {
 	db := GetDb()
 	return db.Save(domain)
 }
 
 // Update - update Domain
-func (u Domain) Update(domain *model.Domain) *gorm.DB {
+func (u DomainDao) Update(domain *model.Domain) *gorm.DB {
 	db := GetDb()
 	return db.Save(domain)
 }
 
 // Create - new Domain
-func (u Domain) Delete(domain *model.Domain) *gorm.DB {
+func (u DomainDao) Delete(domain *model.Domain) *gorm.DB {
 	db := GetDb()
 	return db.Delete(domain)
 }
