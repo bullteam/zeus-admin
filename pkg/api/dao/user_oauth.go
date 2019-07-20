@@ -31,7 +31,7 @@ func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth) {
 	var UserOAuth []model.UserOAuth
 	var total int64
 	db := GetDb()
-	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q,dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&UserOAuth)

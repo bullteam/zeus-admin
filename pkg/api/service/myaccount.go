@@ -14,6 +14,12 @@ type MyAccountService struct {
 	dao      *dao.UserSecretDao
 	oauthdao *dao.UserOAuthDao
 }
+type DingtalkUserInfo struct {
+	Openid  string
+	Unionid string
+	Nick    string
+	Dingid  string
+}
 
 // https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 func (s *MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQuery, err error) {
