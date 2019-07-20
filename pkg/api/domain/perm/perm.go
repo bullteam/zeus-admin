@@ -59,6 +59,10 @@ func DelPerm(params ...interface{}) bool {
 	return enforcer.RemovePolicy(params...)
 }
 
+// DeleteFilteredPerm
+func DelFilteredPerm(fieldIndex int,params ... string) bool{
+	return enforcer.RemoveFilteredPolicy(fieldIndex,params ...)
+}
 // Enforce : check permission
 func Enforce(params ...interface{}) bool {
 	return enforcer.Enforce(params...)
@@ -72,6 +76,7 @@ func DelRoleByDomain(role string, domain string) {
 // DelRole : delete specific role
 func DelRole(role string) {
 	enforcer.RemoveFilteredNamedPolicy("p", 0, role)
+	enforcer.RemoveFilteredGroupingPolicy(1,role)
 }
 
 // GetAllPermsByRoleDomain : get policies by role and domain
@@ -82,11 +87,22 @@ func GetAllPermsByRoleDomain(role string, domain string) [][]string {
 
 // GetAllPermsByRole : get all permission across domains
 func GetAllPermsByRole(role string) [][]string {
-	roles := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", "")
-	return roles
+	perms := enforcer.GetFilteredNamedPolicy("p", 0, role, "", "", "")
+	return perms
+}
+
+// GetAllPermsByUser : get all permission across domains
+func GetAllPermsByUser(uid string) [][]string {
+	perms := enforcer.GetFilteredNamedGroupingPolicy("g", 0, uid, "", "", "")
+	var policies [][]string
+	for _, policy := range perms {
+		rp := GetAllPermsByRole(policy[1])
+		policies = append(policies, rp...)
+	}
+	return policies
 }
 
 //dangerous! do not call until you really need it
 func CommitChange() {
-	enforcer.SavePolicy()
+	_ = enforcer.SavePolicy()
 }

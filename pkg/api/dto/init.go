@@ -39,6 +39,6 @@ func Bind(c *gin.Context, obj interface{}) error {
 //ValidateErrorMessage : customize error messages
 var ValidateErrorMessage = map[string]string{
 	"customValidate": "%s can not be %s",
-	"required":       "%s is required,got empty%s",
+	"required":       "%s is required,got empty %#v",
 	"pwdValidate":    "%s is not a valid password",
 }

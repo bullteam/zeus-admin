@@ -4,10 +4,14 @@ import "strings"
 
 // GeneralListDto - General list request params
 type GeneralListDto struct {
-	Offset int    `form:"offset,default=0" json:"offset"`
-	Limit  int    `form:"limit,default=20" json:"limit"`
-	Order  string `form:"order" json:"order"`
-	Q      string `form:"q" json:"q"`
+	Skip  int    `form:"skip,default=0" json:"skip"`
+	Limit int    `form:"limit,default=20" json:"limit" binding:"max=100"`
+	Order string `form:"order" json:"order"`
+	Q     string `form:"q" json:"q"`
+}
+
+type GeneralTreeDto struct{
+	Q     string `form:"q" json:"q"`
 }
 type GeneralDelDto struct {
 	Id int `uri:"id" json:"id" binding:"required"`
@@ -17,9 +21,9 @@ type GeneralGetDto struct {
 }
 
 // TransformSearch - transform search query
-func (gl GeneralListDto) TransformSearch(mapping map[string]string) (ss map[string]string) {
+func TransformSearch(qs string,mapping map[string]string) (ss map[string]string) {
 	ss = make(map[string]string)
-	for _, v := range strings.Split(gl.Q, ",") {
+	for _, v := range strings.Split(qs, ",") {
 		vs := strings.Split(v, "=")
 		if _, ok := mapping[vs[0]]; ok {
 			ss[mapping[vs[0]]] = vs[1]

@@ -1,4 +1,45 @@
-host: api.bullteam.cn
+basePath: /v1
+definitions:
+  model.User:
+    properties:
+      created_time:
+        example: 2019-07-10 0:39
+        type: string
+      department_id:
+        example: 1
+        type: integer
+      email:
+        example: xxxx@hotmail.com
+        type: string
+      faceicon:
+        example: http://xxx.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      mobile:
+        example: "186000000"
+        type: string
+      realname:
+        example: 黄梧桐
+        type: string
+      sex:
+        example: 1
+        type: integer
+      status:
+        example: 1
+        type: integer
+      title:
+        example: title
+        type: string
+      updated_time:
+        example: 2019-07-10 0:39
+        type: string
+      username:
+        example: wutongci
+        type: string
+    type: object
+host: 127.0.0.1:8012
 info:
   contact:
     email: support@bullteam.cn
@@ -11,6 +52,403 @@ info:
   title: Zeus 宙斯权限后台 API
   version: V0.1
 paths:
+  /account/domains:
+    get:
+      parameters:
+      - description: 用户id
+        in: query
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[]}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户管理域
+      tags:
+      - Account
+  /account/info/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: 登陆用户信息接口
+      parameters:
+      - description: 用户ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: 登录用户信息
+      tags:
+      - Account
+  /account/password:
+    put:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新个人密码
+      tags:
+      - Account
+  /datas:
+    get:
+      parameters:
+      - description: 条数
+        in: query
+        name: limit
+        type: integer
+      - description: 偏移量
+        in: query
+        name: skip
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[...],"total":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 数据权限列表[分页+搜索]
+      tags:
+      - DataPerm
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 新增数据权限
+      tags:
+      - DataPerm
+  /datas/{id}:
+    delete:
+      parameters:
+      - description: 要删除的id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除项目
+      tags:
+      - DataPerm
+    get:
+      parameters:
+      - description: 数据权限id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 数据权限详情
+      tags:
+      - DataPerm
+    put:
+      parameters:
+      - description: 需要编辑的id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑数据权限
+      tags:
+      - DataPerm
+  /depts:
+    get:
+      parameters:
+      - description: 条数
+        in: query
+        name: limit
+        type: integer
+      - description: 偏移量
+        in: query
+        name: skip
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[...],"total":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 部门列表[分页+搜索]
+      tags:
+      - Department
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 新增部门
+      tags:
+      - Department
+  /depts/{id}:
+    delete:
+      parameters:
+      - description: 部门id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除部门
+      tags:
+      - Department
+    get:
+      parameters:
+      - description: 部门id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 部门信息
+      tags:
+      - Department
+    put:
+      parameters:
+      - description: 部门id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑部门
+      tags:
+      - Department
+  /domains:
+    get:
+      parameters:
+      - description: 条数
+        in: query
+        name: limit
+        type: integer
+      - description: 偏移量
+        in: query
+        name: skip
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[...],"total":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 项目列表[分页+搜索]
+      tags:
+      - Domain
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 新增项目
+      tags:
+      - Domain
+  /domains/{id}:
+    delete:
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除项目
+      tags:
+      - Domain
+    get:
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 项目信息
+      tags:
+      - Domain
+    put:
+      parameters:
+      - description: 项目id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑项目
+      tags:
+      - Domain
+  /roles:
+    get:
+      parameters:
+      - description: 条数
+        in: query
+        name: limit
+        type: integer
+      - description: 偏移量
+        in: query
+        name: skip
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[...],"total":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 角色列表[分页+搜索]
+      tags:
+      - Role
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 新增角色
+      tags:
+      - Role
+  /roles/{id}:
+    get:
+      parameters:
+      - description: 角色id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 角色信息
+      tags:
+      - Role
   /test:
     get:
       produces:
@@ -21,8 +459,19 @@ paths:
           schema:
             type: string
       summary: 测试
-  /v1/api/roles:
+      tags:
+      - Test
+  /users:
     get:
+      parameters:
+      - description: 条数
+        in: query
+        name: limit
+        type: integer
+      - description: 偏移量
+        in: query
+        name: skip
+        type: integer
       produces:
       - application/json
       responses:
@@ -30,17 +479,151 @@ paths:
           description: '{"code":200,"data":{"result":[...],"total":1}}'
           schema:
             type: string
-      summary: 角色列表[分页+搜索]
-  /v1/api/roles/:
-    get:
+      security:
+      - ApiKeyAuth: []
+      summary: 用户列表[分页+搜索]
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          description: '{"code":200,"data":{"id":1}}'
           schema:
             type: string
-      summary: 角色信息
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: '{"code":10004,"msg": "用户信息不存在"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用户信息
+      tags:
+      - Users
+    put:
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑用户
+      tags:
+      - Users
+  /users/{id}/password:
+    put:
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户密码
+      tags:
+      - Users
+  /users/{id}/permissions:
+    get:
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户权限列表
+      tags:
+      - Users
+  /users/{id}/status:
+    put:
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新用户状态
+      tags:
+      - Users
+  /users/department/move:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 移动部门
+      tags:
+      - Users
   /v1/api/users:
     get:
       produces:
@@ -50,43 +633,14 @@ paths:
           description: '{"code":200,"data":{"id":1}}'
           schema:
             type: string
+      security:
+      - ApiKeyAuth: []
       summary: 新增用户
-  /v1/api/users/:
-    delete:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1}}'
-          schema:
-            type: string
-      summary: 删除用户
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1,"name":"test"}}'
-          schema:
-            type: string
-      summary: 用户信息
-    put:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1}}'
-          schema:
-            type: string
-      summary: 编辑用户
-  /v1/api/users/info:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1,"name":"test"}}'
-          schema:
-            type: string
-      summary: 登录用户信息
+      tags:
+      - Users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

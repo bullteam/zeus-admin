@@ -41,7 +41,38 @@ type UserEditDto struct {
 	Faceicon     string `json:"faceicon"`
 	Email        string `form:"email" json:"email"`
 	Title        string `form:"title" json:"title"`
-	Status       int    `form:"status" json:"status"`
+	Status       int    `form:"status,default=1" json:"status"`
+}
+
+// UserEditStatusDto - User update status only
+type UserEditStatusDto struct {
+	Id     int `uri:"id" json:"id" binding:"required,min=1"`
+	Status int `form:"status" json:"status" binding:"gte=0"`
+}
+
+type UserMoveDepartmentDto struct {
+	Ids        string `form:"ids" json:"ids" binding:"required"`
+	Department int    `form:"department" json:"department" binding:"required,gte=1"`
+}
+
+// UserEditPasswordDto - User update password only
+type UserEditPasswordDto struct {
+	Id       int    `uri:"id" json:"id" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required,pwdValidate"`
+	Salt     string
+}
+
+type LoginDingtalkDto struct {
+	Code string `form:"code"`
+}
+
+type BindThirdDto struct {
+	From int    `form:"from"`
+	Code string `form:"code"`
+}
+
+type UnBindThirdDto struct {
+	From int `form:"from"`
 }
 
 // password validator
