@@ -11,8 +11,9 @@ type User struct {
 }
 
 //Get - get single user info
-func (User) Get(id int,preload bool) model.User {
+func (User) Get(id int, preload bool) model.User {
 	var user model.User
+	db := GetDb()
 	if preload {
 		db = db.Preload("Department")
 	}
@@ -25,10 +26,11 @@ func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	var users []model.User
 	var total int64
 	db := GetDb()
-	for sk, sv := range listDto.TransformSearch(dto.UserListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("Department").Offset(listDto.Offset).Limit(listDto.Limit).Find(&users)
+	db.Preload("Department").Preload("Roles").Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
+	//db.Preload("Roles").Find(&users)
 	db.Model(&model.User{}).Count(&total)
 	return users, total
 }
@@ -45,7 +47,7 @@ func (u User) Update(user *model.User) *gorm.DB {
 	return db.Save(user)
 }
 
-// Create - new user
+// Delete - delete user
 func (u User) Delete(user *model.User) *gorm.DB {
 	db := GetDb()
 	return db.Delete(user)
@@ -57,4 +59,12 @@ func (u User) GetByUserName(username string) model.User {
 	m := model.User{}
 	db.Where("username = ?", username).First(&m)
 	return m
+}
+
+// UpdateDepartment - update user's department
+func (u User) UpdateDepartment(uids []string, departmentId int) error {
+	db := GetDb()
+	return db.Table("user").Where("id in (?)", uids).Updates(map[string]interface{}{
+		"department_id": departmentId,
+	}).Error
 }

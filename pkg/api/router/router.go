@@ -24,28 +24,70 @@ func Init(e *gin.Engine) {
 	//auth.POST("/token", jwtAuth.LoginHandler)
 	//auth.GET("/refresh_token", jwtAuth.RefreshHandler)
 
-
 	//api handlers
-	v1.POST("/users/login",jwtAuth.LoginHandler)
-	v1.POST("/users/login/refresh",jwtAuth.RefreshHandler)
+	v1.POST("/users/login", jwtAuth.LoginHandler)
+	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
-	userController := controllers.UserController{}
+	userController := &controllers.UserController{}
+	accountController := &controllers.AccountController{}
 
-	v1.GET("/login/info", userController.Info)
-	//update login user's password
-	v1.PUT("/login/password",userController.EditLoginUserPassword)
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
+	v1.GET("/users/:id/permissions", userController.GetUserPermissions)
 	v1.PUT("/users/:id", userController.Edit)
 	v1.PUT("/users/:id/status", userController.EditStatus)
 	v1.PUT("/users/:id/password", userController.EditPassword)
 	v1.DELETE("/users/:id", userController.Delete)
+	v1.POST("/users/department/move", userController.UpdateDepartment)
+	//account - login user
+	v1.GET("/account/info", accountController.Info)
+	//update login user's password
+	v1.PUT("/account/password", accountController.EditPassword)
+	v1.GET("/account/getdomains", accountController.GetDomains)
+	v1.POST("/account/bindcode", accountController.BindCode)
+	v1.POST("/account/thirdbind", accountController.Thirdbind)
+	v1.POST("/account/thirdunbind", accountController.ThirdUnbind)
+	v1.GET("/account/third", accountController.Third)
+	v1.POST("/account/verifymail", accountController.Verifymail)
+	v1.GET("/account/emailverification", accountController.EmailVerification)
 
-
-	roleController := controllers.RoleController{}
+	roleController := &controllers.RoleController{}
 	//role
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
+	v1.POST("/roles", roleController.Create)
+	v1.PUT("/roles/:id", roleController.Edit)
+	v1.DELETE("/roles/:id", roleController.Delete)
+	//menu
+	menuController := &controllers.MenuController{}
+	v1.GET("/menus", menuController.List)
+	v1.GET("/menus/:id", menuController.Get)
+	v1.POST("/menus", menuController.Create)
+	v1.PUT("/menus/:id", menuController.Edit)
+	v1.DELETE("/menus/:id", menuController.Delete)
+	//domain
+	domainController := &controllers.DomainController{}
+	v1.GET("/domains", domainController.List)
+	v1.GET("/domains/:id", domainController.Get)
+	v1.POST("/domains", domainController.Create)
+	v1.PUT("/domains/:id", domainController.Edit)
+	v1.DELETE("/domains/:id", domainController.Delete)
+
+	//dept
+	deptController := &controllers.DeptController{}
+	v1.GET("/depts", deptController.List)
+	v1.GET("/depts/:id", deptController.Get)
+	v1.POST("/depts", deptController.Create)
+	v1.PUT("/depts/:id", deptController.Edit)
+	v1.DELETE("/depts/:id", deptController.Delete)
+
+	// data permission
+	dataPermController := &controllers.DatePermController{}
+	v1.GET("/datas", dataPermController.List)
+	v1.GET("/datas/:id", dataPermController.Get)
+	v1.POST("/datas", dataPermController.Create)
+	v1.PUT("/datas/:id", dataPermController.Edit)
+	v1.DELETE("/datas/:id", dataPermController.Delete)
 }

@@ -10,6 +10,7 @@ type Menu struct {
 	Id             int       `json:"id"`
 	ParentId       int       `json:"parent_id"`
 	DomainId       int       `json:"domain_id"`
+	Domain         Domain    `json:"domain"`
 	Name           string    `json:"name"`
 	Url            string    `json:"url"`
 	Perms          string    `json:"url"`

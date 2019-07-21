@@ -2,7 +2,6 @@ package user
 
 import (
 	"zeus/pkg/api/domain/perm"
-	"zeus/pkg/api/utils"
 )
 
 // Permission : where ,do what ,in which domain
@@ -23,15 +22,31 @@ func OverwriteRoles(userId string, newRoles [][]string) {
 	for k1, newRole := range newRoles {
 		for k2, currentRole := range currentRoles {
 			if newRole[0] == currentRole[0] && newRole[1] == currentRole[1] {
-				utils.StringSliceRemove(newRoles, k1)
-				utils.StringSliceRemove(currentRoles, k2)
+				//utils.StringSliceRemove(newRoles, k1)
+				//utils.StringSliceRemove(currentRoles, k2)
+				newRoles[k1] = []string{"-skip"}
+				currentRoles[k2] = []string{"-skip"}
 			}
 		}
 	}
 	for _, newRole := range newRoles {
+		if newRole[0] == "-skip" {
+			continue
+		}
 		perm.AddGroup(newRole)
 	}
 	for _, rmRole := range currentRoles {
+		if rmRole[0] == "-skip" {
+			continue
+		}
 		perm.DelGroup(rmRole)
+	}
+}
+
+// Delete user's group policies
+func DeleteUser(uid string) {
+	groups := perm.GetGroupsByUser(uid)
+	for _, group := range groups {
+		perm.DelGroup(group)
 	}
 }
