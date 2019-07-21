@@ -89,6 +89,10 @@ func fail(c *gin.Context, errs *ControllerError) {
 	})
 }
 
+func Fail(c *gin.Context, errs *ControllerError)  {
+	fail(c,errs)
+}
+
 func failValidate(c *gin.Context, msg string) {
 	errs := ErrValidation
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)
@@ -97,9 +101,4 @@ func failValidate(c *gin.Context, msg string) {
 		"msg":    errs.Message,
 		"detail": msg,
 	})
-	//c.JSON(http.StatusOK, gin.H{
-	//	"code":   errs.Code,
-	//	"msg":    errs.Message,
-	//	"detail": msg,
-	//})
 }

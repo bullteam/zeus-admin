@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	//"fmt"
+	//"crypto/md5"
 	"github.com/gin-gonic/gin"
+	//"strconv"
 	"strings"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
+	//"zeus/pkg/api/utils"
 )
 
 var userService = service.UserService{}
@@ -181,5 +185,39 @@ func (u *UserController) UpdateDepartment(c *gin.Context) {
 			return
 		}
 		ok(c, "ok.UpdateDone")
+	}
+}
+
+// @Tags Users
+// @Summary 钉钉登陆
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/users/dingtalklogin [post]
+func (u *UserController) DingtalkLogin(c *gin.Context) {
+	dingtalkDto := &dto.LoginDingtalkDto{}
+	if u.BindAndValidate(c, &dingtalkDto) {
+		//userService := service.UserService{}
+		//userOauth, err := userService.LoginByDingtalk(dingtalkDto.Code)
+		//if err != nil {
+		//	fail(c,ErrNoUser)
+		//	return
+		//}
+		////generate jwt with rsa private key
+		//jwtoken, err := utils.GenerateJwtWithUserInfo(strconv.Itoa(userOauth.User_id), userOauth.Name)
+		//if err != nil {
+		//	fail(c,ErrGenJwt)
+		//	return
+		//}
+		//md5Ctx := md5.New()
+		//md5Ctx.Write([]byte(jwtoken))
+		//cipherStr := md5Ctx.Sum(nil)
+		//refreshToken, _ := utils.GenerateRefreshJwtWithToken(fmt.Sprintf("auth%xsafe", cipherStr))
+		//resp(c, map[string]interface{}{
+		//	"access_token":  jwtoken,
+		//	"refresh_token": refreshToken,
+		//	"userid":        userOauth.User_id,
+		//	"username":      userOauth.Name,
+		//})
 	}
 }

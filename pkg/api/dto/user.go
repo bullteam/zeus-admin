@@ -63,7 +63,7 @@ type UserEditPasswordDto struct {
 }
 
 type LoginDingtalkDto struct {
-	Code string `form:"code"`
+	Code string `form:"code" binding:"customValidate"`
 }
 
 type BindThirdDto struct {

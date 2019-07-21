@@ -135,7 +135,7 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/bindcode [get]
-func (a *AccountController) BindCode(c *gin.Context) {
+func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	myAccountService := service.MyAccountService{}
 	userSecretQuery, err := myAccountService.GetSecret(userId)
@@ -173,7 +173,7 @@ func (a *AccountController) BindCode(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
-func (a *AccountController) Third(c *gin.Context) {
+func (a *AccountController) ThirdList(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	//userId := int(c.Value("userId").(float64))
 	if a.BindAndValidate(c, &listDto) {
@@ -223,7 +223,7 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/EmailVerification [get]
-func (a *AccountController) EmailVerification(c *gin.Context) {
+func (a *AccountController) EmailVerify(c *gin.Context) {
 	emailVerificationDto := &dto.EmailVerificationDto{}
 	if a.BindAndValidate(c, &emailVerificationDto) {
 		resp(c, map[string]interface{}{

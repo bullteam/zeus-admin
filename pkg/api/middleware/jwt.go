@@ -4,6 +4,7 @@ import (
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"net/http"
 	"time"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
@@ -12,9 +13,10 @@ import (
 )
 
 var accountService = service.UserService{}
+var loginType int
 
 //todo : 用单独的claims model去掉user model
-func JwtAuth() *jwt.GinJWTMiddleware {
+func JwtAuth(loginType int) *jwt.GinJWTMiddleware {
 	jwtMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            "Jwt",
 		SigningAlgorithm: "RS256",
@@ -23,6 +25,7 @@ func JwtAuth() *jwt.GinJWTMiddleware {
 		Timeout:          time.Hour * 24,
 		MaxRefresh:       time.Hour * 24 * 90,
 		IdentityKey:      "id",
+		LoginResponse:    LoginResponse,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(model.UserClaims); ok {
 				return jwt.MapClaims{
@@ -40,18 +43,10 @@ func JwtAuth() *jwt.GinJWTMiddleware {
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
-			var loginDto dto.LoginDto
-			if err := dto.Bind(c, &loginDto); err != nil {
-				return "", err
+			if loginType == 1{
+				return Authenticator(c)
 			}
-			ok, u := accountService.VerifyAndReturnUserInfo(loginDto)
-			if ok {
-				return model.UserClaims{
-					Id:   u.Id,
-					Name: u.Username,
-				}, nil
-			}
-			return nil, jwt.ErrFailedAuthentication
+			return AuthenticatorDingtalk(c)
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			if _, ok := data.(model.UserClaims); ok {
@@ -65,26 +60,51 @@ func JwtAuth() *jwt.GinJWTMiddleware {
 				"msg":  message,
 			})
 		},
-		// TokenLookup is a string in the form of "<source>:<name>" that is used
-		// to extract token from the request.
-		// Optional. Default value "header:Authorization".
-		// Possible values:
-		// - "header:<name>"
-		// - "query:<name>"
-		// - "cookie:<name>"
-		// - "param:<name>"
 		TokenLookup: "header: Authorization, query: token, cookie: jwt",
-		// TokenLookup: "query:token",
-		// TokenLookup: "cookie:token",
-
-		// TokenHeadName is a string in the header. Default value is "Bearer"
 		TokenHeadName: "Bearer",
-
-		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
 		TimeFunc: time.Now,
 	})
 	if err != nil {
 		log.Error(err.Error())
 	}
 	return jwtMiddleware
+}
+
+func LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"data": map[string]interface{}{
+			"token": token,
+			"expire":expire,
+		},
+	})
+}
+func Authenticator(c *gin.Context)(interface{}, error){
+	var loginDto dto.LoginDto
+	if err := dto.Bind(c, &loginDto); err != nil {
+		return "", err
+	}
+	ok, u := accountService.VerifyAndReturnUserInfo(loginDto)
+	if ok {
+		return model.UserClaims{
+			Id:   u.Id,
+			Name: u.Username,
+		}, nil
+	}
+	return nil, jwt.ErrFailedAuthentication
+}
+
+func AuthenticatorDingtalk(c *gin.Context)(interface{}, error){
+	dingtalkDto := &dto.LoginDingtalkDto{}
+	if err := dto.Bind(c, &dingtalkDto); err != nil {
+		return "", err
+	}
+	userOauth, err := accountService.LoginByDingtalk(dingtalkDto.Code)
+	if err != nil {
+		return "",err
+	}
+	return model.UserClaims{
+		Id:   userOauth.Id,
+		Name: userOauth.Name,
+	}, nil
 }
