@@ -102,7 +102,7 @@ func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 	}
 	//TODO 支持微信、钉钉、QQ等登陆
 	userOauth, err := accountService.LoginByDingtalk(oauthDto.Code)
-	if err != nil {
+	if err != nil || userOauth == nil {
 		return "", err
 	}
 	return model.UserClaims{

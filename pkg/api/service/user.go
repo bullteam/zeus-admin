@@ -153,8 +153,8 @@ func (us UserService) LoginByDingtalk(code string) (user *model.UserOAuth, err e
 	return nil, err
 }
 
-func (us UserService) UnBindUserDingtalk(oauthType int, user_id int) error {
-	return us.oauthdao.DeleteByUseridAndFrom(oauthType, user_id)
+func (us UserService) UnBindUserDingtalk(from int, user_id int) error {
+	return us.oauthdao.DeleteByUseridAndFrom(from, user_id)
 }
 
 func (us UserService) GetBindOauthUserInfo(userid int) (UserInfo model.UserOAuth) {
