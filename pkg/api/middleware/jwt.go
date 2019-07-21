@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"time"
+	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
@@ -43,10 +44,10 @@ func JwtAuth(loginType int) *jwt.GinJWTMiddleware {
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
-			if loginType == 1{
+			if loginType == account.LoginStandard.Type {
 				return Authenticator(c)
 			}
-			return AuthenticatorDingtalk(c)
+			return AuthenticatorOAuth(c)
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			if _, ok := data.(model.UserClaims); ok {
@@ -60,9 +61,9 @@ func JwtAuth(loginType int) *jwt.GinJWTMiddleware {
 				"msg":  message,
 			})
 		},
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
 		TokenHeadName: "Bearer",
-		TimeFunc: time.Now,
+		TimeFunc:      time.Now,
 	})
 	if err != nil {
 		log.Error(err.Error())
@@ -74,12 +75,12 @@ func LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"data": map[string]interface{}{
-			"token": token,
-			"expire":expire,
+			"token":  token,
+			"expire": expire,
 		},
 	})
 }
-func Authenticator(c *gin.Context)(interface{}, error){
+func Authenticator(c *gin.Context) (interface{}, error) {
 	var loginDto dto.LoginDto
 	if err := dto.Bind(c, &loginDto); err != nil {
 		return "", err
@@ -94,14 +95,14 @@ func Authenticator(c *gin.Context)(interface{}, error){
 	return nil, jwt.ErrFailedAuthentication
 }
 
-func AuthenticatorDingtalk(c *gin.Context)(interface{}, error){
-	dingtalkDto := &dto.LoginDingtalkDto{}
-	if err := dto.Bind(c, &dingtalkDto); err != nil {
+func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
+	oauthDto := &dto.LoginOAuthDto{}
+	if err := dto.Bind(c, &oauthDto); err != nil {
 		return "", err
 	}
-	userOauth, err := accountService.LoginByDingtalk(dingtalkDto.Code)
+	userOauth, err := accountService.LoginByDingtalk(oauthDto.Code)
 	if err != nil {
-		return "",err
+		return "", err
 	}
 	return model.UserClaims{
 		Id:   userOauth.Id,

@@ -62,8 +62,9 @@ type UserEditPasswordDto struct {
 	Salt     string
 }
 
-type LoginDingtalkDto struct {
-	Code string `form:"code" binding:"customValidate"`
+type LoginOAuthDto struct {
+	Code string `form:"code" binding:"required"`
+	Type string `form:"type" binding:"required"`
 }
 
 type BindThirdDto struct {

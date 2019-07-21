@@ -178,7 +178,7 @@ func (a *AccountController) ThirdList(c *gin.Context) {
 	//userId := int(c.Value("userId").(float64))
 	if a.BindAndValidate(c, &listDto) {
 		myAccountService := service.MyAccountService{}
-		data,total := myAccountService.GetThirdList(listDto)
+		data, total := myAccountService.GetThirdList(listDto)
 		resp(c, map[string]interface{}{
 			"result": data,
 			"total":  total,

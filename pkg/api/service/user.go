@@ -1,8 +1,6 @@
 package service
 
 import (
-	dingtalk "github.com/icepy/go-dingtalk/src"
-	"github.com/spf13/viper"
 	"strconv"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
@@ -144,7 +142,7 @@ func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 
 //钉钉登陆
 func (us UserService) LoginByDingtalk(code string) (user *model.UserOAuth, err error) {
-	Info, err := getUserInfo(code)
+	Info, err := login.GetUserInfo(code)
 	if err != nil {
 		return nil, err
 	}
@@ -155,39 +153,8 @@ func (us UserService) LoginByDingtalk(code string) (user *model.UserOAuth, err e
 	return nil, err
 }
 
-func getUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
-	c := GetCompanyDingTalkClient()
-	c.RefreshSNSAccessToken()
-	perInfo, err := c.SNSGetPersistentCode(code)
-	if err != nil {
-		return nil, err
-	}
-	snstoken, err := c.SNSGetSNSToken(perInfo.OpenID, perInfo.PersistentCode)
-	if err != nil {
-		return nil, err
-	}
-	Info, _ := c.SNSGetUserInfo(snstoken.SnsToken)
-	userInfo := &DingtalkUserInfo{
-		Info.UserInfo.OpenID,
-		Info.UserInfo.UnionID,
-		Info.UserInfo.Nick,
-		Info.UserInfo.DingID,
-	}
-	return userInfo, nil
-}
-
 func (us UserService) UnBindUserDingtalk(from int, user_id int) error {
 	return us.oauthdao.DeleteByUseridAndFrom(from, user_id)
-}
-
-func GetCompanyDingTalkClient() *dingtalk.DingTalkClient {
-	SNSAppID := viper.GetString("dingtalk.SNSAppID")
-	SNSSecret := viper.GetString("dingtalk.SNSSecret")
-	config := &dingtalk.DTConfig{
-		SNSAppID:  SNSAppID,
-		SNSSecret: SNSSecret,
-	}
-	return dingtalk.NewDingTalkCompanyClient(config)
 }
 
 func (us UserService) GetBindOauthUserInfo(userid int) (UserInfo model.UserOAuth) {

@@ -7,6 +7,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "zeus/docs"
 	"zeus/pkg/api/controllers"
+	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/middleware"
 )
 
@@ -20,13 +21,13 @@ func Init(e *gin.Engine) {
 	e.GET("/healthcheck", controllers.Healthy)
 	//version fragment
 	v1 := e.Group("/v1")
-	jwtAuth := middleware.JwtAuth(1)
+	jwtAuth := middleware.JwtAuth(account.LoginStandard.Type)
 
 	//api handlers
 	v1.POST("/users/login", jwtAuth.LoginHandler)
 	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
-	jwtAuths := middleware.JwtAuth(2)
-	v1.POST("/users/login-dingtalk",jwtAuths.LoginHandler)
+	jwtAuths := middleware.JwtAuth(account.LoginOAuth.Type)
+	v1.POST("/users/login-dingtalk", jwtAuths.LoginHandler)
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
@@ -42,7 +43,6 @@ func Init(e *gin.Engine) {
 	v1.PUT("/users/:id/password", userController.EditPassword)
 	v1.DELETE("/users/:id", userController.Delete)
 	v1.POST("/users/department/move", userController.UpdateDepartment)
-
 
 	//account - login user
 	v1.GET("/account/info", accountController.Info)

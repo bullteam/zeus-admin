@@ -12,7 +12,6 @@ require (
 	github.com/billcobbler/casbin-redis-watcher v0.0.0-20180829182704-69cab1cdcf44
 	github.com/casbin/casbin v1.8.3
 	github.com/denisenkom/go-mssqldb v0.0.0-20190515213511-eb9f6a1743f3 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-contrib/cors v1.3.0

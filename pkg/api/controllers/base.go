@@ -89,10 +89,6 @@ func fail(c *gin.Context, errs *ControllerError) {
 	})
 }
 
-func Fail(c *gin.Context, errs *ControllerError)  {
-	fail(c,errs)
-}
-
 func failValidate(c *gin.Context, msg string) {
 	errs := ErrValidation
 	errs.Message = i18n.Tr(middleware.GetLang(), errs.Langkey)

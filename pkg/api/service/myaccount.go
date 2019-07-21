@@ -5,6 +5,7 @@ import (
 	"encoding/base32"
 	"fmt"
 	"zeus/pkg/api/dao"
+	"zeus/pkg/api/domain/account/login"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
 	"zeus/pkg/api/utils"
@@ -13,12 +14,6 @@ import (
 type MyAccountService struct {
 	dao      dao.UserSecretDao
 	oauthdao dao.UserOAuthDao
-}
-type DingtalkUserInfo struct {
-	Openid  string
-	Unionid string
-	Nick    string
-	Dingid  string
 }
 
 // https://github.com/google/google-authenticator/wiki/Key-Uri-Format
@@ -49,13 +44,13 @@ func (s *MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQ
 /**
 获取第三方账号绑定列表
 */
-func (s *MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAuth,int64) {
+func (s *MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAuth, int64) {
 	return s.oauthdao.List(dto)
 }
 
 //绑定第三方应用
 func (s *MyAccountService) BindByDingtalk(code string, uid int, from int) (openid string, err error) {
-	Info, err := getUserInfo(code)
+	Info, err := login.GetUserInfo(code)
 	if err != nil {
 		return "", err
 	}

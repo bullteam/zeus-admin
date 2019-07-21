@@ -27,7 +27,7 @@ func (u UserOAuthDao) Delete(UserOAuth *model.UserOAuth) *gorm.DB {
 }
 
 // List - userOAuth list
-func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth,int64) {
+func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth, int64) {
 	var UserOAuth []model.UserOAuth
 	var total int64
 	db := GetDb()
