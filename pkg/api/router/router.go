@@ -47,4 +47,14 @@ func Init(e *gin.Engine) {
 	//role
 	api.GET("/roles", roleController.List)
 	api.GET("/roles/:id", roleController.Get)
+
+	logController := controllers.LogController{}
+	//login log
+	api.GET("/log/login", logController.LoginLogLists)
+	api.GET("/log/login/:id", logController.LoginLogDetail)
+
+	//request log
+	api.GET("/log/operation", logController.OperationLogLists)
+	api.GET("/log/operation/:id", logController.OperationLogDetail)
+
 }
