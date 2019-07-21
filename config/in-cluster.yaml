@@ -34,8 +34,8 @@ dingtalk:
   CorpSecret:
   AgentID:
   SSOSecret:
-  SNSAppID: dingoaztngtzbbyeblwvkl
-  SNSSecret: B6R0UUn_BDIdiPh1vMJKErbEunB9Si2a_0HmYnqqJUI8eE426V5dKWpMNSKslhyj
+  SNSAppID: dingoatdqa3hb5eta4tlvi
+  SNSSecret: RHNFFTJXh-uxQ2YosdoBt8u0gqBGwWhe8J3dMwqf5gz41vHq9zHvc7D9WNZSDuJ0
 email:
   username: xxx@qq.com
   password: xxxxxxxx

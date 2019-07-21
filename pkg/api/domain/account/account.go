@@ -21,15 +21,15 @@ var (
 
 //社会化登陆类型
 type OAuthType struct {
-	Type string
+	From int
 }
 
 var (
-	OAuthDingTalk = &OAuthType{"dingtalk"}
-	OAuthWechat   = &OAuthType{"wechat"}
-	OAuthQQ       = &OAuthType{"qq"}
-	OAuthFacebook = &OAuthType{"facebook"}
-	OAuthGoogle   = &OAuthType{"google"}
+	OAuthDingTalk = &OAuthType{1}
+	OAuthWechat   = &OAuthType{2}
+	OAuthQQ       = &OAuthType{3}
+	OAuthFacebook = &OAuthType{4}
+	OAuthGoogle   = &OAuthType{5}
 )
 
 // HashPassword : password hashing

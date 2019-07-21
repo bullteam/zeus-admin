@@ -42,13 +42,13 @@ func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth, int64
 
 func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (*model.UserOAuth, error) {
 	var userOAuth *model.UserOAuth
-	db.Where("openid = ? and from = ?", openid, from).First(&userOAuth)
+	db.Where("openid = ? and from = ?", openid, from).Find(&userOAuth)
 	return userOAuth, nil
 }
 
-func (dao *UserOAuthDao) DeleteByUseridAndFrom(oauthType int, user_id int) error {
+func (dao *UserOAuthDao) DeleteByUseridAndFrom(from int, user_id int) error {
 	db := GetDb()
 	var userOAuth model.UserOAuth
-	db.Where("openid = ? and from = ?", oauthType, user_id).Delete(userOAuth)
+	db.Where("openid = ? and from = ?", from, user_id).Delete(&userOAuth)
 	return nil
 }
