@@ -15,6 +15,7 @@ jwt:
   key:
     private: keys/jwt_private_key.pem
     public: keys/jwt_public_key.pem
+  expiresat: 3600*24*1
 casbin:
   model:
     rule_0: config/casbin/rbac_model_0.conf

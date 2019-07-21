@@ -14,3 +14,4 @@
 cmd/api/zeus
 zeus
 keys/
+.company_sns_access_token_file
