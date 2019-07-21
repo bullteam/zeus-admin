@@ -46,9 +46,9 @@ func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (*model.UserOA
 	return userOAuth, nil
 }
 
-func (dao *UserOAuthDao) DeleteByUseridAndFrom(from int, user_id int) error {
+func (dao *UserOAuthDao) DeleteByUseridAndFrom(oauthType int, user_id int) error {
 	db := GetDb()
 	var userOAuth model.UserOAuth
-	db.Where("openid = ? and from = ?", from, user_id).Delete(userOAuth)
+	db.Where("openid = ? and from = ?", oauthType, user_id).Delete(userOAuth)
 	return nil
 }

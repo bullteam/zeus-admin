@@ -266,12 +266,12 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	UnBindDingtalkDto := &dto.UnBindThirdDto{}
 	if a.BindAndValidate(c, &UnBindDingtalkDto) {
 		userId := int(c.Value("userId").(float64))
-		from := UnBindDingtalkDto.From
-		if from == 0 {
-			from = 1
+		oauthType := UnBindDingtalkDto.OAuthType
+		if oauthType == 0 {
+			oauthType = 1
 		}
 		userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
-		errs := userService.UnBindUserDingtalk(from, userId)
+		errs := userService.UnBindUserDingtalk(oauthType, userId)
 		if errs != nil {
 			fail(c, ErrUnBindDingtalk)
 		}

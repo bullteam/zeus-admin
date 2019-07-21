@@ -27,7 +27,7 @@ func Init(e *gin.Engine) {
 	v1.POST("/users/login", jwtAuth.LoginHandler)
 	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 	jwtAuths := middleware.JwtAuth(account.LoginOAuth.Type)
-	v1.POST("/users/login-dingtalk", jwtAuths.LoginHandler)
+	v1.POST("/users/login/oauth", jwtAuths.LoginHandler)
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
