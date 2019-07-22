@@ -9,6 +9,7 @@ type LoginDto struct {
 	Username string `form:"username" json:"username" binding:"required,customValidate"`
 	Password string `form:"password" json:"password" binding:"required"`
 }
+
 //oauth login
 type LoginOAuthDto struct {
 	Code string `form:"code" binding:"required"`
@@ -24,6 +25,7 @@ type BindThirdDto struct {
 type UnBindThirdDto struct {
 	OAuthType int `form:"type"`
 }
+
 // demo usage
 func customValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
 	if val, ok := field.Interface().(string); ok {

@@ -31,14 +31,14 @@ func GetDingTalkUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
 	}
 	dtUser, err := c.SNSGetUserInfo(snstoken.SnsToken)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return &DingtalkUserInfo{
 		dtUser.UserInfo.OpenID,
 		dtUser.UserInfo.UnionID,
 		dtUser.UserInfo.Nick,
 		dtUser.UserInfo.DingID,
-	},nil
+	}, nil
 }
 
 func GetCompanyDingTalkClient() *dingtalk.DingTalkClient {

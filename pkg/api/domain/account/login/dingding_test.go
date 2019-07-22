@@ -5,7 +5,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
-func init(){
+
+func init() {
 	//Overwrite it for tests
 	dingTalkClient = dingtalk.NewDingTalkCompanyClient(&dingtalk.DTConfig{
 		SNSAppID:  "dingoatdqa3hb5eta4tlvi",
@@ -14,12 +15,10 @@ func init(){
 }
 
 func TestGetCompanyDingTalkClient(t *testing.T) {
-	assert.NotEqual(t,nil,dingTalkClient)
+	assert.NotEqual(t, nil, dingTalkClient)
 }
 
 //func TestGetDingTalkUserInfo(t *testing.T) {
 //	_,err := GetDingTalkUserInfo("xyzefer")
 //	assert.NotEqual(t,nil,err)
 //}
-
-
