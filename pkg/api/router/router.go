@@ -47,12 +47,12 @@ func Init(e *gin.Engine) {
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
 	v1.PUT("/account/password", accountController.EditPassword)
-	v1.GET("/account/getdomains", accountController.GetDomains)
+	v1.GET("/account/domains", accountController.GetDomains)
 	v1.POST("/account/bind-google-2fa-code", accountController.BindGoogle2faCode)
 	v1.POST("/account/third-bind", accountController.Thirdbind)
 	v1.POST("/account/third-unbind", accountController.ThirdUnbind)
 	v1.GET("/account/thirds", accountController.ThirdList)
-	v1.POST("/account/verif-ymail", accountController.Verifymail)
+	v1.POST("/account/verify-email", accountController.Verifymail)
 	v1.GET("/account/email-verify", accountController.EmailVerify)
 
 	roleController := &controllers.RoleController{}

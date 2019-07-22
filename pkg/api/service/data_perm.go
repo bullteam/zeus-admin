@@ -14,17 +14,17 @@ type DataPermService struct {
 }
 
 // get info by id
-func (dps *DataPermService) InfoOfId(dto dto.GeneralGetDto) model.DataPerm {
+func (DataPermService) InfoOfId(dto dto.GeneralGetDto) model.DataPerm {
 	return dataPermDao.Get(dto.Id)
 }
 
 // List
-func (dps *DataPermService) List(dto dto.GeneralListDto) ([]model.DataPerm, int64) {
+func (DataPermService) List(dto dto.GeneralListDto) ([]model.DataPerm, int64) {
 	return dataPermDao.List(dto)
 }
 
 // Create
-func (dps *DataPermService) Create(dto dto.DataPermAddDto) model.DataPerm {
+func (DataPermService) Create(dto dto.DataPermAddDto) model.DataPerm {
 	dpsModel := model.DataPerm{
 		DomainId:  dto.DomainId,
 		ParentId:  dto.ParentId,
@@ -43,7 +43,7 @@ func (dps *DataPermService) Create(dto dto.DataPermAddDto) model.DataPerm {
 }
 
 // Update
-func (dps *DataPermService) Update(dto dto.DataPermEditDto) int64 {
+func (DataPermService) Update(dto dto.DataPermEditDto) int64 {
 	dpsModel := model.DataPerm{
 		Id:        dto.Id,
 		DomainId:  dto.DomainId,
@@ -61,7 +61,7 @@ func (dps *DataPermService) Update(dto dto.DataPermEditDto) int64 {
 }
 
 // Delete
-func (dps *DataPermService) Delete(dto dto.GeneralDelDto) int64 {
+func (DataPermService) Delete(dto dto.GeneralDelDto) int64 {
 	dpsModel := model.DataPerm{
 		Id: dto.Id,
 	}

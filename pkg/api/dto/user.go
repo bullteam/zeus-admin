@@ -62,22 +62,6 @@ type UserEditPasswordDto struct {
 	Salt     string
 }
 
-//oauth login
-type LoginOAuthDto struct {
-	Code string `form:"code" binding:"required"`
-	Type string `form:"type" binding:"required"`
-}
-
-type BindThirdDto struct {
-	From int    `form:"from"`
-	Code string `form:"code"`
-}
-
-//unbind
-type UnBindThirdDto struct {
-	OAuthType int `form:"type"`
-}
-
 // password validator
 func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
 	if val, ok := field.Interface().(string); ok {
