@@ -245,7 +245,7 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 		}
 		userId := int(c.Value("userId").(float64))
 		myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
-		openid, err := myAccountService.BindByDingtalk(bindThirdDto.Code, userId, from)
+		openid, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
 		if err != nil {
 			fail(c, ErrBindDingtalk)
 		}

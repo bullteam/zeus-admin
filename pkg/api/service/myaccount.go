@@ -49,8 +49,8 @@ func (s *MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAu
 }
 
 //绑定第三方应用
-func (s *MyAccountService) BindByDingtalk(code string, uid int, from int) (openid string, err error) {
-	Info, err := login.GetUserInfo(code)
+func (s *MyAccountService) BindDingtalk(code string, uid int, from int) (openid string, err error) {
+	Info, err := login.GetDingTalkUserInfo(code)
 	if err != nil {
 		return "", err
 	}

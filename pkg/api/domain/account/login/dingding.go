@@ -5,6 +5,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+var dingTalkClient = dingtalk.NewDingTalkCompanyClient(&dingtalk.DTConfig{
+	SNSAppID:  viper.GetString("dingtalk.SNSAppID"),
+	SNSSecret: viper.GetString("dingtalk.SNSSecret"),
+})
+
 type DingtalkUserInfo struct {
 	Openid  string
 	Unionid string
@@ -12,9 +17,10 @@ type DingtalkUserInfo struct {
 	Dingid  string
 }
 
-func GetUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
+//GetDingTalkUserInfo - get dingdingtalk's userinfo by code
+func GetDingTalkUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
 	c := GetCompanyDingTalkClient()
-	c.RefreshSNSAccessToken()
+	_ = c.RefreshSNSAccessToken()
 	perInfo, err := c.SNSGetPersistentCode(code)
 	if err != nil {
 		return nil, err
@@ -23,22 +29,18 @@ func GetUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
 	if err != nil {
 		return nil, err
 	}
-	Info, _ := c.SNSGetUserInfo(snstoken.SnsToken)
-	userInfo := &DingtalkUserInfo{
-		Info.UserInfo.OpenID,
-		Info.UserInfo.UnionID,
-		Info.UserInfo.Nick,
-		Info.UserInfo.DingID,
+	dtUser, err := c.SNSGetUserInfo(snstoken.SnsToken)
+	if err != nil {
+		return nil,err
 	}
-	return userInfo, nil
+	return &DingtalkUserInfo{
+		dtUser.UserInfo.OpenID,
+		dtUser.UserInfo.UnionID,
+		dtUser.UserInfo.Nick,
+		dtUser.UserInfo.DingID,
+	},nil
 }
 
 func GetCompanyDingTalkClient() *dingtalk.DingTalkClient {
-	SNSAppID := viper.GetString("dingtalk.SNSAppID")
-	SNSSecret := viper.GetString("dingtalk.SNSSecret")
-	config := &dingtalk.DTConfig{
-		SNSAppID:  SNSAppID,
-		SNSSecret: SNSSecret,
-	}
-	return dingtalk.NewDingTalkCompanyClient(config)
+	return dingTalkClient
 }
