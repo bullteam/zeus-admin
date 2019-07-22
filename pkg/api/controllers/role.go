@@ -76,6 +76,7 @@ func (r *RoleController) Create(c *gin.Context) {
 }
 
 // @Summary 更新角色信息
+// @Tags Role
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/roles/:id [put]
@@ -93,6 +94,7 @@ func (r *RoleController) Edit(c *gin.Context) {
 }
 
 // @Summary 删除角色信息
+// @Tags Role
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/roles/:id [delete]

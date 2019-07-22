@@ -17,7 +17,7 @@ type MyAccountService struct {
 }
 
 // https://github.com/google/google-authenticator/wiki/Key-Uri-Format
-func (s *MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQuery, err error) {
+func (s MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQuery, err error) {
 	v := s.dao.Get(uid)
 	if !utils.IsNilObject(v) {
 		userSecretQuery.Account_name = v.Account_name
@@ -44,12 +44,12 @@ func (s *MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQ
 /**
 获取第三方账号绑定列表
 */
-func (s *MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAuth, int64) {
+func (s MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAuth, int64) {
 	return s.oauthdao.List(dto)
 }
 
 //绑定第三方应用
-func (s *MyAccountService) BindDingtalk(code string, uid int, from int) (openid string, err error) {
+func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid string, err error) {
 	Info, err := login.GetDingTalkUserInfo(code)
 	if err != nil {
 		return "", err

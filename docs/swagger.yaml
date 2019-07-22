@@ -334,6 +334,18 @@ paths:
       summary: 编辑项目
       tags:
       - Domain
+  /healthcheck:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{""}}'
+          schema:
+            type: string
+      summary: 健康检查
+      tags:
+      - Health
   /roles:
     get:
       parameters:
@@ -390,18 +402,6 @@ paths:
       summary: 角色信息
       tags:
       - Role
-  /test:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{""}}'
-          schema:
-            type: string
-      summary: 测试
-      tags:
-      - Test
   /users:
     get:
       produces:
@@ -566,6 +566,8 @@ paths:
           schema:
             type: string
       summary: 验证邮件地址(验证)
+      tags:
+      - account
   /v1/account/ThirdUnbind:
     get:
       produces:
@@ -576,6 +578,8 @@ paths:
           schema:
             type: string
       summary: 解除绑定第三方应用
+      tags:
+      - account
   /v1/account/Thirdbind:
     get:
       produces:
@@ -586,6 +590,8 @@ paths:
           schema:
             type: string
       summary: 解除绑定第三方应用
+      tags:
+      - account
   /v1/account/accountinfo:
     get:
       produces:
@@ -606,6 +612,8 @@ paths:
           schema:
             type: string
       summary: 绑定2fa goole 验证码
+      tags:
+      - account
   /v1/account/domains:
     get:
       produces:
@@ -616,6 +624,8 @@ paths:
           schema:
             type: string
       summary: 获取用户管理域
+      tags:
+      - account
   /v1/account/info:
     get:
       consumes:
@@ -637,6 +647,8 @@ paths:
               $ref: '#/definitions/model.User'
             type: array
       summary: 登录用户信息
+      tags:
+      - account
   /v1/account/password:
     put:
       produces:
@@ -647,6 +659,8 @@ paths:
           schema:
             type: string
       summary: 更新个人密码
+      tags:
+      - account
   /v1/account/third:
     get:
       produces:
@@ -657,6 +671,8 @@ paths:
           schema:
             type: string
       summary: 验证邮件地址(发送邮件)
+      tags:
+      - account
   /v1/menus:
     get:
       produces:
@@ -667,6 +683,8 @@ paths:
           schema:
             type: string
       summary: 菜单列表
+      tags:
+      - menu
     post:
       produces:
       - application/json
@@ -676,6 +694,8 @@ paths:
           schema:
             type: string
       summary: 新增菜单
+      tags:
+      - menu
   /v1/menus/:
     delete:
       produces:
@@ -686,6 +706,8 @@ paths:
           schema:
             type: string
       summary: 删除菜单
+      tags:
+      - menu
     get:
       consumes:
       - application/json
@@ -703,6 +725,8 @@ paths:
           schema:
             type: string
       summary: 菜单信息
+      tags:
+      - menu
     put:
       produces:
       - application/json
@@ -712,6 +736,8 @@ paths:
           schema:
             type: string
       summary: 编辑菜单
+      tags:
+      - menu
   /v1/roles/:
     delete:
       produces:
@@ -722,6 +748,8 @@ paths:
           schema:
             type: string
       summary: 删除角色信息
+      tags:
+      - Role
     put:
       produces:
       - application/json
@@ -731,6 +759,8 @@ paths:
           schema:
             type: string
       summary: 更新角色信息
+      tags:
+      - Role
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -22,6 +22,7 @@ type AccountController struct {
 }
 
 // @Summary 登录用户信息
+// @Tags account
 // @Description 登陆用户信息接口
 // @Accept  json
 // @Produce  json
@@ -37,6 +38,7 @@ func (u AccountController) Info(c *gin.Context) {
 }
 
 // @Summary 更新个人密码
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/account/password [put]
@@ -61,6 +63,7 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 }
 
 // @Summary 获取用户管理域
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/domains [get]
@@ -132,6 +135,7 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 }
 
 // @Summary 绑定2fa goole 验证码
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/bindcode [get]
@@ -170,6 +174,7 @@ func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 }
 
 // @Summary 第三方绑定列表
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
@@ -187,6 +192,7 @@ func (a *AccountController) ThirdList(c *gin.Context) {
 }
 
 // @Summary 验证邮件地址(发送邮件)
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
@@ -220,6 +226,7 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 }
 
 // @Summary 验证邮件地址(验证)
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/EmailVerification [get]
@@ -233,6 +240,7 @@ func (a *AccountController) EmailVerify(c *gin.Context) {
 }
 
 // @Summary 解除绑定第三方应用
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/Thirdbind [get]
@@ -259,6 +267,7 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 }
 
 // @Summary 解除绑定第三方应用
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/ThirdUnbind [get]
