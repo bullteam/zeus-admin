@@ -22,6 +22,7 @@ type AccountController struct {
 }
 
 // @Summary 登录用户信息
+// @Tags account
 // @Description 登陆用户信息接口
 // @Accept  json
 // @Produce  json
@@ -37,6 +38,7 @@ func (u AccountController) Info(c *gin.Context) {
 }
 
 // @Summary 更新个人密码
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/account/password [put]
@@ -61,6 +63,7 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 }
 
 // @Summary 获取用户管理域
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/domains [get]
@@ -132,10 +135,11 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 }
 
 // @Summary 绑定2fa goole 验证码
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/bindcode [get]
-func (a *AccountController) BindCode(c *gin.Context) {
+func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	myAccountService := service.MyAccountService{}
 	userSecretQuery, err := myAccountService.GetSecret(userId)
@@ -170,19 +174,25 @@ func (a *AccountController) BindCode(c *gin.Context) {
 }
 
 // @Summary 第三方绑定列表
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
-func (a *AccountController) Third(c *gin.Context) {
+func (a *AccountController) ThirdList(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	//userId := int(c.Value("userId").(float64))
-	myAccountService := service.MyAccountService{}
-	resp(c, map[string]interface{}{
-		"result": myAccountService.GetThirdList(listDto),
-	})
+	if a.BindAndValidate(c, &listDto) {
+		myAccountService := service.MyAccountService{}
+		data, total := myAccountService.GetThirdList(listDto)
+		resp(c, map[string]interface{}{
+			"result": data,
+			"total":  total,
+		})
+	}
 }
 
 // @Summary 验证邮件地址(发送邮件)
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
@@ -216,72 +226,70 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 }
 
 // @Summary 验证邮件地址(验证)
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/EmailVerification [get]
-func (a *AccountController) EmailVerification(c *gin.Context) {
+func (a *AccountController) EmailVerify(c *gin.Context) {
 	emailVerificationDto := &dto.EmailVerificationDto{}
-	if !a.BindAndValidate(c, &emailVerificationDto) {
-		fail(c, ErrInvalidParams)
-		return
+	if a.BindAndValidate(c, &emailVerificationDto) {
+		resp(c, map[string]interface{}{
+			"result": "email verify success！",
+		})
 	}
-	resp(c, map[string]interface{}{
-		"result": "email verify success！",
-	})
 }
 
 // @Summary 解除绑定第三方应用
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/Thirdbind [get]
 func (a *AccountController) Thirdbind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
-	if !a.BindAndValidate(c, &bindThirdDto) {
-		fail(c, ErrInvalidParams)
-		return
+	if a.BindAndValidate(c, &bindThirdDto) {
+		from := bindThirdDto.From
+		if from == 0 {
+			from = 1
+		}
+		userId := int(c.Value("userId").(float64))
+		myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
+		openid, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
+		if err != nil {
+			fail(c, ErrBindDingtalk)
+		}
+		data := map[string]string{
+			"openid": openid,
+		}
+		resp(c, map[string]interface{}{
+			"result": data,
+		})
 	}
-	from := bindThirdDto.From
-	if from == 0 {
-		from = 1
-	}
-	userId := int(c.Value("userId").(float64))
-	myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
-	openid, err := myAccountService.BindByDingtalk(bindThirdDto.Code, userId, from)
-	if err != nil {
-		fail(c, ErrBindDingtalk)
-	}
-	data := map[string]string{
-		"openid": openid,
-	}
-	resp(c, map[string]interface{}{
-		"result": data,
-	})
 }
 
 // @Summary 解除绑定第三方应用
+// @Tags account
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/ThirdUnbind [get]
 func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	UnBindDingtalkDto := &dto.UnBindThirdDto{}
-	if !a.BindAndValidate(c, &UnBindDingtalkDto) {
-		fail(c, ErrInvalidParams)
-		return
+	if a.BindAndValidate(c, &UnBindDingtalkDto) {
+		userId := int(c.Value("userId").(float64))
+		oauthType := UnBindDingtalkDto.OAuthType
+		if oauthType == 0 {
+			oauthType = 1
+		}
+		userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
+		errs := userService.UnBindUserDingtalk(oauthType, userId)
+		if errs != nil {
+			fail(c, ErrUnBindDingtalk)
+		}
+		data := map[string]bool{
+			"state": true,
+		}
+		resp(c, map[string]interface{}{
+			"result": data,
+		})
 	}
-	userId := int(c.Value("userId").(float64))
-	from := UnBindDingtalkDto.From
-	if from == 0 {
-		from = 1
-	}
-	userService := service.UserService{} //switch case from  1 钉钉 2 微信 TODO
-	errs := userService.UnBindUserDingtalk(from, userId)
-	if errs != nil {
-		fail(c, ErrUnBindDingtalk)
-	}
-	data := map[string]bool{
-		"state": true,
-	}
-	resp(c, map[string]interface{}{
-		"result": data,
-	})
+
 }

@@ -97,9 +97,4 @@ func failValidate(c *gin.Context, msg string) {
 		"msg":    errs.Message,
 		"detail": msg,
 	})
-	//c.JSON(http.StatusOK, gin.H{
-	//	"code":   errs.Code,
-	//	"msg":    errs.Message,
-	//	"detail": msg,
-	//})
 }

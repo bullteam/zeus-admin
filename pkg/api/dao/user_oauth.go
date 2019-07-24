@@ -27,7 +27,7 @@ func (u UserOAuthDao) Delete(UserOAuth *model.UserOAuth) *gorm.DB {
 }
 
 // List - userOAuth list
-func (u UserOAuthDao) List(listDto dto.GeneralListDto) []model.UserOAuth {
+func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth, int64) {
 	var UserOAuth []model.UserOAuth
 	var total int64
 	db := GetDb()
@@ -36,18 +36,19 @@ func (u UserOAuthDao) List(listDto dto.GeneralListDto) []model.UserOAuth {
 	}
 	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&UserOAuth)
 	db.Model(&model.UserOAuth{}).Count(&total)
-	return UserOAuth
+	fmt.Println(total)
+	return UserOAuth, total
 }
 
 func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (*model.UserOAuth, error) {
 	var userOAuth *model.UserOAuth
-	db.Where("openid = ? and from = ?", openid, from).First(&userOAuth)
+	db.Where("openid = ? and from = ?", openid, from).Find(&userOAuth)
 	return userOAuth, nil
 }
 
 func (dao *UserOAuthDao) DeleteByUseridAndFrom(from int, user_id int) error {
 	db := GetDb()
 	var userOAuth model.UserOAuth
-	db.Where("openid = ? and from = ?", from, user_id).Delete(userOAuth)
+	db.Where("openid = ? and from = ?", from, user_id).Delete(&userOAuth)
 	return nil
 }

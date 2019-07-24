@@ -31,7 +31,6 @@ var pcases = []permissionCases{
 
 func init() {
 	SetUpForTest(".")
-	//enforcer = casbin.NewEnforcer("./rbac_model_0.conf","./perm_test.csv")
 }
 func runTestCases(t *testing.T, cases []permissionCases) {
 	for _, cs := range cases {

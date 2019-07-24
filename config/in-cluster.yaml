@@ -15,10 +15,28 @@ jwt:
   key:
     private: keys/jwt_private_key.pem
     public: keys/jwt_public_key.pem
+  expiresat: 3600*24*1
 casbin:
   model:
     rule_0: config/casbin/rbac_model_0.conf
 lang:
   types: zh-CN|en-US
   names: 简体中文|English
+<<<<<<< HEAD
 domain: bullteam.local
+=======
+domain: bullteam.local
+dingtalk:
+  CorpId:
+  CorpSecret:
+  AgentID:
+  SSOSecret:
+  SNSAppID: dingoatdqa3hb5eta4tlvi
+  SNSSecret: RHNFFTJXh-uxQ2YosdoBt8u0gqBGwWhe8J3dMwqf5gz41vHq9zHvc7D9WNZSDuJ0
+email:
+  username: xxx@qq.com
+  password: xxxxxxxx
+  host: smtp.qq.com
+  port: 25
+  from: xxxxxx@qq.com
+>>>>>>> 04f994dabce19dcf6bf49af0b07cf9097e15712b
