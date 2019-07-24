@@ -14,7 +14,7 @@ type LogController struct {
 // @Summary 登录日志信息
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/api/users/info [get]
+// @Router /v1/api/log/login/{logId} [get]
 func (LogController) LoginLogDetail(c *gin.Context) {
 	logId := int(c.Value("id").(float64))
 	data := logService.LoginLogDetail(dto.GeneralGetDto{Id: logId})
@@ -24,10 +24,10 @@ func (LogController) LoginLogDetail(c *gin.Context) {
 }
 
 
-// @Summary 登录日志信息
+// @Summary 登录日志列表
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/api/users/info [get]
+// @Router /v1/api/log/login [get]
 func (LogController) LoginLogLists(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	_ = dto.Bind(c, &listDto)
@@ -39,10 +39,10 @@ func (LogController) LoginLogLists(c *gin.Context) {
 }
 
 
-// @Summary 登录日志信息
+// @Summary 操作日志信息
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/api/users/info [get]
+// @Router /v1/api/log/operation [get]
 func (LogController) OperationLogDetail(c *gin.Context) {
 	logId := int(c.Value("id").(float64))
 	data := logService.OperationLogDetail(dto.GeneralGetDto{Id: logId})
@@ -52,10 +52,10 @@ func (LogController) OperationLogDetail(c *gin.Context) {
 }
 
 
-// @Summary 登录日志信息
+// @Summary 操作日志列表
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /v1/api/users/info [get]
+// @Router /v1/api/log/operation/{logId} [get]
 func (LogController) OperationLogLists(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	_ = dto.Bind(c, &listDto)
