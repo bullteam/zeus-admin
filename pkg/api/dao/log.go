@@ -27,7 +27,7 @@ func (LoginLogDao) Lists(listDto dto.GeneralListDto) ([]LoginLog, int64) {
 	var total int64
 	db := GetDb()
 
-	db.Offset(listDto.Offset).Limit(listDto.Limit).Find(&loginLogList)
+	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&loginLogList)
 	db.Model(&LoginLog{}).Count(&total)
 	return loginLogList, total
 }
@@ -46,7 +46,7 @@ func (OperationLogDao) Lists(listDto dto.GeneralListDto) ([]OperationLog, int64)
 	var total int64
 	db := GetDb()
 
-	db.Offset(listDto.Offset).Limit(listDto.Limit).Find(&dataModelList)
+	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&dataModelList)
 	db.Model(&OperationLog{}).Count(&total)
 	return dataModelList, total
 }
