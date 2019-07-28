@@ -92,4 +92,13 @@ func Init(e *gin.Engine) {
 	v1.POST("/datas", dataPermController.Create)
 	v1.PUT("/datas/:id", dataPermController.Edit)
 	v1.DELETE("/datas/:id", dataPermController.Delete)
+
+	logController := controllers.LogController{}
+	//login log
+	v1.GET("/log/login", logController.LoginLogLists)
+	v1.GET("/log/login/:id", logController.LoginLogDetail)
+
+	//request log
+	v1.GET("/log/operation", logController.OperationLogLists)
+	v1.GET("/log/operation/:id", logController.OperationLogDetail)
 }
