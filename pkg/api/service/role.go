@@ -17,7 +17,7 @@ type RoleService struct {
 
 // InfoOfId - get role info by id
 func (rs RoleService) InfoOfId(dto dto.GeneralGetDto) model.Role {
-	return roleDao.Get(dto.Id,true)
+	return roleDao.Get(dto.Id, true)
 }
 
 // List - users list with pagination
@@ -27,7 +27,7 @@ func (rs RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
 
 // AssignPermission - assign permissions
 func (rs RoleService) AssignPermission(roleId int, menuIds string) {
-	roleData := roleDao.Get(roleId,true)
+	roleData := roleDao.Get(roleId, true)
 	menus := menuDao.GetMenusByIds(menuIds)
 	if len(menus) > 0 {
 		var policies [][]string
@@ -41,11 +41,11 @@ func (rs RoleService) AssignPermission(roleId int, menuIds string) {
 // Create - create a new account
 func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 	roleModel := model.Role{
-		Name:     dto.Name,
-		RoleName: dto.RoleName,
-		Remark:   dto.Remark,
-		DomainId: dto.DomainId,
-		MenuIds : dto.MenuIds,
+		Name:       dto.Name,
+		RoleName:   dto.RoleName,
+		Remark:     dto.Remark,
+		DomainId:   dto.DomainId,
+		MenuIds:    dto.MenuIds,
 		MenuIdsEle: dto.MenuIdsEle,
 	}
 	c := roleDao.Create(&roleModel)
@@ -65,8 +65,8 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 
 // Update - update role's information
 func (rs RoleService) Update(dto dto.RoleEditDto) int64 {
-	roleModel := roleDao.Get(dto.Id,false)
-	if roleModel.Id < 1{
+	roleModel := roleDao.Get(dto.Id, false)
+	if roleModel.Id < 1 {
 		return -1
 	}
 	roleModel.Name = dto.Name
@@ -85,8 +85,8 @@ func (rs RoleService) Update(dto dto.RoleEditDto) int64 {
 
 // Delete - delete role
 func (rl RoleService) Delete(dto dto.GeneralDelDto) int64 {
-	roleModel := roleDao.Get(dto.Id,false)
-	if roleModel.Id < 1{
+	roleModel := roleDao.Get(dto.Id, false)
+	if roleModel.Id < 1 {
 		return -1
 	}
 	//1. delete role

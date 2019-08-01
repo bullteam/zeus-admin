@@ -76,6 +76,7 @@ func (r *RoleController) Create(c *gin.Context) {
 }
 
 // @Summary 更新角色信息
+// @Tags Role
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/roles/:id [put]
@@ -85,7 +86,7 @@ func (r *RoleController) Edit(c *gin.Context) {
 	if r.BindAndValidate(c, &roleDto) {
 		affected := roleService.Update(roleDto)
 		if affected < 0 {
-			fail(c,ErrNoRecord)
+			fail(c, ErrNoRecord)
 			return
 		}
 		ok(c, "ok.UpdateDone")
@@ -93,17 +94,18 @@ func (r *RoleController) Edit(c *gin.Context) {
 }
 
 // @Summary 删除角色信息
+// @Tags Role
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/roles/:id [delete]
 // Delete - d of crud
 func (r *RoleController) Delete(c *gin.Context) {
 	var roleDto dto.GeneralDelDto
-	if r.BindAndValidate(c,&roleDto) {
+	if r.BindAndValidate(c, &roleDto) {
 		if roleService.Delete(roleDto) < 1 {
-			fail(c,ErrNoRecord)
+			fail(c, ErrNoRecord)
 			return
 		}
-		ok(c,"ok.DeleteDone")
+		ok(c, "ok.DeleteDone")
 	}
 }

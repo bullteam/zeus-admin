@@ -1,7 +1,7 @@
 mode: debug
 mysql:
   dsn: >-
-    ${MYSQL_USERNAME}:${MYSQL_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DB}?charset=utf8&parseTime=True&loc=Local
+    ${MYSQL_USERNAME}:${MYSQL_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/zeus?charset=utf8&parseTime=True&loc=Local
   pool:
     min: 5
     max: 20
@@ -15,16 +15,28 @@ jwt:
   key:
     private: keys/jwt_private_key.pem
     public: keys/jwt_public_key.pem
+  expiresat: 3600*24*1
 casbin:
   model:
     rule_0: config/casbin/rbac_model_0.conf
-cors:
-  enable: false
-  allow_origins: "http://localhost:8000"
-  allow_headers: []
-  allow_credentials: true
-  max_age: 7200
 lang:
   types: zh-CN|en-US
   names: 简体中文|English
+<<<<<<< HEAD
 domain: bullteam.local
+=======
+domain: bullteam.local
+dingtalk:
+  CorpId:
+  CorpSecret:
+  AgentID:
+  SSOSecret:
+  SNSAppID: dingoatdqa3hb5eta4tlvi
+  SNSSecret: RHNFFTJXh-uxQ2YosdoBt8u0gqBGwWhe8J3dMwqf5gz41vHq9zHvc7D9WNZSDuJ0
+email:
+  username: xxx@qq.com
+  password: xxxxxxxx
+  host: smtp.qq.com
+  port: 25
+  from: xxxxxx@qq.com
+>>>>>>> 04f994dabce19dcf6bf49af0b07cf9097e15712b

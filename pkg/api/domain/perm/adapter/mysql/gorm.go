@@ -125,7 +125,7 @@ func (a *GormAdapter) AddPolicy(sec string, ptype string, rule []string) error {
 func (a *GormAdapter) RemovePolicy(sec string, ptype string, rule []string) error {
 	line := savePolicyLine(ptype, rule)
 	//_, err := a.o.Delete(&line, "p_type", "v0", "v1", "v2", "v3", "v4", "v5")
-	do := a.o.Delete(apiModel.CasbinRule{},"p_type=? and v0=? and v1=? and v2=? and v3=? and v4=? and v5=?",line.PType,
+	do := a.o.Delete(apiModel.CasbinRule{}, "p_type=? and v0=? and v1=? and v2=? and v3=? and v4=? and v5=?", line.PType,
 		line.V0,
 		line.V1,
 		line.V2,
@@ -178,7 +178,7 @@ func (a *GormAdapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex 
 		}
 	}
 	//_, err := a.o.Delete(&line, filter...)
-	do := a.o.Delete(apiModel.CasbinRule{},"p_type=? and v0=? and v1=? and v2=? and v3=? and v4=? and v5=?",line.PType,
+	do := a.o.Delete(apiModel.CasbinRule{}, "p_type=? and v0=? and v1=? and v2=? and v3=? and v4=? and v5=?", line.PType,
 		line.V0,
 		line.V1,
 		line.V2,

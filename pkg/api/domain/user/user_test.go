@@ -29,12 +29,12 @@ func TestOverwriteRoles(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	perm.AddGroup("lake","role-1")
-	perm.AddGroup("lake","role-3")
+	perm.AddGroup("lake", "role-1")
+	perm.AddGroup("lake", "role-3")
 	assert.Equal(t, true, CheckPermission("lake", Permission{"zone-2", "manage-some-stuff", "department-1"}), "Permission check of account")
 	assert.Equal(t, true, CheckPermission("lake", Permission{"zone-3", "*", "department-4"}), "Permission check of account")
-	assert.Len(t,perm.GetGroupsByUser("lake"),2,"Verify - user's deletion")
+	assert.Len(t, perm.GetGroupsByUser("lake"), 2, "Verify - user's deletion")
 	DeleteUser("lake")
-	assert.Len(t,perm.GetGroupsByUser("lake"),0,"verify user's deletion")
+	assert.Len(t, perm.GetGroupsByUser("lake"), 0, "verify user's deletion")
 
 }

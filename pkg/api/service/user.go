@@ -15,8 +15,10 @@ import (
 const pwHashBytes = 64
 
 var userDao = dao.User{}
+var userOauthDao = dao.UserOAuthDao{}
 
 type UserService struct {
+	//oauthdao *dao.UserOAuthDao
 }
 
 func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
@@ -137,4 +139,25 @@ func (UserService) GetAllPermissions(uid string) []string {
 // MoveToAnotherDepartment - move users to another department
 func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 	return userDao.UpdateDepartment(uids, target)
+}
+
+//VerifyDTAndReturnUserInfo - verify dingtalk and return user info
+func (us UserService) VerifyDTAndReturnUserInfo(code string) (user *model.UserOAuth, err error) {
+	dtUser, err := login.GetDingTalkUserInfo(code)
+	if err != nil {
+		return nil, err
+	}
+	User, err := userOauthDao.GetUserByOpenId(dtUser.Openid, 1)
+	if err == nil {
+		return User, nil
+	}
+	return nil, err
+}
+
+func (us UserService) UnBindUserDingtalk(from int, user_id int) error {
+	return userOauthDao.DeleteByUseridAndFrom(from, user_id)
+}
+
+func (us UserService) GetBindOauthUserInfo(userid int) (UserInfo model.UserOAuth) {
+	return userOauthDao.Get(userid)
 }

@@ -13,6 +13,7 @@ type MenuController struct {
 }
 
 // @Summary 菜单信息
+// @Tags menu
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
@@ -34,6 +35,7 @@ func (m *MenuController) Get(c *gin.Context) {
 }
 
 // @Summary 菜单列表
+// @Tags menu
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/menus [get]
@@ -50,6 +52,7 @@ func (m *MenuController) List(c *gin.Context) {
 }
 
 // @Summary 新增菜单
+// @Tags menu
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/menus [post]
@@ -65,6 +68,7 @@ func (m *MenuController) Create(c *gin.Context) {
 }
 
 // @Summary 编辑菜单
+// @Tags menu
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/menus/:id [put]
@@ -82,6 +86,7 @@ func (u *MenuController) Edit(c *gin.Context) {
 }
 
 // @Summary 删除菜单
+// @Tags menu
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/menus/:id [delete]
@@ -91,7 +96,11 @@ func (m *MenuController) Delete(c *gin.Context) {
 	if m.BindAndValidate(c, &menuDto) {
 		affected := menuService.Delete(menuDto)
 		if affected <= 0 {
-			fail(c, ErrDelFail)
+			if affected == -2 {
+				fail(c, ErrHasSubRecord)
+			} else {
+				fail(c, ErrDelFail)
+			}
 			return
 		}
 		ok(c, "ok.DeletedDone")

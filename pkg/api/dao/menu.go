@@ -10,7 +10,8 @@ import (
 
 type Menu struct {
 }
-// GetMenusById
+
+// GetMenusByIds
 func (m Menu) GetMenusByIds(ids string) []model.Menu {
 	var menus []model.Menu
 	db := GetDb()
@@ -19,7 +20,7 @@ func (m Menu) GetMenusByIds(ids string) []model.Menu {
 }
 
 //Get - get single menu info
-func (m Menu) Get(id int,preload bool) model.Menu {
+func (m Menu) Get(id int, preload bool) model.Menu {
 	var menu model.Menu
 	db := GetDb()
 	if preload {
@@ -28,18 +29,28 @@ func (m Menu) Get(id int,preload bool) model.Menu {
 	db.Where("id = ?", id).First(&menu)
 	return menu
 }
+
+//GetSubMenus
+func (m Menu) GetSubMenus(id int) []model.Menu {
+	var menus []model.Menu
+	db := GetDb()
+	db.Where("parent_id=?", id).First(&menus)
+	return menus
+}
+
 // List
 func (m Menu) List(treeDto dto.GeneralTreeDto) ([]model.Menu, int64) {
 	var menus []model.Menu
 	var total int64
 	db := GetDb()
-	for sk, sv := range dto.TransformSearch(treeDto.Q,dto.MenuListSearchMapping) {
+	for sk, sv := range dto.TransformSearch(treeDto.Q, dto.MenuListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Preload("Domain").Order("order_num asc").Find(&menus)
 	db.Model(&model.Menu{}).Count(&total)
 	return menus, total
 }
+
 // Create - new menu
 func (m Menu) Create(menu *model.Menu) *gorm.DB {
 	db := GetDb()

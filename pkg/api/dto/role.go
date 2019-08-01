@@ -4,8 +4,9 @@ package dto
 var RoleListSearchMapping = map[string]string{
 	"n": "name",
 	"d": "domain_id",
-	"r" : "role_name",
+	"r": "role_name",
 }
+
 // RoleCreateDto - dto for role's creation
 type RoleCreateDto struct {
 	Name       string `form:"name" binding:"required"`
@@ -18,7 +19,7 @@ type RoleCreateDto struct {
 
 // RoleEditDto - dto for role's modification
 type RoleEditDto struct {
-	Id int `uri:"id" binding:"required,gte=1"`
+	Id         int    `uri:"id" binding:"required,gte=1"`
 	Name       string `form:"name" binding:"required"`
 	DomainId   int    `form:"domain_id" binding:"required,gte=1"`
 	Remark     string `form:"remark"`

@@ -13,6 +13,7 @@ func CheckPerm(roleName, zone, action, domain string) bool {
 func DeletePermWithDomain(roleName, domain string) {
 	perm.DelRoleByDomain(roleName, domain)
 }
+
 // DeletePerm : delete role in casbin policies
 func DeletePerm(roleName string) {
 	perm.DelRole(roleName)
@@ -29,7 +30,7 @@ func OverwritePerm(roleName, domainCode string, polices [][]string) {
 				newPerm[2] == currentPerm[2] &&
 				newPerm[3] == currentPerm[3] {
 				polices[k1] = []string{"-skip"}
-				currentPerms[k2]= []string{"-skip"}
+				currentPerms[k2] = []string{"-skip"}
 			}
 		}
 	}

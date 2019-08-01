@@ -51,7 +51,8 @@ var (
 	ErrGoogleBindCode    = &ControllerError{13009, "err.ErrGoogleBindCode", "", ""}
 	ErrSendMail          = &ControllerError{13010, "err.ErrSendMail", "", ""}
 	ErrValidation        = &ControllerError{13011, "err.ErrValidate", "", ""}
-	ErrNoRecord			 = &ControllerError{13012,"err.ErrNoRecord","",""}
+	ErrNoRecord          = &ControllerError{13012, "err.ErrNoRecord", "", ""}
+	ErrHasSubRecord      = &ControllerError{13013, "err.ErrHasSubRecord", "", ""}
 )
 
 type BaseController struct {
@@ -96,9 +97,4 @@ func failValidate(c *gin.Context, msg string) {
 		"msg":    errs.Message,
 		"detail": msg,
 	})
-	//c.JSON(http.StatusOK, gin.H{
-	//	"code":   errs.Code,
-	//	"msg":    errs.Message,
-	//	"detail": msg,
-	//})
 }
