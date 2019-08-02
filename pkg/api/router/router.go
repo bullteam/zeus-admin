@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
@@ -10,6 +11,9 @@ import (
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/middleware"
 )
+
+var jwtAuth *jwt.GinJWTMiddleware
+var jwtAuths *jwt.GinJWTMiddleware
 
 func Init(e *gin.Engine) {
 	e.Use(
@@ -21,12 +25,12 @@ func Init(e *gin.Engine) {
 	e.GET("/healthcheck", controllers.Healthy)
 	//version fragment
 	v1 := e.Group("/v1")
-	jwtAuth := middleware.JwtAuth(account.LoginStandard.Type)
+	jwtAuth = middleware.JwtAuth(account.LoginStandard.Type)
 
 	//api handlers
-	v1.POST("/users/login", jwtAuth.LoginHandler)
-	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
-	jwtAuths := middleware.JwtAuth(account.LoginOAuth.Type)
+	v1.POST("/users/login", jwtAuthLoginHandler)
+	v1.POST("/users/login/refresh", jwtAuthRefreshHandler)
+	jwtAuths = middleware.JwtAuth(account.LoginOAuth.Type)
 	v1.POST("/users/login/oauth", jwtAuths.LoginHandler)
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
@@ -101,4 +105,31 @@ func Init(e *gin.Engine) {
 	//request log
 	v1.GET("/log/operation", logController.OperationLogLists)
 	v1.GET("/log/operation/:id", logController.OperationLogDetail)
+}
+
+// @Tags Users
+// @Summary 用户登录
+// @Accept  multipart/form-data
+// @Produce  json
+// @Param username formData string true "登录名"
+// @Param password formData string true "密码"
+// @Param captchaid formData string false "验证码ID"
+// @Param captchaval formData string false "验证码"
+// @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"wutong"}}"
+// @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
+// @Router /users/login [post]
+func jwtAuthLoginHandler(c *gin.Context) {
+	jwtAuth.LoginHandler(c)
+}
+
+// @Tags Users
+// @Summary 刷新token
+// @Security ApiKeyAuth
+// @Accept  multipart/form-data
+// @Produce  json
+// @Success 200 {string} json "{"code":0,"data":{"id":1,"name":"wutong"}}"
+// @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
+// @Router /users/login/refresh [post]
+func jwtAuthRefreshHandler(c *gin.Context) {
+	jwtAuth.RefreshHandler(c)
 }

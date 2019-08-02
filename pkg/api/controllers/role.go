@@ -77,9 +77,10 @@ func (r *RoleController) Create(c *gin.Context) {
 
 // @Summary 更新角色信息
 // @Tags Role
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/roles/:id [put]
+// @Router /roles/:id [put]
 // Edit - u of crud
 func (r *RoleController) Edit(c *gin.Context) {
 	var roleDto dto.RoleEditDto
@@ -95,9 +96,10 @@ func (r *RoleController) Edit(c *gin.Context) {
 
 // @Summary 删除角色信息
 // @Tags Role
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/roles/:id [delete]
+// @Router /roles/:id [delete]
 // Delete - d of crud
 func (r *RoleController) Delete(c *gin.Context) {
 	var roleDto dto.GeneralDelDto
