@@ -1,7 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
+	"strconv"
+	"strings"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/role"
 	"zeus/pkg/api/dto"
@@ -10,6 +13,7 @@ import (
 )
 
 var roleDao = dao.Role{}
+var roleDataPermDao = dao.RoleDataPermDao{}
 
 // RoleService
 type RoleService struct {
@@ -38,7 +42,41 @@ func (rs RoleService) AssignPermission(roleId int, menuIds string) {
 	}
 }
 
-// Create - create a new account
+// assign data permission
+func (rs RoleService) AssignDataPerm(roleId int, dataPermIds string) error {
+	var (
+		dtos           []dto.AssignDataPermDto
+		dtoOne         dto.AssignDataPermDto
+		oldDataPermIds []int
+		dataIds        []string
+	)
+
+	// Get the old data permission list of the current role
+	oldRoleDataPerms, _ := roleDataPermDao.GetByRoleId(roleId)
+
+	// Delete all old data permissions for this role and insert new ones
+	if len(oldRoleDataPerms) > 0 {
+		for _, v := range oldRoleDataPerms {
+			oldDataPermIds = append(oldDataPermIds, v.Id)
+		}
+		_ = roleDataPermDao.DeleteMulti(roleId, oldDataPermIds)
+	}
+	// Insert new data permissions
+	dataIds = strings.Split(dataPermIds, ",")
+	if len(dataIds) > 0 {
+		for _, v := range dataIds {
+			tmpId, _ := strconv.Atoi(v)
+			dtoOne.RoleId = roleId
+			dtoOne.DataPermId = tmpId
+			dtos = append(dtos, dtoOne)
+		}
+		_ = roleDataPermDao.InsertMulti(dtos)
+	}
+
+	return nil
+}
+
+// Create - create a new role
 func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 	roleModel := model.Role{
 		Name:       dto.Name,
@@ -59,6 +97,10 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 		if dto.MenuIds != "" {
 			rs.AssignPermission(roleModel.Id, dto.MenuIds)
 		}
+		// insert data permissions
+		if len(dto.DataPermIds) > 0 {
+			_ = rs.AssignDataPerm(roleModel.Id, dto.DataPermIds)
+		}
 	}
 	return roleModel, nil
 }
@@ -75,11 +117,16 @@ func (rs RoleService) Update(dto dto.RoleEditDto) int64 {
 	roleModel.MenuIds = dto.MenuIds
 	roleModel.MenuIdsEle = dto.MenuIdsEle
 	c := roleDao.Update(&roleModel)
+	fmt.Println(dto.DataPermIds)
 	if c.RowsAffected > 0 {
 		if dto.MenuIds != "" {
 			rs.AssignPermission(roleModel.Id, dto.MenuIds)
 		}
 	}
+	if dto.DataPermIds != "" {
+		_ = rs.AssignDataPerm(roleModel.Id, dto.DataPermIds)
+	}
+
 	return c.RowsAffected
 }
 
@@ -94,6 +141,14 @@ func (rl RoleService) Delete(dto dto.GeneralDelDto) int64 {
 	if c.RowsAffected > 0 {
 		//2. delete role's policies
 		role.DeletePerm(roleModel.RoleName)
+
+		//3. delete role's data permissions
+		_ = roleDataPermDao.DeleteByRoleId(dto.Id)
 	}
 	return c.RowsAffected
+}
+
+// 通过角色id获取数据权限列表
+func (rl RoleService) GetRoleDataPermsByRoleId(roleId int) ([]model.GetByRoleIdData, int64) {
+	return roleDataPermDao.GetByRoleId(roleId)
 }

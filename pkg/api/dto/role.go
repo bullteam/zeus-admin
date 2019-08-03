@@ -9,20 +9,22 @@ var RoleListSearchMapping = map[string]string{
 
 // RoleCreateDto - dto for role's creation
 type RoleCreateDto struct {
-	Name       string `form:"name" binding:"required"`
-	DomainId   int    `form:"domain_id" binding:"required,gte=1"`
-	RoleName   string `form:"role_name" binding:"required"`
-	Remark     string `form:"remark"`
-	MenuIds    string `form:"menu_ids"`
-	MenuIdsEle string `form:"menu_ids_ele"`
+	Name        string `form:"name" binding:"required"`
+	DomainId    int    `form:"domain_id" binding:"required,gte=1"`
+	RoleName    string `form:"role_name" binding:"required"`
+	Remark      string `form:"remark"`
+	MenuIds     string `form:"menu_ids"`
+	MenuIdsEle  string `form:"menu_ids_ele"`
+	DataPermIds string `form:"data_perm_ids"`
 }
 
 // RoleEditDto - dto for role's modification
 type RoleEditDto struct {
-	Id         int    `uri:"id" binding:"required,gte=1"`
-	Name       string `form:"name" binding:"required"`
-	DomainId   int    `form:"domain_id" binding:"required,gte=1"`
-	Remark     string `form:"remark"`
-	MenuIds    string `form:"menu_ids"`
-	MenuIdsEle string `form:"menu_ids_ele"`
+	Id          int    `uri:"id" binding:"required,gte=1"`
+	Name        string `form:"name" binding:"required"`
+	DomainId    int    `form:"domain_id" binding:"required,gte=1"`
+	Remark      string `form:"remark"`
+	MenuIds     string `form:"menu_ids"`
+	MenuIdsEle  string `form:"menu_ids_ele"`
+	DataPermIds string `form:"data_perm_ids"`
 }

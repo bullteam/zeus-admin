@@ -25,11 +25,17 @@ func (r *RoleController) Get(c *gin.Context) {
 		data := roleService.InfoOfId(gDto)
 		//role not found
 		if data.Id < 1 {
-			fail(c, ErrNoUser)
+			fail(c, ErrNoRecord)
 			return
 		}
+		// todo: get feature permission list
+		// data permission list
+		dataPerms, _ := roleService.GetRoleDataPermsByRoleId(data.Id)
 		resp(c, map[string]interface{}{
-			"result": data,
+			"result": map[string]interface{}{
+				"detail":     data,
+				"data_perms": dataPerms,
+			},
 		})
 	}
 }

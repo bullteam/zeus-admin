@@ -4,8 +4,6 @@ import (
 	"time"
 )
 
-const TableMenu = "menu"
-
 type Menu struct {
 	Id             int       `json:"id"`
 	ParentId       int       `json:"parent_id"`
@@ -22,5 +20,5 @@ type Menu struct {
 }
 
 func (m *Menu) TableName() string {
-	return TableMenu
+	return "menu"
 }

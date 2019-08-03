@@ -24,9 +24,8 @@ func (d *DatePermController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if d.BindAndValidate(c, &gDto) {
 		data := dataPermService.InfoOfId(gDto)
-		//role not found
 		if data.Id < 1 {
-			fail(c, ErrNoUser)
+			fail(c, ErrNoRecord)
 			return
 		}
 		resp(c, map[string]interface{}{
@@ -108,7 +107,7 @@ func (d *DatePermController) Edit(c *gin.Context) {
 	if d.BindAndValidate(c, &dataPermEditDto) {
 		affected := dataPermService.Update(dataPermEditDto)
 		if affected <= 0 {
-			//fail(c,ErrEditFail)
+			//fail(c, ErrEditFail)
 			//return
 		}
 		ok(c, "ok.UpdateDone")
