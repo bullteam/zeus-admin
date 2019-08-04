@@ -25,11 +25,17 @@ func (r *RoleController) Get(c *gin.Context) {
 		data := roleService.InfoOfId(gDto)
 		//role not found
 		if data.Id < 1 {
-			fail(c, ErrNoUser)
+			fail(c, ErrNoRecord)
 			return
 		}
+		// todo: get feature permission list
+		// data permission list
+		dataPerms, _ := roleService.GetRoleDataPermsByRoleId(data.Id)
 		resp(c, map[string]interface{}{
-			"result": data,
+			"result": map[string]interface{}{
+				"detail":     data,
+				"data_perms": dataPerms,
+			},
 		})
 	}
 }
@@ -77,9 +83,10 @@ func (r *RoleController) Create(c *gin.Context) {
 
 // @Summary 更新角色信息
 // @Tags Role
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/roles/:id [put]
+// @Router /roles/:id [put]
 // Edit - u of crud
 func (r *RoleController) Edit(c *gin.Context) {
 	var roleDto dto.RoleEditDto
@@ -95,9 +102,10 @@ func (r *RoleController) Edit(c *gin.Context) {
 
 // @Summary 删除角色信息
 // @Tags Role
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/roles/:id [delete]
+// @Router /roles/:id [delete]
 // Delete - d of crud
 func (r *RoleController) Delete(c *gin.Context) {
 	var roleDto dto.GeneralDelDto

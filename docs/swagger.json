@@ -17,6 +17,238 @@
     "host": "127.0.0.1:8012",
     "basePath": "/v1",
     "paths": {
+        "/account/EmailVerification": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "验证邮件地址(验证)",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/ThirdUnbind": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "解除绑定第三方应用",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/Thirdbind": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "解除绑定第三方应用",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/accountinfo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "获取个人中心用户信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/bindcode": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "绑定2fa goole 验证码",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/domains": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "获取用户管理域",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/info": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "登陆用户信息接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "登录用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/account/password": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "更新个人密码",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/third": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "验证邮件地址(发送邮件)",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/datas": {
             "get": {
                 "security": [
@@ -501,6 +733,228 @@
                 }
             }
         },
+        "/log/login": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "登录日志列表",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/log/login/{logId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "登录日志信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/log/operation": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "操作日志信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/log/operation/{logId}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "操作日志列表",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"test\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/menus": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "菜单列表",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "新增菜单",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/menus/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "菜单信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "{\"code\":10004,\"msg\": \"用户信息不存在\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "编辑菜单",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "删除菜单",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/roles": {
             "get": {
                 "security": [
@@ -554,6 +1008,52 @@
                 "responses": {
                     "200": {
                         "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/roles/": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "更新角色信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "删除角色信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
                         "schema": {
                             "type": "string"
                         }
@@ -635,6 +1135,95 @@
                 "responses": {
                     "200": {
                         "description": "{\"code\":200,\"data\":{\"id\":1}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "登录名",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "验证码ID",
+                        "name": "captchaid",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "验证码",
+                        "name": "captchaval",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"code\":10004,\"msg\": \"用户信息不存在\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login/refresh": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "刷新token",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "{\"code\":10004,\"msg\": \"用户信息不存在\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -841,327 +1430,6 @@
                 "responses": {
                     "200": {
                         "description": "{\"code\":200,\"data\":{\"id\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/EmailVerification": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "验证邮件地址(验证)",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/ThirdUnbind": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "解除绑定第三方应用",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/Thirdbind": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "解除绑定第三方应用",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/accountinfo": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "获取个人中心用户信息",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/bindcode": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "绑定2fa goole 验证码",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/domains": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "获取用户管理域",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/info": {
-            "get": {
-                "description": "登陆用户信息接口",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "登录用户信息",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "用户ID",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.User"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/password": {
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "更新个人密码",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/account/third": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "account"
-                ],
-                "summary": "验证邮件地址(发送邮件)",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[]}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/menus": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "menu"
-                ],
-                "summary": "菜单列表",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "menu"
-                ],
-                "summary": "新增菜单",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/menus/": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "menu"
-                ],
-                "summary": "菜单信息",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1,\"name\":\"wutong\"}}",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.User"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "{\"code\":10004,\"msg\": \"用户信息不存在\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "menu"
-                ],
-                "summary": "编辑菜单",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "menu"
-                ],
-                "summary": "删除菜单",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"id\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/roles/": {
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Role"
-                ],
-                "summary": "更新角色信息",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Role"
-                ],
-                "summary": "删除角色信息",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\":200,\"data\":{\"result\":[...],\"total\":1}}",
                         "schema": {
                             "type": "string"
                         }

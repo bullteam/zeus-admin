@@ -11,7 +11,7 @@ type DataPerm struct {
 }
 
 //Get
-func (dp *DataPerm) Get(id int) model.DataPerm {
+func (dp DataPerm) Get(id int) model.DataPerm {
 	var dataPerm model.DataPerm
 	db := GetDb()
 	db.Where("id = ?", id).First(&dataPerm)
@@ -19,7 +19,7 @@ func (dp *DataPerm) Get(id int) model.DataPerm {
 }
 
 // List
-func (dp *DataPerm) List(listDto dto.GeneralListDto) ([]model.DataPerm, int64) {
+func (dp DataPerm) List(listDto dto.GeneralListDto) ([]model.DataPerm, int64) {
 	var dataPerms []model.DataPerm
 	var total int64
 	db := GetDb()
@@ -32,19 +32,19 @@ func (dp *DataPerm) List(listDto dto.GeneralListDto) ([]model.DataPerm, int64) {
 }
 
 // Create
-func (dp *DataPerm) Create(dataPerm *model.DataPerm) *gorm.DB {
+func (dp DataPerm) Create(dataPerm *model.DataPerm) *gorm.DB {
 	db := GetDb()
 	return db.Save(dataPerm)
 }
 
 // Update
-func (dp *DataPerm) Update(dataPerm *model.DataPerm) *gorm.DB {
+func (dp DataPerm) Update(dataPerm *model.DataPerm) *gorm.DB {
 	db := GetDb()
 	return db.Save(dataPerm)
 }
 
 // Create
-func (dp *DataPerm) Delete(dataPerm *model.DataPerm) *gorm.DB {
+func (dp DataPerm) Delete(dataPerm *model.DataPerm) *gorm.DB {
 	db := GetDb()
 	return db.Delete(dataPerm)
 }

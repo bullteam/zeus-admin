@@ -14,11 +14,12 @@ type MenuController struct {
 
 // @Summary 菜单信息
 // @Tags menu
+// @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
 // @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
-// @Router /v1/menus/:id [get]
+// @Router /menus/:id [get]
 func (m *MenuController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if m.BindAndValidate(c, &gDto) {
@@ -36,9 +37,10 @@ func (m *MenuController) Get(c *gin.Context) {
 
 // @Summary 菜单列表
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /v1/menus [get]
+// @Router /menus [get]
 // List - r of crud
 func (m *MenuController) List(c *gin.Context) {
 	var menuDto dto.GeneralTreeDto
@@ -53,9 +55,10 @@ func (m *MenuController) List(c *gin.Context) {
 
 // @Summary 新增菜单
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/menus [post]
+// @Router /menus [post]
 //Create - c of crud
 func (m *MenuController) Create(c *gin.Context) {
 	var menuDto dto.MenuCreateDto
@@ -69,9 +72,10 @@ func (m *MenuController) Create(c *gin.Context) {
 
 // @Summary 编辑菜单
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/menus/:id [put]
+// @Router /menus/:id [put]
 // Edit - u of crud
 func (u *MenuController) Edit(c *gin.Context) {
 	var menuDto dto.MenuEditDto
@@ -87,9 +91,10 @@ func (u *MenuController) Edit(c *gin.Context) {
 
 // @Summary 删除菜单
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/menus/:id [delete]
+// @Router /menus/:id [delete]
 // Delete - d of crud
 func (m *MenuController) Delete(c *gin.Context) {
 	var menuDto dto.GeneralDelDto

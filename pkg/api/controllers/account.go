@@ -23,12 +23,13 @@ type AccountController struct {
 
 // @Summary 登录用户信息
 // @Tags account
+// @Security ApiKeyAuth
 // @Description 登陆用户信息接口
 // @Accept  json
 // @Produce  json
 // @Param userId path int true "用户ID"
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
-// @Router /v1/account/info [get]
+// @Router /account/info [get]
 func (u AccountController) Info(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
@@ -39,9 +40,10 @@ func (u AccountController) Info(c *gin.Context) {
 
 // @Summary 更新个人密码
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /v1/account/password [put]
+// @Router /account/password [put]
 // EditPassword - update login user's password
 func (a *AccountController) EditPassword(c *gin.Context) {
 	// simulate value in query
@@ -64,9 +66,10 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 
 // @Summary 获取用户管理域
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/domains [get]
+// @Router /account/domains [get]
 // GetDomains - get user managing domains
 func (AccountController) GetDomains(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
@@ -77,15 +80,19 @@ func (AccountController) GetDomains(c *gin.Context) {
 }
 
 // @Summary 获取登录用户权限列表
+// @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/domains [get]
 // GetDomains - get user managing domains
 
 // @Summary 获取个人中心用户信息
+// @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/accountinfo [get]
+// @Router /account/accountinfo [get]
 func (a *AccountController) AccountInfo(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
@@ -136,9 +143,10 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 
 // @Summary 绑定2fa goole 验证码
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/bindcode [get]
+// @Router /account/bindcode [get]
 func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	myAccountService := service.MyAccountService{}
@@ -175,9 +183,10 @@ func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 
 // @Summary 第三方绑定列表
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/third [get]
+// @Router /account/third [get]
 func (a *AccountController) ThirdList(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	//userId := int(c.Value("userId").(float64))
@@ -193,9 +202,10 @@ func (a *AccountController) ThirdList(c *gin.Context) {
 
 // @Summary 验证邮件地址(发送邮件)
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/third [get]
+// @Router /account/third [get]
 func (a *AccountController) Verifymail(c *gin.Context) {
 	verifyEmailDto := &dto.VerifyEmailDto{}
 	if a.BindAndValidate(c, &verifyEmailDto) {
@@ -227,9 +237,10 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 
 // @Summary 验证邮件地址(验证)
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/EmailVerification [get]
+// @Router /account/EmailVerification [get]
 func (a *AccountController) EmailVerify(c *gin.Context) {
 	emailVerificationDto := &dto.EmailVerificationDto{}
 	if a.BindAndValidate(c, &emailVerificationDto) {
@@ -241,9 +252,10 @@ func (a *AccountController) EmailVerify(c *gin.Context) {
 
 // @Summary 解除绑定第三方应用
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/Thirdbind [get]
+// @Router /account/Thirdbind [get]
 func (a *AccountController) Thirdbind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
 	if a.BindAndValidate(c, &bindThirdDto) {
@@ -268,9 +280,10 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 
 // @Summary 解除绑定第三方应用
 // @Tags account
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/ThirdUnbind [get]
+// @Router /account/ThirdUnbind [get]
 func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	UnBindDingtalkDto := &dto.UnBindThirdDto{}
 	if a.BindAndValidate(c, &UnBindDingtalkDto) {
