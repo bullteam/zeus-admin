@@ -52,7 +52,19 @@ info:
   title: Zeus 宙斯权限后台 API
   version: V0.1
 paths:
-  /account/accountinfo:
+  /healthcheck:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{""}}'
+          schema:
+            type: string
+      summary: 健康检查
+      tags:
+      - Health
+  /v1/account/accountinfo:
     get:
       produces:
       - application/json
@@ -66,145 +78,6 @@ paths:
       summary: 获取个人中心用户信息
       tags:
       - account
-  /account/thirdbind:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"result":[]}}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 解除绑定第三方应用
-      tags:
-      - account
-  /healthcheck:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{""}}'
-          schema:
-            type: string
-      summary: 健康检查
-      tags:
-      - Health
-  /log/operation:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1,"name":"test"}}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 操作日志信息
-      tags:
-      - Log
-  /menus/:
-    put:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1}}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 编辑菜单
-      tags:
-      - menu
-  /roles:
-    post:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1}}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 新增角色
-      tags:
-      - Role
-  /users:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1}}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 新增用户
-      tags:
-      - Users
-  /users/login:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 登录名
-        in: formData
-        name: username
-        required: true
-        type: string
-      - description: 密码
-        in: formData
-        name: password
-        required: true
-        type: string
-      - description: 验证码ID
-        in: formData
-        name: captchaid
-        type: string
-      - description: 验证码
-        in: formData
-        name: captchaval
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
-          schema:
-            type: string
-        "400":
-          description: '{"code":10004,"msg": "用户信息不存在"}'
-          schema:
-            type: string
-      summary: 用户登录
-      tags:
-      - Users
-  /users/login/refresh:
-    post:
-      consumes:
-      - multipart/form-data
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"code":0,"data":{"id":1,"name":"wutong"}}'
-          schema:
-            type: string
-        "400":
-          description: '{"code":10004,"msg": "用户信息不存在"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 刷新token
-      tags:
-      - Users
   /v1/account/bindcode:
     get:
       produces:
@@ -298,6 +171,20 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 验证邮件地址(发送邮件)
+      tags:
+      - account
+  /v1/account/thirdbind:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"result":[]}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 解除绑定第三方应用
       tags:
       - account
   /v1/account/thirdunbind:
@@ -624,6 +511,20 @@ paths:
       summary: 登录日志信息
       tags:
       - Log
+  /v1/log/operation:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"test"}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 操作日志信息
+      tags:
+      - Log
   /v1/log/operation/{logId}:
     get:
       produces:
@@ -700,6 +601,19 @@ paths:
       summary: 菜单信息
       tags:
       - menu
+    put:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑菜单
+      tags:
+      - menu
   /v1/roles:
     get:
       parameters:
@@ -721,6 +635,19 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 角色列表[分页+搜索]
+      tags:
+      - Role
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1}}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 新增角色
       tags:
       - Role
   /v1/roles/:
@@ -772,25 +699,16 @@ paths:
       - Role
   /v1/users:
     get:
-      parameters:
-      - description: 条数
-        in: query
-        name: limit
-        type: integer
-      - description: 偏移量
-        in: query
-        name: skip
-        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"code":200,"data":{"result":[...],"total":1}}'
+          description: '{"code":200,"data":{"id":1}}'
           schema:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 用户列表[分页+搜索]
+      summary: 新增用户
       tags:
       - Users
   /v1/users/{id}:
@@ -931,6 +849,67 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 移动部门
+      tags:
+      - Users
+  /v1/users/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 登录名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: 验证码ID
+        in: formData
+        name: captchaid
+        type: string
+      - description: 验证码
+        in: formData
+        name: captchaval
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: '{"code":10004,"msg": "用户信息不存在"}'
+          schema:
+            type: string
+      summary: 用户登陆
+      tags:
+      - Users
+  /v1/users/login/refresh:
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      produces:
+      - application/json
+      - application/json
+      responses:
+        "200":
+          description: '{"code":200,"data":{"id":1,"name":"wutong"}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: '{"code":10004,"msg": "用户信息不存在"}'
+          schema:
+            type: string
+      summary: 用户refresh-token接口
       tags:
       - Users
 securityDefinitions:

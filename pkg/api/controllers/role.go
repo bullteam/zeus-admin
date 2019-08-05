@@ -64,7 +64,7 @@ func (r *RoleController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /roles [post]
+// @Router /v1/roles [post]
 func (r *RoleController) Create(c *gin.Context) {
 	var roleDto dto.RoleCreateDto
 	if r.BindAndValidate(c, &roleDto) {

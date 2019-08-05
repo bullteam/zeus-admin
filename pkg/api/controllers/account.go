@@ -92,7 +92,7 @@ func (AccountController) GetDomains(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/accountinfo [get]
+// @Router /v1/account/accountinfo [get]
 func (a *AccountController) AccountInfo(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
@@ -255,7 +255,7 @@ func (a *AccountController) EmailVerify(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/thirdbind [get]
+// @Router /v1/account/thirdbind [get]
 func (a *AccountController) Thirdbind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
 	if a.BindAndValidate(c, &bindThirdDto) {

@@ -46,7 +46,7 @@ func (LogController) LoginLogLists(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /log/operation [get]
+// @Router /v1/log/operation [get]
 func (LogController) OperationLogDetail(c *gin.Context) {
 	logId := int(c.Value("id").(float64))
 	data := logService.OperationLogDetail(dto.GeneralGetDto{Id: logId})

@@ -75,7 +75,7 @@ func (m *MenuController) Create(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /menus/:id [put]
+// @Router /v1/menus/:id [put]
 // Edit - u of crud
 func (u *MenuController) Edit(c *gin.Context) {
 	var menuDto dto.MenuEditDto
