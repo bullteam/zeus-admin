@@ -18,7 +18,7 @@ type RoleController struct {
 // @Param id path int true "角色id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /roles/{id} [get]
+// @Router /v1/roles/{id} [get]
 func (r *RoleController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if r.BindAndValidate(c, &gDto) {
@@ -47,7 +47,7 @@ func (r *RoleController) Get(c *gin.Context) {
 // @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /roles [get]
+// @Router /v1/roles [get]
 func (r *RoleController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if r.BindAndValidate(c, &listDto) {
@@ -86,7 +86,7 @@ func (r *RoleController) Create(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /roles/:id [put]
+// @Router /v1/roles/:id [put]
 // Edit - u of crud
 func (r *RoleController) Edit(c *gin.Context) {
 	var roleDto dto.RoleEditDto
@@ -105,7 +105,7 @@ func (r *RoleController) Edit(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /roles/:id [delete]
+// @Router /v1/roles/:id [delete]
 // Delete - d of crud
 func (r *RoleController) Delete(c *gin.Context) {
 	var roleDto dto.GeneralDelDto

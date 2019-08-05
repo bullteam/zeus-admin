@@ -19,7 +19,7 @@ type MenuController struct {
 // @Produce  json
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
 // @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
-// @Router /menus/:id [get]
+// @Router /v1/menus/:id [get]
 func (m *MenuController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if m.BindAndValidate(c, &gDto) {
@@ -40,7 +40,7 @@ func (m *MenuController) Get(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /menus [get]
+// @Router /v1/menus [get]
 // List - r of crud
 func (m *MenuController) List(c *gin.Context) {
 	var menuDto dto.GeneralTreeDto
@@ -58,7 +58,7 @@ func (m *MenuController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /menus [post]
+// @Router /v1/menus [post]
 //Create - c of crud
 func (m *MenuController) Create(c *gin.Context) {
 	var menuDto dto.MenuCreateDto
@@ -94,7 +94,7 @@ func (u *MenuController) Edit(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /menus/:id [delete]
+// @Router /v1/menus/:id [delete]
 // Delete - d of crud
 func (m *MenuController) Delete(c *gin.Context) {
 	var menuDto dto.GeneralDelDto

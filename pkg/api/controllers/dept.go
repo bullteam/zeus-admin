@@ -18,7 +18,7 @@ type DeptController struct {
 // @Param id path int true "部门id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /depts/{id} [get]
+// @Router /v1/depts/{id} [get]
 func (d *DeptController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if d.BindAndValidate(c, &gDto) {
@@ -40,7 +40,7 @@ func (d *DeptController) Get(c *gin.Context) {
 // @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /depts [get]
+// @Router /v1/depts [get]
 func (d *DeptController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if d.BindAndValidate(c, &listDto) {
@@ -57,7 +57,7 @@ func (d *DeptController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /depts [post]
+// @Router /v1/depts [post]
 func (d *DeptController) Create(c *gin.Context) {
 	var deptDto dto.DeptCreateDto
 	if d.BindAndValidate(c, &deptDto) {
@@ -77,7 +77,7 @@ func (d *DeptController) Create(c *gin.Context) {
 // @Param id path int true "部门id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /depts/{id} [delete]
+// @Router /v1/depts/{id} [delete]
 func (d *DeptController) Delete(c *gin.Context) {
 	var deptDto dto.GeneralDelDto
 	if d.BindAndValidate(c, &deptDto) {
@@ -96,7 +96,7 @@ func (d *DeptController) Delete(c *gin.Context) {
 // @Param id path int true "部门id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /depts/{id} [put]
+// @Router /v1/depts/{id} [put]
 func (d *DeptController) Edit(c *gin.Context) {
 	var deptDto dto.DeptEditDto
 	if d.BindAndValidate(c, &deptDto) {

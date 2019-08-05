@@ -29,7 +29,7 @@ type AccountController struct {
 // @Produce  json
 // @Param userId path int true "用户ID"
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
-// @Router /account/info [get]
+// @Router /v1/account/info [get]
 func (u AccountController) Info(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
@@ -43,7 +43,7 @@ func (u AccountController) Info(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /account/password [put]
+// @Router /v1/account/password [put]
 // EditPassword - update login user's password
 func (a *AccountController) EditPassword(c *gin.Context) {
 	// simulate value in query
@@ -69,7 +69,7 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/domains [get]
+// @Router /v1/account/domains [get]
 // GetDomains - get user managing domains
 func (AccountController) GetDomains(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
@@ -146,7 +146,7 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/bindcode [get]
+// @Router /v1/account/bindcode [get]
 func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	myAccountService := service.MyAccountService{}
@@ -186,7 +186,7 @@ func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/third [get]
+// @Router /v1/account/third [get]
 func (a *AccountController) ThirdList(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	//userId := int(c.Value("userId").(float64))
@@ -205,7 +205,7 @@ func (a *AccountController) ThirdList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/third [get]
+// @Router /v1/account/third [get]
 func (a *AccountController) Verifymail(c *gin.Context) {
 	verifyEmailDto := &dto.VerifyEmailDto{}
 	if a.BindAndValidate(c, &verifyEmailDto) {
@@ -240,7 +240,7 @@ func (a *AccountController) Verifymail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/EmailVerification [get]
+// @Router /v1/account/emailverification [get]
 func (a *AccountController) EmailVerify(c *gin.Context) {
 	emailVerificationDto := &dto.EmailVerificationDto{}
 	if a.BindAndValidate(c, &emailVerificationDto) {
@@ -255,7 +255,7 @@ func (a *AccountController) EmailVerify(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/Thirdbind [get]
+// @Router /account/thirdbind [get]
 func (a *AccountController) Thirdbind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
 	if a.BindAndValidate(c, &bindThirdDto) {
@@ -283,7 +283,7 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /account/ThirdUnbind [get]
+// @Router /v1/account/thirdunbind [get]
 func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	UnBindDingtalkDto := &dto.UnBindThirdDto{}
 	if a.BindAndValidate(c, &UnBindDingtalkDto) {

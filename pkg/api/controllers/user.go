@@ -21,7 +21,7 @@ type UserController struct {
 // @Param id path int true "用户id"
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
 // @Failure 400 {string} json "{"code":10004,"msg": "用户信息不存在"}"
-// @Router /users/{id} [get]
+// @Router /v1/users/{id} [get]
 func (u *UserController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &gDto) {
@@ -44,7 +44,7 @@ func (u *UserController) Get(c *gin.Context) {
 // @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /users?limit=20&offset=0 [get]
+// @Router /v1/users?limit=20&offset=0 [get]
 func (u *UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if u.BindAndValidate(c, &listDto) {
@@ -78,7 +78,7 @@ func (u *UserController) Create(c *gin.Context) {
 // @Produce  json
 // @Param id path int true "用户id"
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /users/{id} [put]
+// @Router /v1/users/{id} [put]
 func (u *UserController) Edit(c *gin.Context) {
 	var userDto dto.UserEditDto
 	if u.BindAndValidate(c, &userDto) {
@@ -97,7 +97,7 @@ func (u *UserController) Edit(c *gin.Context) {
 // @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /users/{id}/status [put]
+// @Router /v1/users/{id}/status [put]
 func (u *UserController) EditStatus(c *gin.Context) {
 	var userDto dto.UserEditStatusDto
 	if u.BindAndValidate(c, &userDto) {
@@ -116,7 +116,7 @@ func (u *UserController) EditStatus(c *gin.Context) {
 // @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /users/{id}/password [put]
+// @Router /v1/users/{id}/password [put]
 func (u *UserController) EditPassword(c *gin.Context) {
 	var userDto dto.UserEditPasswordDto
 	if u.BindAndValidate(c, &userDto) {
@@ -135,7 +135,7 @@ func (u *UserController) EditPassword(c *gin.Context) {
 // @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /users/{id} [delete]
+// @Router /v1/users/{id} [delete]
 func (u *UserController) Delete(c *gin.Context) {
 	var userDto dto.GeneralDelDto
 	if u.BindAndValidate(c, &userDto) {
@@ -154,7 +154,7 @@ func (u *UserController) Delete(c *gin.Context) {
 // @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /users/{id}/permissions [get]
+// @Router /v1/users/{id}/permissions [get]
 func (u *UserController) GetUserPermissions(c *gin.Context) {
 	var userDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &userDto) {
@@ -169,7 +169,7 @@ func (u *UserController) GetUserPermissions(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /users/department/move [post]
+// @Router /v1/users/department/move [post]
 func (u *UserController) UpdateDepartment(c *gin.Context) {
 	var userDto dto.UserMoveDepartmentDto
 	if u.BindAndValidate(c, &userDto) {

@@ -18,7 +18,7 @@ type DomainController struct {
 // @Param id path int true "项目id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /domains/{id} [get]
+// @Router /v1/domains/{id} [get]
 func (d *DomainController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if d.BindAndValidate(c, &gDto) {
@@ -41,7 +41,7 @@ func (d *DomainController) Get(c *gin.Context) {
 // @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /domains [get]
+// @Router /v1/domains [get]
 func (d *DomainController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if d.BindAndValidate(c, &listDto) {
@@ -58,7 +58,7 @@ func (d *DomainController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /domains [post]
+// @Router /v1/domains [post]
 func (d *DomainController) Create(c *gin.Context) {
 	var domainDto dto.DomainCreateDto
 	if d.BindAndValidate(c, &domainDto) {
@@ -78,7 +78,7 @@ func (d *DomainController) Create(c *gin.Context) {
 // @Param id path int true "项目id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /domains/{id} [delete]
+// @Router /v1/domains/{id} [delete]
 func (d *DomainController) Delete(c *gin.Context) {
 	var domainDto dto.GeneralDelDto
 	if d.BindAndValidate(c, &domainDto) {
@@ -97,7 +97,7 @@ func (d *DomainController) Delete(c *gin.Context) {
 // @Param id path int true "项目id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /domains/{id} [put]
+// @Router /v1/domains/{id} [put]
 func (d *DomainController) Edit(c *gin.Context) {
 	var domainDto dto.DomainEditDto
 	if d.BindAndValidate(c, &domainDto) {

@@ -16,7 +16,7 @@ type LogController struct {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /log/login/{logId} [get]
+// @Router /v1/log/login/{logId} [get]
 func (LogController) LoginLogDetail(c *gin.Context) {
 	logId := int(c.Value("id").(float64))
 	data := logService.LoginLogDetail(dto.GeneralGetDto{Id: logId})
@@ -30,7 +30,7 @@ func (LogController) LoginLogDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /log/login [get]
+// @Router /v1/log/login [get]
 func (LogController) LoginLogLists(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	_ = dto.Bind(c, &listDto)
@@ -60,7 +60,7 @@ func (LogController) OperationLogDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /log/operation/{logId} [get]
+// @Router /v1/log/operation/{logId} [get]
 func (LogController) OperationLogLists(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	_ = dto.Bind(c, &listDto)
