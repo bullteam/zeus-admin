@@ -1,7 +1,5 @@
 package model
 
-const TableUserRole = "user_role"
-
 type UserRole struct {
 	Id     int
 	UserId int `sql:"index"`
@@ -9,5 +7,5 @@ type UserRole struct {
 }
 
 func (UserRole) TableName() string {
-	return TableUserRole
+	return "user_role"
 }

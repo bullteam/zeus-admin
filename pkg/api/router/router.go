@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
@@ -10,6 +11,9 @@ import (
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/middleware"
 )
+
+var jwtAuth *jwt.GinJWTMiddleware
+var jwtAuths *jwt.GinJWTMiddleware
 
 func Init(e *gin.Engine) {
 	e.Use(
@@ -21,12 +25,12 @@ func Init(e *gin.Engine) {
 	e.GET("/healthcheck", controllers.Healthy)
 	//version fragment
 	v1 := e.Group("/v1")
-	jwtAuth := middleware.JwtAuth(account.LoginStandard.Type)
-
+	jwtAuth = middleware.JwtAuth(account.LoginStandard.Type)
+	authController := &controllers.AuthController{}
 	//api handlers
-	v1.POST("/users/login", jwtAuth.LoginHandler)
-	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
-	jwtAuths := middleware.JwtAuth(account.LoginOAuth.Type)
+	v1.POST("/users/login", authController.JwtAuthLogin)
+	v1.POST("/users/login/refresh", authController.JwtAuthRefreshLogin)
+	jwtAuths = middleware.JwtAuth(account.LoginOAuth.Type)
 	v1.POST("/users/login/oauth", jwtAuths.LoginHandler)
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
@@ -38,6 +42,7 @@ func Init(e *gin.Engine) {
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
 	v1.GET("/users/:id/permissions", userController.GetUserPermissions)
+	v1.POST("/users", userController.Create)
 	v1.PUT("/users/:id", userController.Edit)
 	v1.PUT("/users/:id/status", userController.EditStatus)
 	v1.PUT("/users/:id/password", userController.EditPassword)

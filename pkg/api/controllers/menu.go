@@ -14,6 +14,7 @@ type MenuController struct {
 
 // @Summary 菜单信息
 // @Tags menu
+// @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
@@ -36,6 +37,7 @@ func (m *MenuController) Get(c *gin.Context) {
 
 // @Summary 菜单列表
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/menus [get]
@@ -53,6 +55,7 @@ func (m *MenuController) List(c *gin.Context) {
 
 // @Summary 新增菜单
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/menus [post]
@@ -69,6 +72,7 @@ func (m *MenuController) Create(c *gin.Context) {
 
 // @Summary 编辑菜单
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/menus/:id [put]
@@ -87,6 +91,7 @@ func (u *MenuController) Edit(c *gin.Context) {
 
 // @Summary 删除菜单
 // @Tags menu
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/menus/:id [delete]

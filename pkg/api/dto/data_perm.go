@@ -17,7 +17,7 @@ type DataPermAddDto struct {
 }
 
 type DataPermEditDto struct {
-	Id        int    `form:"id" json:"id" binding:"required"`
+	Id        int    `uri:"id" json:"id" binding:"required"`
 	DomainId  int    `form:"domain_id" json:"domain_id" binding:"required"`   // 项目域id
 	ParentId  int    `form:"parent_id" json:"parent_id"`                      // 菜单ID
 	Name      string `form:"name" json:"name" binding:"required"`             // 名称

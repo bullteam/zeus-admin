@@ -1,7 +1,5 @@
 package model
 
-const TableDataPerm = "data_perm"
-
 type DataPerm struct {
 	Id        int    `json:"id"`         // 自增ID
 	ParentId  int    `json:"parent_id"`  // 父级id
@@ -21,5 +19,5 @@ type DataPermQuery struct {
 }
 
 func (dp *DataPerm) TableName() string {
-	return TableDataPerm
+	return "data_perm"
 }

@@ -18,18 +18,24 @@ type RoleController struct {
 // @Param id path int true "角色id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /roles/{id} [get]
+// @Router /v1/roles/{id} [get]
 func (r *RoleController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if r.BindAndValidate(c, &gDto) {
 		data := roleService.InfoOfId(gDto)
 		//role not found
 		if data.Id < 1 {
-			fail(c, ErrNoUser)
+			fail(c, ErrNoRecord)
 			return
 		}
+		// todo: get feature permission list
+		// data permission list
+		dataPerms, _ := roleService.GetRoleDataPermsByRoleId(data.Id)
 		resp(c, map[string]interface{}{
-			"result": data,
+			"result": map[string]interface{}{
+				"detail":     data,
+				"data_perms": dataPerms,
+			},
 		})
 	}
 }
@@ -41,7 +47,7 @@ func (r *RoleController) Get(c *gin.Context) {
 // @Param skip query int false "偏移量"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /roles [get]
+// @Router /v1/roles [get]
 func (r *RoleController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if r.BindAndValidate(c, &listDto) {
@@ -58,7 +64,7 @@ func (r *RoleController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /roles [post]
+// @Router /v1/roles [post]
 func (r *RoleController) Create(c *gin.Context) {
 	var roleDto dto.RoleCreateDto
 	if r.BindAndValidate(c, &roleDto) {
@@ -77,6 +83,7 @@ func (r *RoleController) Create(c *gin.Context) {
 
 // @Summary 更新角色信息
 // @Tags Role
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/roles/:id [put]
@@ -95,6 +102,7 @@ func (r *RoleController) Edit(c *gin.Context) {
 
 // @Summary 删除角色信息
 // @Tags Role
+// @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
 // @Router /v1/roles/:id [delete]

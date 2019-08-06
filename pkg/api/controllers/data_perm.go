@@ -19,14 +19,13 @@ type DatePermController struct {
 // @Produce  json
 // @Param id path string true "数据权限id"
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
-// @Router /datas/{id} [get]
+// @Router /v1/datas/{id} [get]
 func (d *DatePermController) Get(c *gin.Context) {
 	var gDto dto.GeneralGetDto
 	if d.BindAndValidate(c, &gDto) {
 		data := dataPermService.InfoOfId(gDto)
-		//role not found
 		if data.Id < 1 {
-			fail(c, ErrNoUser)
+			fail(c, ErrNoRecord)
 			return
 		}
 		resp(c, map[string]interface{}{
@@ -43,7 +42,7 @@ func (d *DatePermController) Get(c *gin.Context) {
 // @Param limit query int false "条数"
 // @Param skip query int false "偏移量"
 // @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
-// @Router /datas [get]
+// @Router /v1/datas [get]
 func (d *DatePermController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if d.BindAndValidate(c, &listDto) {
@@ -61,7 +60,7 @@ func (d *DatePermController) List(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /datas [post]
+// @Router /v1/datas [post]
 func (d *DatePermController) Create(c *gin.Context) {
 	var dataPermAddDto dto.DataPermAddDto
 	if d.BindAndValidate(c, &dataPermAddDto) {
@@ -82,7 +81,7 @@ func (d *DatePermController) Create(c *gin.Context) {
 // @Param id path string true "要删除的id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /datas/{id} [delete]
+// @Router /v1/datas/{id} [delete]
 func (d *DatePermController) Delete(c *gin.Context) {
 	var dataPermDelDto dto.GeneralDelDto
 	if d.BindAndValidate(c, &dataPermDelDto) {
@@ -102,13 +101,13 @@ func (d *DatePermController) Delete(c *gin.Context) {
 // @Produce  json
 // @Param id path int true "需要编辑的id"
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
-// @Router /datas/{id} [put]
+// @Router /v1/datas/{id} [put]
 func (d *DatePermController) Edit(c *gin.Context) {
 	var dataPermEditDto dto.DataPermEditDto
 	if d.BindAndValidate(c, &dataPermEditDto) {
 		affected := dataPermService.Update(dataPermEditDto)
 		if affected <= 0 {
-			//fail(c,ErrEditFail)
+			//fail(c, ErrEditFail)
 			//return
 		}
 		ok(c, "ok.UpdateDone")
