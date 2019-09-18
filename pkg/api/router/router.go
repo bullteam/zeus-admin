@@ -26,10 +26,10 @@ func Init(e *gin.Engine) {
 	//version fragment
 	v1 := e.Group("/v1")
 	jwtAuth = middleware.JwtAuth(account.LoginStandard.Type)
-	authController := &controllers.AuthController{}
+	//authController := &controllers.AuthController{}
 	//api handlers
-	v1.POST("/users/login", authController.JwtAuthLogin)
-	v1.POST("/users/login/refresh", authController.JwtAuthRefreshLogin)
+	v1.POST("/users/login", jwtAuth.LoginHandler)
+	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 	jwtAuths = middleware.JwtAuth(account.LoginOAuth.Type)
 	v1.POST("/users/login/oauth", jwtAuths.LoginHandler)
 

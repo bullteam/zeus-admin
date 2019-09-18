@@ -3,7 +3,7 @@ import qs from 'qs'
 
 export function loginByUsername(data) {
   return request({
-    url: 'user/login',
+    url: '/v1/users/login',
     method: 'post',
     data: qs.stringify(data)
   })
