@@ -13,11 +13,6 @@ var (
 	db *gorm.DB
 )
 
-// migrate migrates database schemas.
-func migrate() {
-
-}
-
 // Setup : Connect to mysql database
 func Setup() {
 	var err error

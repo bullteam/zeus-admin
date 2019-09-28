@@ -9,11 +9,9 @@ import (
 
 var userService = service.UserService{}
 
-
 type UserController struct {
 	BaseController
 }
-
 
 // @Tags Users
 // @Summary 用户信息
@@ -161,7 +159,7 @@ func (u *UserController) GetUserPermissions(c *gin.Context) {
 	var userDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &userDto) {
 		resp(c, map[string]interface{}{
-			"result": userService.GetAllPermissions(c.GetString("userId")),
+			"result": userService.GetAllPermissions(c.GetString("id")),
 		})
 	}
 }

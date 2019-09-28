@@ -38,6 +38,19 @@ func (u AccountController) Info(c *gin.Context) {
 	})
 }
 
+// @Tags Users
+// @Summary 获取用户权限列表
+// @Security ApiKeyAuth
+// @Param id path int true "用户id"
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/account/permissions [get]
+func (*AccountController) GetPermissions(c *gin.Context) {
+	resp(c, map[string]interface{}{
+		"result": userService.GetAllPermissions(c.GetString("userId")),
+	})
+}
+
 // @Summary 更新个人密码
 // @Tags account
 // @Security ApiKeyAuth

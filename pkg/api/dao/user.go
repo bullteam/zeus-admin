@@ -30,7 +30,6 @@ func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
 	db.Preload("Department").Preload("Roles").Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
-	//db.Preload("Roles").Find(&users)
 	db.Model(&model.User{}).Count(&total)
 	return users, total
 }

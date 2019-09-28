@@ -32,7 +32,6 @@ func (LoginLogDao) Lists(listDto dto.GeneralListDto) ([]LoginLog, int64) {
 	return loginLogList, total
 }
 
-
 //Get
 func (OperationLogDao) Detail(id int) OperationLog {
 	var dataModel OperationLog
@@ -50,5 +49,3 @@ func (OperationLogDao) Lists(listDto dto.GeneralListDto) ([]OperationLog, int64)
 	db.Model(&OperationLog{}).Count(&total)
 	return dataModelList, total
 }
-
-

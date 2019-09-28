@@ -51,6 +51,7 @@ func Init(e *gin.Engine) {
 
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
+	v1.GET("/account/permissions", accountController.GetPermissions)
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
 	v1.POST("/account/bind-google-2fa-code", accountController.BindGoogle2faCode)

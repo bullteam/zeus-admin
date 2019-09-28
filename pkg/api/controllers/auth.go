@@ -12,7 +12,6 @@ type AuthController struct {
 	BaseController
 }
 
-
 // @Tags Users
 // @Summary 用户登陆
 // @Accept  json

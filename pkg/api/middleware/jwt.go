@@ -57,8 +57,8 @@ func JwtAuth(loginType int) *jwt.GinJWTMiddleware {
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
-				"code": code,
-				"message":  message,
+				"code":    code,
+				"message": message,
 			})
 		},
 		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
