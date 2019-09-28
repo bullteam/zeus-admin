@@ -7,14 +7,14 @@ const path = require('path')
 module.exports = {
   dev: {
     // Paths
-    // assetsSubDirectory: 'static',
-    // assetsPublicPath: '/',
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/',
     proxyTable: {
-      '/': {
-        target: 'http://api.admin.bullteam.local/',
-        changeOrigin: false,
+      '/api-proxy': {
+        target: 'http://api.admin.bullteam.local',
+        changeOrigin: true,
         pathRewrite: {
-          '^/api-proxy': '/'
+          '^/api-proxy': ''
         }
       }
     },

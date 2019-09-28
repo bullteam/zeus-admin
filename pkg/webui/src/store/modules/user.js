@@ -23,7 +23,6 @@ const user = {
     roles: [],
     auth: [],
     setting: {
-      articlePlatform: []
     }
   },
 
@@ -60,31 +59,16 @@ const user = {
   actions: {
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
-      // const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        loginByUsername(userInfo)
-          .then(response => {
-            const data = response.data
-            commit('SET_TOKEN', data.access_token)
-            setToken(data.access_token)
-            resolve()
-          })
-          .catch(error => {
-            reject(error)
-          })
-        // const response = {
-        //   data: {
-        //     roles: ['admin', 'permission', 'user', 'dept', 'role', 'system', 'menu', 'logs', 'log_login', 'log_operation', 'log_error'],
-        //     token: 'admin',
-        //     introduction: '我是超级管理员',
-        //     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-        //     name: 'Super Admin'
-        //   }
-        // }
-        // const data = response.data
-        // commit('SET_TOKEN', data.token)
-        // setToken(response.data.token)
-        // resolve()
+        loginByUsername(userInfo).then(response => {
+          const data = response.data
+          commit('SET_TOKEN', data.token)
+          setToken(data.token)
+          resolve()
+        }).catch(error => {
+          console.log(error)
+          reject(error)
+        })
       })
     },
 
@@ -94,8 +78,8 @@ const user = {
         loginDingtalk(data)
           .then(response => {
             const data = response.data
-            commit('SET_TOKEN', data.access_token)
-            setToken(data.access_token)
+            commit('SET_TOKEN', data.token)
+            setToken(data.token)
             resolve()
           })
           .catch(error => {

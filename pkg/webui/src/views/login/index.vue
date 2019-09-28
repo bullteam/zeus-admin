@@ -88,7 +88,7 @@
 <script>
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
-import { getUserCaptcha } from '@/api/login'
+// import { getUserCaptcha } from '@/api/login'
 // import { getPrefix } from '@/utils/auth'
 
 export default {
@@ -165,19 +165,20 @@ export default {
         this.passwordType = 'password'
       }
     },
-    showCaptcha() {
-      this.loginForm.captchaval = ''
-      getUserCaptcha().then((json) => {
-        this.loginForm.captchaid = json.data.captcha.Id
-        this.captchaUrl = `//api.${location.host}/captcha/${this.loginForm.captchaid}.png`
-        // this.captchaUrl = ('http://api-auth{fix}.etcchebao.com/captcha/' + this.loginForm.captchaid + '.png').replace('{fix}', getPrefix())
-      })
-    },
+    // showCaptcha() {
+    //   this.loginForm.captchaval = ''
+    //   getUserCaptcha().then((json) => {
+    //     this.loginForm.captchaid = json.data.captcha.Id
+    //     this.captchaUrl = `//api.${location.host}/captcha/${this.loginForm.captchaid}.png`
+    //     // this.captchaUrl = ('http://api-auth{fix}.etcchebao.com/captcha/' + this.loginForm.captchaid + '.png').replace('{fix}', getPrefix())
+    //   })
+    // },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            console.log('sssss')
             // TODO: Wendell Sheh 本项目后台登录完成后，路由到指定页面
             // 其他项目后台根据参数 redirectURL, 跳转到对应的项目上
             // 如果没有此参数，根据 redirect 返回到本项目指定路由
@@ -189,14 +190,11 @@ export default {
             }
             this.$router.push({ path: this.redirect || '/' })
           }).catch((res) => {
+            // console.log(res)
             if (res.code === 13001) {
               this.showCaptcha()
-              // getUserCaptcha().then((json) => {
-              //   this.loginForm.captchaid = json.data.captcha.Id
-              //   this.captchaUrl = ('http://api-auth{fix}.etcchebao.com/captcha/' + this.loginForm.captchaid + '.png').replace('{fix}', getPrefix())
-              // })
             } else {
-              this.$message.error(res.msg)
+              // this.$message.error(res.msg)
             }
             this.loading = false
           })
