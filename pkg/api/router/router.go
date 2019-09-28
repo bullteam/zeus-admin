@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/appleboy/gin-jwt/v2"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -19,7 +18,7 @@ func Init(e *gin.Engine) {
 	e.Use(
 		gin.Recovery(),
 	)
-	e.Use(cors.Default()) // CORS
+	//e.Use(cors.Default()) // CORS
 	e.Use(middleware.SetLangVer())
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/healthcheck", controllers.Healthy)

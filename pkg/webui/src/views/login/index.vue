@@ -178,7 +178,6 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            console.log('sssss')
             // TODO: Wendell Sheh 本项目后台登录完成后，路由到指定页面
             // 其他项目后台根据参数 redirectURL, 跳转到对应的项目上
             // 如果没有此参数，根据 redirect 返回到本项目指定路由

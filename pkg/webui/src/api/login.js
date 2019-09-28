@@ -18,14 +18,14 @@ export function logout() {
 
 export function getUserPrem(token) {
   return request({
-    url: 'user/perm/list?domain=root',
+    url: '/v1/account/permissions',
     method: 'get'
   })
 }
 
 export function getUserDomain(token) {
   return request({
-    url: 'user/domain',
+    url: '/v1/account/domains',
     method: 'get'
   })
 }

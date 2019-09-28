@@ -27,7 +27,7 @@ export default {
   methods: {
     getList() {
       getUserDomain().then(response => {
-        this.domainlist = response.data
+        this.domainlist = response.data.result
       })
     },
     toUrl(obj) {

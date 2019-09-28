@@ -101,9 +101,9 @@ const user = {
             const roles = []
             const auth = []
             data.result.forEach(o => {
-              var p = o.obj.split(':')
+              var p = o.split(':')
               roles.push(p[0])
-              auth.push(o.obj)
+              auth.push(o)
             })
             // console.log(Array.from(new Set(roles)))
             // roles.push('/permission/user')
@@ -132,10 +132,10 @@ const user = {
                 name: data.info.username || ''
               }
             }
-
             commit('SET_NAME', res_data.data.name)
             commit('SET_AVATAR', res_data.data.avatar)
             commit('SET_INTRODUCTION', res_data.data.introduction)
+
             resolve(res_data)
           })
           .catch(error => {
