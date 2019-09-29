@@ -64,8 +64,8 @@ export default {
       accountThird().then(res => {
         this.bindlist = this.iconList.map(val => {
           if (res.data) {
-            res.data.forEach(element => {
-              if (val.from === parseInt(element.from)) {
+            res.data.result.forEach(element => {
+              if (val.from === element.from) {
                 val.isBind = true
                 val.bindName = element.name
               } else {

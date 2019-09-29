@@ -226,9 +226,10 @@ export default {
         domain_id: this.domain_id
       }), dataPermList({
         start: 0,
-        limit: 1000,
+        limit: 20,
         domain_id: this.domain_id
       })]).then(response => {
+        console.log(response)
         const res_menus = response[0].data.result
         const result = response[1].data.result
         if (res_menus && res_menus.length > 0) {

@@ -4,7 +4,7 @@ import qs from 'qs'
 // 获取数据权限列表
 export function dataPermList(data) {
   return request({
-    url: 'data/perm/list',
+    url: 'v1/datas',
     method: 'get',
     params: data
   })
@@ -12,7 +12,7 @@ export function dataPermList(data) {
 // 删除数据权限
 export function dataPermDel(data) {
   return request({
-    url: 'data/perm/del',
+    url: 'v1/datas',
     method: 'get',
     params: data
   })
@@ -20,7 +20,7 @@ export function dataPermDel(data) {
 // 添加数据权限
 export function dataPermAdd(data) {
   return request({
-    url: 'data/perm/add',
+    url: 'v1/datas',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -28,7 +28,7 @@ export function dataPermAdd(data) {
 // 修改数据权限
 export function dataPermEdit(data) {
   return request({
-    url: 'data/perm/edit',
+    url: 'v1/datas',
     method: 'post',
     data: qs.stringify(data)
   })
