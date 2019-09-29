@@ -229,6 +229,7 @@ export default {
         limit: 1000,
         domain_id: this.domain_id
       })]).then(response => {
+        console.log(response)
         const res_menus = response[0].data.result
         const result = response[1].data.result
         if (res_menus && res_menus.length > 0) {

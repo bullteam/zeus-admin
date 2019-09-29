@@ -138,7 +138,7 @@ func (UserService) GetAllPermissions(uid string) []string {
 		if len(seg) == 3 {
 			if ok := path[seg[1]]; !ok {
 				path[seg[1]] = true
-				perms = append(perms, "/" + seg[1])
+				perms = append(perms, "/"+seg[1])
 			}
 		}
 		if ok := path[seg[2]]; !ok {

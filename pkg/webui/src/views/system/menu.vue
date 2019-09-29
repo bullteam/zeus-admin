@@ -219,6 +219,8 @@ export default {
       this.listLoading = true
       fetchMenuList({ domain_id: this.domain_id }).then(res => {
         const res_menus = res.data.result
+        // console.log(res_menus)
+        // console.log(this.o(res_menus, 0))
         // const menu = this.o(res_menus, 0)
         if (res_menus && res_menus.length > 0) {
           this.list = this.o(res_menus, 0)
@@ -241,8 +243,9 @@ export default {
       })
     },
     o(data, id) {
-      const menu = data.filter(o => o.parent_id === id.toString())
+      const menu = data.filter(o => o.parent_id === id)
       menu.forEach(o => {
+        console.log(o.id)
         const children = this.o(data, o.id)
         if (children && children.length > 0) {
           o.children = children
