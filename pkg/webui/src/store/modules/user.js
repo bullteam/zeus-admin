@@ -66,7 +66,6 @@ const user = {
           setToken(data.token)
           resolve()
         }).catch(error => {
-          console.log(error)
           reject(error)
         })
       })
@@ -106,10 +105,6 @@ const user = {
               auth.push(o)
             })
             // console.log(Array.from(new Set(roles)))
-            // console.log(Array.from(new Set(auth)))
-            // roles.push('/permission/user')
-            // roles.push('/permission')
-
             if (roles && roles.length > 0) {
               // 验证返回的roles是否是一个非空数组
               commit('SET_ROLES', Array.from(new Set(roles)))
@@ -133,7 +128,6 @@ const user = {
                 name: data.info.username || ''
               }
             }
-            console.log(res_data)
             commit('SET_NAME', res_data.data.name)
             commit('SET_AVATAR', res_data.data.avatar)
             commit('SET_INTRODUCTION', res_data.data.introduction)
@@ -143,31 +137,6 @@ const user = {
           .catch(error => {
             reject(error)
           })
-        //   const response = {
-        //     data: {
-        //       roles: ['admin', 'permission', 'user', 'dept', 'role', 'system', 'menu', 'logs', 'log_login', 'log_operation', 'log_error'],
-        //       auth: ['user_add', 'user_show'],
-        //       token: 'admin',
-        //       introduction: '我是超级管理员',
-        //       avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-        //       name: 'Super Admin'
-        //     }
-        //   }
-        //   if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-        //     reject('error')
-        //   }
-        //   const data = response.data
-        //
-        //   if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-        //     commit('SET_ROLES', data.roles)
-        //   } else {
-        //     reject('getInfo: roles must be a non-null array !')
-        //   }
-        //
-        //   commit('SET_NAME', data.name)
-        //   commit('SET_AVATAR', data.avatar)
-        //   commit('SET_INTRODUCTION', data.introduction)
-        //   resolve(response)
       })
     },
 
@@ -188,15 +157,8 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        // logout(state.token).then(() => {
-        //   commit('SET_TOKEN', '')
-        //   commit('SET_ROLES', [])
-        //   removeToken()
-        //   resolve()
-        // }).catch(error => {
-        //   reject(error)
-        // })
         commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
         // setTagNavListInLocalstorage([])
         commit('DEL_ALL_VISITED_VIEWS')
         removeToken()

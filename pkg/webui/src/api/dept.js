@@ -3,7 +3,7 @@ import qs from 'qs'
 
 export function fetchDeptList(query) {
   return request({
-    url: 'dept/list',
+    url: 'v1/depts',
     method: 'get',
     params: query
   })

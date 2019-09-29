@@ -3,7 +3,7 @@ import qs from 'qs'
 
 export function fetchUserList(query) {
   return request({
-    url: 'user',
+    url: 'v1/users',
     method: 'get',
     params: query
   })
@@ -11,7 +11,7 @@ export function fetchUserList(query) {
 
 export function fetchUser(id) {
   return request({
-    url: 'user/show',
+    url: 'v1/users',
     method: 'get',
     params: {
       id
@@ -21,16 +21,16 @@ export function fetchUser(id) {
 
 export function createUser(data) {
   return request({
-    url: 'user/add',
+    url: 'v1/users',
     method: 'post',
     data: qs.stringify(data)
   })
 }
 
-export function updateUser(data) {
+export function updateUser(id, data) {
   return request({
-    url: 'user/edit',
-    method: 'post',
+    url: 'v1/users/' + id,
+    method: 'put',
     data: qs.stringify(data)
   })
 }

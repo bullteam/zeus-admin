@@ -3,7 +3,7 @@ import qs from 'qs'
 
 export function fetchDomainList(query) {
   return request({
-    url: 'domain/list',
+    url: 'v1/domains',
     method: 'get',
     params: query
   })

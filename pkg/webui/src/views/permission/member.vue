@@ -50,7 +50,7 @@
       </el-table-column>
       <el-table-column :label="$t('user.department')" width="120px">
         <template slot-scope="scope">
-          {{ department(scope.row.Department.id) }}
+          {{ department(scope.row.department.id) }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('user.title')" align="center" width="120px">
@@ -209,7 +209,7 @@ export default {
     },
     getRoleList() {
       // { q: 'd=' + this.domain_id }
-      fetchRoleList({ limit: 1000 }).then(response => {
+      fetchRoleList({ limit: 20, skip: 10 }).then(response => {
         this.rolelist = response.data.result
         this.getDomainList()
         setTimeout(() => {

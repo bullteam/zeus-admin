@@ -3,7 +3,7 @@ import qs from 'qs'
 
 export function fetchMenuList(query) {
   return request({
-    url: 'menu',
+    url: 'v1/menus',
     method: 'get',
     params: query
   })
@@ -11,7 +11,7 @@ export function fetchMenuList(query) {
 
 export function fetchMenu(id) {
   return request({
-    url: 'menu/show',
+    url: 'v1/menus',
     method: 'get',
     params: {
       id
@@ -21,7 +21,7 @@ export function fetchMenu(id) {
 
 export function createMenu(data) {
   return request({
-    url: 'menu/add',
+    url: 'v1/menus',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -29,7 +29,7 @@ export function createMenu(data) {
 
 export function updateMenu(data) {
   return request({
-    url: 'menu/edit',
+    url: 'v1/menus',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -37,7 +37,7 @@ export function updateMenu(data) {
 
 export function deleteMenu(data) {
   return request({
-    url: 'menu/del',
+    url: 'v1/menus',
     method: 'post',
     data: qs.stringify(data)
   })

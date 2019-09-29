@@ -3,7 +3,7 @@ import qs from 'qs'
 
 export function fetchRoleList(query) {
   return request({
-    url: 'role/list',
+    url: 'v1/roles',
     method: 'get',
     params: query
   })

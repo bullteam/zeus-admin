@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column :label="$t('user.department')" width="120px">
         <template slot-scope="scope">
-          {{ department(scope.row.Department.id) }}
+          {{ scope.row.department.name }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('user.title')" align="center" width="120px">
@@ -76,7 +76,8 @@
       </el-table-column>
       <el-table-column :label="$t('user.date')" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.create_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.created_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <!-- <span>{{ scope.row.create_time }}</span> -->
         </template>
       </el-table-column>
       <el-table-column
@@ -327,7 +328,6 @@ export default {
     if (this.$route.query.dept) {
       this.listQuery.q = 'd=' + this.$route.query.dept
       this.search_dept_id = parseInt(this.$route.query.dept)
-      // console.log(this.$route.query)
     }
     this.getList()
     this.getRoleList()
@@ -339,6 +339,7 @@ export default {
       this.listLoading = true
       this.listQuery.start = (this.listQuery.page - 1) * 20
       fetchUserList(this.listQuery).then(response => {
+        console.log(response.data)
         this.list = response.data.result
         this.total = response.data.total
 
@@ -358,7 +359,7 @@ export default {
     },
     getRoleList() {
       // { q: 'd=' + this.domain_id }
-      fetchRoleList({ limit: 1000 }).then(response => {
+      fetchRoleList({ limit: 20 }).then(response => {
         this.rolelist = response.data.result
         this.getDomainList()
         setTimeout(() => {
@@ -484,10 +485,10 @@ export default {
       this.temp.realname = ''
       this.temp.status = this.temp.status.toString()
       this.roles = []
-      this.temp.Roles.forEach(o => {
+      this.temp.roles.forEach(o => {
         this.roles.push(o.id)
       })
-      this.dept_id = this.temp.Department.id
+      this.dept_id = this.temp.department.id
       this.temp.faceicon = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'create'
@@ -519,7 +520,7 @@ export default {
           this.temp.password = '123456'
           this.temp.roles = this.roles.join(',')
           this.temp.dept_id = this.dept_id
-          delete this.temp.Roles
+          delete this.temp.roles
           createUser(this.temp).then(() => {
             // this.list.unshift(this.temp)
             this.getList()
@@ -541,10 +542,10 @@ export default {
       this.temp.sex = this.temp.sex.toString()
       this.temp.status = this.temp.status.toString()
       this.roles = []
-      this.temp.Roles.forEach(o => {
+      this.temp.roles.forEach(o => {
         this.roles.push(o.id)
       })
-      this.dept_id = this.temp.Department.id
+      this.dept_id = this.temp.department.id
       this.temp.faceicon = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
@@ -573,14 +574,14 @@ export default {
           //   this.$message.error('请选择所属角色授权')
           //   return
           // }
-          delete this.temp.Roles
-          delete this.temp.Department
+          delete this.temp.roles
+          delete this.temp.department
           delete this.temp.create_time
           this.temp.roles = this.roles.join(',')
           this.temp.dept_id = this.dept_id
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = new Date()
-          updateUser(tempData).then(() => {
+          updateUser(this.temp.id, tempData).then(() => {
             this.getList()
             this.dialogFormVisible = false
             this.$notify({
