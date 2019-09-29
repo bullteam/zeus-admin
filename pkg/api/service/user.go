@@ -2,6 +2,7 @@ package service
 
 import (
 	"strconv"
+	"strings"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/login"
@@ -130,8 +131,21 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 // GetAllPermissions - get all permission by specific user
 func (UserService) GetAllPermissions(uid string) []string {
 	perms := []string{}
-	for _, p := range perm.GetAllPermsByUser(uid) {
-		perms = append(perms, p[1])
+	var path = map[string]bool{}
+	for _, perm := range perm.GetAllPermsByUser(uid) {
+		prefix := strings.Split(perm[1], ":")
+		seg := strings.Split(prefix[0], "/")
+		if len(seg) == 3 {
+			if ok := path[seg[1]]; !ok {
+				path[seg[1]] = true
+				perms = append(perms, "/" + seg[1])
+			}
+		}
+		if ok := path[seg[2]]; !ok {
+			path[seg[2]] = true
+			perms = append(perms, prefix[0])
+		}
+		perms = append(perms, perm[1])
 	}
 	return perms
 }

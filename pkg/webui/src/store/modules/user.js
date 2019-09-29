@@ -106,6 +106,7 @@ const user = {
               auth.push(o)
             })
             // console.log(Array.from(new Set(roles)))
+            // console.log(Array.from(new Set(auth)))
             // roles.push('/permission/user')
             // roles.push('/permission')
 
@@ -129,9 +130,11 @@ const user = {
                 introduction: '我是超级管理员',
                 avatar:
                   'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-                name: data.info.username || ''
+                name: ''
+                // name: data.info.username || ''
               }
             }
+            console.log(res_data)
             commit('SET_NAME', res_data.data.name)
             commit('SET_AVATAR', res_data.data.avatar)
             commit('SET_INTRODUCTION', res_data.data.introduction)
