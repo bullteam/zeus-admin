@@ -45,9 +45,14 @@ func (u AccountController) Info(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/account/permissions [get]
-func (*AccountController) GetPermissions(c *gin.Context) {
+func (u AccountController) GetPermissions(c *gin.Context) {
+	userId := strconv.Itoa(int(c.Value("userId").(float64)))
 	resp(c, map[string]interface{}{
-		"result": userService.GetAllPermissions(c.GetString("userId")),
+		"result": userService.GetAllPermissions(userId),
+		"info": map[string]interface{}{
+			"id":       c.Value("userId"),
+			"username": c.GetString("userName"),
+		},
 	})
 }
 
