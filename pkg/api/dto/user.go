@@ -28,6 +28,7 @@ type UserCreateDto struct {
 	Status        int       `form:"status" json:"status"`
 	CreateTime    time.Time `type(datetime)" json:"create_time"`
 	LastLoginTime time.Time `type(datetime)" json:"-"`
+	Roles         string    `from:"roles" json:"roles"`
 }
 
 //UserCreateDto - binding user edition params
@@ -42,6 +43,7 @@ type UserEditDto struct {
 	Email        string `form:"email" json:"email"`
 	Title        string `form:"title" json:"title"`
 	Status       int    `form:"status,default=1" json:"status"`
+	Roles        string `from:"roles" json:"roles"`
 }
 
 // UserEditStatusDto - User update status only

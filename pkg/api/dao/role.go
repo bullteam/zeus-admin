@@ -3,6 +3,7 @@ package dao
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	"strings"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
 )
@@ -19,6 +20,14 @@ func (u Role) Get(id int, preload bool) model.Role {
 	}
 	db.Where("id = ?", id).First(&role)
 	return role
+}
+
+// GetRolesByIds
+func (Role) GetRolesByIds(ids string) []model.Role {
+	var roles []model.Role
+	db := GetDb()
+	db.Where("id in (?)", strings.Split(ids, ",")).Find(&roles)
+	return roles
 }
 
 //Get - get single roel infoD

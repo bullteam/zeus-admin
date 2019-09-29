@@ -45,6 +45,10 @@ func (us UserService) Create(dto dto.UserCreateDto) model.User {
 	c := userDao.Create(&userModel)
 	if c.Error != nil {
 		log.Error(c.Error.Error())
+	} else {
+		if dto.Roles != "" {
+			us.AssignRoleByRoleIds(strconv.Itoa(userModel.Id), dto.Roles)
+		}
 	}
 	return userModel
 }
@@ -61,8 +65,11 @@ func (us UserService) Update(dto dto.UserEditDto) int64 {
 		Realname:     dto.Realname,
 		Email:        dto.Email,
 	}
-
+	if dto.Roles != "" {
+		us.AssignRoleByRoleIds(strconv.Itoa(dto.Id), dto.Roles)
+	}
 	c := userDao.Update(&userModel)
+
 	return c.RowsAffected
 }
 
@@ -106,6 +113,17 @@ func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) 
 	return false, model.User{}
 }
 
+//AssignRoleByRoleIds - assign roles to specific user
+func (UserService) AssignRoleByRoleIds(userId string, roles string) {
+	// update roles
+	rs := roleDao.GetRolesByIds(roles)
+	var groups [][]string
+	for _, role := range rs {
+		groups = append(groups, []string{userId, role.RoleName})
+	}
+	user.OverwriteRoles(userId, groups)
+}
+
 //AssignRole - assign roles to specific user
 func (UserService) AssignRole(userId string, roleNames []string) {
 	var groups [][]string
@@ -138,7 +156,7 @@ func (UserService) GetAllPermissions(uid string) []string {
 		if len(seg) == 3 {
 			if ok := path[seg[1]]; !ok {
 				path[seg[1]] = true
-				perms = append(perms, "/" + seg[1])
+				perms = append(perms, "/"+seg[1])
 			}
 		}
 		if ok := path[seg[2]]; !ok {
