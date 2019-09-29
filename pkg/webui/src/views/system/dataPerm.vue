@@ -170,7 +170,7 @@ export default {
       permsType: 1,
       listQuery: {
         start: 0,
-        limit: 1000,
+        limit: 20,
         domain_id: 1
       }
     }

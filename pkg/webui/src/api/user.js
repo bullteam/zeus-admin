@@ -78,7 +78,7 @@ export function deleteUser(data) {
 // 绑定钉钉
 export function bind(data) {
   return request({
-    url: '/account/bind',
+    url: 'v1/account/third-bind',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -87,7 +87,7 @@ export function bind(data) {
 // 第三方绑定账号列表
 export function accountThird() {
   return request({
-    url: '/account/third',
+    url: 'v1/account/thirds',
     method: 'get'
   })
 }
@@ -95,7 +95,7 @@ export function accountThird() {
 // 第三方绑定账号列表
 export function unbind(data) {
   return request({
-    url: '/account/unbind',
+    url: 'v1/account/unbind',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -104,7 +104,7 @@ export function unbind(data) {
 // 钉钉登录
 export function loginDingtalk(data) {
   return request({
-    url: '/user/login-dingtalk',
+    url: 'v1/users/login/oauth',
     method: 'post',
     data: qs.stringify(data)
   })

@@ -226,7 +226,7 @@ export default {
         domain_id: this.domain_id
       }), dataPermList({
         start: 0,
-        limit: 1000,
+        limit: 20,
         domain_id: this.domain_id
       })]).then(response => {
         console.log(response)
