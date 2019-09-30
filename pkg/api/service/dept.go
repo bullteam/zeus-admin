@@ -41,12 +41,13 @@ func (us DeptService) Create(dto dto.DeptCreateDto) model.Department {
 func (us DeptService) Update(dto dto.DeptEditDto) int64 {
 	deptModel := model.Department{
 		Id:       dto.Id,
-		Name:     dto.Name,
-		ParentId: dto.ParentId,
-		OrderNum: dto.OrderNum,
 	}
 
-	c := deptDao.Update(&deptModel)
+	c := deptDao.Update(&deptModel, map[string]interface{}{
+		"name":        dto.Name,
+		//"parentId": dto.ParentId,
+		"orderNum": dto.OrderNum,
+	})
 	return c.RowsAffected
 }
 

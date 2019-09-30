@@ -48,7 +48,12 @@ func (us DomainService) Update(dto dto.DomainEditDto) int64 {
 		Code:        dto.Code,
 	}
 
-	c := domainDao.Update(&domainModel)
+	c := domainDao.Update(&domainModel, map[string]interface{}{
+		"name":        dto.Name,
+		"callbackurl": dto.Callbackurl,
+		"remark":      dto.Remark,
+		"code":        dto.Code,
+	})
 	return c.RowsAffected
 }
 

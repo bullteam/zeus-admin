@@ -255,7 +255,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteDomain({ id: row.id }).then(() => {
+        deleteDomain(row.id, { id: row.id }).then(() => {
           this.$notify({
             title: '成功',
             message: '删除成功',
