@@ -257,7 +257,7 @@ export default {
       })
     },
     o(data, id) {
-      const menu = data.filter(o => parseInt(o.parent_id) === parseInt(id))
+      const menu = data.filter(o => parseInt(o.parent_id) === parseInt(id) && o.domain_id > 0)
       menu.forEach(o => {
         o.children = this.o(data, o.id)
       })
