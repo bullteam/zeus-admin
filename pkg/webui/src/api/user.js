@@ -52,8 +52,8 @@ export function updateUserStatus(data) {
 
 export function updateUserPassWord(data) {
   return request({
-    url: 'user/change-password',
-    method: 'post',
+    url: 'v1/account/password',
+    method: 'put',
     data: qs.stringify(data)
   })
 }
