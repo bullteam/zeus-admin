@@ -41,13 +41,18 @@ func (us UserService) Create(userDto dto.UserCreateDto) model.User {
 		Password:     pwd,
 		DepartmentId: userDto.DepartmentId,
 		Salt:         salt,
+		Sex:          userDto.Sex,
+		Email:        userDto.Email,
+		Title:        userDto.Title,
+		Realname:     userDto.Realname,
+		Status:       userDto.Status,
 	}
 	c := userDao.Create(&userModel)
 	if c.Error != nil {
 		log.Error(c.Error.Error())
 	} else {
 		if userDto.Roles != "" {
-			us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles,","))
+			us.AssignRole(strconv.Itoa(userModel.Id), strings.Split(userDto.Roles, ","))
 		}
 	}
 	return userModel
@@ -55,23 +60,28 @@ func (us UserService) Create(userDto dto.UserCreateDto) model.User {
 
 // Update - update user's information
 func (us UserService) Update(userDto dto.UserEditDto) int64 {
-	userModel := userDao.Get(userDto.Id, true)
-	userModel.Mobile = userDto.Mobile
-	userModel.DepartmentId = userDto.DepartmentId
-	userModel.Status = userDto.Status
-	userModel.Title = userDto.Title
-	userModel.Realname = userDto.Realname
-	userModel.Email = userDto.Email
-	c := userDao.Update(&userModel)
-	us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles,","))
+	userModel := model.User{
+		Id: userDto.Id,
+	}
+	c := userDao.Update(&userModel, map[string]interface{}{
+		"mobile":        userDto.Mobile,
+		"department_id": userDto.DepartmentId,
+		"status":        userDto.Status,
+		"title":         userDto.Title,
+		"real_name":     userDto.Realname,
+		"email":         userDto.Email,
+	})
+	us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles, ","))
 	return c.RowsAffected
 }
 
 // UpdateStatus - update user's status only
 func (UserService) UpdateStatus(dto dto.UserEditStatusDto) int64 {
 	u := userDao.Get(dto.Id, false)
-	u.Status = dto.Status
-	c := userDao.Update(&u)
+	//u.Status = dto.Status
+	c := userDao.Update(&u, map[string]interface{}{
+		"status": dto.Status,
+	})
 	return c.RowsAffected
 }
 
@@ -80,9 +90,12 @@ func (UserService) UpdatePassword(dto dto.UserEditPasswordDto) int64 {
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(dto.Password, salt)
 	u := userDao.Get(dto.Id, false)
-	u.Password = pwd
-	u.Salt = salt
-	c := userDao.Update(&u)
+	//u.Password = pwd
+	//u.Salt = salt
+	c := userDao.Update(&u, map[string]interface{}{
+		"password": pwd,
+		"salt":     salt,
+	})
 	return c.RowsAffected
 }
 
@@ -141,11 +154,11 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 }
 
 // GetAllRoles would return all roles of a user
-func (UserService) GetAllRoles(uid string) []string{
+func (UserService) GetAllRoles(uid string) []string {
 	groups := perm.GetGroupsByUser(uid)
-	var roles []string
-	for _,group := range groups {
-		roles = append(roles,group[1])
+	roles := []string{}
+	for _, group := range groups {
+		roles = append(roles, group[1])
 	}
 	return roles
 }

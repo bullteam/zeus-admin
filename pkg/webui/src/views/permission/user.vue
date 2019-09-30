@@ -13,7 +13,7 @@
       <!--<el-select v-model="search_domain_id" class="filter-item" placeholder="Please select" @change="toSearch">-->
       <!--<el-option v-for="item in domainlist" :key="item.id" :label="item.name" :value="item.id"/>-->
       <!--</el-select>-->
-      <el-select v-model="search_dept_id" class="filter-item" placeholder="Please select" @change="toSearch">
+      <el-select v-model="search_department_id" class="filter-item" placeholder="Please select" @change="toSearch">
         <el-option key="" label="全部" value=""/>
         <el-option v-for="item in deptlist" :key="item.id" :label="item.name" :value="item.id"/>
       </el-select>
@@ -157,7 +157,7 @@
           <el-input :disabled="dialogStatus==='update'" v-model="temp.username"/>
         </el-form-item>
         <el-form-item :label="$t('user.department')">
-          <el-select v-model="dept_id" class="filter-item" placeholder="Please select">
+          <el-select v-model="department_id" class="filter-item" placeholder="Please select">
             <el-option v-for="item in deptlist" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
@@ -279,7 +279,7 @@ export default {
         title: '',
         type: '',
         username: '',
-        dept_id: '',
+        department_id: '',
         email: '',
         mobile: '',
         status: '1',
@@ -293,7 +293,7 @@ export default {
         remark: ''
         // roles: []
       },
-      dept_id: '',
+      department_id: '',
       roles: [1],
       dialogFormVisible: false,
       dialogStatus: 'create',
@@ -317,7 +317,7 @@ export default {
       domainlist: [],
       domain_id: '',
       search_domain_id: '',
-      search_dept_id: '',
+      search_department_id: '',
       tree_data: [],
       tree_props: {
         children: 'children',
@@ -328,7 +328,7 @@ export default {
   created() {
     if (this.$route.query.dept) {
       this.listQuery.q = 'd=' + this.$route.query.dept
-      this.search_dept_id = parseInt(this.$route.query.dept)
+      this.search_department_id = parseInt(this.$route.query.dept)
     }
     this.getList()
     this.getRoleList()
@@ -351,8 +351,8 @@ export default {
       })
     },
     toSearch() {
-      if (this.search_dept_id !== '') {
-        this.listQuery.q = 'd=' + this.search_dept_id
+      if (this.search_department_id !== '') {
+        this.listQuery.q = 'd=' + this.search_department_id
       } else {
         delete this.listQuery.q
       }
@@ -445,7 +445,7 @@ export default {
         title: '',
         type: '',
         username: '',
-        dept_id: '',
+        department_id: '',
         email: '',
         mobile: '',
         status: '1',
@@ -460,10 +460,10 @@ export default {
         // roles: []
       }
       this.roles = []
-      // this.dept_id = ''
+      // this.department_id = ''
       this.domain_id = ''
       const dept = this.deptlist.find(o => o.name === '未分配')
-      dept ? this.dept_id = dept.id : ''
+      dept ? this.department_id = dept.id : ''
     },
     handleCreate() {
       this.resetTemp()
@@ -489,7 +489,7 @@ export default {
       this.temp.roles.forEach(o => {
         this.roles.push(o.id)
       })
-      this.dept_id = this.temp.department.id
+      this.department_id = this.temp.department.id
       this.temp.faceicon = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'create'
@@ -504,7 +504,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.dept_id === '') {
+          if (this.department_id === '') {
             this.$message.error('请选择所属部门')
             return
           }
@@ -520,8 +520,8 @@ export default {
           // }
           this.temp.password = '123456'
           this.temp.roles = this.roles.join(',')
-          this.temp.dept_id = this.dept_id
-          delete this.temp.roles
+          this.temp.department_id = this.department_id
+          // delete this.temp.roles
           createUser(this.temp).then(() => {
             // this.list.unshift(this.temp)
             this.getList()
@@ -546,10 +546,11 @@ export default {
       // this.temp.roles.forEach(o => {
       //   this.roles.push(o.role_name)
       // })
+      this.roles = []
       fetchUserRoles(row.id).then(response => {
         this.roles = response.data.result
       })
-      this.dept_id = this.temp.department.id
+      this.department_id = this.temp.department.id
       this.temp.faceicon = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
@@ -564,7 +565,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          if (this.dept_id === '') {
+          if (this.department_id === '') {
             this.$message.error('请选择所属部门')
             return
           }
@@ -582,7 +583,7 @@ export default {
           delete this.temp.department
           delete this.temp.create_time
           this.temp.roles = this.roles.join(',')
-          this.temp.dept_id = this.dept_id
+          this.temp.department_id = this.department_id
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = new Date()
           updateUser(this.temp.id, tempData).then(() => {

@@ -18,8 +18,8 @@ type User struct {
 	Email         string     `json:"email" example:"xxxx@hotmail.com"`
 	Title         string     `json:"title" example:"title"`
 	Status        int        `json:"status" example:"1"`
-	CreateTime    time.Time  `gorm:"type:time" json:"created_time,omitempty" example:"2019-07-10 0:39"`
-	LastLoginTime time.Time  `gorm:"type:time" json:"logined_time,omitempty" example:"2019-07-10 0:39"`
+	CreateTime    time.Time  `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP" json:"created_time,omitempty" example:"2019-07-10 0:39"`
+	LastLoginTime time.Time  `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP" json:"logined_time,omitempty" example:"2019-07-10 0:39"`
 	Roles         []Role     `gorm:"many2many:user_role;" json:"roles" example:"roles"`
 }
 

@@ -30,7 +30,7 @@ func (u Dept) List(listDto dto.GeneralListDto) ([]model.Department, int64) {
 	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("department").Offset(listDto.Skip).Limit(listDto.Limit).Find(&Depts)
+	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&Depts)
 	db.Model(&model.Department{}).Count(&total)
 	return Depts, total
 }

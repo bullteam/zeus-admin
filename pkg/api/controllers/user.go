@@ -102,7 +102,7 @@ func (u *UserController) Create(c *gin.Context) {
 func (u *UserController) Edit(c *gin.Context) {
 	var userDto dto.UserEditDto
 	if u.BindAndValidate(c, &userDto) {
-		log.Info(fmt.Sprintf("%#v",userDto))
+		log.Info(fmt.Sprintf("%#v", userDto))
 		affected := userService.Update(userDto)
 		if affected <= 0 {
 			//fail(c,ErrEditFail)

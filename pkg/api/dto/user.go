@@ -25,7 +25,7 @@ type UserCreateDto struct {
 	Faceicon      string    `json:"faceicon"`
 	Email         string    `form:"email" json:"email"`
 	Title         string    `form:"title" json:"title"`
-	Status        int       `form:"status" json:"status"`
+	Status        int       `form:"status,default=1" json:"status"`
 	CreateTime    time.Time `type(datetime)" json:"create_time"`
 	LastLoginTime time.Time `type(datetime)" json:"-"`
 	Roles         string    `form:"roles" json:"roles"`

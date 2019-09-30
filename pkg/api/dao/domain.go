@@ -26,7 +26,7 @@ func (u DomainDao) List(listDto dto.GeneralListDto) ([]model.Domain, int64) {
 	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&domains)
+	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&domains)
 	db.Model(&model.Domain{}).Count(&total)
 	return domains, total
 }

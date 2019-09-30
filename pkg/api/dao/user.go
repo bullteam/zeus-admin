@@ -37,13 +37,14 @@ func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 // Create - new user
 func (u User) Create(user *model.User) *gorm.DB {
 	db := GetDb()
-	return db.Save(user)
+	return db.Create(user)
 }
 
 // Update - update user
-func (u User) Update(user *model.User) *gorm.DB {
+func (u User) Update(user *model.User, ups map[string]interface{}) *gorm.DB {
 	db := GetDb()
-	return db.Save(user)
+	return db.Model(user).Update(ups)
+	//return db.Save(user)
 }
 
 // Delete - delete user
