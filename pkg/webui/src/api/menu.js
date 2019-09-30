@@ -38,7 +38,7 @@ export function updateMenu(data) {
 export function deleteMenu(data) {
   return request({
     url: 'v1/menus',
-    method: 'post',
+    method: 'delete',
     data: qs.stringify(data)
   })
 }

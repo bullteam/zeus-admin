@@ -30,7 +30,7 @@ export function createDept(data) {
 export function updateDept(data) {
   return request({
     url: 'dept/edit',
-    method: 'post',
+    method: 'put',
     data: qs.stringify(data)
   })
 }
@@ -46,7 +46,7 @@ export function checkMemberDept(data) {
 export function deleteDept(data) {
   return request({
     url: 'dept/del',
-    method: 'post',
+    method: 'delete',
     data: qs.stringify(data)
   })
 }
