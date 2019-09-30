@@ -84,6 +84,7 @@ func Init(e *gin.Engine) {
 	v1.PUT("/domains/:id", domainController.Edit)
 	v1.DELETE("/domains/:id", domainController.Delete)
 
+
 	//dept
 	deptController := &controllers.DeptController{}
 	v1.GET("/depts", deptController.List)
@@ -91,6 +92,7 @@ func Init(e *gin.Engine) {
 	v1.POST("/depts", deptController.Create)
 	v1.PUT("/depts/:id", deptController.Edit)
 	v1.DELETE("/depts/:id", deptController.Delete)
+	v1.POST("/depts/:id/check-no-member",deptController.Delete)
 
 	// data permission
 	dataPermController := &controllers.DatePermController{}
@@ -102,10 +104,10 @@ func Init(e *gin.Engine) {
 
 	logController := controllers.LogController{}
 	//login log
-	v1.GET("/log/login", logController.LoginLogLists)
+	v1.GET("/log/logins", logController.LoginLogLists)
 	v1.GET("/log/login/:id", logController.LoginLogDetail)
 
 	//request log
-	v1.GET("/log/operation", logController.OperationLogLists)
-	v1.GET("/log/operation/:id", logController.OperationLogDetail)
+	v1.GET("/log/operations", logController.OperationLogLists)
+	v1.GET("/log/operations/:id", logController.OperationLogDetail)
 }

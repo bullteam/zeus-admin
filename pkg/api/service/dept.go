@@ -59,3 +59,9 @@ func (us DeptService) Delete(dto dto.GeneralDelDto) int64 {
 	c := deptDao.Delete(&deptModel)
 	return c.RowsAffected
 }
+
+
+// check - check has member TODO
+func (us DeptService) CheckIfPeopleInside(dto dto.GeneralDelDto) int64 {
+	return 0
+}

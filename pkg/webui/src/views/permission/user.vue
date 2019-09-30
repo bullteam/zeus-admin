@@ -416,7 +416,7 @@ export default {
       this.getList()
     },
     handleModifyStatus(row, status) {
-      updateUserStatus({ id: row.id, status: status }).then(() => {
+      updateUserStatus(row.id, { id: row.id, status: status }).then(() => {
         this.$message({
           message: '操作成功',
           type: 'success'
@@ -630,7 +630,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        changeUserPassword({ user_id: row.id, new_password: '123456', re_password: '123456' }).then(() => {
+        changeUserPassword(row.id, { user_id: row.id, new_password: '123456', re_password: '123456' }).then(() => {
           this.$notify({
             title: '成功',
             message: '重置成功',

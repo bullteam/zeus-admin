@@ -108,3 +108,24 @@ func (d *DeptController) Edit(c *gin.Context) {
 		ok(c, "ok.UpdateDone")
 	}
 }
+
+// @Tags Department
+// @Summary 检查部门下面是否有用户
+// @Security ApiKeyAuth
+// @Param id path int true "部门id"
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/depts/{id} [put]
+func (d *DeptController) CheckNoMember(c *gin.Context) {
+	var deptDto dto.GeneralDelDto
+	if d.BindAndValidate(c, &deptDto) {
+		data := deptService.CheckIfPeopleInside(deptDto)
+		if data > 0 {
+			fail(c, ErrDeptHasMember)
+			return
+		}
+		resp(c, map[string]interface{}{
+			"result": data,
+		})
+	}
+}

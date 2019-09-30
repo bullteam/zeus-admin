@@ -61,7 +61,6 @@ type UserMoveDepartmentDto struct {
 type UserEditPasswordDto struct {
 	Id       int    `uri:"id" json:"id" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required,pwdValidate"`
-	Salt     string
 }
 
 //Account edit password only

@@ -19,3 +19,5 @@ type DeptEditDto struct {
 	//ParentId int    `form:"parent_id" json:"parent_id" binding:"required"`
 	OrderNum int    `form:"order_num" json:"order_num"`
 }
+
+
