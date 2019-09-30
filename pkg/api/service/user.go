@@ -32,44 +32,38 @@ func (us UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
 }
 
 // Create - create a new account
-func (us UserService) Create(dto dto.UserCreateDto) model.User {
+func (us UserService) Create(userDto dto.UserCreateDto) model.User {
 	salt, _ := account.MakeSalt()
-	pwd, _ := account.HashPassword(dto.Password, salt)
+	pwd, _ := account.HashPassword(userDto.Password, salt)
 	userModel := model.User{
-		Username:     dto.Username,
-		Mobile:       dto.Mobile,
+		Username:     userDto.Username,
+		Mobile:       userDto.Mobile,
 		Password:     pwd,
-		DepartmentId: dto.DepartmentId,
+		DepartmentId: userDto.DepartmentId,
 		Salt:         salt,
 	}
 	c := userDao.Create(&userModel)
 	if c.Error != nil {
 		log.Error(c.Error.Error())
 	} else {
-		if dto.Roles != "" {
-			us.AssignRoleByRoleIds(strconv.Itoa(userModel.Id), dto.Roles)
+		if userDto.Roles != "" {
+			us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles,","))
 		}
 	}
 	return userModel
 }
 
 // Update - update user's information
-func (us UserService) Update(dto dto.UserEditDto) int64 {
-	userModel := model.User{
-		Id:           dto.Id,
-		Username:     dto.Username,
-		Mobile:       dto.Mobile,
-		DepartmentId: dto.DepartmentId,
-		Status:       dto.Status,
-		Title:        dto.Title,
-		Realname:     dto.Realname,
-		Email:        dto.Email,
-	}
-	if dto.Roles != "" {
-		us.AssignRoleByRoleIds(strconv.Itoa(dto.Id), dto.Roles)
-	}
+func (us UserService) Update(userDto dto.UserEditDto) int64 {
+	userModel := userDao.Get(userDto.Id, true)
+	userModel.Mobile = userDto.Mobile
+	userModel.DepartmentId = userDto.DepartmentId
+	userModel.Status = userDto.Status
+	userModel.Title = userDto.Title
+	userModel.Realname = userDto.Realname
+	userModel.Email = userDto.Email
 	c := userDao.Update(&userModel)
-
+	us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles,","))
 	return c.RowsAffected
 }
 
@@ -144,6 +138,16 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 		domains = append(domains, role.Domain)
 	}
 	return domains
+}
+
+// GetAllRoles would return all roles of a user
+func (UserService) GetAllRoles(uid string) []string{
+	groups := perm.GetGroupsByUser(uid)
+	var roles []string
+	for _,group := range groups {
+		roles = append(roles,group[1])
+	}
+	return roles
 }
 
 // GetAllPermissions - get all permission by specific user

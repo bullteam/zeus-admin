@@ -50,3 +50,7 @@ func DeleteUser(uid string) {
 		perm.DelGroup(group)
 	}
 }
+//
+func GetRoles(uid string) {
+
+}

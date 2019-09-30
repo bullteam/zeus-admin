@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"strings"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 )
 
@@ -57,6 +60,23 @@ func (u *UserController) List(c *gin.Context) {
 }
 
 // @Tags Users
+// @Summary 用户角色列表[分页+搜索]
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[...],"total":1}}"
+// @Router /v1/users/:id/roles [get]
+func (u *UserController) Roles(c *gin.Context) {
+	var listDto dto.GeneralGetDto
+	if u.BindAndValidate(c, &listDto) {
+		data := userService.GetAllRoles(strconv.Itoa(listDto.Id))
+		resp(c, map[string]interface{}{
+			"result": data,
+			"total":  len(data),
+		})
+	}
+}
+
+// @Tags Users
 // @Summary 新增用户
 // @Security ApiKeyAuth
 // @Produce  json
@@ -82,6 +102,7 @@ func (u *UserController) Create(c *gin.Context) {
 func (u *UserController) Edit(c *gin.Context) {
 	var userDto dto.UserEditDto
 	if u.BindAndValidate(c, &userDto) {
+		log.Info(fmt.Sprintf("%#v",userDto))
 		affected := userService.Update(userDto)
 		if affected <= 0 {
 			//fail(c,ErrEditFail)

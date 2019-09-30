@@ -19,6 +19,13 @@ export function fetchUser(id) {
   })
 }
 
+export function fetchUserRoles(id) {
+  return request({
+    url: 'v1/users/' + id + '/roles',
+    method: 'get'
+  })
+}
+
 export function createUser(data) {
   return request({
     url: 'v1/users',

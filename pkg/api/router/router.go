@@ -45,6 +45,8 @@ func Init(e *gin.Engine) {
 	v1.PUT("/users/:id", userController.Edit)
 	v1.PUT("/users/:id/status", userController.EditStatus)
 	v1.PUT("/users/:id/password", userController.EditPassword)
+	v1.GET("/users/:id/roles", userController.Roles)
+
 	v1.DELETE("/users/:id", userController.Delete)
 	v1.POST("/users/department/move", userController.UpdateDepartment)
 

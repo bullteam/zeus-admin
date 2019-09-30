@@ -19,7 +19,7 @@ type User struct {
 	Title         string     `json:"title" example:"title"`
 	Status        int        `json:"status" example:"1"`
 	CreateTime    time.Time  `gorm:"type:time" json:"created_time,omitempty" example:"2019-07-10 0:39"`
-	LastLoginTime time.Time  `gorm:"type:time" json:"updated_time,omitempty" example:"2019-07-10 0:39"`
+	LastLoginTime time.Time  `gorm:"type:time" json:"logined_time,omitempty" example:"2019-07-10 0:39"`
 	Roles         []Role     `gorm:"many2many:user_role;" json:"roles" example:"roles"`
 }
 

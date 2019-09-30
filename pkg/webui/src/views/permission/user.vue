@@ -223,8 +223,8 @@
               <el-checkbox-group v-model="roles">
                 <el-checkbox
                   v-for="item in rolelist.filter(o =>o.domain.id === items.id)"
-                  :label="item.id"
-                  :key="item.id">{{ item.name }}
+                  :label="item.role_name"
+                  :key="item.role_name">{{ item.name }}
                 </el-checkbox>
               </el-checkbox-group>
             </el-tab-pane>
@@ -246,7 +246,8 @@ import { fetchRoleList } from '@/api/role'
 import { fetchDeptList } from '@/api/dept'
 import { fetchDomainList } from '@/api/domain'
 // import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import Pagination from '@/components/Pagination'
+import { fetchUserRoles } from '../../api/user' // Secondary package based on el-pagination
 
 export default {
   name: 'User',
@@ -293,7 +294,7 @@ export default {
         // roles: []
       },
       dept_id: '',
-      roles: [],
+      roles: [1],
       dialogFormVisible: false,
       dialogStatus: 'create',
       textMap: {
@@ -359,7 +360,7 @@ export default {
     },
     getRoleList() {
       // { q: 'd=' + this.domain_id }
-      fetchRoleList({ limit: 20 }).then(response => {
+      fetchRoleList({ limit: 100 }).then(response => {
         this.rolelist = response.data.result
         this.getDomainList()
         setTimeout(() => {
@@ -541,9 +542,12 @@ export default {
       this.temp = Object.assign({ password: '' }, row) // copy obj
       this.temp.sex = this.temp.sex.toString()
       this.temp.status = this.temp.status.toString()
-      this.roles = []
-      this.temp.roles.forEach(o => {
-        this.roles.push(o.id)
+      // this.roles = ['超级管理员']
+      // this.temp.roles.forEach(o => {
+      //   this.roles.push(o.role_name)
+      // })
+      fetchUserRoles(row.id).then(response => {
+        this.roles = response.data.result
       })
       this.dept_id = this.temp.department.id
       this.temp.faceicon = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
@@ -676,5 +680,11 @@ export default {
 
   .el-message-box__message span {
     color: red;
+  }
+  .el-checkbox+.el-checkbox {
+    margin-left: 0px;
+  }
+  .el-checkbox {
+    margin-right: 15px;
   }
 </style>
