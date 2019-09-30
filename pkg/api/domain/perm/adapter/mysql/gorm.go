@@ -1,14 +1,12 @@
 package mysql
 
 import (
-	"fmt"
 	"github.com/casbin/casbin/model"
 	"github.com/casbin/casbin/persist"
 	"github.com/jinzhu/gorm"
 	"runtime"
 	"strings"
 	"zeus/pkg/api/dao"
-	"zeus/pkg/api/log"
 	apiModel "zeus/pkg/api/model"
 )
 
@@ -188,12 +186,9 @@ func (a *GormAdapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex 
 		}
 	}
 	//_, err := a.o.Delete(&line, filter...)
-	log.Info(fmt.Sprintf("%#v", filter))
-	log.Info(fmt.Sprintf("%#v", val))
 	params := []interface{}{}
 	params = append(params, strings.Join(filter, " and "))
 	params = append(params, val...)
-	log.Info(fmt.Sprintf("%#v", params))
 	//do := a.o.Delete(apiModel.CasbinRule{}, "p_type=? and v0=? and v1=? and v2=? and v3=? and v4=? and v5=?", line.PType,
 	//	line.V0,
 	//	line.V1,
