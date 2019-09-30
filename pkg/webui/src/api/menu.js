@@ -29,15 +29,15 @@ export function createMenu(data) {
 
 export function updateMenu(data) {
   return request({
-    url: 'v1/menus',
-    method: 'post',
+    url: 'v1/menus/' + data.id,
+    method: 'put',
     data: qs.stringify(data)
   })
 }
 
 export function deleteMenu(data) {
   return request({
-    url: 'v1/menus',
+    url: 'v1/menus/' + data.id,
     method: 'delete',
     data: qs.stringify(data)
   })

@@ -15,8 +15,8 @@ type Menu struct {
 	MenuType       int       `json:"menu_type"`
 	Icon           string    `json:"icon"`
 	OrderNum       int       `json:"order_num"`
-	CreateTime     time.Time `json:"create_time"`
-	LastUpdateTime time.Time `json:"last_update_time"`
+	CreateTime     time.Time `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP" json:"created_time,omitempty" example:"2019-07-10 0:39"`
+	LastUpdateTime time.Time `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP ON UPDATE" json:"update_time,omitempty" example:"2019-07-10 0:39"`
 }
 
 func (m *Menu) TableName() string {

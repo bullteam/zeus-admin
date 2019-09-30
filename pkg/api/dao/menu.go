@@ -58,9 +58,9 @@ func (m Menu) Create(menu *model.Menu) *gorm.DB {
 }
 
 // Update - update menu
-func (m Menu) Update(menu *model.Menu) *gorm.DB {
+func (m Menu) Update(menu *model.Menu, ups map[string]interface{}) *gorm.DB {
 	db := GetDb()
-	return db.Save(menu)
+	return db.Model(menu).Update(ups)
 }
 
 // Delete - delete menu

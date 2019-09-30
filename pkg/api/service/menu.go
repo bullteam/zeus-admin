@@ -43,15 +43,22 @@ func (ms MenuService) Create(dto dto.MenuCreateDto) model.Menu {
 }
 
 // Update
-func (ms MenuService) Update(dto dto.MenuEditDto) int64 {
-	menuModel := menuDao.Get(dto.Id, false)
-	menuModel.Name = dto.Name
-	menuModel.Url = dto.Url
-	menuModel.Perms = dto.Perms
-	menuModel.OrderNum = dto.OrderNum
-	menuModel.ParentId = dto.ParentId
-	menuModel.Icon = dto.Icon
-	c := menuDao.Update(&menuModel)
+func (ms MenuService) Update(menuDto dto.MenuEditDto) int64 {
+	menuModel := menuDao.Get(menuDto.Id, false)
+	//menuModel.Name = dto.Name
+	//menuModel.Url = dto.Url
+	//menuModel.Perms = dto.Perms
+	//menuModel.OrderNum = dto.OrderNum
+	//menuModel.ParentId = dto.ParentId
+	//menuModel.Icon = dto.Icon
+	c := menuDao.Update(&menuModel, map[string]interface{}{
+		"name":      menuDto.Name,
+		"url":       menuDto.Url,
+		"perms":     menuDto.Perms,
+		"order_num": menuDto.OrderNum,
+		"parent_id": menuDto.ParentId,
+		"icon":      menuDto.Icon,
+	})
 	return c.RowsAffected
 }
 
@@ -67,10 +74,14 @@ func (ms MenuService) Delete(dto dto.GeneralDelDto) int64 {
 		return -2
 	}
 	//1. delete menu
+	perms := menuModel.Perms
 	c := menuDao.Delete(&menuModel)
 	if c.RowsAffected > 0 {
 		//2. delete related policies
-		perm.DelFilteredPerm(1, menuModel.Perms)
+		//Empty perms puts in delete method would cause all casbin rules removed!
+		if perms != "" {
+			perm.DelFilteredPerm(1, perms)
+		}
 	}
 	return c.RowsAffected
 }
