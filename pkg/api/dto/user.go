@@ -64,6 +64,13 @@ type UserEditPasswordDto struct {
 	Salt     string
 }
 
+//Account edit password only
+type AccountEditPasswordDto struct {
+	Id       int    `uri:"id" json:"id" binding:"required"`
+	RePassword string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
+	NewPassword string `form:"new_password" json:"new_password" binding:"required,pwdValidate"`
+}
+
 // password validator
 func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
 	if val, ok := field.Interface().(string); ok {

@@ -11,7 +11,7 @@ export function fetchDeptList(query) {
 
 export function fetchDept(id) {
   return request({
-    url: 'dept/show',
+    url: 'v1/depts',
     method: 'get',
     params: {
       id
@@ -21,15 +21,15 @@ export function fetchDept(id) {
 
 export function createDept(data) {
   return request({
-    url: 'dept/add',
+    url: 'v1/depts',
     method: 'post',
     data: qs.stringify(data)
   })
 }
 
-export function updateDept(data) {
+export function updateDept(id, data) {
   return request({
-    url: 'dept/edit',
+    url: 'v1/depts/' + id,
     method: 'put',
     data: qs.stringify(data)
   })
@@ -45,7 +45,7 @@ export function checkMemberDept(data) {
 
 export function deleteDept(data) {
   return request({
-    url: 'dept/del',
+    url: 'v1/depts',
     method: 'delete',
     data: qs.stringify(data)
   })

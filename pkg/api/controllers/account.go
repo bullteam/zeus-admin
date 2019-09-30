@@ -71,8 +71,16 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 			Value: fmt.Sprintf("%d", int(c.Value("userId").(float64))),
 		},
 	}
+	var accountDto dto.AccountEditPasswordDto
 	var userDto dto.UserEditPasswordDto
-	if a.BindAndValidate(c, &userDto) {
+	accountDto.Id =  int(c.Value("userId").(float64))
+	if a.BindAndValidate(c, &accountDto) {
+		if accountDto.NewPassword != accountDto.RePassword {
+			fail(c,ErrDifferentPasswords)
+			return
+		}
+		userDto.Id = accountDto.Id
+		userDto.Password = accountDto.RePassword
 		affected := userService.UpdatePassword(userDto)
 		if affected <= 0 {
 			//fail(c,ErrEditFail)

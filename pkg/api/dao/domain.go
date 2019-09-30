@@ -38,9 +38,9 @@ func (u DomainDao) Create(domain *model.Domain) *gorm.DB {
 }
 
 // Update - update Domain
-func (u DomainDao) Update(domain *model.Domain) *gorm.DB {
+func (u DomainDao) Update(domain *model.Domain, ups map[string]interface{}) *gorm.DB {
 	db := GetDb()
-	return db.Save(domain)
+	return db.Model(domain).Update(ups)
 }
 
 // Create - new Domain

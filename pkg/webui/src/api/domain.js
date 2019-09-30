@@ -32,9 +32,9 @@ export function updateDomain(id, data) {
   })
 }
 
-export function deleteDomain(data) {
+export function deleteDomain(id, data) {
   return request({
-    url: 'domain/del',
+    url: 'v1/domains/' + id,
     method: 'delete',
     data: qs.stringify(data)
   })
