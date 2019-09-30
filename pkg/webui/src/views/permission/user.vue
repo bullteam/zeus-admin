@@ -114,9 +114,9 @@
               type="success">更多 ↓
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-permission="['/permission/user:edit']">
-                <span style="display:block;" @click="handleResetUpdate(scope.row)">{{ $t('table.reset') }}</span>
-              </el-dropdown-item>
+              <!--              <el-dropdown-item v-permission="['/permission/user:edit']">-->
+              <!--                <span style="display:block;" @click="handleResetUpdate(scope.row)">{{ $t('table.reset') }}</span>-->
+              <!--              </el-dropdown-item>-->
               <el-dropdown-item v-permission="['/permission/user:edit']" divided>
                 <span style="display:block;" @click="handleCopyUpdate(scope.row)">{{ $t('table.copy') }}</span>
               </el-dropdown-item>
@@ -161,9 +161,9 @@
             <el-option v-for="item in deptlist" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <!--<el-form-item :label="$t('user.password')">-->
-        <!--<el-input v-model="temp.password" type="password"/>-->
-        <!--</el-form-item>-->
+        <el-form-item v-show="!(temp.id>0)" :label="$t('user.password')" >
+          <el-input v-model="temp.password" type="password"/>
+        </el-form-item>
         <el-form-item :label="$t('user.title')">
           <el-input v-model="temp.title"/>
         </el-form-item>

@@ -58,13 +58,13 @@ func (r Role) Create(role *model.Role) *gorm.DB {
 	if row.Id > 0 {
 		return nil
 	}
-	return db.Save(role)
+	return db.Create(role)
 }
 
 // Update - update role
-func (r Role) Update(role *model.Role) *gorm.DB {
+func (r Role) Update(role *model.Role, ups map[string]interface{}) *gorm.DB {
 	db := GetDb()
-	return db.Save(role)
+	return db.Model(role).Update(ups)
 }
 
 // Delete - delete role

@@ -44,23 +44,23 @@ export function updateUser(id, data) {
 
 export function updateUserStatus(data) {
   return request({
-    url: 'user/updatestatus',
-    method: 'post',
+    url: 'v1/users/' + data.id + '/status',
+    method: 'put',
     data: qs.stringify(data)
   })
 }
 
 export function updateUserPassWord(data) {
   return request({
-    url: 'user/change-password',
-    method: 'post',
+    url: 'v1/users/' + data.id + '/password',
+    method: 'put',
     data: qs.stringify(data)
   })
 }
 
 export function updateUserDept(data) {
   return request({
-    url: 'user/move-department',
+    url: 'v1/users/department/move',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -68,15 +68,15 @@ export function updateUserDept(data) {
 
 export function changeUserPassword(data) {
   return request({
-    url: 'user/change-user-password',
-    method: 'post',
+    url: 'v1/users/' + data.id + '/password',
+    method: 'put',
     data: qs.stringify(data)
   })
 }
 
 export function deleteUser(data) {
   return request({
-    url: 'user/del',
+    url: 'v1/users/' + data.id,
     method: 'delete',
     data: qs.stringify(data)
   })

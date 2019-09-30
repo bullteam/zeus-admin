@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/pkg/errors"
 	"strconv"
 	"strings"
@@ -36,9 +35,13 @@ func (rs RoleService) AssignPermission(roleId int, menuIds string) {
 	if len(menus) > 0 {
 		var policies [][]string
 		for _, m := range menus {
-			policies = append(policies, []string{roleData.RoleName, m.Perms, "*", roleData.Domain.Code})
+			if m.Url == "" && m.Perms != "" {
+				policies = append(policies, []string{roleData.RoleName, m.Perms, "*", roleData.Domain.Code})
+			}
 		}
 		role.OverwritePerm(roleData.RoleName, roleData.Domain.Code, policies)
+	} else {
+		role.DeletePerm(roleData.RoleName)
 	}
 }
 
@@ -106,25 +109,17 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 }
 
 // Update - update role's information
-func (rs RoleService) Update(dto dto.RoleEditDto) int64 {
-	roleModel := roleDao.Get(dto.Id, false)
-	if roleModel.Id < 1 {
-		return -1
-	}
-	roleModel.Name = dto.Name
-	roleModel.Remark = dto.Remark
-	roleModel.DomainId = dto.DomainId
-	roleModel.MenuIds = dto.MenuIds
-	roleModel.MenuIdsEle = dto.MenuIdsEle
-	c := roleDao.Update(&roleModel)
-	fmt.Println(dto.DataPermIds)
-	if c.RowsAffected > 0 {
-		if dto.MenuIds != "" {
-			rs.AssignPermission(roleModel.Id, dto.MenuIds)
-		}
-	}
-	if dto.DataPermIds != "" {
-		_ = rs.AssignDataPerm(roleModel.Id, dto.DataPermIds)
+func (rs RoleService) Update(roleDto dto.RoleEditDto) int64 {
+	c := roleDao.Update(&model.Role{Id: roleDto.Id}, map[string]interface{}{
+		"name":         roleDto.Name,
+		"remark":       roleDto.Remark,
+		"domain_id":    roleDto.DomainId,
+		"menu_ids":     roleDto.MenuIds,
+		"menu_ids_ele": roleDto.MenuIdsEle,
+	})
+	rs.AssignPermission(roleDto.Id, roleDto.MenuIds)
+	if roleDto.DataPermIds != "" {
+		_ = rs.AssignDataPerm(roleDto.Id, roleDto.DataPermIds)
 	}
 
 	return c.RowsAffected

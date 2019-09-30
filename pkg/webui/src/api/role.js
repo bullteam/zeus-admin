@@ -21,7 +21,7 @@ export function fetchRole(id) {
 
 export function createRole(data) {
   return request({
-    url: 'role/add',
+    url: 'v1/roles',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -29,15 +29,15 @@ export function createRole(data) {
 
 export function updateRole(data) {
   return request({
-    url: 'role/edit',
-    method: 'post',
+    url: 'v1/roles/' + data.id,
+    method: 'put',
     data: qs.stringify(data)
   })
 }
 
 export function deleteRole(data) {
   return request({
-    url: 'role/del',
+    url: 'v1/roles/' + data.id,
     method: 'delete',
     data: qs.stringify(data)
   })

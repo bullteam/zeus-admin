@@ -26,7 +26,7 @@ func (dp DataPerm) List(listDto dto.GeneralListDto) ([]model.DataPerm, int64) {
 	for sk, sv := range dto.TransformSearch(listDto.Q, dto.DataPermListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("DataPerm").Offset(listDto.Skip).Limit(listDto.Limit).Find(&dataPerms)
+	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&dataPerms)
 	db.Model(&model.DataPerm{}).Count(&total)
 	return dataPerms, total
 }
