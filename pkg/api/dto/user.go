@@ -65,8 +65,8 @@ type UserEditPasswordDto struct {
 
 //Account edit password only
 type AccountEditPasswordDto struct {
-	Id       int    `uri:"id" json:"id" binding:"required"`
-	RePassword string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
+	Id          int    `uri:"id" json:"id" binding:"required"`
+	RePassword  string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
 	NewPassword string `form:"new_password" json:"new_password" binding:"required,pwdValidate"`
 }
 

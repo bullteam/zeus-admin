@@ -84,7 +84,6 @@ func Init(e *gin.Engine) {
 	v1.PUT("/domains/:id", domainController.Edit)
 	v1.DELETE("/domains/:id", domainController.Delete)
 
-
 	//dept
 	deptController := &controllers.DeptController{}
 	v1.GET("/depts", deptController.List)
@@ -92,7 +91,7 @@ func Init(e *gin.Engine) {
 	v1.POST("/depts", deptController.Create)
 	v1.PUT("/depts/:id", deptController.Edit)
 	v1.DELETE("/depts/:id", deptController.Delete)
-	v1.POST("/depts/:id/check-no-member",deptController.Delete)
+	v1.POST("/depts/:id/check-no-member", deptController.Delete)
 
 	// data permission
 	dataPermController := &controllers.DatePermController{}

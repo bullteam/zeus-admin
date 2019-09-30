@@ -40,11 +40,11 @@ func (us DeptService) Create(dto dto.DeptCreateDto) model.Department {
 // Update - update dept's information
 func (us DeptService) Update(dto dto.DeptEditDto) int64 {
 	deptModel := model.Department{
-		Id:       dto.Id,
+		Id: dto.Id,
 	}
 
 	c := deptDao.Update(&deptModel, map[string]interface{}{
-		"name":        dto.Name,
+		"name": dto.Name,
 		//"parentId": dto.ParentId,
 		"orderNum": dto.OrderNum,
 	})
@@ -59,7 +59,6 @@ func (us DeptService) Delete(dto dto.GeneralDelDto) int64 {
 	c := deptDao.Delete(&deptModel)
 	return c.RowsAffected
 }
-
 
 // check - check has member TODO
 func (us DeptService) CheckIfPeopleInside(dto dto.GeneralDelDto) int64 {

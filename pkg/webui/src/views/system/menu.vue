@@ -25,7 +25,9 @@
         </el-table-column>
         <el-table-column :label="$t('menu.type')" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.menu_type">{{ scope.row.menu_type | tag }}</el-tag>
+            <el-tag v-if="scope.row.menu_type==0" type="info">目录</el-tag>
+            <el-tag v-if="scope.row.menu_type==1" type="primary">菜单</el-tag>
+            <el-tag v-if="scope.row.menu_type==2" type="success">按钮</el-tag>
           </template>
         </el-table-column>
         <el-table-column :label="$t('menu.topnum')" align="center">
@@ -121,7 +123,7 @@ export default {
   components: { treeTable },
   filters: {
     tag(type) {
-      return type === '0' ? '目录' : type === '1' ? '菜单' : '按钮'
+      return type === 0 ? '目录' : type === 1 ? '菜单' : '权限'
     }
   },
   data() {

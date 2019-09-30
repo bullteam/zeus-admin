@@ -73,10 +73,10 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 	}
 	var accountDto dto.AccountEditPasswordDto
 	var userDto dto.UserEditPasswordDto
-	accountDto.Id =  int(c.Value("userId").(float64))
+	accountDto.Id = int(c.Value("userId").(float64))
 	if a.BindAndValidate(c, &accountDto) {
 		if accountDto.NewPassword != accountDto.RePassword {
-			fail(c,ErrDifferentPasswords)
+			fail(c, ErrDifferentPasswords)
 			return
 		}
 		userDto.Id = accountDto.Id

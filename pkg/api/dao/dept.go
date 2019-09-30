@@ -42,7 +42,7 @@ func (u Dept) Create(Dept *model.Department) *gorm.DB {
 }
 
 // Update - update Dept
-func (u Dept) Update(Dept *model.Department,ups map[string]interface{}) *gorm.DB {
+func (u Dept) Update(Dept *model.Department, ups map[string]interface{}) *gorm.DB {
 	db := GetDb()
 	return db.Model(Dept).Updates(ups)
 }
