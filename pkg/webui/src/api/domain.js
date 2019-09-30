@@ -11,26 +11,23 @@ export function fetchDomainList(query) {
 
 export function fetchDomain(id) {
   return request({
-    url: 'domain/show',
-    method: 'get',
-    params: {
-      id
-    }
+    url: 'v1/domains' + id,
+    method: 'get'
   })
 }
 
 export function createDomain(data) {
   return request({
-    url: 'domain/add',
+    url: 'v1/domains',
     method: 'post',
     data: qs.stringify(data)
   })
 }
 
-export function updateDomain(data) {
+export function updateDomain(id, data) {
   return request({
-    url: 'domain/edit',
-    method: 'post',
+    url: 'v1/domains/' + id,
+    method: 'put',
     data: qs.stringify(data)
   })
 }
@@ -38,7 +35,7 @@ export function updateDomain(data) {
 export function deleteDomain(data) {
   return request({
     url: 'domain/del',
-    method: 'post',
+    method: 'delete',
     data: qs.stringify(data)
   })
 }

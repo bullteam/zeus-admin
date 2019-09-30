@@ -38,7 +38,7 @@ export function updateRole(data) {
 export function deleteRole(data) {
   return request({
     url: 'role/del',
-    method: 'post',
+    method: 'delete',
     data: qs.stringify(data)
   })
 }

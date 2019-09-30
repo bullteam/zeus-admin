@@ -77,7 +77,7 @@ export function changeUserPassword(data) {
 export function deleteUser(data) {
   return request({
     url: 'user/del',
-    method: 'post',
+    method: 'delete',
     data: qs.stringify(data)
   })
 }

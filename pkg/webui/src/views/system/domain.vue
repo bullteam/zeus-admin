@@ -234,14 +234,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateDomain(tempData).then(() => {
-            // for (const v of this.list) {
-            //   if (v.id === this.temp.id) {
-            //     const index = this.list.indexOf(v)
-            //     this.list.splice(index, 1, this.temp)
-            //     break
-            //   }
-            // }
+          updateDomain(this.temp.id, tempData).then(() => {
             this.getList()
             this.dialogFormVisible = false
             this.$notify({

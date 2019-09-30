@@ -103,8 +103,8 @@ func (d *DomainController) Edit(c *gin.Context) {
 	if d.BindAndValidate(c, &domainDto) {
 		affected := domainService.Update(domainDto)
 		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+			fail(c, ErrEditFail)
+			return
 		}
 		ok(c, "ok.UpdateDone")
 	}
