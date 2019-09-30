@@ -294,6 +294,7 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 		openid, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
 		if err != nil {
 			fail(c, ErrBindDingtalk)
+			return
 		}
 		data := map[string]string{
 			"openid": openid,
