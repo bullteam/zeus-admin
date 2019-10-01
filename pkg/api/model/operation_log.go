@@ -18,8 +18,8 @@ type OperationLog struct {
 	Ip               string    `form:"ip" json:"ip"`
 	IpLocation       string    `form:"ip_location" json:"ip_location"`
 	OperationContent string    `form:"operation_content" json:"operation_content"`
-	CreateTime       time.Time `form:"type(datetime)" json:"-"`
-	LastUpdateTime   time.Time `form:"type(datetime)" json:"-"`
+	CreateTime       time.Time `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP" json:"created_time,omitempty" example:"2019-07-10 0:39"`
+	LastUpdateTime   time.Time `gorm:"type:time;column:last_update_time;not null;default:CURRENT_TIMESTAMP ON UPDATE" json:"last_update_time,omitempty" example:"2019-07-10 0:39"`
 }
 
 func (log *OperationLog) TableName() string {
