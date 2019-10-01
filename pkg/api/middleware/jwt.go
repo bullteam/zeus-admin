@@ -103,9 +103,10 @@ func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 	}
 	//TODO 支持微信、钉钉、QQ等登陆
 	userOauth, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
-	if err != nil || userOauth == nil {
+	if err != nil || userOauth.Id < 1 {
 		return "", err
 	}
+
 	return model.UserClaims{
 		Id:   userOauth.Id,
 		Name: userOauth.Name,

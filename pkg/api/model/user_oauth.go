@@ -11,8 +11,8 @@ type UserOAuth struct {
 	Avatar     string    `json:"avatar"`
 	Extra      string    `json:"extra"`
 	Name       string    `json:"name"`
-	CreateTime time.Time `json:"create_time"`
-	UpdateTime time.Time `json:"update_time"`
+	CreateTime time.Time `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP" json:"create_time,omitempty" example:"2019-07-10 0:39"`
+	UpdateTime time.Time `gorm:"type:time;column:update_time;not null;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" json:"update_time,omitempty" example:"2019-07-10 0:39"`
 }
 
 func (ur *UserOAuth) TableName() string {

@@ -191,16 +191,16 @@ func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 }
 
 //VerifyDTAndReturnUserInfo - verify dingtalk and return user info
-func (us UserService) VerifyDTAndReturnUserInfo(code string) (user *model.UserOAuth, err error) {
+func (us UserService) VerifyDTAndReturnUserInfo(code string) (user model.UserOAuth, err error) {
 	dtUser, err := login.GetDingTalkUserInfo(code)
 	if err != nil {
-		return nil, err
+		return model.UserOAuth{}, err
 	}
 	User, err := userOauthDao.GetUserByOpenId(dtUser.Openid, 1)
 	if err == nil {
 		return User, nil
 	}
-	return nil, err
+	return model.UserOAuth{}, err
 }
 
 func (us UserService) UnBindUserDingtalk(from int, user_id int) error {

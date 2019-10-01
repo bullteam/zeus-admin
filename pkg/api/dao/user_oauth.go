@@ -40,9 +40,9 @@ func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth, int64
 	return UserOAuth, total
 }
 
-func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (*model.UserOAuth, error) {
-	var userOAuth *model.UserOAuth
-	db.Where("openid = ? and from = ?", openid, from).Find(&userOAuth)
+func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (model.UserOAuth, error) {
+	var userOAuth model.UserOAuth
+	db.Where("openid = ? and `from` = ?", openid, from).Find(&userOAuth)
 	return userOAuth, nil
 }
 
