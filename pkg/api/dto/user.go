@@ -53,8 +53,8 @@ type UserEditStatusDto struct {
 }
 
 type UserMoveDepartmentDto struct {
-	Ids        string `form:"ids" json:"ids" binding:"required"`
-	Department int    `form:"department" json:"department" binding:"required,gte=1"`
+	Ids        string `form:"uids" json:"uids" binding:"required"`
+	Department int    `form:"department_id" json:"department_id" binding:"required,gte=1"`
 }
 
 // UserEditPasswordDto - User update password only
