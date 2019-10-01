@@ -102,7 +102,7 @@ export function accountThird() {
 // 第三方绑定账号列表
 export function unbind(data) {
   return request({
-    url: 'v1/account/unbind',
+    url: 'v1/account/third-unbind',
     method: 'post',
     data: qs.stringify(data)
   })

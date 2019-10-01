@@ -23,7 +23,7 @@ type BindThirdDto struct {
 
 //unbind
 type UnBindThirdDto struct {
-	OAuthType int `form:"type"`
+	OAuthType int `form:"from"`
 }
 
 // demo usage
