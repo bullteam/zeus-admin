@@ -20,6 +20,7 @@ export default {
     log_error: '异常日志',
     dataPerm: '数据权限',
     personal: '个人中心',
+    security: '安全设置',
     psw: '修改密码',
     third: '第三方绑定'
   },
@@ -32,7 +33,8 @@ export default {
     theme: '换肤',
     size: '布局大小',
     binding: '绑定钉钉',
-    personal: '个人中心'
+    personal: '个人中心',
+    security: '安全设置'
   },
   login: {
     title: 'System LogIn', // 考虑到其他系统，默认实用英文

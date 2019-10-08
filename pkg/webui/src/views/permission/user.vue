@@ -340,7 +340,6 @@ export default {
       this.listLoading = true
       this.listQuery.start = (this.listQuery.page - 1) * 20
       fetchUserList(this.listQuery).then(response => {
-        console.log(response.data)
         this.list = response.data.result
         this.total = response.data.total
 

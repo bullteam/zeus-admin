@@ -7,6 +7,7 @@ type UserSecret struct {
 	User_id      int       `json:"user_id"`
 	Account_name string    `json:"account_name"`
 	Secret       string    `json:"secret"`
+	Is_open      int       `json:"is_open"`
 	CreateTime   time.Time `json:"create_time"`
 	UpdateTime   time.Time `json:"update_time"`
 }

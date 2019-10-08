@@ -61,9 +61,11 @@ func Init(e *gin.Engine) {
 	v1.GET("/account/thirds", accountController.ThirdList)
 	v1.POST("/account/verify-email", accountController.Verifymail)
 	v1.GET("/account/email-verify", accountController.EmailVerify)
+	v1.GET("/account/security", accountController.AccountInfo)
+	v1.POST("/account/bindcode", accountController.BindGoogle2faCode)
 
-	roleController := &controllers.RoleController{}
 	//role
+	roleController := &controllers.RoleController{}
 	v1.GET("/roles", roleController.List)
 	v1.GET("/roles/:id", roleController.Get)
 	v1.POST("/roles", roleController.Create)

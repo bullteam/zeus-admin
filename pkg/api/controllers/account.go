@@ -121,11 +121,6 @@ func (AccountController) GetDomains(c *gin.Context) {
 // @Router /v1/account/accountinfo [get]
 func (a *AccountController) AccountInfo(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
-	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
-	resp(c, map[string]interface{}{
-		"result": data,
-	})
-
 	myAccountService := service.MyAccountService{}
 	userSecretQuery, err := myAccountService.GetSecret(userId)
 	if err != nil {
@@ -158,7 +153,7 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 	}
 	base64Img := base64.StdEncoding.EncodeToString(out.Bytes())
 	result := map[string]string{
-		"code ":   "data:image/png;base64," + base64Img,
+		"code":    "data:image/png;base64," + base64Img,
 		"account": account,
 		"secret":  userSecretQuery.Secret,
 	}
@@ -185,6 +180,7 @@ func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 	bindCodeDto := &dto.BindCodeDto{}
 	if !a.BindAndValidate(c, &bindCodeDto) {
 		fail(c, ErrInvalidParams)
+		return
 	}
 	otpc := &dgoogauth.OTPConfig{
 		Secret:      secretBase32,
@@ -192,10 +188,9 @@ func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 		HotpCounter: 0,
 		// UTC:         true,
 	}
-
 	val, err := otpc.Authenticate(bindCodeDto.Google2faToken)
 	if err != nil {
-		fmt.Println(err)
+		fail(c, ErrGoogleBindCode)
 		return
 	}
 	if !val {

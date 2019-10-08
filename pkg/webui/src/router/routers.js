@@ -97,6 +97,14 @@ export const constantRouterMap = [
             component: () => import('@/views/my/psw')
           },
           {
+            path: 'security',
+            name: 'security',
+            meta: {
+              title: 'security'
+            },
+            component: () => import('@/views/my/security')
+          },
+          {
             path: 'third',
             name: 'third',
             meta: {

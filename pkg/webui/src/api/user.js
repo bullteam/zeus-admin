@@ -116,3 +116,20 @@ export function loginDingtalk(data) {
     data: qs.stringify(data)
   })
 }
+
+// 两步验证-用户信息
+export function security() {
+  return request({
+    url: 'v1/account/security',
+    method: 'get'
+  })
+}
+
+// 两步验证-绑定
+export function bindcode(data) {
+  return request({
+    url: 'v1/account/bindcode',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}

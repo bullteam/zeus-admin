@@ -19,7 +19,7 @@ type MyAccountService struct {
 // https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 func (s MyAccountService) GetSecret(uid int) (userSecretQuery model.UserSecretQuery, err error) {
 	v := s.dao.Get(uid)
-	if !utils.IsNilObject(v) {
+	if !utils.IsNilObject(v) && v.Account_name != "" {
 		userSecretQuery.Account_name = v.Account_name
 		userSecretQuery.Secret = v.Secret
 		return userSecretQuery, nil

@@ -10,7 +10,7 @@ type UserSecretDao struct {
 
 func (u UserSecretDao) Get(id int) model.UserSecret {
 	var userSecret model.UserSecret
-	db.Where("id = ?", id).First(&userSecret)
+	db.Where("user_id = ?", id).First(&userSecret)
 	return userSecret
 }
 

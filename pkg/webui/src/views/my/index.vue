@@ -41,6 +41,10 @@ export default {
           path: '/my/psw'
         },
         {
+          name: this.$t('route.security'),
+          path: '/my/security'
+        },
+        {
           name: this.$t('route.third'),
           path: '/my/third'
         }
