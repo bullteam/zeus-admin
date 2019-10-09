@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
 
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form v-if="step === 1" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">{{ $t('login.title') }}</h3>
@@ -52,21 +52,26 @@
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-
-      <!--<div class="tips">-->
-      <!--<span>{{ $t('login.username') }} : admin</span>-->
-      <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
-      <!--</div>-->
-      <!--<div class="tips">-->
-      <!--<span style="margin-right:18px;">{{ $t('login.username') }} : editor</span>-->
-      <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
-      <!--</div>-->
       <br>
       <br>
       <br>
       <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
     </el-form>
-
+    <el-form v-else ref="checkForm" class="login-form" label-position="left" >
+      <div class="title-container">
+        <h3 class="title">{{ $t('login.googleAuths') }}</h3>
+      </div>
+      <el-form-item prop="code">
+        <el-input
+          v-model="checkForm.code"
+          :placeholder="$t('login.code')"
+          name="code"
+          type="text"
+          auto-complete="on"
+          @keyup.enter.native="handlerCode" />
+      </el-form-item>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handlerCode">{{ $t('login.logIn') }}</el-button>
+    </el-form>
     <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog" append-to-body>
       <social-sign />
     </el-dialog>
@@ -88,6 +93,7 @@
 <script>
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
+import { checkGoogle2faCode } from '@/api/user'
 // import { getUserCaptcha } from '@/api/login'
 // import { getPrefix } from '@/utils/auth'
 
@@ -116,6 +122,10 @@ export default {
         captchaid: '',
         captchaval: ''
       },
+      checkForm: {
+        code: ''
+      },
+      step: 1,
       captchaUrl: '',
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -170,7 +180,7 @@ export default {
     //   getUserCaptcha().then((json) => {
     //     this.loginForm.captchaid = json.data.captcha.Id
     //     this.captchaUrl = `//api.${location.host}/captcha/${this.loginForm.captchaid}.png`
-    //     // this.captchaUrl = ('http://api-auth{fix}.etcchebao.com/captcha/' + this.loginForm.captchaid + '.png').replace('{fix}', getPrefix())
+    //     // this.captchaUrl = ('http://api-auth{fix}.bullteam.com/captcha/' + this.loginForm.captchaid + '.png').replace('{fix}', getPrefix())
     //   })
     // },
     handleLogin() {
@@ -178,16 +188,16 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            // TODO: Wendell Sheh 本项目后台登录完成后，路由到指定页面
             // 其他项目后台根据参数 redirectURL, 跳转到对应的项目上
             // 如果没有此参数，根据 redirect 返回到本项目指定路由
             this.loading = false
 
-            if (this.redirectURL) {
-              location.href = decodeURIComponent(this.redirectURL)
-              return
-            }
-            this.$router.push({ path: this.redirect || '/' })
+            // if (this.redirectURL) {
+            //   location.href = decodeURIComponent(this.redirectURL)
+            //   return
+            // }
+            // this.$router.push({ path: this.redirect || '/' })
+            this.step = 2
           }).catch((res) => {
             // console.log(res)
             if (res.code === 13001) {
@@ -200,6 +210,22 @@ export default {
         } else {
           console.log('error submit!!')
           return false
+        }
+      })
+    },
+    handlerCode() {
+      checkGoogle2faCode({ google_2fa_token: this.checkForm.code }).then(res => {
+        if (res.code === 200) {
+          this.$message('登陆成功')
+          if (this.redirectURL) {
+            location.href = decodeURIComponent(this.redirectURL)
+            return
+          }
+          this.$router.push({ path: this.redirect || '/' })
+          return
+        } else {
+          this.$message('登陆失败')
+          return
         }
       })
     },
@@ -226,12 +252,11 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  /* 修复input 背景不协调 和光标变色 */
-  /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-
   $bg:#283443;
   $light_gray:#eee;
   $cursor: #fff;
+  $dark_gray:#889aa4;
+  $light_gray:#eee;
 
   @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
     .login-container .el-input input{
@@ -270,12 +295,6 @@ export default {
       color: #454545;
     }
   }
-</style>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
 
 .login-container {
   position: fixed;

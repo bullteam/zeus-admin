@@ -30,7 +30,7 @@ type AccountController struct {
 // @Param userId path int true "用户ID"
 // @Success 200 {array} model.User "{"code":200,"data":{"id":1,"name":"wutong"}}"
 // @Router /v1/account/info [get]
-func (u AccountController) Info(c *gin.Context) {
+func (a AccountController) Info(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	data := userService.InfoOfId(dto.GeneralGetDto{Id: userId})
 	resp(c, map[string]interface{}{
@@ -45,7 +45,7 @@ func (u AccountController) Info(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/account/permissions [get]
-func (u AccountController) GetPermissions(c *gin.Context) {
+func (a AccountController) GetPermissions(c *gin.Context) {
 	userId := strconv.Itoa(int(c.Value("userId").(float64)))
 	resp(c, map[string]interface{}{
 		"result": userService.GetAllPermissions(userId),
@@ -151,14 +151,13 @@ func (a *AccountController) AccountInfo(c *gin.Context) {
 	if errx != nil {
 		fail(c, ErrInvalidParams)
 	}
-	base64Img := base64.StdEncoding.EncodeToString(out.Bytes())
-	result := map[string]string{
-		"code":    "data:image/png;base64," + base64Img,
-		"account": account,
-		"secret":  userSecretQuery.Secret,
-	}
 	resp(c, map[string]interface{}{
-		"result": result,
+		"result": dto.UserSecretRetDto{
+			Is_open: userSecretQuery.Is_open,
+			Account: account,
+			Code:    "data:image/png;base64," + base64.StdEncoding.EncodeToString(out.Bytes()),
+			Secret:  userSecretQuery.Secret,
+		},
 	})
 }
 
@@ -187,6 +186,89 @@ func (a *AccountController) BindGoogle2faCode(c *gin.Context) {
 		WindowSize:  3,
 		HotpCounter: 0,
 		// UTC:         true,
+	}
+	val, err := otpc.Authenticate(bindCodeDto.Google2faToken)
+	if err != nil {
+		fail(c, ErrGoogleBindCode)
+		return
+	}
+	if !val {
+		fail(c, ErrGoogleBindCode)
+		return
+	}
+
+	myAccountService.Update2FaStatus(userId, 1) //更新状态
+	resp(c, map[string]interface{}{
+		"result": "bind success!",
+	})
+}
+
+// @Summary 关闭Google 两步验证
+// @Tags account
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/close2fa [post]
+func (a *AccountController) Close2fa(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	myAccountService := service.MyAccountService{}
+	userSecretQuery, err := myAccountService.GetSecret(userId)
+	if err != nil {
+		fail(c, ErrInvalidUser)
+		return
+	}
+	secretBase32 := userSecretQuery.Secret
+	bindCodeDto := &dto.BindCodeDto{}
+	if !a.BindAndValidate(c, &bindCodeDto) {
+		fail(c, ErrInvalidParams)
+		return
+	}
+	otpc := &dgoogauth.OTPConfig{
+		Secret:      secretBase32,
+		WindowSize:  3,
+		HotpCounter: 0,
+		// UTC:         true,
+	}
+	val, err := otpc.Authenticate(bindCodeDto.Google2faToken)
+	if err != nil {
+		fail(c, ErrGoogleBindCode)
+		return
+	}
+	if !val {
+		fail(c, ErrGoogleBindCode)
+		return
+	}
+
+	myAccountService.Update2FaStatus(userId, 0) //更新状态
+	resp(c, map[string]interface{}{
+		"result": "update success!",
+	})
+}
+
+// @Summary 验证2fa goole 验证码
+// @Tags account
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/check-google-2fa-code [get]
+func (a *AccountController) CheckGoogle2faCode(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	myAccountService := service.MyAccountService{}
+	userSecretQuery, err := myAccountService.GetSecret(userId)
+	if err != nil {
+		fail(c, ErrInvalidUser)
+		return
+	}
+	secretBase32 := userSecretQuery.Secret
+	bindCodeDto := &dto.BindCodeDto{}
+	if !a.BindAndValidate(c, &bindCodeDto) {
+		fail(c, ErrInvalidParams)
+		return
+	}
+	otpc := &dgoogauth.OTPConfig{
+		Secret:      secretBase32,
+		WindowSize:  3,
+		HotpCounter: 0,
 	}
 	val, err := otpc.Authenticate(bindCodeDto.Google2faToken)
 	if err != nil {

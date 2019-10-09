@@ -10,3 +10,10 @@ type UserSecretCreateDto struct {
 	CreateTime   time.Time `type(datetime)" json:"create_time"`
 	UpdateTime   time.Time `type(datetime)" json:"-"`
 }
+
+type UserSecretRetDto struct {
+	Is_open int    `json:"is_open"`
+	Code    string `json:"code"`
+	Account string `json:"account"`
+	Secret  string `json:"secret"`
+}

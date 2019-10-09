@@ -63,6 +63,8 @@ func Init(e *gin.Engine) {
 	v1.GET("/account/email-verify", accountController.EmailVerify)
 	v1.GET("/account/security", accountController.AccountInfo)
 	v1.POST("/account/bindcode", accountController.BindGoogle2faCode)
+	v1.POST("/account/close2fa", accountController.Close2fa)
+	v1.POST("account/check-google-2fa-code", accountController.CheckGoogle2faCode)
 
 	//role
 	roleController := &controllers.RoleController{}

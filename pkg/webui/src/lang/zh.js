@@ -37,18 +37,16 @@ export default {
     security: '安全设置'
   },
   login: {
-    title: 'System LogIn', // 考虑到其他系统，默认实用英文
-    logIn: 'LogIn',
-    username: 'Account',
-    password: 'Password',
-    // title: '系统登录',
-    // logIn: '登录',
-    // username: '账号',
-    // password: '密码',
+    title: '系统登录',
+    logIn: '登录',
+    username: '账号',
+    password: '密码',
     any: '随便填',
     captcha: '验证码',
     thirdparty: '第三方登录',
-    thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
+    thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！',
+    code: '验证码',
+    googleAuths: '两步验证・谷歌身份验证器'
   },
   documentation: {
     documentation: '文档',

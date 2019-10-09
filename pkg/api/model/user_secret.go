@@ -13,6 +13,7 @@ type UserSecret struct {
 }
 
 type UserSecretQuery struct {
+	Is_open      int
 	Account_name string
 	Secret       string
 }

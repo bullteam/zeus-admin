@@ -45,12 +45,6 @@ func (ms MenuService) Create(dto dto.MenuCreateDto) model.Menu {
 // Update
 func (ms MenuService) Update(menuDto dto.MenuEditDto) int64 {
 	menuModel := menuDao.Get(menuDto.Id, false)
-	//menuModel.Name = dto.Name
-	//menuModel.Url = dto.Url
-	//menuModel.Perms = dto.Perms
-	//menuModel.OrderNum = dto.OrderNum
-	//menuModel.ParentId = dto.ParentId
-	//menuModel.Icon = dto.Icon
 	c := menuDao.Update(&menuModel, map[string]interface{}{
 		"name":      menuDto.Name,
 		"url":       menuDto.Url,

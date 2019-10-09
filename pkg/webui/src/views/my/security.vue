@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="accountInfo.is_open === 0">
     <div class="card twofactor-manager">
       <div class="card-header">
         <h4 class="card-title">两步验证</h4>
@@ -48,16 +48,43 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <div class="card twofactor-manager">
+      <div class="card-content with-border">
+        <div class="twofactor-unbind">
+          <h4 class="margin-resp-bottom">您已经开启了两步验证</h4>
+          <div class="unbind-wrap input-button">
+            <el-form :model="form" label-width="200px">
+              <el-row v-if="state === true">
+                <el-button type="danger" @click="changeState">关闭</el-button>
+              </el-row>
+              <el-row v-else>
+                <el-input v-model="form.code" placeholder="输入身份验证器中的验证码"></el-input>
+                <el-button type="danger" @click="onClose">确认关闭</el-button>
+              </el-row>
+            </el-form>
+            <a class="btn btn-lg btn-text">关闭后，可以再次开启</a>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer emc-hidden-printer">
+        <div class="card-help">
+          <span class="icon icon-help"></span>为什么两步验证更安全？<a href="https://teambition.kf5.com/hc/kb/article/1303296/">点这里详细了解</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import { security, bindcode } from '@/api/user'
+import { security, bindcode, close2fa } from '@/api/user'
 export default {
   data() {
     return {
       form: {
         code: ''
       },
-      accountInfo: []
+      accountInfo: [],
+      state: true
     }
   },
   mounted() {
@@ -71,15 +98,30 @@ export default {
     },
     onSubmit() {
       bindcode({ google_2fa_token: this.form.code }).then(res => {
-        this.$message(res.msg)
         if (res.code === 200) {
           this.$message('绑定成功')
+          location.reload()
           return
         } else {
           this.$message('绑定失败！')
           return
         }
       })
+    },
+    onClose() {
+      close2fa({ google_2fa_token: this.form.code }).then(res => {
+        if (res.code === 200) {
+          this.$message('关闭成功')
+          location.reload()
+          return
+        } else {
+          this.$message('关闭失败！')
+          return
+        }
+      })
+    },
+    changeState() {
+      this.state = !this.state
     }
   }
 }
@@ -263,5 +305,8 @@ export default {
 .form-account-info {
     margin: 20px;
     width: 450px;
+}
+.margin-resp-bottom {
+    margin-bottom:15px
 }
 </style>

@@ -30,7 +30,7 @@ export default {
     personal: 'personal center'
   },
   login: {
-    title: 'Login Form',
+    title: 'System LogIn',
     logIn: 'Log in',
     username: 'Username',
     password: 'Password',

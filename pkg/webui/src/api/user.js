@@ -133,3 +133,21 @@ export function bindcode(data) {
     data: qs.stringify(data)
   })
 }
+
+// 两步验证-关闭
+export function close2fa(data) {
+  return request({
+    url: 'v1/account/close2fa',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+// 两步验证-校验code
+export function checkGoogle2faCode(data) {
+  return request({
+    url: 'v1/account/check-google-2fa-code',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
