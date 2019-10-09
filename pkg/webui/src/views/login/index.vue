@@ -93,7 +93,7 @@
 <script>
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
-import { checkGoogle2faCode } from '@/api/user'
+import { checkGoogle2faCode, FindCodeOpen } from '@/api/user'
 // import { getUserCaptcha } from '@/api/login'
 // import { getPrefix } from '@/utils/auth'
 
@@ -191,13 +191,17 @@ export default {
             // 其他项目后台根据参数 redirectURL, 跳转到对应的项目上
             // 如果没有此参数，根据 redirect 返回到本项目指定路由
             this.loading = false
-
-            // if (this.redirectURL) {
-            //   location.href = decodeURIComponent(this.redirectURL)
-            //   return
-            // }
-            // this.$router.push({ path: this.redirect || '/' })
-            this.step = 2
+            FindCodeOpen().then(res => {
+              if (res.code === 200 && res.data.is_open === 1) {
+                this.step = 2
+              } else {
+                if (this.redirectURL) {
+                  location.href = decodeURIComponent(this.redirectURL)
+                  return
+                }
+                this.$router.push({ path: this.redirect || '/' })
+              }
+            })
           }).catch((res) => {
             // console.log(res)
             if (res.code === 13001) {

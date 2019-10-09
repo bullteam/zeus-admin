@@ -65,6 +65,7 @@ func Init(e *gin.Engine) {
 	v1.POST("/account/bindcode", accountController.BindGoogle2faCode)
 	v1.POST("/account/close2fa", accountController.Close2fa)
 	v1.POST("account/check-google-2fa-code", accountController.CheckGoogle2faCode)
+	v1.GET("account/find-code-open", accountController.FindCodeOpen) // is check google 2fa code
 
 	//role
 	roleController := &controllers.RoleController{}

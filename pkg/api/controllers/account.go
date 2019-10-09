@@ -284,6 +284,25 @@ func (a *AccountController) CheckGoogle2faCode(c *gin.Context) {
 	})
 }
 
+// @Summary 判断是否开启 Google 两步验证
+// @Tags account
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
+// @Router /v1/account/close2fa [post]
+func (a *AccountController) FindCodeOpen(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	myAccountService := service.MyAccountService{}
+	userSecretQuery, err := myAccountService.GetSecret(userId)
+	if err != nil {
+		fail(c, ErrInvalidUser)
+		return
+	}
+	resp(c, map[string]interface{}{
+		"is_open": userSecretQuery.Is_open,
+	})
+}
+
 // @Summary 第三方绑定列表
 // @Tags account
 // @Security ApiKeyAuth

@@ -151,3 +151,11 @@ export function checkGoogle2faCode(data) {
     data: qs.stringify(data)
   })
 }
+
+// 两步验证-判断是否校验Google 2fa code
+export function FindCodeOpen() {
+  return request({
+    url: 'v1/account/find-code-open',
+    method: 'get'
+  })
+}
