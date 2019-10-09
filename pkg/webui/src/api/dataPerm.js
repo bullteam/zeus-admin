@@ -12,8 +12,8 @@ export function dataPermList(data) {
 // 删除数据权限
 export function dataPermDel(data) {
   return request({
-    url: 'v1/datas',
-    method: 'get',
+    url: 'v1/datas/' + data.id,
+    method: 'delete',
     params: data
   })
 }
@@ -28,8 +28,8 @@ export function dataPermAdd(data) {
 // 修改数据权限
 export function dataPermEdit(data) {
   return request({
-    url: 'v1/datas',
-    method: 'post',
+    url: 'v1/datas/' + data.id,
+    method: 'put',
     data: qs.stringify(data)
   })
 }

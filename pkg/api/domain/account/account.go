@@ -24,13 +24,13 @@ type OAuthType struct {
 	From int
 }
 
-var (
-	OAuthDingTalk = &OAuthType{1}
-	OAuthWechat   = &OAuthType{2}
-	OAuthQQ       = &OAuthType{3}
-	OAuthFacebook = &OAuthType{4}
-	OAuthGoogle   = &OAuthType{5}
-)
+//var (
+//	OAuthDingTalk = &OAuthType{1}
+//	OAuthWechat   = &OAuthType{2}
+//	OAuthQQ       = &OAuthType{3}
+//	OAuthFacebook = &OAuthType{4}
+//	OAuthGoogle   = &OAuthType{5}
+//)
 
 // HashPassword : password hashing
 func HashPassword(password string, salt string) (hash string, err error) {
