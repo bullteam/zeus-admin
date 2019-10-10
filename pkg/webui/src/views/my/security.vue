@@ -48,31 +48,18 @@
       </div>
     </div>
   </div>
-  <div v-else>
-    <div class="card twofactor-manager">
-      <div class="card-content with-border">
-        <div class="twofactor-unbind">
-          <h4 class="margin-resp-bottom">您已经开启了两步验证</h4>
-          <div class="unbind-wrap input-button">
-            <el-form :model="form" label-width="200px">
-              <el-row v-if="state === true">
-                <el-button type="danger" @click="changeState">关闭</el-button>
-              </el-row>
-              <el-row v-else>
-                <el-input v-model="form.code" placeholder="输入身份验证器中的验证码"></el-input>
-                <el-button type="danger" @click="onClose">确认关闭</el-button>
-              </el-row>
-            </el-form>
-            <a class="btn btn-lg btn-text">关闭后，可以再次开启</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-footer emc-hidden-printer">
-        <div class="card-help">
-          <span class="icon icon-help"></span>为什么两步验证更安全？<a href="https://teambition.kf5.com/hc/kb/article/1303296/">点这里详细了解</a>
-        </div>
-      </div>
-    </div>
+  <div v-else class="filter-container">
+    <h4 class="margin-resp-bottom">您已经开启了两步验证</h4>
+    <el-form :model="form" class="filter-item">
+      <el-row v-if="state === true">
+        <el-button type="danger" @click="changeState">关闭</el-button>
+      </el-row>
+      <el-row v-else>
+        <el-input v-model="form.code" class="filter-item" placeholder="输入身份验证器中的验证码"></el-input>
+        <el-button type="danger" class="filter-item" style="display: inline-block;" @click="onClose">确认关闭</el-button>
+      </el-row>
+    </el-form>
+    <!-- <a class="btn btn-lg btn-text">关闭后，可以再次开启</a> -->
   </div>
 </template>
 <script>
