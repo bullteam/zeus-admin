@@ -203,10 +203,15 @@ func (us UserService) VerifyDTAndReturnUserInfo(code string) (user model.UserOAu
 	return model.UserOAuth{}, err
 }
 
-func (us UserService) UnBindUserDingtalk(from int, user_id int) error {
-	return userOauthDao.DeleteByUseridAndFrom(from, user_id)
+func (us UserService) UnBindUserDingtalk(from int, uid int) error {
+	return userOauthDao.DeleteByUseridAndFrom(from, uid)
 }
 
-func (us UserService) GetBindOauthUserInfo(userid int) (UserInfo model.UserOAuth) {
-	return userOauthDao.Get(userid)
+func (us UserService) GetBindOauthUserInfo(uid int) (UserInfo model.UserOAuth) {
+	return userOauthDao.Get(uid)
+}
+
+//GetDomainMenu -  get specific user's menus of specific domain
+func (us UserService) GetDomainMenu(uid string,domain string){
+	//roles := us.GetAllRoles(uid)
 }

@@ -237,6 +237,10 @@ export default {
       Object.keys(this.temp).forEach(val => {
         this.temp[val] = row[val]
       })
+      if (this.permsType === 1) {
+        this.temp.perms = '-'
+        this.temp.perms_rule = '-'
+      }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
     },
