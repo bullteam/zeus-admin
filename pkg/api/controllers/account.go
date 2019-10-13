@@ -39,13 +39,13 @@ func (a AccountController) Info(c *gin.Context) {
 }
 
 // @Tags Users
-// @Summary 获取用户权限列表
+// @Summary 获取用户权限列表(带菜单)
 // @Security ApiKeyAuth
 // @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/account/permissions [get]
-func (a AccountController) GetPermissions(c *gin.Context) {
+func (a AccountController) GetPermissionsWithMenu(c *gin.Context) {
 	userId := strconv.Itoa(int(c.Value("userId").(float64)))
 	resp(c, map[string]interface{}{
 		"result": userService.GetAllPermissions(userId),

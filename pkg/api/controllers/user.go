@@ -177,17 +177,71 @@ func (u *UserController) Delete(c *gin.Context) {
 }
 
 // @Tags Users
-// @Summary 获取用户权限列表
+// @Summary 获取用户权限列表(带菜单)
 // @Security ApiKeyAuth
 // @Param id path int true "用户id"
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/users/{id}/permissions [get]
-func (u *UserController) GetUserPermissions(c *gin.Context) {
+func (u *UserController) GetUserPermissionsWithMenu(c *gin.Context) {
 	var userDto dto.GeneralGetDto
 	if u.BindAndValidate(c, &userDto) {
 		resp(c, map[string]interface{}{
 			"result": userService.GetAllPermissions(c.GetString("id")),
+		})
+	}
+}
+
+// @Tags Users
+// @Summary 获取用户权限列表
+// @Security ApiKeyAuth
+// @Param id int true "用户id"
+// @Param domain string ""
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/user/perm/list [get]
+func (u *UserController) GetDomainPermissions(c *gin.Context) {
+	var permDto dto.UserInDomainDto
+	userId := int(c.Value("userId").(float64))
+	if u.BindAndValidate(c, &permDto) {
+		resp(c, map[string]interface{}{
+			"result": userService.GetPermissionsOfDomain(strconv.Itoa(userId), permDto.Domain),
+		})
+	}
+}
+
+// @Tags Users
+// @Summary 检查用户权限
+// @Security ApiKeyAuth
+// @Param id int true "用户id"
+// @Param domain string ""
+// @Param perm string ""
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"result":true}}"
+// @Router /v1/user/perm/check [post]
+func (u *UserController) DomainPermCheck(c *gin.Context) {
+	var permDto dto.CheckPermDto
+	userId := int(c.Value("userId").(float64))
+	if u.BindAndValidate(c, &permDto) {
+		resp(c, map[string]interface{}{
+			"result": userService.CheckPermission(strconv.Itoa(userId), permDto.Domain, permDto.Perm),
+		})
+	}
+}
+
+// @Tags Users
+// @Summary 获取用户特定域相关菜单
+// @Security ApiKeyAuth
+// @Param domain string ""
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/user/menu [get]
+func (u *UserController) GetDomainMenus(c *gin.Context) {
+	var permDto dto.UserInDomainDto
+	userId := int(c.Value("userId").(float64))
+	if u.BindAndValidate(c, &permDto) {
+		resp(c, map[string]interface{}{
+			"result": userService.GetDomainMenu(strconv.Itoa(userId), permDto.Domain),
 		})
 	}
 }

@@ -5,7 +5,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
+
 var dingTalkClient *dingtalk.DingTalkClient
+
 func init() {
 	//Overwrite it for tests
 	dingTalkClient = dingtalk.NewDingTalkCompanyClient(&dingtalk.DTConfig{

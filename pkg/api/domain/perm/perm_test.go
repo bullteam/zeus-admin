@@ -206,3 +206,23 @@ func TestDelFilteredPerm(t *testing.T) {
 		},
 	})
 }
+
+func TestUserGroupPermission(t *testing.T) {
+	runTestCases(t, []permissionCases{
+		{
+			args:  []interface{}{"100", "zone-4", "*", "department-4"},
+			want:  false,
+			label: "Enforce with user group policy",
+		},
+		{
+			args:  []interface{}{"101", "zone-5", "*", "department-5"},
+			want:  true,
+			label: "Enforce with user group policy",
+		},
+		{
+			args:  []interface{}{"100", "zone-6", "*", "department-6"},
+			want:  true,
+			label: "Enforce with user group policy",
+		},
+	})
+}

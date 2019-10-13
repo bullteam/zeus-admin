@@ -171,7 +171,7 @@ export default {
       listQuery: {
         start: 0,
         limit: 20,
-        domain_id: 1
+        q: ''
       }
     }
   },
@@ -205,7 +205,11 @@ export default {
       this.listLoading = false
     },
     async getList() {
-      this.listQuery.domain_id = this.domain_id
+      var q = ''
+      if (this.domain_id !== '') {
+        q += 'd=' + this.domain_id
+      }
+      this.listQuery.q = q
       const { result: res_menus } = (await dataPermList(this.listQuery)).data
       if (res_menus && res_menus.length > 0) {
         this.list = this.o(res_menus, 0)

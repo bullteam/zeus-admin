@@ -70,6 +70,11 @@ type AccountEditPasswordDto struct {
 	NewPassword string `form:"new_password" json:"new_password" binding:"required,pwdValidate"`
 }
 
+//UserInDomainDto
+type UserInDomainDto struct {
+	Domain string `form:"domain" json:"domain" binding:"required"`
+}
+
 // password validator
 func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
 	if val, ok := field.Interface().(string); ok {

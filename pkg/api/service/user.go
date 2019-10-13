@@ -180,9 +180,34 @@ func (UserService) GetAllPermissions(uid string) []string {
 			path[seg[2]] = true
 			perms = append(perms, prefix[0])
 		}
-		perms = append(perms, perm[1])
+		if ok := path[perm[1]]; !ok {
+			path[perm[1]] = true
+			perms = append(perms, perm[1])
+		}
 	}
 	return perms
+}
+
+//GetPermissionsOfDomain - Get pure permission list  in specific domain(another backend system)
+func (UserService) GetPermissionsOfDomain(uid string, domain string) []string {
+	perms := perm.GetAllPermsByUser(uid)
+	var polices []string
+	for _, p := range perms {
+		if p[3] == domain {
+			polices = append(polices, p[1])
+		}
+	}
+	return polices
+}
+
+//GetMenusOfDomain - get menus in specific domain
+func (UserService) GetMenusOfDomain(uid string, domain string) []model.Role {
+	roles := perm.GetGroupsByUser(uid)
+	var roleNames []string
+	for _, r := range roles {
+		roleNames = append(roleNames, r[1])
+	}
+	return roleDao.GetRolesByNames(roleNames)
 }
 
 // MoveToAnotherDepartment - move users to another department
@@ -212,6 +237,16 @@ func (us UserService) GetBindOauthUserInfo(uid int) (UserInfo model.UserOAuth) {
 }
 
 //GetDomainMenu -  get specific user's menus of specific domain
-func (us UserService) GetDomainMenu(uid string,domain string){
-	//roles := us.GetAllRoles(uid)
+func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
+	roles := us.GetAllRoles(uid)
+	mids := []string{}
+	for _, r := range roleDao.GetRolesByNames(roles) {
+		mids = append(mids, r.MenuIds)
+	}
+	return menuDao.GetMenusByIds(strings.Join(mids, ","))
+}
+
+//CheckPermission - check user's permission in specific domain with specific policy
+func (us UserService) CheckPermission(uid string, domain string, policy string) bool {
+	return perm.Enforce(uid, policy, "*", domain)
 }

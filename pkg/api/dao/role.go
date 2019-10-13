@@ -30,6 +30,14 @@ func (Role) GetRolesByIds(ids string) []model.Role {
 	return roles
 }
 
+// GetRolesByNames
+func (Role) GetRolesByNames(names []string) []model.Role {
+	var roles []model.Role
+	db := GetDb()
+	db.Where("role_name in (?)", names).Find(&roles)
+	return roles
+}
+
 //Get - get single roel infoD
 func (u Role) GetByName(name string) model.Role {
 	var role model.Role

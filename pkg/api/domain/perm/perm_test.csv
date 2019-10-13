@@ -4,4 +4,10 @@ p,role-1,zone-3,can-not-do-anything,department-2
 p,role-2,zone-1,see-report,department-1
 p,role-2,zone-2,can-not-do-anything,department-3
 p,role-3,zone-3,*,department-4
-g,1,role3
+p,role-4,zone-4,*,department-4
+p,role-5,zone-5,*,department-5
+p,role-6,zone-6,*,department-6
+g,100,u4
+g,101,u5
+g2,u5,role-5
+g,100,role-6

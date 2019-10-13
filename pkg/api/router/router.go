@@ -40,7 +40,7 @@ func Init(e *gin.Engine) {
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
-	v1.GET("/users/:id/permissions", userController.GetUserPermissions)
+	v1.GET("/users/:id/permissions", userController.GetUserPermissionsWithMenu)
 	v1.POST("/users", userController.Create)
 	v1.PUT("/users/:id", userController.Edit)
 	v1.PUT("/users/:id/status", userController.EditStatus)
@@ -50,9 +50,14 @@ func Init(e *gin.Engine) {
 	v1.DELETE("/users/:id", userController.Delete)
 	v1.POST("/users/department/move", userController.UpdateDepartment)
 
+	//sdk related
+	v1.GET("/user/perm/list", userController.GetDomainPermissions)
+	v1.POST("/user/perm/check", userController.DomainPermCheck)
+	v1.GET("/user/menu", userController.GetDomainMenus)
+
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
-	v1.GET("/account/permissions", accountController.GetPermissions)
+	v1.GET("/account/permissions", accountController.GetPermissionsWithMenu)
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
 	v1.POST("/account/bind-google-2fa-code", accountController.BindGoogle2faCode)
