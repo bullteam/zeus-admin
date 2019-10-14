@@ -429,3 +429,7 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 	}
 
 }
+
+func (a *AccountController) LdapAddUser(c *gin.Context) {
+
+}

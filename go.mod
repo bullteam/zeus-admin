@@ -42,7 +42,9 @@ require (
 	golang.org/x/text v0.3.2 // indirect
 	golang.org/x/tools v0.0.0-20190525145741-7be61e1b0e51 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
+	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2
+	gopkg.in/ldap.v3 v3.0.3
 )
 
 replace github.com/ugorji/go v1.1.4 => github.com/ugorji/go/codec v0.0.0-20190204201341-e444a5086c43

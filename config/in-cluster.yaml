@@ -42,3 +42,16 @@ email:
   host: smtp.qq.com
   port: 25
   from: xxxxxx@qq.com
+ldap:
+  addr: 172.72.33.11:389
+  baseDn: dc=bullteam,dc=com
+  userDn: cn=admin,dc=bullteam,dc=com
+  bindDn: cn=admin,dc=bullteam,dc=com
+  bindPass: zeus@admin#123456
+  authFilter: (&(uid=%s))
+  attributes:
+    - "cn"
+    - "displayName"
+    - "mail"
+  tls: false
+  startTLS: false
