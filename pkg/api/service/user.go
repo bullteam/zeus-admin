@@ -1,10 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
+	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/domain/account/login"
 	"zeus/pkg/api/domain/perm"
 	"zeus/pkg/api/domain/user"
@@ -118,6 +120,17 @@ func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) 
 		return true, userModel
 	}
 	return false, model.User{}
+}
+
+//Verfy Ldap userinfo
+func (UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.User) {
+	ldapConn := ldap.GetLdap()
+	suc, err := ldapConn.Auth(dto.Username, dto.Password)
+	if err != nil {
+		return false, model.User{}
+	}
+	fmt.Println(suc)
+	return true, userDao.GetByUserName(dto.Username)
 }
 
 //AssignRoleByRoleIds - assign roles to specific user

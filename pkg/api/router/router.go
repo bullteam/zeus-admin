@@ -24,13 +24,17 @@ func Init(e *gin.Engine) {
 	e.GET("/healthcheck", controllers.Healthy)
 	//version fragment
 	v1 := e.Group("/v1")
-	jwtAuth = middleware.JwtAuth(account.LoginStandard.Type)
+	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
 	//api handlers
 	v1.POST("/users/login", jwtAuth.LoginHandler)
 	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
-	jwtAuths = middleware.JwtAuth(account.LoginOAuth.Type)
+	// oauth login
+	jwtAuths = middleware.JwtAuth(account.LoginOAuth)
 	v1.POST("/users/login/oauth", jwtAuths.LoginHandler)
+	// ldap login
+	jwtAuths = middleware.JwtAuth(account.LoginLdap)
+	v1.POST("/users/login/ldap", jwtAuths.LoginHandler)
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
@@ -71,7 +75,7 @@ func Init(e *gin.Engine) {
 	v1.POST("/account/close2fa", accountController.Close2fa)
 	v1.POST("/account/check-google-2fa-code", accountController.CheckGoogle2faCode)
 	v1.GET("/account/find-code-open", accountController.FindCodeOpen) // is check google 2fa code
-	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // is check google 2fa code
+	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // add ldap user
 
 	//role
 	roleController := &controllers.RoleController{}

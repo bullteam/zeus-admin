@@ -175,4 +175,5 @@ func (lc *LDAP_CONFIG) Add(username, mail, uidNumber, gidNumber, password string
 	add.Attribute("userPassword", []string{password})
 	err := Conn.Add(add)
 	return err
+	//return errors.New("")
 }

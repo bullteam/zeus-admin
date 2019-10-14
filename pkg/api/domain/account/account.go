@@ -9,28 +9,21 @@ import (
 
 const pwHashBytes = 64
 
-type LoginType struct {
-	Type int
-}
-
-//登录类型
+//login type
 var (
-	LoginStandard = &LoginType{1}
-	LoginOAuth    = &LoginType{2}
+	LoginStandard = 1
+	LoginOAuth    = 2
+	LoginLdap     = 3
 )
 
-//社会化登陆类型
-type OAuthType struct {
-	From int
-}
-
-//var (
-//	OAuthDingTalk = &OAuthType{1}
-//	OAuthWechat   = &OAuthType{2}
-//	OAuthQQ       = &OAuthType{3}
-//	OAuthFacebook = &OAuthType{4}
-//	OAuthGoogle   = &OAuthType{5}
-//)
+//login oauth type
+var (
+	OAuthDingTalk = 1
+	OAuthWechat   = 2
+	OAuthQQ       = 3
+	OAuthFacebook = 4
+	OAuthGoogle   = 5
+)
 
 // HashPassword : password hashing
 func HashPassword(password string, salt string) (hash string, err error) {
