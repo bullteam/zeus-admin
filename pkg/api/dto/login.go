@@ -13,7 +13,7 @@ type LoginDto struct {
 //oauth login
 type LoginOAuthDto struct {
 	Code string `form:"code" binding:"required"`
-	Type string `form:"type" binding:"required"`
+	Type int    `form:"type" binding:"required"`
 }
 
 type BindThirdDto struct {

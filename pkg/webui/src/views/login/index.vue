@@ -155,7 +155,7 @@ export default {
     const code = this.$route.query.code
     if (code) {
       this.loading = true
-      this.$store.dispatch('LoginByThird', { code }).then(() => {
+      this.$store.dispatch('LoginByThird', { code, type: 1 }).then(() => {
         this.loading = false
         this.$router.push('/dashboard')
       }).catch(res => {

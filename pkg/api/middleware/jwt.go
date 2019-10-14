@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -17,7 +18,7 @@ var accountService = service.UserService{}
 var loginType int
 
 //todo : 用单独的claims model去掉user model
-func JwtAuth(loginType int) *jwt.GinJWTMiddleware {
+func JwtAuth(LoginType int) *jwt.GinJWTMiddleware {
 	jwtMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:            "Jwt",
 		SigningAlgorithm: "RS256",
@@ -44,10 +45,10 @@ func JwtAuth(loginType int) *jwt.GinJWTMiddleware {
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
-			if loginType == account.LoginStandard.Type {
-				return Authenticator(c)
+			if LoginType == account.LoginOAuth { //OAuth
+				return AuthenticatorOAuth(c)
 			}
-			return AuthenticatorOAuth(c)
+			return Authenticator(c, LoginType)
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			if _, ok := data.(model.UserClaims); ok {
@@ -81,12 +82,23 @@ func LoginResponse(c *gin.Context, code int, token string, expire time.Time) {
 		"message": "success",
 	})
 }
-func Authenticator(c *gin.Context) (interface{}, error) {
+func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 	var loginDto dto.LoginDto
 	if err := dto.Bind(c, &loginDto); err != nil {
 		return "", err
 	}
-	ok, u := accountService.VerifyAndReturnUserInfo(loginDto)
+
+	if LoginType == account.LoginLdap { // LDAP login
+		ok, u := accountService.VerifyAndReturnLdapUserInfo(loginDto)
+		if ok {
+			return model.UserClaims{
+				Id:   u.Id,
+				Name: u.Username,
+			}, nil
+		}
+		return nil, jwt.ErrFailedAuthentication
+	}
+	ok, u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
 	if ok {
 		return model.UserClaims{
 			Id:   u.Id,
@@ -102,13 +114,15 @@ func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 		return "", err
 	}
 	//TODO 支持微信、钉钉、QQ等登陆
-	userOauth, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
-	if err != nil || userOauth.Id < 1 {
-		return "", err
+	if oauthDto.Type == account.OAuthDingTalk { //dingtalk
+		userOauth, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
+		if err != nil || userOauth.Id < 1 {
+			return "", err
+		}
+		return model.UserClaims{
+			Id:   userOauth.User_id,
+			Name: userOauth.Name,
+		}, nil
 	}
-
-	return model.UserClaims{
-		Id:   userOauth.Id,
-		Name: userOauth.Name,
-	}, nil
+	return "", errors.New("")
 }

@@ -12,6 +12,7 @@ import (
 	"image/png"
 	"net/url"
 	"strconv"
+	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
 	"zeus/pkg/api/utils/mailTemplate"
@@ -428,4 +429,12 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 		})
 	}
 
+}
+
+func (a *AccountController) LdapAddUser(c *gin.Context) {
+	ldapConn := ldap.GetLdap()
+	rr := ldapConn.Add("zeus", "zeus@bullteam.cn", "10111", "10111", "123456")
+	resp(c, map[string]interface{}{
+		"result": rr,
+	})
 }
