@@ -243,7 +243,7 @@ export default {
       })
       if (this.permsType === 1) {
         this.temp.perms = '-'
-        this.temp.perms_rule = '-'
+        this.temp.perms_rule = '{}'
       }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
