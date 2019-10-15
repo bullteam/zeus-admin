@@ -9,6 +9,15 @@ export function loginByUsername(data) {
   })
 }
 
+// login ldap
+export function loginLdapByUsername(data) {
+  return request({
+    url: '/v1/users/login/ldap',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
 export function logout() {
   return request({
     url: 'login/logout',
