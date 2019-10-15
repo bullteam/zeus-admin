@@ -46,7 +46,9 @@ export default {
     thirdparty: '第三方登录',
     thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！',
     code: '验证码',
-    googleAuths: '两步验证・谷歌身份验证器'
+    googleAuths: '两步验证・谷歌身份验证器',
+    ldap: 'LDAP',
+    standard: '常规登录'
   },
   documentation: {
     documentation: '文档',

@@ -3,6 +3,11 @@
 
     <el-form v-if="step === 1" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
+      <el-radio-group v-model="loginForm.loginType" class="login-type">
+        <el-radio-button :label="1">{{ $t('login.standard') }}</el-radio-button>
+        <el-radio-button :label="2">{{ $t('login.ldap') }}</el-radio-button>
+      </el-radio-group>
+
       <div class="title-container">
         <h3 class="title">{{ $t('login.title') }}</h3>
         <!--<lang-select class="set-language"/>-->
@@ -120,7 +125,8 @@ export default {
         username: '',
         password: '',
         captchaid: '',
-        captchaval: ''
+        captchaval: '',
+        loginType: 1// 登录类型，1常规登录，2LDAP
       },
       checkForm: {
         code: ''
@@ -442,6 +448,18 @@ export default {
   }
   .wave-animation .wave-back {
     animation: move_wave 15s linear infinite;
+  }
+
+  /*登录类型*/
+  .login-type{
+    margin-bottom: 40px;
+    width: 100%;
+    .el-radio-button{
+      width: 50%;
+      &__inner{
+        width: 100%;
+      }
+    }
   }
 }
 </style>
