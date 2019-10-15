@@ -19,15 +19,17 @@ func Setup() {
 		TLS:        viper.GetBool("ldap.tls"),
 		StartTLS:   viper.GetBool("ldap.startTLS"),
 	}
-	e := ldapConn.Connect()
-	if e != nil {
-		log.Fatal("ldap connect fail!")
-	} else {
-		//defer ldapConn.Close()
-	}
 	log.Info("Successfully init ldap config")
 }
 
+func ConnectLdap() {
+	e := ldapConn.Connect()
+	if e != nil {
+		log.Fatal("ldap connect fail!")
+	}
+}
+
 func GetLdap() LDAP_CONFIG {
+	ConnectLdap()
 	return ldapConn
 }

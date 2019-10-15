@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"zeus/pkg/api/dao"
@@ -125,11 +124,10 @@ func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) 
 //Verfy Ldap userinfo
 func (UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.User) {
 	ldapConn := ldap.GetLdap()
-	suc, err := ldapConn.Auth(dto.Username, dto.Password)
+	_, err := ldapConn.Auth(dto.Username, dto.Password)
 	if err != nil {
 		return false, model.User{}
 	}
-	fmt.Println(suc)
 	return true, userDao.GetByUserName(dto.Username)
 }
 

@@ -219,7 +219,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchMenuList({ domain_id: this.domain_id }).then(res => {
+      fetchMenuList({ q: 'd=' + this.domain_id }).then(res => {
         const res_menus = res.data.result
         // console.log(res_menus)
         // console.log(this.o(res_menus, 0))
