@@ -5,7 +5,7 @@ import "strings"
 // GeneralListDto - General list request params
 type GeneralListDto struct {
 	Skip  int    `form:"skip,default=0" json:"skip"`
-	Limit int    `form:"limit,default=20" json:"limit" binding:"max=100"`
+	Limit int    `form:"limit,default=20" json:"limit" binding:"max=10000"`
 	Order string `form:"order" json:"order"`
 	Q     string `form:"q" json:"q"`
 }

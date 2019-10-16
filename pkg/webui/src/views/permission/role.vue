@@ -223,11 +223,11 @@ export default {
     // 获取权限列表 （角色权限or数据权限）
     getPermList() {
       Promise.all([fetchMenuList({
-        domain_id: this.domain_id
+        q: 'd=' + this.domain_id
       }), dataPermList({
         start: 0,
         limit: 20,
-        domain_id: this.domain_id
+        q: 'd=' + this.domain_id
       })]).then(response => {
         console.log(response)
         const res_menus = response[0].data.result
@@ -320,11 +320,6 @@ export default {
           const data_perm_ids = []
           this.$refs.tree.getCheckedKeys().forEach(o => {
             menu_ids.push(o)
-            // this.findParentMenus(menu_ids, o)
-            // const s = this.menuslist.find(i => i.id === o)
-            // if (s) {
-            //   menu_ids.push(s.parent_id)
-            // }
           })
           this.$refs.treeData.getCheckedKeys().forEach(o => {
             data_perm_ids.push(o)
