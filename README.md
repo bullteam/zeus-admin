@@ -98,6 +98,13 @@ mysql> source ./script/init.sql;
 [1]: https://docs.docker.com/ "Docker Documentation"
 [2]: https://github.com/yeasy/docker_practice "docker_practice"
 
+
+## 相关截图
+
+<img src="./docs/images/screenshot1.png"></img>
+<img src="./docs/images/screenshot2.png"></img>
+<img src="./docs/images/screenshot3.png"></img>
+
 ## 开发者
 
 * [wutongci](http://github.com/wutongci)
@@ -108,13 +115,7 @@ mysql> source ./script/init.sql;
 更多请进入我们的官网了解我们  [公牛开源战队](http://www.bullteam.cn)
 
 欢迎各路开发者加入或者疑问加入讨论群，请扫下面的二维码加入群
-<img src="./docs/images/wechatqun.jpg" height=1961></img>
+<img src="./docs/images/wechatqun.jpg"></img>
 
 如果失效，或者满员，请加我微信,说明加入群原因 `zeus 开源交流`
 <img src="./docs/images/wx.jpg" height=430></img>
-
-## 相关截图
-
-<img src="./docs/images/screenshot1.png"></img>
-<img src="./docs/images/screenshot2.png"></img>
-<img src="./docs/images/screenshot3.png"></img>
