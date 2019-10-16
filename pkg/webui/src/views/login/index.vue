@@ -193,7 +193,13 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          var requestApi = ''
+          if (this.loginForm.loginType === 1) {
+            requestApi = 'LoginByUsername'
+          } else {
+            requestApi = 'LoginLdapByUsername'
+          }
+          this.$store.dispatch(requestApi, this.loginForm).then(() => {
             // 其他项目后台根据参数 redirectURL, 跳转到对应的项目上
             // 如果没有此参数，根据 redirect 返回到本项目指定路由
             this.loading = false

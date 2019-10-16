@@ -1,5 +1,6 @@
 import {
   loginByUsername,
+  loginLdapByUsername,
   // logout,
   getUserPrem
 } from '@/api/login'
@@ -61,6 +62,20 @@ const user = {
     LoginByUsername({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         loginByUsername(userInfo).then(response => {
+          const data = response.data
+          commit('SET_TOKEN', data.token)
+          setToken(data.token)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+
+    // Ldap 登陆
+    LoginLdapByUsername({ commit }, userInfo) {
+      return new Promise((resolve, reject) => {
+        loginLdapByUsername(userInfo).then(response => {
           const data = response.data
           commit('SET_TOKEN', data.token)
           setToken(data.token)

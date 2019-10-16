@@ -159,6 +159,9 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	//2.get domains by roles
 	for _, rn := range roles {
 		role := roleDao.GetByName(rn[1])
+		if role.Domain.Code == "root" {
+			continue
+		}
 		domains = append(domains, role.Domain)
 	}
 	return domains
@@ -181,20 +184,15 @@ func (UserService) GetAllPermissions(uid string) []string {
 	for _, perm := range perm.GetAllPermsByUser(uid) {
 		prefix := strings.Split(perm[1], ":")
 		seg := strings.Split(prefix[0], "/")
-		if len(seg) == 3 {
-			if ok := path[seg[1]]; !ok {
-				path[seg[1]] = true
-				perms = append(perms, "/"+seg[1])
+		ss := ""
+		for _, s := range seg[1:] {
+			ss += "/" + s
+			if ok := path[ss]; !ok {
+				path[ss] = true
+				perms = append(perms, ss)
 			}
 		}
-		if ok := path[seg[2]]; !ok {
-			path[seg[2]] = true
-			perms = append(perms, prefix[0])
-		}
-		if ok := path[perm[1]]; !ok {
-			path[perm[1]] = true
-			perms = append(perms, perm[1])
-		}
+		perms = append(perms, perm[1])
 	}
 	return perms
 }

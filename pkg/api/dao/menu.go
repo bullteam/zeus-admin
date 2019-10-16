@@ -19,6 +19,14 @@ func (m Menu) GetMenusByIds(ids string) []model.Menu {
 	return menus
 }
 
+// GetMenusPermByIds - get permissions in menu table
+func (m Menu) GetMenusPermByIds(ids string) []model.Menu {
+	var menus []model.Menu
+	db := GetDb()
+	db.Where("id in (?) and menu_type=2", strings.Split(ids, ",")).Find(&menus)
+	return menus
+}
+
 //Get - get single menu info
 func (m Menu) Get(id int, preload bool) model.Menu {
 	var menu model.Menu
