@@ -174,7 +174,7 @@ CREATE TABLE `domain` (
 
 insert  into `domain`(`id`,`name`,`callbackurl`,`remark`,`code`,`create_time`,`last_update_time`) values 
 (1,' 权限中心','http://admin.bullteam.cn',' 管理所有后台项目的菜单，权限，鉴权等','root','2019-09-30 11:38:15','2019-09-30 14:22:51'),
-(2,'crawlnovel小说','https://www.baidu.com','此项目用来测试','test','2019-09-30 11:44:00','2019-09-30 14:24:12');
+(2,'crawlnovel小说','https://www.baidu.com','此项目用来测试','crawlnovel','2019-09-30 11:44:00','2019-10-15 23:10:34');
 
 /*Table structure for table `log` */
 
@@ -213,7 +213,7 @@ CREATE TABLE `menu` (
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_menu_domain_id` (`domain_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
 
 /*Data for the table `menu` */
 
@@ -261,13 +261,17 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`menu_type
 (42,39,1,'修改','','/logs/log_error:edit',2,'',3,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
 (43,39,1,'删除','','/logs/log_error:del',2,'',4,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
 (66,0,0,'首页','admin/default','',1,'size',1,'2019-01-25 16:34:33','2019-01-25 16:34:33'),
-(70,69,1,'121','','/permission/role:edit',1,'bug',1,'2019-01-28 10:46:42','2019-01-28 10:46:42'),
+(70,69,1,'编辑角色','','/permission/role:edit',1,'bug',1,'2019-01-28 10:46:42','2019-10-15 23:20:09'),
 (71,17,1,'数据权限','/auth-system/dataPerm','',1,'component',1,'2019-07-08 10:53:55','2019-07-08 10:53:55'),
 (72,71,1,'添加','','/auth-system/dataPerm:add',2,'',1,'2019-07-08 02:54:28','2019-07-08 02:54:28'),
 (73,71,1,'编辑','','/auth-system/dataPerm:edit',2,'',1,'2019-07-08 02:54:58','2019-07-08 02:54:58'),
 (74,71,1,'删除','','/auth-system/dataPerm:del',2,'',1,'2019-07-08 02:55:15','2019-07-08 02:55:15'),
 (75,71,1,'浏览','','/auth-system/dataPerm:show',2,'',1,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
-(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
+(77,0,2,'任务管理','','',0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
+(78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
+(79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
+(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31');
 
 /*Table structure for table `role` */
 
