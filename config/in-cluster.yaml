@@ -43,7 +43,7 @@ email:
   port: 25
   from: xxxxxx@qq.com
 ldap:
-  addr: 148.70.178.85:389
+  addr: zeus_ldap:389
   baseDn: dc=bullteam,dc=com
   userDn: cn=admin,dc=bullteam,dc=com
   bindDn: cn=admin,dc=bullteam,dc=com
