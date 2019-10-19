@@ -30,7 +30,7 @@ CREATE TABLE `casbin_rule` (
   `v4` varchar(255) NOT NULL DEFAULT '',
   `v5` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `casbin_rule` */
 
@@ -104,7 +104,8 @@ insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values
 (72,'p','超级管理员','/auth-system/menu:show','*','root','',''),
 (73,'p','超级管理员','/auth-system/menu:add','*','root','',''),
 (74,'p','超级管理员','/auth-system/menu:edit','*','root','',''),
-(75,'p','超级管理员','/auth-system/menu:del','*','root','','');
+(75,'p','超级管理员','/auth-system/menu:del','*','root','',''),
+(76,'g','2','crawlnovel管理员','','','','');
 
 /*Table structure for table `data_perm` */
 
@@ -174,7 +175,7 @@ CREATE TABLE `domain` (
 
 insert  into `domain`(`id`,`name`,`callbackurl`,`remark`,`code`,`create_time`,`last_update_time`) values 
 (1,' 权限中心','http://admin.bullteam.cn',' 管理所有后台项目的菜单，权限，鉴权等','root','2019-09-30 11:38:15','2019-09-30 14:22:51'),
-(2,'crawlnovel小说','https://www.baidu.com','此项目用来测试','crawlnovel','2019-09-30 11:44:00','2019-10-15 23:10:34');
+(2,'crawlnovel小说','http://crawlnovel.bullteam.cn/admin','此项目用来测试','crawlnovel','2019-09-30 11:44:00','2019-10-17 00:01:30');
 
 /*Table structure for table `log` */
 
@@ -287,14 +288,15 @@ CREATE TABLE `role` (
   `menu_ids_ele` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `domain_role` (`domain_id`,`role_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='角色表';
 
 /*Data for the table `role` */
 
 insert  into `role`(`id`,`name`,`domain_id`,`role_name`,`remark`,`menu_ids`,`menu_ids_ele`) values 
-(1,'超级管理员',1,'超级管理员','超级管理员','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27'),
+(1,'超级管理员',1,'超级管理员','超级管理员','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,77,78,79,80,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,77,78,79,80,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27'),
 (2,'系统设置',1,'系统设置','系统设置','17,18,19,20,21,22,23,24,25,26,27','17,18,19,20,21,22,23,24,25,26,27'),
-(3,'日志管理',1,'日志管理','日志管理','28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43','28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43');
+(3,'日志管理',1,'日志管理','日志管理','28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43','28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43'),
+(4,'crawlnovel管理员',2,'crawlnovel管理员','','77,78,79,80','77,78,79,80');
 
 /*Table structure for table `role_data_perm` */
 

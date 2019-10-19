@@ -10,7 +10,7 @@
 
 <script>
 import { getUserDomain } from '@/api/login'
-// import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 // import { getToken } from '@/utils'
 
 export default {
@@ -31,19 +31,19 @@ export default {
       })
     },
     toUrl(obj) {
-      if (obj && obj.url) {
+      if (obj && obj.callbackurl) {
         // 暂不需要授权token, 通过跨域 cookies 打通子域名
-        // window.open(obj.url.replace('[access_token]', getToken()), '_blank')
+        window.open(obj.callbackurl.replace('[access_token]', getToken()), '_blank')
 
         // 处理后缀环境问题
-        let url = obj.url
-        const arrHost = location.host.split('.')
-        const suffix = arrHost[arrHost.length - 1]
-        // 开发环境或本地
-        if (suffix !== 'work' && arrHost.length !== 1) {
-          url = url.substring(0, url.lastIndexOf('.')) + '.' + suffix
-        }
-        window.open(url, '_blank')
+        // let url = obj.callbackurl.replace('[access_token]', getToken())
+        // const arrHost = location.host.split('.')
+        // const suffix = arrHost[arrHost.length - 1]
+        // // 开发环境或本地
+        // if (suffix !== 'work' && arrHost.length !== 1) {
+        //   url = url.substring(0, url.lastIndexOf('.')) + '.' + suffix
+        // }
+        // window.open(url, '_blank')
       }
     }
   }
