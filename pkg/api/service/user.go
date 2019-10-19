@@ -18,6 +18,7 @@ const pwHashBytes = 64
 
 var userDao = dao.User{}
 var userOauthDao = dao.UserOAuthDao{}
+var logDao = dao.LoginLogDao{}
 
 type UserService struct {
 	//oauthdao *dao.UserOAuthDao
@@ -258,4 +259,9 @@ func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
 //CheckPermission - check user's permission in specific domain with specific policy
 func (us UserService) CheckPermission(uid string, domain string, policy string) bool {
 	return perm.Enforce(uid, policy, "*", domain)
+}
+
+//insert login log
+func (us UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
+	return logDao.Create(loginLogDto)
 }

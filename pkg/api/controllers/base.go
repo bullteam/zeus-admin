@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/middleware"
+	"zeus/pkg/api/service"
 )
 
 type ControllerError struct {
@@ -55,6 +56,8 @@ var (
 	ErrNoRecord           = &ControllerError{13012, "err.ErrNoRecord", "", ""}
 	ErrHasSubRecord       = &ControllerError{13013, "err.ErrHasSubRecord", "", ""}
 )
+
+var logService = service.LogService{}
 
 type BaseController struct {
 }

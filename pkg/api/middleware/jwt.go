@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -100,6 +101,19 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 	}
 	ok, u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
 	if ok {
+		// login log
+		loginLogDto := dto.LoginLogDto{
+			UserId:           u.Id,
+			Platform:         "Standard Login",
+			Client:           c.Request.UserAgent(),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO
+			LoginResult:      "Login Success",
+			LoginStatus:      1,
+			OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
+		}
+		err := accountService.InsertLoginLog(&loginLogDto)
+		fmt.Println(err)
 		return model.UserClaims{
 			Id:   u.Id,
 			Name: u.Username,

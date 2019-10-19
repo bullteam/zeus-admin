@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -86,6 +87,20 @@ func (u *UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
 	if u.BindAndValidate(c, &userDto) {
 		user := userService.Create(userDto)
+		// insert operation log
+		b, _ := json.Marshal(userDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Create User",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"result": user,
 		})
@@ -104,9 +119,21 @@ func (u *UserController) Edit(c *gin.Context) {
 	if u.BindAndValidate(c, &userDto) {
 		log.Info(fmt.Sprintf("%#v", userDto))
 		affected := userService.Update(userDto)
-		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+		if affected > 0 {
+			// insert operation log
+			b, _ := json.Marshal(userDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           int(c.Value("userId").(float64)),
+				RequestUrl:       c.Request.RequestURI,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Edit User",
+			}
+			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}
@@ -123,9 +150,21 @@ func (u *UserController) EditStatus(c *gin.Context) {
 	var userDto dto.UserEditStatusDto
 	if u.BindAndValidate(c, &userDto) {
 		affected := userService.UpdateStatus(userDto)
-		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+		if affected > 0 {
+			// insert operation log
+			b, _ := json.Marshal(userDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           int(c.Value("userId").(float64)),
+				RequestUrl:       c.Request.RequestURI,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Edit User Status",
+			}
+			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}
@@ -149,9 +188,21 @@ func (u *UserController) EditPassword(c *gin.Context) {
 		userDto.Id = accountDto.Id
 		userDto.Password = accountDto.RePassword
 		affected := userService.UpdatePassword(userDto)
-		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+		if affected > 0 {
+			// insert operation log
+			b, _ := json.Marshal(userDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           int(c.Value("userId").(float64)),
+				RequestUrl:       c.Request.RequestURI,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Edit User Password",
+			}
+			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}
@@ -172,6 +223,20 @@ func (u *UserController) Delete(c *gin.Context) {
 			fail(c, ErrDelFail)
 			return
 		}
+		// insert operation log
+		b, _ := json.Marshal(userDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Delete User",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.DeletedDone")
 	}
 }
@@ -262,6 +327,20 @@ func (u *UserController) UpdateDepartment(c *gin.Context) {
 			fail(c, errInfo)
 			return
 		}
+		// insert operation log
+		b, _ := json.Marshal(userDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Move user to new department",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.UpdateDone")
 	}
 }
