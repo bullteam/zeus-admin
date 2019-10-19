@@ -59,11 +59,11 @@
 ### 快速开始
 需要golang 1.11+ 编译环境,设置git clone 权限
 ````
-git clone git@github.com:bullteam/zeus.git
+git clone git@github.com:bullteam/zeus-admin.git
 export GOPROXY=https://goproxy.cn
 export GO111MODULE=on
 go build -o zeus
-./zeus start -c ./config/in-local.yaml
+./zeus server -c ./config/in-local.yaml
 
 ````
 通过Makefile 安装（暂时不可用）
@@ -74,7 +74,7 @@ wget -O - https://raw.githubusercontent.com/bullteam/zeus-admin/master/tool/getl
 
 ```bash
 # 执行 sql 语句
-mysql> source ./script/init.sql;
+mysql> source ./scripts/init.sql;
 ```
 
 ## Git 工作流
