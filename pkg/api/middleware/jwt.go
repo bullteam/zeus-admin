@@ -89,9 +89,22 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 		return "", err
 	}
 
+	// login log
+	loginLogDto := dto.LoginLogDto{
+		Client:           c.Request.UserAgent(),
+		Ip:               c.ClientIP(),
+		IpLocation:       "", //TODO
+		LoginStatus:      1,
+		OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
+	}
+
 	if LoginType == account.LoginLdap { // LDAP login
 		ok, u := accountService.VerifyAndReturnLdapUserInfo(loginDto)
 		if ok {
+			loginLogDto.UserId = u.Id
+			loginLogDto.Platform = "LDAP Login"
+			loginLogDto.LoginResult = "LDAP Login Success"
+			_ = accountService.InsertLoginLog(&loginLogDto)
 			return model.UserClaims{
 				Id:   u.Id,
 				Name: u.Username,
@@ -101,19 +114,10 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 	}
 	ok, u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
 	if ok {
-		// login log
-		loginLogDto := dto.LoginLogDto{
-			UserId:           u.Id,
-			Platform:         "Standard Login",
-			Client:           c.Request.UserAgent(),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO
-			LoginResult:      "Login Success",
-			LoginStatus:      1,
-			OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
-		}
-		err := accountService.InsertLoginLog(&loginLogDto)
-		fmt.Println(err)
+		loginLogDto.UserId = u.Id
+		loginLogDto.Platform = "Standard Login"
+		loginLogDto.LoginResult = "Standard Login Success"
+		_ = accountService.InsertLoginLog(&loginLogDto)
 		return model.UserClaims{
 			Id:   u.Id,
 			Name: u.Username,
@@ -128,11 +132,23 @@ func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 		return "", err
 	}
 	//TODO 支持微信、钉钉、QQ等登陆
+	//login log
+	loginLogDto := dto.LoginLogDto{
+		Client:           c.Request.UserAgent(),
+		Ip:               c.ClientIP(),
+		IpLocation:       "", //TODO
+		LoginStatus:      1,
+		OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
+	}
 	if oauthDto.Type == account.OAuthDingTalk { //dingtalk
 		userOauth, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
 		if err != nil || userOauth.Id < 1 {
 			return "", err
 		}
+		loginLogDto.LoginResult = "DingTalk login success"
+		loginLogDto.UserId = userOauth.Id
+		loginLogDto.Platform = "DingTalk Login"
+		_ = accountService.InsertLoginLog(&loginLogDto)
 		return model.UserClaims{
 			Id:   userOauth.User_id,
 			Name: userOauth.Name,
