@@ -6,7 +6,7 @@ import "time"
 type DeptCreateDto struct {
 	Id         int       `json:"id"`
 	Name       string    `form:"name" json:"name" binding:"required"`
-	ParentId   int       `form:"parent_id" json:"parent_id" binding:"required"`
+	ParentId   int       `form:"parent_id" json:"parent_id"`
 	OrderNum   int       `form:"order_num" json:"order_num"`
 	CreateTime time.Time `type(datetime)" json:"create_time"`
 	UpdateTime time.Time `type(datetime)" json:"-"`

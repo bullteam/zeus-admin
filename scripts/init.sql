@@ -267,7 +267,7 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`menu_type
 (73,71,1,'编辑','','/auth-system/dataPerm:edit',2,'',1,'2019-07-08 02:54:58','2019-07-08 02:54:58'),
 (74,71,1,'删除','','/auth-system/dataPerm:del',2,'',1,'2019-07-08 02:55:15','2019-07-08 02:55:15'),
 (75,71,1,'浏览','','/auth-system/dataPerm:show',2,'',1,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
-(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
+(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
 (77,0,2,'任务管理','','',0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
 (78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
 (79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
@@ -413,7 +413,7 @@ CREATE TABLE `user_secret` (
 /*Data for the table `user_secret` */
 
 insert  into `user_secret`(`id`,`user_id`,`account_name`,`secret`,`is_open`,`create_time`,`update_time`) values 
-(2,2,'Zeus:2','2VMIIAS4TYELTF4Z',0,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+(2,2,'Zeus:2','2VMIIAS4TYELTF4Z',0,'2019-07-08 02:55:33','2019-07-08 02:55:33');
 
 DROP TABLE IF EXISTS `login_log`;
 
