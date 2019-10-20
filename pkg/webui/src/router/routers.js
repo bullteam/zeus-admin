@@ -362,92 +362,93 @@ export const asyncRouterMap = [
       }
     ]
   },
-  // {
-  //   path: '/logs',
-  //   component: Layout,
-  //   alwaysShow: true, // will always show the root menu
-  //   meta: {
-  //     title: 'logs',
-  //     icon: 'chart',
-  //     roles: ['/logs']
-  //   },
-  //   children: [
-  //     {
-  //       path: 'log_login',
-  //       component: () => import('@/views/logs/login'),
-  //       name: 'log_login',
-  //       meta: {
-  //         title: 'log_login',
-  //         icon: 'peoples',
-  //         roles: ['/logs/log_login']
-  //       },
-  //       auth: [
-  //         {
-  //           name: '浏览',
-  //           code: 'show'
-  //         }, {
-  //           name: '添加',
-  //           code: 'add'
-  //         }, {
-  //           name: '修改',
-  //           code: 'edit'
-  //         }, {
-  //           name: '删除',
-  //           code: 'del'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'log_operation',
-  //       component: () => import('@/views/logs/operation'),
-  //       name: 'log_operation',
-  //       meta: {
-  //         title: 'log_operation',
-  //         icon: 'peoples',
-  //         roles: ['/logs/log_operation']
-  //       },
-  //       auth: [
-  //         {
-  //           name: '浏览',
-  //           code: 'show'
-  //         }, {
-  //           name: '添加',
-  //           code: 'add'
-  //         }, {
-  //           name: '修改',
-  //           code: 'edit'
-  //         }, {
-  //           name: '删除',
-  //           code: 'del'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'log_error',
-  //       component: () => import('@/views/logs/error'),
-  //       name: 'log_error',
-  //       meta: {
-  //         title: 'log_error',
-  //         icon: 'peoples',
-  //         roles: ['/logs/log_error']
-  //       },
-  //       auth: [
-  //         {
-  //           name: '浏览',
-  //           code: 'show'
-  //         }, {
-  //           name: '添加',
-  //           code: 'add'
-  //         }, {
-  //           name: '修改',
-  //           code: 'edit'
-  //         }, {
-  //           name: '删除',
-  //           code: 'del'
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // },
+  {
+    path: '/logs',
+    component: Layout,
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'logs',
+      icon: 'chart',
+      roles: ['/logs']
+    },
+    children: [
+      {
+        path: 'log_login',
+        component: () => import('@/views/logs/login'),
+        name: 'log_login',
+        meta: {
+          title: 'log_login',
+          icon: 'peoples',
+          roles: ['/logs/log_login']
+        },
+        auth: [
+          {
+            name: '浏览',
+            code: 'show'
+          },
+          {
+            name: '添加',
+            code: 'add'
+          }, {
+            name: '修改',
+            code: 'edit'
+          }, {
+            name: '删除',
+            code: 'del'
+          }
+        ]
+      },
+      {
+        path: 'log_operation',
+        component: () => import('@/views/logs/operation'),
+        name: 'log_operation',
+        meta: {
+          title: 'log_operation',
+          icon: 'peoples',
+          roles: ['/logs/log_operation']
+        },
+        auth: [
+          {
+            name: '浏览',
+            code: 'show'
+          }, {
+            name: '添加',
+            code: 'add'
+          }, {
+            name: '修改',
+            code: 'edit'
+          }, {
+            name: '删除',
+            code: 'del'
+          }
+        ]
+      }
+      // {
+      //   path: 'log_error',
+      //   component: () => import('@/views/logs/error'),
+      //   name: 'log_error',
+      //   meta: {
+      //     title: 'log_error',
+      //     icon: 'peoples',
+      //     roles: ['/logs/log_error']
+      //   },
+      //   auth: [
+      //     {
+      //       name: '浏览',
+      //       code: 'show'
+      //     }, {
+      //       name: '添加',
+      //       code: 'add'
+      //     }, {
+      //       name: '修改',
+      //       code: 'edit'
+      //     }, {
+      //       name: '删除',
+      //       code: 'del'
+      //     }
+      //   ]
+      // }
+    ]
+  },
   { path: '*', permission: false, redirect: '/404', hidden: true }
 ]
