@@ -113,10 +113,8 @@ export default {
       this.$store.dispatch('toggleSideBar')
     },
     logout() {
-      var self = this
       this.$store.dispatch('LogOut').then(() => {
-        self.$router.push('/login')
-        // location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     },
     toUpWord() {
