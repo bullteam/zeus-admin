@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/utils"
 	"github.com/dgryski/dgoogauth"
@@ -241,6 +242,21 @@ func (a *AccountController) Close2fa(c *gin.Context) {
 	}
 
 	myAccountService.Update2FaStatus(userId, 0) //更新状态
+
+	// insert operation log
+	b, _ := json.Marshal(bindCodeDto)
+	orLogDto := dto.OperationLogDto{
+		UserId:           userId,
+		RequestUrl:       c.Request.RequestURI,
+		OperationMethod:  c.Request.Method,
+		Params:           string(b),
+		Ip:               c.ClientIP(),
+		IpLocation:       "", //TODO...待接入获取ip位置服务
+		OperationResult:  "success",
+		OperationSuccess: 1,
+		OperationContent: "Close Google 2fa",
+	}
+	_ = logService.InsertOperationLog(&orLogDto)
 	resp(c, map[string]interface{}{
 		"result": "update success!",
 	})
@@ -396,6 +412,20 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 		data := map[string]string{
 			"openid": openid,
 		}
+		// insert operation log
+		b, _ := json.Marshal(bindThirdDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           userId,
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Bind third account",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"result": data,
 		})
@@ -424,6 +454,20 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 		data := map[string]bool{
 			"state": true,
 		}
+		// insert operation log
+		b, _ := json.Marshal(UnBindDingtalkDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           userId,
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Unbind third account",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"result": data,
 		})

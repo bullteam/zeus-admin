@@ -105,7 +105,9 @@ insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values
 (73,'p','超级管理员','/auth-system/menu:add','*','root','',''),
 (74,'p','超级管理员','/auth-system/menu:edit','*','root','',''),
 (75,'p','超级管理员','/auth-system/menu:del','*','root','',''),
-(76,'g','2','crawlnovel管理员','','','','');
+(76,'p','超级管理员','/logs/log_login:show','*','root','',''),
+(77,'p','超级管理员','/logs/log_operation:show','*','root','','');
+(78,'g','2','crawlnovel管理员','','','','');
 
 /*Table structure for table `data_perm` */
 
@@ -268,12 +270,16 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`menu_type
 (73,71,1,'编辑','','/auth-system/dataPerm:edit',2,'',1,'2019-07-08 02:54:58','2019-07-08 02:54:58'),
 (74,71,1,'删除','','/auth-system/dataPerm:del',2,'',1,'2019-07-08 02:55:15','2019-07-08 02:55:15'),
 (75,71,1,'浏览','','/auth-system/dataPerm:show',2,'',1,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
-(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
+(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
 (77,0,2,'任务管理','','',0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
 (78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
 (79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
-(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31');
-
+(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31'),
+(83,0,1,'日志管理','/logs','',1,'',3,'2019-10-19 23:47:06','2019-10-19 23:47:13'),
+(84,83,1,'登录日志','/logs/log_login','',1,'',1,'2019-10-19 23:48:06','2019-10-19 23:48:06'),
+(85,84,1,'浏览','','/logs/log_login:show',2,'',1,'2019-10-19 23:50:54','2019-10-19 23:50:54'),
+(86,83,1,'操作日志','/logs/log_operation','',1,'', 2,'2019-10-19 23:52:49','2019-10-19 23:53:41'),
+(87,86,1,'浏览','','/logs/log_operation:show',2,'',1,'2019-10-19 23:54:11','2019-10-19 23:54:11');
 /*Table structure for table `role` */
 
 DROP TABLE IF EXISTS `role`;
@@ -415,7 +421,49 @@ CREATE TABLE `user_secret` (
 /*Data for the table `user_secret` */
 
 insert  into `user_secret`(`id`,`user_id`,`account_name`,`secret`,`is_open`,`create_time`,`update_time`) values 
-(2,2,'Zeus:2','2VMIIAS4TYELTF4Z',0,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+(2,2,'Zeus:2','2VMIIAS4TYELTF4Z',0,'2019-07-08 02:55:33','2019-07-08 02:55:33');
+
+DROP TABLE IF EXISTS `login_log`;
+
+CREATE TABLE `login_log` (
+   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+   `user_id` int(11) DEFAULT NULL COMMENT '登录用户',
+   `client` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录终端型号',
+   `platform` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录系统',
+   `login_result` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作信息',
+   `login_status` tinyint(1) DEFAULT NULL COMMENT '1 成功 0失败',
+   `login_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
+   `ip` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip',
+   `ip_location` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip地理位置',
+   `operation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+   `operation_content` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作内容',
+   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志'
+
+DROP TABLE IF EXISTS `operation_log`;
+
+CREATE TABLE `operation_log` (
+   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+   `log_no` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '日志编号',
+   `module` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作模块',
+   `request_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求地址',
+   `operation_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作方法',
+   `params` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求参数',
+   `exception_stack` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '异常堆栈信息',
+   `operation_result` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作结果',
+   `operation_success` tinyint(1) DEFAULT NULL COMMENT '操作结果 1 成功/2 失败',
+   `user_id` int(11) DEFAULT NULL COMMENT '操作人员',
+   `ip` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip',
+   `ip_location` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip地理位置',
+   `operation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+   `operation_content` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作内容',
+   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志'
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

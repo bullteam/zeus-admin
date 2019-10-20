@@ -3,12 +3,10 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
-	"zeus/pkg/api/service"
 )
 
-var logService = service.LogService{}
-
 type LogController struct {
+	BaseController
 }
 
 // @Summary 登录日志信息

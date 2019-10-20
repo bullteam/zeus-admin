@@ -225,5 +225,21 @@ export default {
     topnum: '排序',
     name: '名称',
     actions: '操作'
+  },
+  log: {
+    id: 'ID',
+    user_id: '用户id',
+    client: '登录终端',
+    platform: '登录平台',
+    login_result: '备注',
+    login_status: '登录结果',
+    ip: '登录IP',
+    ip_location: '登录城市',
+    login_time: '登录时间',
+    request_url: '请求地址',
+    operation_method: '请求方法',
+    operation_result: '操作结果',
+    operation_content: '操作内容',
+    operation_time: '操作时间'
   }
 }
