@@ -32,6 +32,22 @@ func (LoginLogDao) Lists(listDto dto.GeneralListDto) ([]LoginLog, int64) {
 	return loginLogList, total
 }
 
+// Insert Login Log
+func (LoginLogDao) Create(loginLogDto *dto.LoginLogDto) error {
+	db := GetDb()
+	loginLogModel := model.LoginLog{
+		UserId:           loginLogDto.UserId,
+		Client:           loginLogDto.Client,
+		Platform:         loginLogDto.Platform,
+		Ip:               loginLogDto.Ip,
+		IpLocation:       loginLogDto.IpLocation,
+		LoginResult:      loginLogDto.LoginResult,
+		LoginStatus:      loginLogDto.LoginStatus,
+		OperationContent: loginLogDto.OperationContent,
+	}
+	return db.Create(&loginLogModel).Error
+}
+
 //Get
 func (OperationLogDao) Detail(id int) OperationLog {
 	var dataModel OperationLog
@@ -48,4 +64,21 @@ func (OperationLogDao) Lists(listDto dto.GeneralListDto) ([]OperationLog, int64)
 	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&dataModelList)
 	db.Model(&OperationLog{}).Count(&total)
 	return dataModelList, total
+}
+
+// Insert OperationLog
+func (ol OperationLogDao) Create(orLogDto *dto.OperationLogDto) error {
+	db := GetDb()
+	operationLogModel := model.OperationLog{
+		RequestUrl:       orLogDto.RequestUrl,
+		OperationMethod:  orLogDto.OperationMethod,
+		Params:           orLogDto.Params,
+		OperationResult:  orLogDto.OperationResult,
+		OperationSuccess: orLogDto.OperationSuccess,
+		UserId:           orLogDto.UserId,
+		Ip:               orLogDto.Ip,
+		IpLocation:       orLogDto.IpLocation,
+		OperationContent: orLogDto.OperationContent,
+	}
+	return db.Create(&operationLogModel).Error
 }

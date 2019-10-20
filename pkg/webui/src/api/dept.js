@@ -37,7 +37,7 @@ export function updateDept(id, data) {
 
 export function checkMemberDept(data) {
   return request({
-    url: 'dept/check-no-member',
+    url: 'v1/depts/' + data.id + '/check-no-member',
     method: 'post',
     data: qs.stringify(data)
   })
@@ -45,7 +45,7 @@ export function checkMemberDept(data) {
 
 export function deleteDept(data) {
   return request({
-    url: 'v1/depts',
+    url: 'v1/depts/' + data.id,
     method: 'delete',
     data: qs.stringify(data)
   })
