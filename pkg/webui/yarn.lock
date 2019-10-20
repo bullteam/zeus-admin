@@ -4,8 +4,8 @@
 
 "@ams-team/ams@^0.18.4":
   version "0.18.4"
-  resolved "https://registry.npm.taobao.org/@ams-team/ams/download/@ams-team/ams-0.18.4.tgz#cb53c39aa3880a9b4c2cfa9f87f337d11b96235f"
-  integrity sha1-y1PDmqOICptMLPqfh/M30RuWI18=
+  resolved "https://registry.yarnpkg.com/@ams-team/ams/-/ams-0.18.4.tgz#cb53c39aa3880a9b4c2cfa9f87f337d11b96235f"
+  integrity sha512-PCdIWltQhW73RVE/KU3dbzEMQP4QSaf4XUEvvfsizubbm2EuiatlH4mxGF2TAVn8gavAKMBGhF3/x7wezP/9bw==
   dependencies:
     "@babel/runtime" "^7.4.4"
     element-ui "^2.12.0"
