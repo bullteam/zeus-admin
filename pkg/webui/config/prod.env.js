@@ -5,5 +5,5 @@ module.exports = {
 
   // 以下是不同 api 接口配置
   // 主域名
-  'ZEUS_ADMIN_URL': '"//api.auth.bullteam.cn"'
+  'ZEUS_ADMIN_URL': '"//localhost:8090"'
 }
