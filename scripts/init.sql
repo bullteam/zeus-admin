@@ -104,7 +104,9 @@ insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values
 (72,'p','超级管理员','/auth-system/menu:show','*','root','',''),
 (73,'p','超级管理员','/auth-system/menu:add','*','root','',''),
 (74,'p','超级管理员','/auth-system/menu:edit','*','root','',''),
-(75,'p','超级管理员','/auth-system/menu:del','*','root','','');
+(75,'p','超级管理员','/auth-system/menu:del','*','root','',''),
+(76,'p','超级管理员','/logs/log_login:show','*','root','',''),
+(77,'p','超级管理员','/logs/log_operation:show','*','root','','');
 
 /*Table structure for table `data_perm` */
 
@@ -271,8 +273,12 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`menu_type
 (77,0,2,'任务管理','','',0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
 (78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
 (79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
-(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31');
-
+(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31'),
+(83,0,1,'日志管理','/logs','',1,'',3,'2019-10-19 23:47:06','2019-10-19 23:47:13'),
+(84,83,1,'登录日志','/logs/log_login','',1,'',1,'2019-10-19 23:48:06','2019-10-19 23:48:06'),
+(85,84,1,'浏览','','/logs/log_login:show',2,'',1,'2019-10-19 23:50:54','2019-10-19 23:50:54'),
+(86,83,1,'操作日志','/logs/log_operation','',1,'', 2,'2019-10-19 23:52:49','2019-10-19 23:53:41'),
+(87,86,1,'浏览','','/logs/log_operation:show',2,'',1,'2019-10-19 23:54:11','2019-10-19 23:54:11');
 /*Table structure for table `role` */
 
 DROP TABLE IF EXISTS `role`;
