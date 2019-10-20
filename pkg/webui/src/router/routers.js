@@ -58,6 +58,11 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/install',
+    component: () => import('@/views/install/index'),
+    hidden: true
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'dashboard',

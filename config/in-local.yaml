@@ -21,9 +21,10 @@ casbin:
     rule_0: config/casbin/rbac_model_0.conf
 cors:
   enable: false
-  allow_origins: "*"
-  allow_headers: []
-  allow_credentials: true
+  allow_origins: ["*"]
+  allow_headers: ["*"]
+  allow_methods: ["GET","POST","OPTIONS","PUT","DELETE"]
+  allow_credentials: false
   max_age: 7200
 lang:
   types: zh-CN|en-US

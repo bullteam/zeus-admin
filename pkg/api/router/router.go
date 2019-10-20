@@ -14,11 +14,13 @@ import (
 var jwtAuth *jwt.GinJWTMiddleware
 var jwtAuths *jwt.GinJWTMiddleware
 
-func Init(e *gin.Engine) {
+func SetUp(e *gin.Engine, cors bool) {
 	e.Use(
 		gin.Recovery(),
 	)
-	//e.Use(cors.Default()) // CORS
+	if cors {
+		e.Use(middleware.Cors())
+	}
 	e.Use(middleware.SetLangVer())
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/healthcheck", controllers.Healthy)
