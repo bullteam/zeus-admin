@@ -24,8 +24,14 @@ func SetUp(e *gin.Engine, cors bool) {
 	e.Use(middleware.SetLangVer())
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/healthcheck", controllers.Healthy)
+
 	//version fragment
 	v1 := e.Group("/v1")
+
+	//install
+	InstallController := controllers.InstallController{}
+	v1.POST("/install", InstallController.Install)
+
 	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
 	//api handlers
