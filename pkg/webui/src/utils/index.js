@@ -334,7 +334,7 @@ export const getDomainHost = (host = location.host) => {
   const arrDomainHost = host.split('.')
   const domain = arrDomainHost[arrDomainHost.length - 2] || ''
   const suffix = arrDomainHost[arrDomainHost.length - 1] || ''
-
+  console.log(host, `${domain}.${suffix}`)
   return {
     host,
     domain: `${domain}.${suffix}`
