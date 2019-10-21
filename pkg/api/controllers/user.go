@@ -87,6 +87,7 @@ func (u *UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
 	if u.BindAndValidate(c, &userDto) {
 		user := userService.Create(userDto)
+		// TODO insert ldap user
 		// insert operation log
 		b, _ := json.Marshal(userDto)
 		orLogDto := dto.OperationLogDto{
@@ -119,6 +120,7 @@ func (u *UserController) Edit(c *gin.Context) {
 	if u.BindAndValidate(c, &userDto) {
 		log.Info(fmt.Sprintf("%#v", userDto))
 		affected := userService.Update(userDto)
+		// TODO update ldap user
 		if affected > 0 {
 			// insert operation log
 			b, _ := json.Marshal(userDto)
