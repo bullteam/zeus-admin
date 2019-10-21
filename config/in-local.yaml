@@ -47,11 +47,15 @@ ldap:
   tls: false
   userdn: cn=admin,dc=bullteam,dc=com
 mode: debug
-mysql:
-  dsn: root:123456@tcp(127.0.0.1:3306)/zeus?charset=utf8&parseTime=True&loc=Local
-  pool:
-    max: 20
-    min: 5
+database:
+  driver: sqlite
+  sqlite:
+    dsn: data/zeus.db
+  mysql:
+    dsn: root:root@tcp(127.0.0.1:3306)/auth?charset=utf8&parseTime=True&loc=Local
+    pool:
+      max: 20
+      min: 5
 redis:
   host: 127.0.0.1:6379
   pool:

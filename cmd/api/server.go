@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"zeus/pkg/api/cache"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/domain/perm"
@@ -23,7 +22,7 @@ var (
 	port     string
 	loglevel uint8
 	cors     bool
-	single   bool
+	cluster  bool
 	//StartCmd : set up restful api server
 	StartCmd = &cobra.Command{
 		Use:     "server",
@@ -44,7 +43,7 @@ func init() {
 	StartCmd.PersistentFlags().StringVarP(&port, "port", "p", "8082", "Tcp port server listening on")
 	StartCmd.PersistentFlags().Uint8VarP(&loglevel, "loglevel", "l", 0, "Log level")
 	StartCmd.PersistentFlags().BoolVarP(&cors, "cors", "x", false, "Enable cors headers")
-	StartCmd.PersistentFlags().BoolVarP(&single, "single", "s", true, "single-alone mode or distributed mod")
+	StartCmd.PersistentFlags().BoolVarP(&cluster, "cluster", "s", false, "cluster-alone mode or distributed mod")
 }
 
 func usage() {
@@ -79,11 +78,11 @@ func setup() {
 	//4.Set up database connection
 	dao.Setup()
 	//5.Set up cache
-	cache.SetUp()
+	//cache.SetUp()
 	//6.Set up ldap
 	ldap.Setup()
 	//7.Set up permission handler
-	perm.SetUp(single)
+	perm.SetUp(cluster)
 	middleware.InitLang()
 }
 

@@ -11,7 +11,6 @@ require (
 	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
 	github.com/billcobbler/casbin-redis-watcher v0.0.0-20180829182704-69cab1cdcf44
 	github.com/casbin/casbin v1.8.3
-	github.com/denisenkom/go-mssqldb v0.0.0-20190515213511-eb9f6a1743f3 // indirect
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/garyburd/redigo v1.6.0 // indirect
@@ -24,8 +23,7 @@ require (
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/icepy/go-dingtalk v0.0.0-20180430151047-e8997a391814
-	github.com/jinzhu/gorm v1.9.8
-	github.com/lib/pq v1.1.1 // indirect
+	github.com/jinzhu/gorm v1.9.11
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/pkg/errors v0.8.1
