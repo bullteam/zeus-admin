@@ -1,61 +1,63 @@
+casbin:
+  model:
+    rule_0: config/casbin/rbac_model_0.conf
+cors:
+  allow_credentials: false
+  allow_headers:
+    - '*'
+  allow_methods:
+    - GET
+    - POST
+    - OPTIONS
+    - PUT
+    - DELETE
+  allow_origins:
+    - '*'
+  enable: false
+  max_age: 7200
+dingtalk:
+  snsappid: dingoa1uudyxl2dcjvqpij
+  snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
+domain: bullteam.local
+email:
+  from: xxxxxx@qq.com
+  host: smtp.qq.com
+  password: xxxxxxxx
+  port: 25
+  username: xxx@qq.com
+jwt:
+  expiresat: 3600*24*1
+  key:
+    private: keys/jwt_private_key.pem
+    public: keys/jwt_public_key.pem
+lang:
+  names: 简体中文|English
+  types: zh-CN|en-US
+ldap:
+  addr: 127.0.0.1:389
+  attributes:
+    - cn
+    - displayName
+    - mail
+  authfilter: (&(uid=%s))
+  basedn: dc=bullteam,dc=com
+  binddn: cn=admin,dc=bullteam,dc=com
+  bindpass: zeus@admin#123456
+  starttls: false
+  tls: false
+  userdn: cn=admin,dc=bullteam,dc=com
 mode: release
 database:
   driver: sqlite
   sqlite:
     dsn: data/zeus.db
   mysql:
-    dsn: >-
-      ${MYSQL_USERNAME}:${MYSQL_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DB}?charset=utf8&parseTime=True&loc=Local
+    dsn: ${MYSQL_USERNAME}:${MYSQL_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DB}?charset=utf8&parseTime=True&loc=Local
     pool:
-      min: 5
       max: 20
+      min: 5
 redis:
-  host: ${REDIS_HOST}:${REDIS_PORT}
-  auth: ${REDIS_PASSWORD}
+  host: 127.0.0.1:6379
   pool:
-    min: 3
     max: 20
-jwt:
-  key:
-    private: keys/jwt_private_key.pem
-    public: keys/jwt_public_key.pem
-  expiresat: 3600*24*1
-casbin:
-  model:
-    rule_0: config/casbin/rbac_model_0.conf
-cors:
-  enable: false
-  allow_origins: "*"
-  allow_headers: []
-  allow_credentials: true
-  max_age: 7200
-lang:
-  types: zh-CN|en-US
-  names: 简体中文|English
-domain: bullteam.local
-dingtalk:
-  CorpId:
-  CorpSecret:
-  AgentID:
-  SSOSecret:
-  SNSAppID: dingoatdqa3hb5eta4tlvi
-  SNSSecret: RHNFFTJXh-uxQ2YosdoBt8u0gqBGwWhe8J3dMwqf5gz41vHq9zHvc7D9WNZSDuJ0
-email:
-  username: xxx@qq.com
-  password: xxxxxxxx
-  host: smtp.qq.com
-  port: 25
-  from: xxxxxx@qq.com
-ldap:
-  addr: zeus_ldap:389
-  baseDn: dc=bullteam,dc=com
-  userDn: cn=admin,dc=bullteam,dc=com
-  bindDn: cn=admin,dc=bullteam,dc=com
-  bindPass: zeus@admin#123456
-  authFilter: (&(uid=%s))
-  attributes:
-    - "cn"
-    - "displayName"
-    - "mail"
-  tls: false
-  startTLS: false
+    min: 3
