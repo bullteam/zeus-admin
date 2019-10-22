@@ -14,16 +14,24 @@ import (
 var jwtAuth *jwt.GinJWTMiddleware
 var jwtAuths *jwt.GinJWTMiddleware
 
-func Init(e *gin.Engine) {
+func SetUp(e *gin.Engine, cors bool) {
 	e.Use(
 		gin.Recovery(),
 	)
-	//e.Use(cors.Default()) // CORS
+	if cors {
+		e.Use(middleware.Cors())
+	}
 	e.Use(middleware.SetLangVer())
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/healthcheck", controllers.Healthy)
+
 	//version fragment
 	v1 := e.Group("/v1")
+
+	//install
+	InstallController := controllers.InstallController{}
+	v1.POST("/install", InstallController.Install)
+
 	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
 	//api handlers
@@ -106,7 +114,7 @@ func Init(e *gin.Engine) {
 	v1.POST("/depts", deptController.Create)
 	v1.PUT("/depts/:id", deptController.Edit)
 	v1.DELETE("/depts/:id", deptController.Delete)
-	v1.POST("/depts/:id/check-no-member", deptController.Delete)
+	v1.POST("/depts/:id/check-no-member", deptController.CheckNoMember)
 
 	// data permission
 	dataPermController := &controllers.DatePermController{}
@@ -124,4 +132,9 @@ func Init(e *gin.Engine) {
 	//request log
 	v1.GET("/log/operations", logController.OperationLogLists)
 	v1.GET("/log/operations/:id", logController.OperationLogDetail)
+
+	e.LoadHTMLGlob("./pkg/webui/dist/*.html")        // 添加入口index.html
+	e.LoadHTMLFiles("./pkg/webui/dist/static/*/*")   // 添加资源路径
+	e.Static("/static", "./pkg/webui/dist/static")   // 添加资源路径
+	e.StaticFile("/", "./pkg/webui/dist/index.html") //前端接口
 }

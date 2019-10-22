@@ -32,3 +32,8 @@ func (LogService) OperationLogDetail(dto dto.GeneralGetDto) OperationLog {
 func (LogService) OperationLogLists(dto dto.GeneralListDto) ([]OperationLog, int64) {
 	return operationLogDao.Lists(dto)
 }
+
+//Insert Operation Log
+func (LogService) InsertOperationLog(orLogDto *dto.OperationLogDto) error {
+	return operationLogDao.Create(orLogDto)
+}

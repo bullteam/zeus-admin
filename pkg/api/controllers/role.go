@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
@@ -75,6 +76,20 @@ func (r *RoleController) Create(c *gin.Context) {
 			ErrAddFail.Moreinfo = ""
 			return
 		}
+		// insert operation log
+		b, _ := json.Marshal(roleDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Create Role",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"result": newRole,
 		})
@@ -96,6 +111,20 @@ func (r *RoleController) Edit(c *gin.Context) {
 			fail(c, ErrNoRecord)
 			return
 		}
+		// insert operation log
+		b, _ := json.Marshal(roleDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Edit Role",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.UpdateDone")
 	}
 }
@@ -114,6 +143,20 @@ func (r *RoleController) Delete(c *gin.Context) {
 			fail(c, ErrNoRecord)
 			return
 		}
+		// insert operation log
+		b, _ := json.Marshal(roleDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Delete Role",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.DeleteDone")
 	}
 }

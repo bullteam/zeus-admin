@@ -237,7 +237,39 @@ const installBlock = {
     }
   },
   blocks: {
-
+    sqlTitle: {
+      type: 'title',
+      options: {
+        title: '数据库设置'
+      },
+      style: {
+        marginLeft: '350px',
+        marginBottom: '10px'
+      },
+      slot: 'top'
+    },
+    commonTitle: {
+      type: 'title',
+      options: {
+        title: '一般设置'
+      },
+      style: {
+        marginLeft: '350px',
+        marginBottom: '10px'
+      },
+      slot: 'field:dataPath'
+    },
+    operaTitle: {
+      type: 'title',
+      options: {
+        title: '可选设置'
+      },
+      style: {
+        marginLeft: '350px',
+        marginBottom: '10px'
+      },
+      slot: 'field:logPath'
+    }
   }
 }
 

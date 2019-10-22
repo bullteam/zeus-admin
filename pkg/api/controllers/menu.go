@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
@@ -64,6 +65,22 @@ func (m *MenuController) Create(c *gin.Context) {
 	var menuDto dto.MenuCreateDto
 	if m.BindAndValidate(c, &menuDto) {
 		menu := menuService.Create(menuDto)
+		if menu.Id > 0 {
+			// insert operation log
+			b, _ := json.Marshal(menuDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           int(c.Value("userId").(float64)),
+				RequestUrl:       c.Request.RequestURI,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Create Menu",
+			}
+			_ = logService.InsertOperationLog(&orLogDto)
+		}
 		resp(c, map[string]interface{}{
 			"result": menu,
 		})
@@ -81,9 +98,21 @@ func (u *MenuController) Edit(c *gin.Context) {
 	var menuDto dto.MenuEditDto
 	if u.BindAndValidate(c, &menuDto) {
 		affected := menuService.Update(menuDto)
-		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+		if affected > 0 {
+			// insert operation log
+			b, _ := json.Marshal(menuDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           int(c.Value("userId").(float64)),
+				RequestUrl:       c.Request.RequestURI,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Edit Menu",
+			}
+			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}
@@ -108,6 +137,20 @@ func (m *MenuController) Delete(c *gin.Context) {
 			}
 			return
 		}
+		// insert operation log
+		b, _ := json.Marshal(menuDto)
+		orLogDto := dto.OperationLogDto{
+			UserId:           int(c.Value("userId").(float64)),
+			RequestUrl:       c.Request.RequestURI,
+			OperationMethod:  c.Request.Method,
+			Params:           string(b),
+			Ip:               c.ClientIP(),
+			IpLocation:       "", //TODO...待接入获取ip位置服务
+			OperationResult:  "success",
+			OperationSuccess: 1,
+			OperationContent: "Delete Menu",
+		}
+		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.DeletedDone")
 	}
 }

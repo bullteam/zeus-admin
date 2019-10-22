@@ -13,17 +13,19 @@ var (
 )
 
 // SetUp permission handler
-func SetUp() {
+func SetUp(cluster bool) {
 	enforcer = casbin.NewEnforcer(viper.GetString("casbin.model.rule_0"), adapter.NewMysqlAdapter())
-	//Distributed watcher
-	w, _ := rediswatcher.NewWatcher(viper.GetString("redis.host"), rediswatcher.Password(viper.GetString("redis.auth")))
-	enforcer.SetWatcher(w)
-	// @Overwrite
-	// See if policy changed and do distributed notification
-	_ = w.SetUpdateCallback(func(s string) {
-		log.Info("Casbin policies changed")
-		_ = enforcer.LoadPolicy()
-	})
+	if cluster {
+		//Distributed watcher
+		w, _ := rediswatcher.NewWatcher(viper.GetString("redis.host"), rediswatcher.Password(viper.GetString("redis.auth")))
+		enforcer.SetWatcher(w)
+		// @Overwrite
+		// See if policy changed and do distributed notification
+		_ = w.SetUpdateCallback(func(s string) {
+			log.Info("Casbin policies changed")
+			_ = enforcer.LoadPolicy()
+		})
+	}
 }
 
 // SetUpForTest : for unit tests

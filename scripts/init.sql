@@ -1,6 +1,6 @@
 /*
 SQLyog Enterprise v13.1.1 (64 bit)
-MySQL - 5.6.28-log : Database - zeus
+MySQL - 5.7.26 : Database - zeus
 *********************************************************************
 */
 
@@ -30,23 +30,11 @@ CREATE TABLE `casbin_rule` (
   `v4` varchar(255) NOT NULL DEFAULT '',
   `v5` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `casbin_rule` */
 
 insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values 
-(1,'p','日志管理','/logs/log_login:show','*','root','',''),
-(2,'p','日志管理','/logs/log_login:add','*','root','',''),
-(3,'p','日志管理','/logs/log_login:edit','*','root','',''),
-(4,'p','日志管理','/logs/log_login:del','*','root','',''),
-(5,'p','日志管理','/logs/log_operation:show','*','root','',''),
-(6,'p','日志管理','/logs/log_operation:add','*','root','',''),
-(7,'p','日志管理','/logs/log_operation:edit','*','root','',''),
-(8,'p','日志管理','/logs/log_operation:del','*','root','',''),
-(9,'p','日志管理','/logs/log_error:show','*','root','',''),
-(10,'p','日志管理','/logs/log_error:add','*','root','',''),
-(11,'p','日志管理','/logs/log_error:edit','*','root','',''),
-(12,'p','日志管理','/logs/log_error:del','*','root','',''),
 (13,'p','系统设置','/auth-system/menu:show','*','root','',''),
 (14,'p','系统设置','/auth-system/menu:add','*','root','',''),
 (15,'p','系统设置','/auth-system/menu:edit','*','root','',''),
@@ -105,7 +93,24 @@ insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values
 (73,'p','超级管理员','/auth-system/menu:add','*','root','',''),
 (74,'p','超级管理员','/auth-system/menu:edit','*','root','',''),
 (75,'p','超级管理员','/auth-system/menu:del','*','root','',''),
-(76,'g','2','crawlnovel管理员','','','','');
+(76,'g','2','crawlnovel管理员','','','',''),
+(83,'g','2','日志管理','','','',''),
+(84,'p','日志管理','/logs/log_login:show','*','root','',''),
+(85,'p','日志管理','/logs/log_login:add','*','root','',''),
+(86,'p','日志管理','/logs/log_login:edit','*','root','',''),
+(87,'p','日志管理','/logs/log_login:del','*','root','',''),
+(88,'p','日志管理','/logs/log_operation:show','*','root','',''),
+(89,'p','日志管理','/logs/log_operation:add','*','root','',''),
+(90,'p','日志管理','/logs/log_operation:edit','*','root','',''),
+(91,'p','日志管理','/logs/log_operation:del','*','root','',''),
+(92,'p','超级管理员','/logs/log_login:show','*','root','',''),
+(93,'p','超级管理员','/logs/log_login:add','*','root','',''),
+(94,'p','超级管理员','/logs/log_login:edit','*','root','',''),
+(95,'p','超级管理员','/logs/log_login:del','*','root','',''),
+(96,'p','超级管理员','/logs/log_operation:show','*','root','',''),
+(97,'p','超级管理员','/logs/log_operation:add','*','root','',''),
+(98,'p','超级管理员','/logs/log_operation:edit','*','root','',''),
+(99,'p','超级管理员','/logs/log_operation:del','*','root','','');
 
 /*Table structure for table `data_perm` */
 
@@ -125,7 +130,7 @@ CREATE TABLE `data_perm` (
   `remarks` varchar(500) NOT NULL DEFAULT '' COMMENT '说明',
   PRIMARY KEY (`id`),
   KEY `idx_data_perm_domain_id` (`domain_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='数据权限管理';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='数据权限管理';
 
 /*Data for the table `data_perm` */
 
@@ -196,6 +201,32 @@ CREATE TABLE `log` (
 
 /*Data for the table `log` */
 
+/*Table structure for table `login_log` */
+
+DROP TABLE IF EXISTS `login_log`;
+
+CREATE TABLE `login_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_id` int(11) DEFAULT NULL COMMENT '登录用户',
+  `client` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录终端型号',
+  `platform` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '登录系统',
+  `login_result` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作信息',
+  `login_status` tinyint(1) DEFAULT NULL COMMENT '1 成功 0失败',
+  `login_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
+  `ip` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip',
+  `ip_location` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip地理位置',
+  `operation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+  `operation_content` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作内容',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志';
+
+/*Data for the table `login_log` */
+
+insert  into `login_log`(`id`,`user_id`,`client`,`platform`,`login_result`,`login_status`,`login_time`,`ip`,`ip_location`,`operation_time`,`operation_content`,`create_time`,`last_update_time`) values 
+(1,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36','Standard Login','Standard Login Success',1,'2019-10-20 21:36:32','223.192.253.163','','2019-10-20 21:36:32','POST /v1/users/login','2019-10-20 21:36:32','2019-10-20 21:36:32');
+
 /*Table structure for table `menu` */
 
 DROP TABLE IF EXISTS `menu`;
@@ -214,7 +245,7 @@ CREATE TABLE `menu` (
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_menu_domain_id` (`domain_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
 
 /*Data for the table `menu` */
 
@@ -272,7 +303,61 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`menu_type
 (77,0,2,'任务管理','','',0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
 (78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
 (79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
-(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31');
+(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31'),
+(83,0,1,'日志管理','','',0,'table',1,'2019-10-20 21:22:56','2019-10-20 21:22:56'),
+(84,83,1,'登录日志','/logs/log_login','/logs/log_login',1,'clipboard',1,'2019-10-20 21:25:06','2019-10-20 21:25:06'),
+(85,83,1,'操作日志','/logs/log_operation','/logs/log_operation',1,'documentation',1,'2019-10-20 21:25:39','2019-10-20 21:25:39'),
+(86,84,1,'浏览','','/logs/log_login:show',2,'',1,'2019-10-20 21:30:09','2019-10-20 21:30:09'),
+(87,84,1,'添加','','/logs/log_login:add',2,'',1,'2019-10-20 21:30:53','2019-10-20 21:30:53'),
+(88,84,1,'修改','','/logs/log_login:edit',2,'',1,'2019-10-20 21:31:17','2019-10-20 21:31:17'),
+(89,84,1,'删除','','/logs/log_login:del',2,'',1,'2019-10-20 21:31:39','2019-10-20 21:31:39'),
+(90,85,1,'浏览','','/logs/log_operation:show',2,'',1,'2019-10-20 21:32:36','2019-10-20 21:32:36'),
+(91,85,1,'添加','','/logs/log_operation:add',2,'',1,'2019-10-20 21:32:56','2019-10-20 21:32:56'),
+(92,85,1,'修改','','/logs/log_operation:edit',2,'',1,'2019-10-20 21:33:16','2019-10-20 21:33:16'),
+(93,85,1,'删除','','/logs/log_operation:del',2,'',1,'2019-10-20 21:33:44','2019-10-20 21:33:44');
+
+/*Table structure for table `operation_log` */
+
+DROP TABLE IF EXISTS `operation_log`;
+
+CREATE TABLE `operation_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `log_no` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '日志编号',
+  `module` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作模块',
+  `request_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求地址',
+  `operation_method` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作方法',
+  `params` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求参数',
+  `exception_stack` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '异常堆栈信息',
+  `operation_result` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作结果',
+  `operation_success` tinyint(1) DEFAULT NULL COMMENT '操作结果 1 成功/2 失败',
+  `user_id` int(11) DEFAULT NULL COMMENT '操作人员',
+  `ip` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip',
+  `ip_location` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ip地理位置',
+  `operation_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+  `operation_content` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '操作内容',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
+
+/*Data for the table `operation_log` */
+
+insert  into `operation_log`(`id`,`log_no`,`module`,`request_url`,`operation_method`,`params`,`exception_stack`,`operation_result`,`operation_success`,`user_id`,`ip`,`ip_location`,`operation_time`,`operation_content`,`create_time`,`last_update_time`) values 
+(2,'','','/v1/menus','POST','{\"name\":\"日志管理\",\"parent_id\":0,\"domain_id\":1,\"url\":\"\",\"perms\":\"\",\"menu_type\":0,\"icon\":\"table\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:22:56','Create Menu','2019-10-20 21:22:56','2019-10-20 21:22:56'),
+(3,'','','/v1/menus','POST','{\"name\":\"登录日志\",\"parent_id\":83,\"domain_id\":1,\"url\":\"/logs/log_login\",\"perms\":\"/logs/log_login\",\"menu_type\":1,\"icon\":\"clipboard\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:25:06','Create Menu','2019-10-20 21:25:06','2019-10-20 21:25:06'),
+(4,'','','/v1/menus','POST','{\"name\":\"操作日志\",\"parent_id\":83,\"domain_id\":1,\"url\":\"/logs/log_operation\",\"perms\":\"/logs/log_operation\",\"menu_type\":1,\"icon\":\"documentation\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:25:39','Create Menu','2019-10-20 21:25:39','2019-10-20 21:25:39'),
+(5,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,85,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,85,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:26:05','Edit Role','2019-10-20 21:26:05','2019-10-20 21:26:05'),
+(6,'','','/v1/roles/3','PUT','{\"id\":3,\"name\":\"日志管理\",\"domain_id\":1,\"remark\":\"日志管理\",\"menu_ids\":\"83,84,85\",\"menu_ids_ele\":\"83,84,85\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:26:29','Edit Role','2019-10-20 21:26:29','2019-10-20 21:26:29'),
+(7,'','','/v1/menus','POST','{\"name\":\"浏览\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:show\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:30:09','Create Menu','2019-10-20 21:30:09','2019-10-20 21:30:09'),
+(8,'','','/v1/menus','POST','{\"name\":\"添加\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:add\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:30:53','Create Menu','2019-10-20 21:30:53','2019-10-20 21:30:53'),
+(9,'','','/v1/menus','POST','{\"name\":\"修改\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:edit\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:31:17','Create Menu','2019-10-20 21:31:17','2019-10-20 21:31:17'),
+(10,'','','/v1/menus','POST','{\"name\":\"删除\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:del\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:31:39','Create Menu','2019-10-20 21:31:39','2019-10-20 21:31:39'),
+(11,'','','/v1/menus','POST','{\"name\":\"浏览\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:show\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:32:36','Create Menu','2019-10-20 21:32:36','2019-10-20 21:32:36'),
+(12,'','','/v1/menus','POST','{\"name\":\"添加\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:add\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:32:56','Create Menu','2019-10-20 21:32:56','2019-10-20 21:32:56'),
+(13,'','','/v1/menus','POST','{\"name\":\"修改\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:edit\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:33:16','Create Menu','2019-10-20 21:33:16','2019-10-20 21:33:16'),
+(14,'','','/v1/menus','POST','{\"name\":\"删除\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:del\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:33:44','Create Menu','2019-10-20 21:33:44','2019-10-20 21:33:44'),
+(15,'','','/v1/roles/3','PUT','{\"id\":3,\"name\":\"日志管理\",\"domain_id\":1,\"remark\":\"日志管理\",\"menu_ids\":\"83,84,86,87,88,89,85,90,91,92,93\",\"menu_ids_ele\":\"83,84,86,87,88,89,85,90,91,92,93\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:33:59','Edit Role','2019-10-20 21:33:59','2019-10-20 21:33:59'),
+(16,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:34:08','Edit Role','2019-10-20 21:34:08','2019-10-20 21:34:08');
 
 /*Table structure for table `role` */
 
@@ -293,9 +378,9 @@ CREATE TABLE `role` (
 /*Data for the table `role` */
 
 insert  into `role`(`id`,`name`,`domain_id`,`role_name`,`remark`,`menu_ids`,`menu_ids_ele`) values 
-(1,'超级管理员',1,'超级管理员','超级管理员','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,77,78,79,80,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,77,78,79,80,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27'),
+(1,'超级管理员',1,'超级管理员','超级管理员','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27'),
 (2,'系统设置',1,'系统设置','系统设置','17,18,19,20,21,22,23,24,25,26,27','17,18,19,20,21,22,23,24,25,26,27'),
-(3,'日志管理',1,'日志管理','日志管理','28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43','28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43'),
+(3,'日志管理',1,'日志管理','日志管理','83,84,86,87,88,89,85,90,91,92,93','83,84,86,87,88,89,85,90,91,92,93'),
 (4,'crawlnovel管理员',2,'crawlnovel管理员','','77,78,79,80','77,78,79,80');
 
 /*Table structure for table `role_data_perm` */
@@ -332,7 +417,7 @@ CREATE TABLE `user` (
   `last_login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `title` tinytext COLLATE utf8mb4_unicode_ci COMMENT '职位，头衔',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 /*Data for the table `user` */
 

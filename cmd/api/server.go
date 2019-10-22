@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"zeus/pkg/api/cache"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/domain/perm"
@@ -22,6 +21,8 @@ var (
 	config   string
 	port     string
 	loglevel uint8
+	cors     bool
+	cluster  bool
 	//StartCmd : set up restful api server
 	StartCmd = &cobra.Command{
 		Use:     "server",
@@ -41,6 +42,8 @@ func init() {
 	StartCmd.PersistentFlags().StringVarP(&config, "config", "c", "./config/in-local.yaml", "Start server with provided configuration file")
 	StartCmd.PersistentFlags().StringVarP(&port, "port", "p", "8082", "Tcp port server listening on")
 	StartCmd.PersistentFlags().Uint8VarP(&loglevel, "loglevel", "l", 0, "Log level")
+	StartCmd.PersistentFlags().BoolVarP(&cors, "cors", "x", false, "Enable cors headers")
+	StartCmd.PersistentFlags().BoolVarP(&cluster, "cluster", "s", false, "cluster-alone mode or distributed mod")
 }
 
 func usage() {
@@ -75,16 +78,16 @@ func setup() {
 	//4.Set up database connection
 	dao.Setup()
 	//5.Set up cache
-	cache.SetUp()
+	//cache.SetUp()
 	//6.Set up ldap
 	ldap.Setup()
 	//7.Set up permission handler
-	perm.SetUp()
+	perm.SetUp(cluster)
 	middleware.InitLang()
 }
 
 func run() error {
 	engine := gin.Default()
-	router.Init(engine)
+	router.SetUp(engine, cors)
 	return engine.Run(":" + port)
 }
