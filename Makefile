@@ -25,8 +25,8 @@ print:
 	@echo TAG:$(TAG)
 	@echo -e "\n"
 build:
-	@echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compile server<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-	$(shell $(BASE_PATH)/scripts/build.sh)
+	@echo -e ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compile server<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+	$(BASE_PATH)/scripts/build.sh
 	@echo -e "\n"
 run:
 	@echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>run directly<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
@@ -34,9 +34,9 @@ run:
 	@echo -e "\n"
 ui:
 	@echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compile ui<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-	$(shell $(BASE_PATH)/scripts/ui.sh)
+	$(BASE_PATH)/scripts/ui.sh
 	@echo -e "\n"
 docker:
 	@echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>docker build & push<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-	$(shell $(BASE_PATH)/scripts/docker.sh ${tag})
+	$(BASE_PATH)/scripts/docker.sh ${tag}
 	@echo -e "\n"
