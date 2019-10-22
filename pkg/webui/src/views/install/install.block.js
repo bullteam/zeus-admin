@@ -2,7 +2,7 @@ const installBlock = {
   type: 'form',
   ctx: 'edit',
   data: {
-    sqlType: 'mysql',
+    sqlType: 'sqlite',
     dataPath: '/data/gitea/gitea.db',
     siteName: 'Gitea: Git with a cup of tea',
     rootPath: '/data/git/repositories',
@@ -29,10 +29,10 @@ const installBlock = {
         props: {
           multiple: false,
           options: {
+            sqlite: 'SQLite3',
             mysql: 'MySQL',
-            PostgreSQL: 'postgresql',
-            mssql: 'MSSQL',
-            sqlite: 'SQLite3'
+            postgresql: 'PostgreSQL',
+            mssql: 'MSSQL'
           }
         },
         label: '数据库类型',
@@ -43,7 +43,85 @@ const installBlock = {
         type: 'text',
         label: '数据库文件路径',
         desc: 'SQLite3 数据库的文件路径。如果以服务的方式运行 Gitea，请输入绝对路径。',
-        rules: [{ require: true }]
+        rules: [{ require: true }],
+        show: {
+          name: 'sqlType',
+          value: 'sqlite'
+        }
+      },
+      sqlHost: {
+        default: 'localhost:3306',
+        type: 'text',
+        label: '数据库主机',
+        rules: [{ require: true }],
+        show(data) {
+          return data.sqlType === 'mysql' || data.sqlType === 'postgresql' || data.sqlType === 'mssql'
+        }
+      },
+      sqlUser: {
+        default: 'root',
+        type: 'text',
+        label: '用户名',
+        rules: [{ require: true }],
+        show(data) {
+          return data.sqlType === 'mysql' || data.sqlType === 'postgresql' || data.sqlType === 'mssql'
+        }
+      },
+      sqlPassword: {
+        type: 'text',
+        label: '数据库用户密码',
+        rules: [{ require: true }],
+        show(data) {
+          return data.sqlType === 'mysql' || data.sqlType === 'postgresql' || data.sqlType === 'mssql'
+        }
+      },
+      sqlName: {
+        default: 'zeus',
+        type: 'text',
+        label: '数据库名称',
+        rules: [{ require: true }],
+        show(data) {
+          return data.sqlType === 'mysql' || data.sqlType === 'postgresql' || data.sqlType === 'mssql'
+        }
+      },
+      sqlChatset: {
+        type: 'select',
+        label: '字符集',
+        default: 'utf8',
+        rules: [{ require: true }],
+        props: {
+          multiple: false,
+          options: {
+            utf8: 'utf8',
+            utf8mb4: 'utf8mb4'
+          }
+        },
+        show: {
+          name: 'sqlType',
+          value: 'mysql'
+        }
+      },
+      sqlSSL: {
+        default: '0',
+        type: 'select',
+        label: 'SSl',
+        rules: [{ require: true }],
+        props: {
+          multiple: false,
+          options: {
+            0: 'Disable',
+            1: 'Require',
+            2: 'Verify Full'
+          }
+        },
+        show: {
+          name: 'sqlType',
+          value: 'postgresql'
+        }
+      },
+      _: {
+        type: 'text',
+        show: false
       },
       siteName: {
         type: 'text',
@@ -257,7 +335,7 @@ const installBlock = {
         marginLeft: '350px',
         marginBottom: '10px'
       },
-      slot: 'field:dataPath'
+      slot: 'field:_'
     },
     operaTitle: {
       type: 'title',
