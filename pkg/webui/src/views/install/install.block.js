@@ -3,16 +3,11 @@ const installBlock = {
   ctx: 'edit',
   data: {
     sqlType: 'sqlite',
-    dataPath: '/data/gitea/gitea.db',
-    siteName: 'Gitea: Git with a cup of tea',
-    rootPath: '/data/git/repositories',
-    lfsPath: '/data/git/lfs',
-    userName: 'git',
-    sshServerName: 'localhost',
-    sshPort: '22',
-    port: '3000',
-    baseUrl: 'http://localhost:3000/',
-    logPath: '/data/gitea/log',
+    dataPath: '/data/zeus.db',
+    siteName: 'Zeus 宙斯权限后台管理系统',
+    port: '8082',
+    baseUrl: 'http://localhost:8082/',
+    logPath: '/data/log',
     hideEmail: 'noreply.example.org'
   },
   props: {
@@ -36,13 +31,13 @@ const installBlock = {
           }
         },
         label: '数据库类型',
-        desc: 'Gitea 需要 MySQL、PostgreSQL、MSSQL 或 SQLite3。',
+        desc: 'Zeus 需要 MySQL、PostgreSQL、MSSQL 或 SQLite3。',
         rules: [{ require: true }]
       },
       dataPath: {
         type: 'text',
         label: '数据库文件路径',
-        desc: 'SQLite3 数据库的文件路径。如果以服务的方式运行 Gitea，请输入绝对路径。',
+        desc: 'SQLite3 数据库的文件路径。如果以服务的方式运行 Zeus，请输入绝对路径。',
         rules: [{ require: true }],
         show: {
           name: 'sqlType',
@@ -129,33 +124,11 @@ const installBlock = {
         desc: '您可以在此输入您公司的名称。',
         rules: [{ require: true }]
       },
-      rootPath: {
-        type: 'text',
-        label: '仓库根目录',
-        desc: '所有远程 Git 仓库将保存到此目录。',
-        rules: [{ require: true }]
-      },
-      lfsPath: {
-        type: 'text',
-        label: 'LFS根目录',
-        desc: '存储为Git LFS的文件将被存储在此目录。留空禁用LFS'
-      },
       userName: {
         type: 'text',
         label: '以用户名运行',
         desc: '输入 Zeus 运行的操作系统用户名。请注意, 此用户必须具有对存储库根路径的访问权限。',
         rules: [{ require: true }]
-      },
-      sshServerName: {
-        type: 'text',
-        label: 'SSH 服务域名',
-        desc: '用于 SSH 克隆的域名或主机地址。',
-        rules: [{ require: true }]
-      },
-      sshPort: {
-        type: 'text',
-        label: 'SSH 服务域名',
-        desc: 'SSH 服务器的端口号，为空则禁用它。'
       },
       port: {
         type: 'text',

@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <h3>初始配置</h3>
-    <div class="info">如果您正在使用 Docker 容器运行 Gitea，请务必先仔细阅读 <a target="blank" href="https://github.com/bullteam/zeus-admin">官方文档</a> 后再对本页面进行填写。</div>
+    <div class="info">如果您正在使用 Docker 容器运行 Zeus，请务必先仔细阅读 <a target="blank" href="https://github.com/bullteam/zeus-admin">官方文档</a> 后再对本页面进行填写。</div>
     <ams-block v-if="ready" name="install"></ams-block>
   </div>
 </template>
