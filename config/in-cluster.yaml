@@ -46,7 +46,7 @@ ldap:
   starttls: false
   tls: false
   userdn: cn=admin,dc=bullteam,dc=com
-mode: release
+mode: debug
 database:
   driver: sqlite
   sqlite:
