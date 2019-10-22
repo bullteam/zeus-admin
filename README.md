@@ -58,7 +58,7 @@
 <img src="./docs/images/arch.png" height=920></img>
 
 ### 快速开始
-> 该操作在linux 下生效，需要golang 1.11+ 编译环境,设置git clone 权限
+> 该操作在linux 下生效，需要golang 1.11+ & node v9 + 编译环境,设置git clone 权限
 ````
 git clone git@github.com:bullteam/zeus-admin.git
 export GOPROXY=https://goproxy.cn
@@ -105,15 +105,10 @@ mysql> source ./scripts/init.sql;
 * [client 演示源码：crawlnovel]([http](https://github.com/bullteam/crawlnovel)) [演示地址：http://crawlnovel.bullteam.cn/admin](http://crawlnovel.bullteam.cn/admin)
   
 # 接入权限系统 client demo
-* [python-client](https://github.com/bullteam/zeusclient-python)
-* [php-client](https://github.com/bullteam/zeusclient-php)
-* [java-client](https://github.com/bullteam/zeusclient-java)
-* [go-client](https://github.com/bullteam/zeusclient-go)
-
-# API文档
-[1]: https://docs.docker.com/ "Docker Documentation"
-[2]: https://github.com/yeasy/docker_practice "docker_practice"
-
+* [python-client](https://github.com/bullteam/zeusclient-python) 已提供
+* [php-client](https://github.com/bullteam/zeusclient-php) 已提供
+* [java-client](https://github.com/bullteam/zeusclient-java) 已提供
+* [go-client](https://github.com/bullteam/zeusclient-go) 暂缺
 
 ## 相关截图
 
@@ -134,11 +129,11 @@ mysql> source ./scripts/init.sql;
 
 ## 贡献代码
 
-非常欢迎优秀的开发者来贡献ArtiPub。在提Pull Request之前，请首先阅读源码，了解原理和架构。如果不懂的可以加作者微信 tikazyq1 注明 ArtiPub。
+非常欢迎优秀的开发者来贡献Zeus。在提Pull Request之前，请首先阅读源码，了解原理和架构。如果不懂的可以加他的微信 wutongci 注明 Zeus。
 
 ## 社区
 
-如果您觉得 Zeus 对您有帮助，请扫描下方群二维码，如果群满，请加微信 wutongci 并注明`zeus 开源交流`，我会将你拉入群。
+如果您觉得 Zeus 对您有帮助，请扫描下方群二维码，如果群满，请加微信 wutongci 并注明`zeus 开源交流`，他会将你拉入群。
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/bullteam/zeus-admin/master/docs/images/wechatqun.jpg" height="360">
