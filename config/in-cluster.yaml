@@ -1,4 +1,4 @@
-mode: debug
+mode: release
 database:
   driver: sqlite
   sqlite:
