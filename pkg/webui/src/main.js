@@ -31,7 +31,7 @@ Vue.use(Element, {
 })
 
 Vue.use(ams)
-
+ams.config({ resource: { api: { successCode: 200 }}})
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

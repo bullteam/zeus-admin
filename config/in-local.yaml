@@ -15,16 +15,25 @@ cors:
   - '*'
   enable: false
   max_age: 7200
+database:
+  driver: sqlite
+  mysql:
+    dsn: root:root@tcp(127.0.0.1:3306)/auth?charset=utf8&parseTime=True&loc=Local
+    pool:
+      max: 20
+      min: 5
+  sqlite:
+    dsn: data/zeus.db
 dingtalk:
   snsappid: dingoa1uudyxl2dcjvqpij
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
 domain: bullteam.local
 email:
-  from: xxxxxx@qq.com
-  host: smtp.qq.com
-  password: xxxxxxxx
+  smtpServer: smtp.qq.com
+  smtpAddress: xxxxxx@qq.com
+  smtpPassword: xxxxxxxx
   port: 25
-  username: xxx@qq.com
+  smtpUser: xxx@qq.com
 jwt:
   expiresat: 3600*24*1
   key:
@@ -47,19 +56,12 @@ ldap:
   tls: false
   userdn: cn=admin,dc=bullteam,dc=com
 mode: debug
-database:
-  driver: sqlite
-  sqlite:
-    dsn: data/zeus.db
-  mysql:
-    dsn: root:root@tcp(127.0.0.1:3306)/auth?charset=utf8&parseTime=True&loc=Local
-    pool:
-      max: 20
-      min: 5
 redis:
   host: 127.0.0.1:6379
   pool:
     max: 20
     min: 3
-test:
-  test: "1111"
+security:
+  install_lock: false
+
+
