@@ -1,22 +1,25 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	//"github.com/spf13/viper"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/service"
 )
 
 type InstallController struct {
 	BaseController
 }
 
+var InstallService = service.InstallService{}
+
 func (i *InstallController) Install(c *gin.Context) {
-	//viper.Set("test.test", "1111")
-	//err := viper.WriteConfig()
 	var InstallDTO dto.InstallDTO
 	if i.BindAndValidate(c, &InstallDTO) {
-		fmt.Println(InstallDTO)
+		ret := InstallService.Install(InstallDTO)
+		if !ret {
+			fail(c, ErrInstall)
+			return
+		}
 	}
 	resp(c, map[string]interface{}{
 		"result": InstallDTO,

@@ -18,6 +18,7 @@ type ControllerError struct {
 
 var (
 	Err404                = &ControllerError{404, "err.Err404", "", ""}
+	ErrInstall            = &ControllerError{10000, "err.ErrInstall", "", ""}
 	ErrInputData          = &ControllerError{10001, "err.ErrInputData", "", ""}
 	ErrDatabase           = &ControllerError{10002, "err.ErrDatabase", "", ""}
 	ErrDupUser            = &ControllerError{10003, "err.ErrDupUser", "", ""}

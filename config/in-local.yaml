@@ -1,3 +1,8 @@
+base:
+  baseurl: http://localhost:8082/
+  logpath: /data/log
+  port: 8082
+  sitename: Zeus 宙斯权限后台管理系统
 casbin:
   model:
     rule_0: config/casbin/rbac_model_0.conf
@@ -29,11 +34,11 @@ dingtalk:
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
 domain: bullteam.local
 email:
-  smtpServer: smtp.qq.com
-  smtpAddress: xxxxxx@qq.com
-  smtpPassword: xxxxxxxx
   port: 25
-  smtpUser: xxx@qq.com
+  smtpaddress: xxxxxx@qq.com
+  smtppassword: xxxxxxxx
+  smtpserver: smtp.qq.com
+  smtpuser: xxx@qq.com
 jwt:
   expiresat: 3600*24*1
   key:
@@ -62,6 +67,4 @@ redis:
     max: 20
     min: 3
 security:
-  install_lock: false
-
-
+  install_lock: true
