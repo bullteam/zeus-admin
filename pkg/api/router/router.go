@@ -32,6 +32,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	//install
 	InstallController := controllers.InstallController{}
 	v1.POST("/install", InstallController.Install)
+	v1.GET("/install/isLock", InstallController.IsLock)
 
 	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
