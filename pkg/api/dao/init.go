@@ -30,7 +30,6 @@ func Setup() {
 			db.LogMode(true)
 		}
 	case DRIVER_MYSQL:
-	default:
 		conn = viper.GetString("database.mysql.dsn")
 		db, err = gorm.Open("mysql", conn)
 		if err != nil {
@@ -42,6 +41,8 @@ func Setup() {
 				db.LogMode(true)
 			}
 		}
+	default:
+		log.Fatal("We do not support this kind of storage system yet!")
 	}
 	log.Info("Successfully connect to database")
 }
@@ -54,5 +55,6 @@ func Shutdown() error {
 
 // GetDb - get a database connection
 func GetDb() *gorm.DB {
+	log.Info(fmt.Sprintf("%#v", db))
 	return db
 }
