@@ -79,7 +79,7 @@ const installBlock = {
           return data.sqlType === 'mysql' || data.sqlType === 'postgresql' || data.sqlType === 'mssql'
         }
       },
-      sqlChatset: {
+      sqlCharset: {
         type: 'select',
         label: '字符集',
         default: 'utf8',

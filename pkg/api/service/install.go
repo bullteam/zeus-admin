@@ -22,12 +22,14 @@ func (us InstallService) Install(dto dto.InstallDTO) bool {
 	viper.Set("base.isEnableCode", dto.IsEnableCode)
 	viper.Set("base.isEnableAccess", dto.IsEnableAccess)
 
-	//mysql
+	//sql
+	viper.Set("database.driver", dto.SqlType)
+	viper.Set("database.sqlite.dsn", dto.DataPath)
 	viper.Set("database.mysql.host", dto.SqlHost)
 	viper.Set("database.mysql.user", dto.SqlUser)
 	viper.Set("database.mysql.password", dto.SqlPassword)
 	viper.Set("database.mysql.name", dto.SqlName)
-	viper.Set("database.mysql.chatset", dto.SqlChatset)
+	viper.Set("database.mysql.charset", dto.SqlCharset)
 	viper.Set("database.mysql.ssl", dto.SqlSSL)
 
 	//Email

@@ -20,7 +20,6 @@ const DRIVER_SQLITE = "sqlite"
 // Setup : Connect to mysql database
 func Setup() {
 	var err error
-	var conn string
 	switch viper.Get("database.driver") {
 	case DRIVER_SQLITE:
 		db, err = gorm.Open("sqlite3", viper.GetString("database.sqlite.dsn"))
@@ -30,8 +29,14 @@ func Setup() {
 			db.LogMode(true)
 		}
 	case DRIVER_MYSQL:
-		conn = viper.GetString("database.mysql.dsn")
-		db, err = gorm.Open("mysql", conn)
+		host := viper.GetString("database.mysql.host")
+		user := viper.GetString("database.mysql.user")
+		password := viper.GetString("database.mysql.password")
+		name := viper.GetString("database.mysql.name")
+		chatset := viper.GetString("database.mysql.chatset")
+
+		dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local", user, password, host, name, chatset)
+		db, err = gorm.Open("mysql", dsn)
 		if err != nil {
 			log.Error(fmt.Sprintf("Failed to connect mysql %s", err.Error()))
 		} else {

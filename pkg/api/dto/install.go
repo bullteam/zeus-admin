@@ -11,7 +11,7 @@ type InstallDTO struct {
 	SqlUser              string `form:"sqlUser" json:"sqlUser"`
 	SqlPassword          string `form:"sqlPassword" json:"sqlPassword"`
 	SqlName              string `form:"sqlName" json:"sqlName"`
-	SqlChatset           string `form:"sqlChatset" json:"sqlChatset"`
+	SqlCharset           string `form:"sqlCharset" json:"sqlCharset"`
 	SqlSSL               bool   `form:"sqlSSL" json:"sqlSSL"`
 	IsShowMailSetting    bool   `form:"isShowMailSetting" json:"isShowMailSetting"`
 	SmtpServer           string `form:"smtpServer" json:"smtpServer"`
