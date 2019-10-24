@@ -59,14 +59,18 @@
 
 ### 快速开始
 > 该操作在linux 下生效，需要golang 1.11+ & node v9 + 编译环境,设置git clone 权限
+
+> 前后统一访问入口部署(前后统一)
 ````
 git clone git@github.com:bullteam/zeus-admin.git
 export GOPROXY=https://goproxy.cn
 export GO111MODULE=on
+#后端编译
 go build -o zeus
+#前端编译
 cd pkg/webui
 npm install
-npm run build:prod
+npm run build:work
 cd ~/zeus-admin
 
 export MYSQL_USERNAME=root
@@ -81,6 +85,35 @@ export REDIS_PASSWORD=""
 ./zeus server -c ./config/in-local.yaml
 
 ````
+
+> 前后不同入口部署(前后分离)
+
+````
+git clone git@github.com:bullteam/zeus-admin.git
+export GOPROXY=https://goproxy.cn
+export GO111MODULE=on
+#后端编译
+go build -o zeus
+#前端编译
+cd pkg/webui
+npm install
+#正常情况下，会生成dist目录，可自己部署web服务器(如nginx)，提供前端服务
+npm run build:prod
+cd ~/zeus-admin
+
+export MYSQL_USERNAME=root
+export MYSQL_PASSWORD=123456
+export MYSQL_HOST=127.0.0.1
+export MYSQL_DB=zeus
+export MYSQL_PORT=3306
+export REDIS_HOST=127.0.0.1
+export REDIS_PORT=6379
+export REDIS_PASSWORD=""
+
+#修改in-local.yamln内部的project.merge为false,然后再启动
+./zeus server -c ./config/in-local.yaml --cors=true
+````
+
 
 # 数据移值
 
