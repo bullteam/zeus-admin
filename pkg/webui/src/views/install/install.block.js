@@ -204,9 +204,14 @@ const installBlock = {
     }
   },
   actions: {
-    install() {
-      // todo: 调用install接口
-      console.log(this.data)
+    async init() {
+      const res = await this.$ams.request({
+        url: '/v1/install/isLock',
+        method: 'get'
+      })
+      if (res.data === true) {
+        location.href = '/'
+      }
     }
   },
   operations: {
