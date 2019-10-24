@@ -61,5 +61,5 @@ redis:
   pool:
     max: 20
     min: 3
-test:
-  test: "1111"
+project:
+  merge: true

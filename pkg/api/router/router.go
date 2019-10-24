@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "zeus/docs"
@@ -133,8 +134,10 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.GET("/log/operations", logController.OperationLogLists)
 	v1.GET("/log/operations/:id", logController.OperationLogDetail)
 
-	e.LoadHTMLGlob("./pkg/webui/dist/*.html")        // 添加入口index.html
-	e.LoadHTMLFiles("./pkg/webui/dist/static/*/*")   // 添加资源路径
-	e.Static("/static", "./pkg/webui/dist/static")   // 添加资源路径
-	e.StaticFile("/", "./pkg/webui/dist/index.html") //前端接口
+	if viper.GetBool("project.merge") {
+		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html
+		//e.LoadHTMLFiles("./pkg/webui/dist/static/*/*")   // 添加资源路径
+		e.Static("/static", "./pkg/webui/dist/static")   // 添加资源路径
+		e.StaticFile("/", "./pkg/webui/dist/index.html") //前端接口
+	}
 }

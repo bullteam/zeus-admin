@@ -46,7 +46,7 @@ ldap:
   starttls: false
   tls: false
   userdn: cn=admin,dc=bullteam,dc=com
-mode: debug
+mode: release
 database:
   driver: sqlite
   sqlite:
@@ -61,3 +61,5 @@ redis:
   pool:
     max: 20
     min: 3
+project:
+  merge: true
