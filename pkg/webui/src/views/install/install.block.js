@@ -14,9 +14,9 @@ const installBlock = {
   },
   resource: {
     api: {
-      prefix: '',
+      prefix: process.env['ZEUS_ADMIN_URL'],
       contentType: 'form',
-      create: process.env['ZEUS_ADMIN_URL'] + '/v1/install'
+      create: '/v1/install'
     },
     fields: {
       sqlType: {
