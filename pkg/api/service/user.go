@@ -144,13 +144,15 @@ func (UserService) AssignRoleByRoleIds(userId string, roles string) {
 }
 
 //AssignRole - assign roles to specific user
+// 这个方法同时作用与用户角色，用户用户组
 func (UserService) AssignRole(userId string, roleNames []string) {
-	var groups [][]string
+	var roles [][]string
 	for _, role := range roleNames {
-		groups = append(groups, []string{userId, role})
+		roles = append(roles, []string{userId, role})
 	}
-	user.OverwriteRoles(userId, groups)
+	user.OverwriteRoles(userId, roles)
 }
+
 
 //GetRelatedDomains - get related domains
 func (UserService) GetRelatedDomains(uid string) []model.Domain {

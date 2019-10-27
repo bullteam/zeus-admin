@@ -26,16 +26,16 @@ database:
   driver: sqlite
   mysql:
     charset: utf8
-    host: localhost:3306
+    host: 127.0.0.1:3306
     name: zeus
-    password: ""
+    password: root
     pool:
       max: 20
       min: 5
     ssl: false
     user: root
   sqlite:
-    dsn: /data/zeus.db
+    dsn: data/zeus.db
 dingtalk:
   snsappid: dingoa1uudyxl2dcjvqpij
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz

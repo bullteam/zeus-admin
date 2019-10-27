@@ -226,3 +226,33 @@ func TestUserGroupPermission(t *testing.T) {
 		},
 	})
 }
+
+func TestAddUserGroup(t *testing.T) {
+	AddGroupRole("u4", "role-4")
+	AddGroup("100", "u4")
+	runTestCases(t, []permissionCases{
+		{
+			args:  []interface{}{"100", "zone-4", "*", "department-4"},
+			want:  true,
+			label: "Enfource with user group policy",
+		},
+	})
+}
+
+func TestDelUserGroup(t *testing.T) {
+	runTestCases(t, []permissionCases{
+		{
+			args:  []interface{}{"100", "zone-4", "*", "department-4"},
+			want:  true,
+			label: "Enfource with user group policy",
+		},
+	})
+	DelGroupPerm("u4", "role-4")
+	runTestCases(t, []permissionCases{
+		{
+			args:  []interface{}{"100", "zone-4", "*", "department-4"},
+			want:  false,
+			label: "Enfource with user group policy",
+		},
+	})
+}

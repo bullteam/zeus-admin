@@ -33,9 +33,10 @@ func Setup() {
 		user := viper.GetString("database.mysql.user")
 		password := viper.GetString("database.mysql.password")
 		name := viper.GetString("database.mysql.name")
-		chatset := viper.GetString("database.mysql.chatset")
+		charset := viper.GetString("database.mysql.charset")
 
-		dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local", user, password, host, name, chatset)
+		dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local", user, password, host, name, charset)
+		log.Info(dsn)
 		db, err = gorm.Open("mysql", dsn)
 		if err != nil {
 			log.Error(fmt.Sprintf("Failed to connect mysql %s", err.Error()))
@@ -60,6 +61,5 @@ func Shutdown() error {
 
 // GetDb - get a database connection
 func GetDb() *gorm.DB {
-	log.Info(fmt.Sprintf("%#v", db))
 	return db
 }
