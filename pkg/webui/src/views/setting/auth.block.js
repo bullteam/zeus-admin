@@ -2,16 +2,16 @@ const settingBlock = {
   type: 'form',
   ctx: 'edit',
   data: {
-    ldapUrl: 'ldap://0.0.0.0',
-    ldapSearchDN: 'cn=domain,dc=example,dc=com',
-    ldapSearchPassword: '',
-    ldapBaseDN: 'dc=example,dc=com',
-    ldapFilter: '',
-    ldapUID: 'cn',
-    ldapGroupBaseDN: 'ou=groups,dc=example,dc=com',
-    ldapGroupFilter: 'objectclass=groupOfNames',
-    ldapGroupGID: 'cn',
-    ldapGroupAdminDN: 'ou=groups,dc=example,dc=com'
+    // ldapUrl: 'ldap://0.0.0.0',
+    // ldapSearchDN: 'cn=domain,dc=example,dc=com',
+    // ldapSearchPassword: '',
+    // ldapBaseDN: 'dc=example,dc=com',
+    // ldapFilter: '',
+    // ldapUID: 'cn',
+    // ldapGroupBaseDN: 'ou=groups,dc=example,dc=com',
+    // ldapGroupFilter: 'objectclass=groupOfNames',
+    // ldapGroupGID: 'cn',
+    // ldapGroupAdminDN: 'ou=groups,dc=example,dc=com'
   },
   props: {
     labelWidth: '200px'
@@ -20,7 +20,8 @@ const settingBlock = {
     api: {
       prefix: process.env['ZEUS_ADMIN_URL'],
       contentType: 'form',
-      create: '/v1/setting/ldap'
+      create: '/v1/setting/ldap',
+      read: '/v1/setting/ldap'
     },
     fields: {
       ldapUrl: {
@@ -85,7 +86,8 @@ const settingBlock = {
       }
     }
   },
-  actions: {
+  events: {
+    init: '@read'
   },
   style: {
     width: '60%'
