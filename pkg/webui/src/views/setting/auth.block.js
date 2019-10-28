@@ -20,7 +20,7 @@ const settingBlock = {
     api: {
       prefix: process.env['ZEUS_ADMIN_URL'],
       contentType: 'form',
-      create: '/v1/setting/authenication'
+      create: '/v1/setting/ldap'
     },
     fields: {
       ldapUrl: {
@@ -86,6 +86,9 @@ const settingBlock = {
     }
   },
   actions: {
+  },
+  style: {
+    width: '60%'
   },
   operations: {
     install: {

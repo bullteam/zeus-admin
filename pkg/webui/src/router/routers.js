@@ -470,7 +470,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/setting/auth'),
         name: 'auth',
         meta: {
-          title: '鉴权配置',
+          title: 'Ldap配置',
           icon: 'lock'
         }
       },

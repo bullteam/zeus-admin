@@ -135,6 +135,13 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.GET("/log/operations", logController.OperationLogLists)
 	v1.GET("/log/operations/:id", logController.OperationLogDetail)
 
+	// Ldap & email setting
+	settingController := controllers.SettingController{}
+	v1.GET("/setting/ldap", settingController.LdapList)
+	v1.POST("/setting/ldap", settingController.LdapUpdate)
+	v1.GET("/setting/email", settingController.EmailList)
+	v1.POST("/setting/email", settingController.EmailUpdate)
+
 	if viper.GetBool("project.merge") {
 		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html
 		//e.LoadHTMLFiles("./pkg/webui/dist/static/*/*")   // 添加资源路径
