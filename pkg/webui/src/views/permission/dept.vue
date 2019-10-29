@@ -117,7 +117,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        start: 0,
+        skip: 0,
         limit: 20,
         importance: undefined,
         title: undefined,
@@ -158,7 +158,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      this.listQuery.start = (this.listQuery.page - 1) * 20
+      this.listQuery.skip = (this.listQuery.page - 1) * this.listQuery.limit
       fetchDeptList(this.listQuery).then(response => {
         this.list = response.data.result
         this.total = response.data.total

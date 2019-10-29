@@ -153,7 +153,6 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 	user.OverwriteRoles(userId, roles)
 }
 
-
 //GetRelatedDomains - get related domains
 func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	var domains []model.Domain
