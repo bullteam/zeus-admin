@@ -148,6 +148,9 @@ func (UserService) AssignRoleByRoleIds(userId string, roles string) {
 func (UserService) AssignRole(userId string, roleNames []string) {
 	var roles [][]string
 	for _, role := range roleNames {
+		if userId == "" || role == "" {
+			continue
+		}
 		roles = append(roles, []string{userId, role})
 	}
 	user.OverwriteRoles(userId, roles)
