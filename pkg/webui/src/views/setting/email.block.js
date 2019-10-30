@@ -39,6 +39,9 @@ const settingBlock = {
   events: {
     init: '@read'
   },
+  style: {
+    width: '60%'
+  },
   operations: {
     install: {
       type: 'button',

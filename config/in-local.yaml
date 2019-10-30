@@ -41,17 +41,12 @@ dingtalk:
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
 domain: bullteam.local
 email:
-  port: 25
   smtp:
-    address: ""
-    password: ""
-    port: 8082
-    server: ""
-    user: ""
-  smtpaddress: xxxxxx@qq.com
-  smtppassword: xxxxxxxx
-  smtpserver: smtp.qq.com
-  smtpuser: xxx@qq.com
+    address: "ss@163.com"
+    password: "xxxxxx"
+    port: 25
+    server: "smtp.163.com"
+    user: "ss@163.com"
 jwt:
   expiresat: 3600*24*1
   key:

@@ -345,22 +345,22 @@ func (a *AccountController) ThirdList(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
 // @Router /v1/account/third [get]
-func (a *AccountController) Verifymail(c *gin.Context) {
-	verifyEmailDto := &dto.VerifyEmailDto{}
-	if a.BindAndValidate(c, &verifyEmailDto) {
-		username := viper.GetString("email.username")
-		password := viper.GetString("email.password")
-		host := viper.GetString("email.host")
-		port := viper.GetInt("email.port")
-		from := viper.GetString("email.from")
+func (a *AccountController) SendVerifymail(c *gin.Context) {
+	var verifyDto dto.VerifyEmailDto
+	if a.BindAndValidate(c, &verifyDto) {
+		username := viper.GetString("email.smtp.user")
+		password := viper.GetString("email.smtp.password")
+		host := viper.GetString("email.smtp.server")
+		port := viper.GetInt("email.smtp.port")
+		from := viper.GetString("email.smtp.address")
 		if port == 0 {
 			port = 25
 		}
 		config := fmt.Sprintf(`{"username":"%s","password":"%s","host":"%s","port":%d,"from":"%s"}`, username, password, host, port, from)
 		temail := utils.NewEMail(config)
-		temail.To = []string{verifyEmailDto.Email} //指定收件人邮箱地址
-		temail.From = from                         //指定发件人的邮箱地址
-		temail.Subject = "验证账号邮件"                  //指定邮件的标题
+		temail.To = []string{verifyDto.Email} //指定收件人邮箱地址
+		temail.From = from                    //指定发件人的邮箱地址
+		temail.Subject = "验证账号邮件"             //指定邮件的标题
 		temail.HTML = mailTemplate.MailBody()
 		err := temail.Send()
 		if err != nil {
