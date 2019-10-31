@@ -51,6 +51,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 
+	v1.Use(middleware.PermCheck)
 	//user
 	v1.GET("/users", userController.List)
 	v1.GET("/users/:id", userController.Get)
