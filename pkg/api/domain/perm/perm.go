@@ -40,9 +40,19 @@ func AddGroup(params ...interface{}) bool {
 	return enforcer.AddGroupingPolicy(params...)
 }
 
+// AddGroupRole : assign role to a user group
+func AddGroupRole(params ...interface{}) bool {
+	return enforcer.AddNamedGroupingPolicy("g2", params...)
+}
+
 // DelGroup : method of group policy deleting
 func DelGroup(params ...interface{}) bool {
 	return enforcer.RemoveGroupingPolicy(params...)
+}
+
+// DelGroupPerm : delete user group - role connection
+func DelGroupPerm(params ...interface{}) bool {
+	return enforcer.RemoveNamedGroupingPolicy("g2", params...)
 }
 
 // GetGroupsByUser : get groups by specific user

@@ -27,6 +27,14 @@ func (m Menu) GetMenusPermByIds(ids string) []model.Menu {
 	return menus
 }
 
+// GetByAlias - get row by alias
+func (m Menu) GetByAlias(alias string) model.Menu {
+	var menu model.Menu
+	db := GetDb()
+	db.Where("alias = ? and menu_type=2", alias).First(&menu)
+	return menu
+}
+
 //Get - get single menu info
 func (m Menu) Get(id int, preload bool) model.Menu {
 	var menu model.Menu

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/pkg/errors"
 	"strconv"
 	"strings"
@@ -40,8 +39,6 @@ func (rs RoleService) AssignPermission(roleId int, menuIds string) {
 				policies = append(policies, []string{roleData.RoleName, m.Perms, "*", roleData.Domain.Code})
 			}
 		}
-		log.Info(roleData.Domain.Code)
-		log.Info(fmt.Sprintf("%#v", policies))
 		role.OverwritePerm(roleData.RoleName, roleData.Domain.Code, policies)
 	} else {
 		role.DeletePerm(roleData.RoleName)

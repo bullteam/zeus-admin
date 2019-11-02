@@ -1,8 +1,7 @@
 package login
 
 import (
-	"fmt"
-	dingtalk "github.com/icepy/go-dingtalk/src"
+	dingtalk "github.com/bullteam/go-dingtalk/src"
 	"github.com/spf13/viper"
 )
 
@@ -18,12 +17,10 @@ func GetDingTalkUserInfo(code string) (UserInfo *DingtalkUserInfo, err error) {
 	c := GetCompanyDingTalkClient()
 	_ = c.RefreshSNSAccessToken()
 	perInfo, err := c.SNSGetPersistentCode(code)
-	fmt.Print(perInfo, err)
 	if err != nil {
 		return nil, err
 	}
 	snstoken, err := c.SNSGetSNSToken(perInfo.OpenID, perInfo.PersistentCode)
-	fmt.Print(snstoken)
 	if err != nil {
 		return nil, err
 	}
@@ -43,5 +40,6 @@ func GetCompanyDingTalkClient() *dingtalk.DingTalkClient {
 	return dingtalk.NewDingTalkCompanyClient(&dingtalk.DTConfig{
 		SNSAppID:  viper.GetString("dingtalk.SNSAppID"),
 		SNSSecret: viper.GetString("dingtalk.SNSSecret"),
+		CachePath: viper.GetString("dingtalk.CachePath"),
 	})
 }

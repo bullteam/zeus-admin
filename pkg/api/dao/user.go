@@ -29,7 +29,7 @@ func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
-	db.Preload("Department").Preload("Roles").Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
+	db.Preload("Department"). /*Preload("Roles")*/ Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
 	db.Model(&model.User{}).Count(&total)
 	return users, total
 }

@@ -11,7 +11,6 @@
 <script>
 import { getUserDomain } from '@/api/login'
 import { getToken } from '@/utils/auth'
-// import { getToken } from '@/utils'
 
 export default {
   name: 'Dashboard',

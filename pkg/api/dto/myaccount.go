@@ -5,9 +5,9 @@ type BindCodeDto struct {
 }
 
 type VerifyEmailDto struct {
-	Email string `form:"email" valid:"Required"` // email
+	Email string `form:"email" json:"email" valid:"required"` // email
 }
 
 type EmailVerificationDto struct {
-	Code string `form:"code" valid:"Required"` // email
+	Code string `form:"code" binding:"required"` // email
 }

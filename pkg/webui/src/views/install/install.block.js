@@ -14,9 +14,9 @@ const installBlock = {
   },
   resource: {
     api: {
-      prefix: '',
+      prefix: process.env['ZEUS_ADMIN_URL'],
       contentType: 'form',
-      create: 'http://api.auth.bullteam.local/v1/install'
+      create: '/v1/install'
     },
     fields: {
       sqlType: {
@@ -25,9 +25,9 @@ const installBlock = {
           multiple: false,
           options: {
             sqlite: 'SQLite3',
-            mysql: 'MySQL',
-            postgresql: 'PostgreSQL',
-            mssql: 'MSSQL'
+            mysql: 'MySQL'
+            // postgresql: 'PostgreSQL',
+            // mssql: 'MSSQL'
           }
         },
         label: '数据库类型',
@@ -79,7 +79,7 @@ const installBlock = {
           return data.sqlType === 'mysql' || data.sqlType === 'postgresql' || data.sqlType === 'mssql'
         }
       },
-      sqlChatset: {
+      sqlCharset: {
         type: 'select',
         label: '字符集',
         default: 'utf8',
@@ -204,9 +204,14 @@ const installBlock = {
     }
   },
   actions: {
-    install() {
-      // todo: 调用install接口
-      console.log(this.data)
+    async init() {
+      const res = await this.$ams.request({
+        url: process.env['ZEUS_ADMIN_URL'] + '/v1/install/isLock',
+        method: 'get'
+      })
+      if (res.data.data.result === true) {
+        location.href = '/'
+      }
     }
   },
   operations: {

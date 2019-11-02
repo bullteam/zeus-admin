@@ -32,6 +32,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	//install
 	InstallController := controllers.InstallController{}
 	v1.POST("/install", InstallController.Install)
+	v1.GET("/install/isLock", InstallController.IsLock)
 
 	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
@@ -50,19 +51,6 @@ func SetUp(e *gin.Engine, cors bool) {
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 
-	//user
-	v1.GET("/users", userController.List)
-	v1.GET("/users/:id", userController.Get)
-	v1.GET("/users/:id/permissions", userController.GetUserPermissionsWithMenu)
-	v1.POST("/users", userController.Create)
-	v1.PUT("/users/:id", userController.Edit)
-	v1.PUT("/users/:id/status", userController.EditStatus)
-	// v1.PUT("/users/:id/password", userController.EditPassword)
-	v1.GET("/users/:id/roles", userController.Roles)
-
-	v1.DELETE("/users/:id", userController.Delete)
-	v1.POST("/users/department/move", userController.UpdateDepartment)
-
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
 	v1.POST("/user/perm/check", userController.DomainPermCheck)
@@ -77,14 +65,28 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/account/third-bind", accountController.Thirdbind)
 	v1.POST("/account/third-unbind", accountController.ThirdUnbind)
 	v1.GET("/account/thirds", accountController.ThirdList)
-	v1.POST("/account/verify-email", accountController.Verifymail)
-	v1.GET("/account/email-verify", accountController.EmailVerify)
+	v1.POST("/account/send-verify-email", accountController.SendVerifymail)
+	v1.GET("/account/active", accountController.EmailVerify)
 	v1.GET("/account/security", accountController.AccountInfo)
 	v1.POST("/account/bindcode", accountController.BindGoogle2faCode)
 	v1.POST("/account/close2fa", accountController.Close2fa)
 	v1.POST("/account/check-google-2fa-code", accountController.CheckGoogle2faCode)
 	v1.GET("/account/find-code-open", accountController.FindCodeOpen) // is check google 2fa code
 	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // add ldap user
+
+	v1.Use(middleware.PermCheck)
+	//user
+	v1.GET("/users", userController.List)
+	v1.GET("/users/:id", userController.Get)
+	//v1.GET("/users/:id/permissions", userController.GetUserPermissionsWithMenu)
+	v1.POST("/users", userController.Create)
+	v1.PUT("/users/:id", userController.Edit)
+	v1.PUT("/users/:id/status", userController.EditStatus)
+	// v1.PUT("/users/:id/password", userController.EditPassword)
+	v1.GET("/users/:id/roles", userController.Roles)
+
+	v1.DELETE("/users/:id", userController.Delete)
+	v1.POST("/users/department/move", userController.UpdateDepartment)
 
 	//role
 	roleController := &controllers.RoleController{}
@@ -133,6 +135,13 @@ func SetUp(e *gin.Engine, cors bool) {
 	//request log
 	v1.GET("/log/operations", logController.OperationLogLists)
 	v1.GET("/log/operations/:id", logController.OperationLogDetail)
+
+	// Ldap & email setting
+	settingController := controllers.SettingController{}
+	v1.GET("/setting/ldap", settingController.LdapList)
+	v1.POST("/setting/ldap", settingController.LdapUpdate)
+	v1.GET("/setting/email", settingController.EmailList)
+	v1.POST("/setting/email", settingController.EmailUpdate)
 
 	if viper.GetBool("project.merge") {
 		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html

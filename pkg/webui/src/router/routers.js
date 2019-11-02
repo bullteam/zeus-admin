@@ -455,5 +455,35 @@ export const asyncRouterMap = [
       // }
     ]
   },
+  {
+    path: '/setting',
+    component: Layout,
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: '配置管理',
+      icon: 'edit'
+      // roles: ['/logs']
+    },
+    children: [
+      {
+        path: 'auth',
+        component: () => import('@/views/setting/auth'),
+        name: 'auth',
+        meta: {
+          title: 'Ldap配置',
+          icon: 'lock'
+        }
+      },
+      {
+        path: 'email',
+        component: () => import('@/views/setting/email'),
+        name: 'email',
+        meta: {
+          title: 'Email配置',
+          icon: 'lock'
+        }
+      }
+    ]
+  },
   { path: '*', permission: false, redirect: '/404', hidden: true }
 ]

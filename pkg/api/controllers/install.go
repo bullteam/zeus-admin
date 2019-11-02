@@ -25,3 +25,10 @@ func (i *InstallController) Install(c *gin.Context) {
 		"result": InstallDTO,
 	})
 }
+
+func (i *InstallController) IsLock(c *gin.Context) {
+	isLock := InstallService.Islock()
+	resp(c, map[string]interface{}{
+		"result": isLock,
+	})
+}

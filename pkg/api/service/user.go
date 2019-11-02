@@ -144,12 +144,16 @@ func (UserService) AssignRoleByRoleIds(userId string, roles string) {
 }
 
 //AssignRole - assign roles to specific user
+// 这个方法同时作用与用户角色，用户用户组
 func (UserService) AssignRole(userId string, roleNames []string) {
-	var groups [][]string
+	var roles [][]string
 	for _, role := range roleNames {
-		groups = append(groups, []string{userId, role})
+		if userId == "" || role == "" {
+			continue
+		}
+		roles = append(roles, []string{userId, role})
 	}
-	user.OverwriteRoles(userId, groups)
+	user.OverwriteRoles(userId, roles)
 }
 
 //GetRelatedDomains - get related domains
@@ -258,6 +262,12 @@ func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
 
 //CheckPermission - check user's permission in specific domain with specific policy
 func (us UserService) CheckPermission(uid string, domain string, policy string) bool {
+	//Could it be an alias?
+	domainModel := domainDao.GetByCode(domain)
+	row := menuPermAliasDao.GetByAlias(policy, domainModel.Id)
+	if row.Id > 0 {
+		policy = row.Perms
+	}
 	return perm.Enforce(uid, policy, "*", domain)
 }
 

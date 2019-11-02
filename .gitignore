@@ -19,3 +19,4 @@ pkg/webui/node_modules/
 pkg/webui/.vscode/settings.json
 pkg/webui/package-lock.json
 pkg/webui/dist/
+data/

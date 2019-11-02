@@ -20,7 +20,7 @@ type User struct {
 	Status        int        `json:"status" example:"1"`
 	CreateTime    time.Time  `gorm:"type:time;column:create_time;not null;default:CURRENT_TIMESTAMP" json:"created_time,omitempty" example:"2019-07-10 0:39"`
 	LastLoginTime time.Time  `gorm:"type:time;column:last_login_time;not null;default:CURRENT_TIMESTAMP" json:"logined_time,omitempty" example:"2019-07-10 0:39"`
-	Roles         []Role     `gorm:"many2many:user_role;" json:"roles" example:"roles"`
+	//Roles         []Role     `gorm:"many2many:user_role;" json:"roles" example:"roles"`
 }
 
 func (User) TableName() string {

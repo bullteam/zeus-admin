@@ -12,6 +12,7 @@ type Menu struct {
 	Name           string    `json:"name"`
 	Url            string    `json:"url"`
 	Perms          string    `json:"perms"`
+	Alias          string    `json:"alias"`
 	MenuType       int       `json:"menu_type"`
 	Icon           string    `json:"icon"`
 	OrderNum       int       `json:"order_num"`
