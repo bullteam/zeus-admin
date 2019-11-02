@@ -90,10 +90,21 @@
         <el-form-item v-if="temp.menu_type==='1'" :label="$t('menu.router')">
           <el-input v-model="temp.url"/>
         </el-form-item>
-        <el-form-item v-if="temp.menu_type!=='0'" :label="$t('menu.auth')">
+        <el-form-item>
+          <el-alert
+            v-if="temp.menu_type==2"
+            title="权限标识与别名说明"
+            type="warning"
+            description="标识，别名属同一个权限，主要用于前后分离,前后权限标识不一致,且前后两端皆需判定权限的项目。一般情况别名置空即可,如有多个别名可逗号分隔。">
+          </el-alert>
+        </el-form-item>
+        <el-form-item v-if="temp.menu_type==2" :label="$t('menu.auth')">
           <el-input v-model="temp.perms"/>
         </el-form-item>
-        <el-form-item v-if="temp.menu_type!=='2'" :label="$t('menu.icon')">
+        <el-form-item v-if="temp.menu_type==2" :label="$t('menu.alias')" >
+          <el-input v-model="temp.alias"/>
+        </el-form-item>
+        <el-form-item v-if="temp.menu_type!=2" :label="$t('menu.icon')">
           <el-select v-model="temp.icon" class="filter-item" placeholder="Please select">
             <el-option v-for="item in icons" :key="item" :label="item" :value="item">
               <svg-icon :icon-class="item"/>
@@ -271,6 +282,7 @@ export default {
             url: JSON.stringify(parent) === '{}' ? o.path : parent.url + '/' + o.path,
             parent_id: JSON.stringify(parent) === '{}' ? 0 : parent.id,
             perms: '',
+            alias: '',
             menu_type: '1'
           }
           this.index += 1

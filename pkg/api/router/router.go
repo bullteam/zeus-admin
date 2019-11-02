@@ -51,20 +51,6 @@ func SetUp(e *gin.Engine, cors bool) {
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 
-	v1.Use(middleware.PermCheck)
-	//user
-	v1.GET("/users", userController.List)
-	v1.GET("/users/:id", userController.Get)
-	v1.GET("/users/:id/permissions", userController.GetUserPermissionsWithMenu)
-	v1.POST("/users", userController.Create)
-	v1.PUT("/users/:id", userController.Edit)
-	v1.PUT("/users/:id/status", userController.EditStatus)
-	// v1.PUT("/users/:id/password", userController.EditPassword)
-	v1.GET("/users/:id/roles", userController.Roles)
-
-	v1.DELETE("/users/:id", userController.Delete)
-	v1.POST("/users/department/move", userController.UpdateDepartment)
-
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
 	v1.POST("/user/perm/check", userController.DomainPermCheck)
@@ -87,6 +73,20 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/account/check-google-2fa-code", accountController.CheckGoogle2faCode)
 	v1.GET("/account/find-code-open", accountController.FindCodeOpen) // is check google 2fa code
 	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // add ldap user
+
+	v1.Use(middleware.PermCheck)
+	//user
+	v1.GET("/users", userController.List)
+	v1.GET("/users/:id", userController.Get)
+	//v1.GET("/users/:id/permissions", userController.GetUserPermissionsWithMenu)
+	v1.POST("/users", userController.Create)
+	v1.PUT("/users/:id", userController.Edit)
+	v1.PUT("/users/:id/status", userController.EditStatus)
+	// v1.PUT("/users/:id/password", userController.EditPassword)
+	v1.GET("/users/:id/roles", userController.Roles)
+
+	v1.DELETE("/users/:id", userController.Delete)
+	v1.POST("/users/department/move", userController.UpdateDepartment)
 
 	//role
 	roleController := &controllers.RoleController{}

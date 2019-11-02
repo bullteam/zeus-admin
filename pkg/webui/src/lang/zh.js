@@ -206,13 +206,16 @@ export default {
     type: '类型',
     topnum: '排序',
     router: '路由',
-    auth: '授权标识',
+    auth: '标识',
+    alias: '别名',
+    notice: '权限标识与别名说明',
+    desc: '标识，别名属同一个权限，主要用于前后分离,前后路由不一致,且皆需判定权限的项目。一般情况别名置空即可。',
     Edit: '编辑',
     Create: '新建',
     actions: '操作',
     type_directories: '目录',
     type_menu: '菜单',
-    type_button: '按钮'
+    type_button: '权限'
   },
   dataPerm: {
     type: '类型',

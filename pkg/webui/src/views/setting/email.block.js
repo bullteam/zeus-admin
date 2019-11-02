@@ -8,10 +8,10 @@ const settingBlock = {
   },
   resource: {
     api: {
-      prefix: process.env['ZEUS_ADMIN_URL'],
+      prefix: process.env['ZEUS_ADMIN_URL'] || '/',
       contentType: 'form',
-      create: '/v1/setting/email',
-      read: '/v1/setting/email'
+      create: 'v1/setting/email',
+      read: 'v1/setting/email'
     },
     fields: {
       smtpServer: {

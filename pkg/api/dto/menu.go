@@ -12,6 +12,8 @@ type MenuCreateDto struct {
 	DomainId int    `form:"domain_id" json:"domain_id" binding:"required,gte=1"`
 	Url      string `form:"url" json:"url"`
 	Perms    string `form:"perms" json:"perms"`
+	// alias which can be checked with permission(Like Perms above) also
+	Alias    string `form:"alias" json:"alias"`
 	MenuType int    `form:"menu_type,default=1" json:"menu_type"`
 	Icon     string `form:"icon" json:"icon"`
 	OrderNum int    `form:"order_num,default=1" json:"order_num"`
@@ -25,6 +27,8 @@ type MenuEditDto struct {
 	DomainId int    `form:"domain_id" json:"domain_id" binding:"required,gte=1"`
 	Url      string `form:"url" json:"url"`
 	Perms    string `form:"perms" json:"perms"`
+	// alias which can be checked with permission(Like Perms above) also
+	Alias    string `form:"alias" json:"alias"`
 	MenuType int    `form:"menu_type,default=0" json:"menu_type"`
 	Icon     string `form:"icon" json:"icon"`
 	OrderNum int    `form:"order_num,default=1" json:"order_num"`

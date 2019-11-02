@@ -67,22 +67,22 @@ insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values
 (46,'p','超级管理员','/auth-system/domain:add','*','root','',''),
 (47,'p','超级管理员','/auth-system/domain:edit','*','root','',''),
 (48,'p','超级管理员','/auth-system/domain:del','*','root','',''),
-(50,'p','超级管理员','/auth-system/dataPerm:add,/data/perm/add','*','root','',''),
-(51,'p','超级管理员','/auth-system/dataPerm:edit,/data/perm/edit','*','root','',''),
-(52,'p','超级管理员','/auth-system/dataPerm:del,/data/perm/del','*','root','',''),
-(53,'p','超级管理员','/auth-system/dataPerm:show,/data/perm/show','*','root','',''),
-(54,'p','超级管理员','/auth-system/dataPerm:add,/data/perm/add','*','root','',''),
-(55,'p','超级管理员','/auth-system/dataPerm:edit,/data/perm/edit','*','root','',''),
-(56,'p','超级管理员','/auth-system/dataPerm:del,/data/perm/del','*','root','',''),
-(57,'p','超级管理员','/auth-system/dataPerm:show,/data/perm/show','*','root','',''),
-(58,'p','超级管理员','/auth-system/dataPerm:add,/data/perm/add','*','root','',''),
-(59,'p','超级管理员','/auth-system/dataPerm:edit,/data/perm/edit','*','root','',''),
-(60,'p','超级管理员','/auth-system/dataPerm:del,/data/perm/del','*','root','',''),
-(61,'p','超级管理员','/auth-system/dataPerm:show,/data/perm/show','*','root','',''),
-(62,'p','超级管理员','/auth-system/dataPerm:add,/data/perm/add','*','root','',''),
-(63,'p','超级管理员','/auth-system/dataPerm:edit,/data/perm/edit','*','root','',''),
-(64,'p','超级管理员','/auth-system/dataPerm:del,/data/perm/del','*','root','',''),
-(65,'p','超级管理员','/auth-system/dataPerm:show,/data/perm/show','*','root','',''),
+(50,'p','超级管理员','/auth-system/dataPerm:add|/data/perm/add','*','root','',''),
+(51,'p','超级管理员','/auth-system/dataPerm:edit|/data/perm/edit','*','root','',''),
+(52,'p','超级管理员','/auth-system/dataPerm:del|/data/perm/del','*','root','',''),
+(53,'p','超级管理员','/auth-system/dataPerm:show|/data/perm/show','*','root','',''),
+(54,'p','超级管理员','/auth-system/dataPerm:add|/data/perm/add','*','root','',''),
+(55,'p','超级管理员','/auth-system/dataPerm:edit|/data/perm/edit','*','root','',''),
+(56,'p','超级管理员','/auth-system/dataPerm:del|/data/perm/del','*','root','',''),
+(57,'p','超级管理员','/auth-system/dataPerm:show|/data/perm/show','*','root','',''),
+(58,'p','超级管理员','/auth-system/dataPerm:add|/data/perm/add','*','root','',''),
+(59,'p','超级管理员','/auth-system/dataPerm:edit|/data/perm/edit','*','root','',''),
+(60,'p','超级管理员','/auth-system/dataPerm:del|/data/perm/del','*','root','',''),
+(61,'p','超级管理员','/auth-system/dataPerm:show|/data/perm/show','*','root','',''),
+(62,'p','超级管理员','/auth-system/dataPerm:add|/data/perm/add','*','root','',''),
+(63,'p','超级管理员','/auth-system/dataPerm:edit|/data/perm/edit','*','root','',''),
+(64,'p','超级管理员','/auth-system/dataPerm:del|/data/perm/del','*','root','',''),
+(65,'p','超级管理员','/auth-system/dataPerm:show|/data/perm/show','*','root','',''),
 (66,'p','超级管理员','/auth-system/dataPerm:add','*','root','',''),
 (67,'p','超级管理员','/auth-system/dataPerm:edit','*','root','',''),
 (68,'p','超级管理员','/auth-system/dataPerm:del','*','root','',''),
@@ -246,75 +246,77 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   KEY `idx_menu_domain_id` (`domain_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
-
+/* Updated at 2019.11.02 */
+ALTER TABLE `menu` ADD COLUMN `alias` TEXT AFTER `perms`;
+ALTER TABLE `menu` ADD INDEX perms_index (`perms`);
 /*Data for the table `menu` */
-
-insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`menu_type`,`icon`,`order_num`,`create_time`,`last_update_time`) values 
-(1,0,1,'权限管理','/permission','',1,'peoples',1,'2018-12-29 16:15:09','2019-03-20 13:01:46'),
-(2,1,1,'用户管理','/permission/user','',1,'peoples',1,'2018-12-29 16:15:09','2018-12-29 16:15:09'),
-(3,2,1,'浏览','','/permission/user:show',2,'',1,'2018-12-29 16:15:09','2018-12-29 16:15:09'),
-(4,2,1,'添加','','/permission/user:add',2,'',2,'2018-12-29 16:15:09','2018-12-29 16:15:09'),
-(5,2,1,'修改','','/permission/user:edit',2,'',3,'2018-12-29 16:15:09','2018-12-29 16:15:09'),
-(6,2,1,'删除','','/permission/user:del',2,'',4,'2018-12-29 16:15:09','2018-12-29 16:15:09'),
-(7,1,1,'部门管理','/permission/dept','',1,'peoples',2,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(8,7,1,'浏览','','/permission/dept:show',2,'',1,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(9,7,1,'添加','','/permission/dept:add',2,'',2,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(10,7,1,'修改','','/permission/dept:edit',2,'',3,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(11,7,1,'删除','','/permission/dept:del',2,'',4,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(12,1,1,'角色管理','/permission/role','',1,'peoples',3,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(13,12,1,'浏览','','/permission/role:show',2,'',1,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(14,12,1,'添加','','/permission/role:add',2,'',2,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(15,12,1,'修改','','/permission/role:edit',2,'',3,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(16,12,1,'删除','','/permission/role:del',2,'',4,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(17,0,1,'系统设置','/auth-system','',1,'nested',2,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(18,17,1,'菜单管理','/auth-system/menu','',1,'peoples',1,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(19,18,1,'浏览','','/auth-system/menu:show',2,'',1,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(20,18,1,'添加','','/auth-system/menu:add',2,'',2,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(21,18,1,'修改','','/auth-system/menu:edit',2,'',3,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(22,18,1,'删除','','/auth-system/menu:del',2,'',4,'2018-12-29 16:15:10','2018-12-29 16:15:10'),
-(23,17,1,'项目管理','/auth-system/domain','',1,'peoples',2,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(24,23,1,'浏览','','/auth-system/domain:show',2,'',1,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(25,23,1,'添加','','/auth-system/domain:add',2,'',2,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(26,23,1,'修改','','/auth-system/domain:edit',2,'',3,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(27,23,1,'删除','','/auth-system/domain:del',2,'',4,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(29,28,1,'登录日志','/logs/log_login','',1,'peoples',1,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(30,29,1,'浏览','','/logs/log_login:show',2,'',1,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(31,29,1,'添加','','/logs/log_login:add',2,'',2,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(32,29,1,'修改','','/logs/log_login:edit',2,'',3,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(33,29,1,'删除','','/logs/log_login:del',2,'',4,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(34,28,1,'操作日志','/logs/log_operation','',1,'peoples',2,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(35,34,1,'浏览','','/logs/log_operation:show',2,'',1,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(36,34,1,'添加','','/logs/log_operation:add',2,'',2,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(37,34,1,'修改','','/logs/log_operation:edit',2,'',3,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(38,34,1,'删除','','/logs/log_operation:del',2,'',4,'2018-12-29 16:15:11','2018-12-29 16:15:11'),
-(39,28,1,'异常日志','/logs/log_error','',1,'peoples',3,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
-(40,39,1,'浏览','','/logs/log_error:show',2,'',1,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
-(41,39,1,'添加','','/logs/log_error:add',2,'',2,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
-(42,39,1,'修改','','/logs/log_error:edit',2,'',3,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
-(43,39,1,'删除','','/logs/log_error:del',2,'',4,'2018-12-29 16:15:12','2018-12-29 16:15:12'),
-(66,0,0,'首页','admin/default','',1,'size',1,'2019-01-25 16:34:33','2019-01-25 16:34:33'),
-(70,69,1,'编辑角色','','/permission/role:edit',1,'bug',1,'2019-01-28 10:46:42','2019-10-15 23:20:09'),
-(71,17,1,'数据权限','/auth-system/dataPerm','',1,'component',1,'2019-07-08 10:53:55','2019-07-08 10:53:55'),
-(72,71,1,'添加','','/auth-system/dataPerm:add',2,'',1,'2019-07-08 02:54:28','2019-07-08 02:54:28'),
-(73,71,1,'编辑','','/auth-system/dataPerm:edit',2,'',1,'2019-07-08 02:54:58','2019-07-08 02:54:58'),
-(74,71,1,'删除','','/auth-system/dataPerm:del',2,'',1,'2019-07-08 02:55:15','2019-07-08 02:55:15'),
-(75,71,1,'浏览','','/auth-system/dataPerm:show',2,'',1,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
-(76,18,1,'删除','','/auth-system/menu:del',2,'',3,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
-(77,0,2,'任务管理','','',0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
-(78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
-(79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
-(80,77,2,'添加任务','/taskmanage/create','/taskmanage/create',1,'documentation',1,'2019-10-15 23:18:31','2019-10-15 23:18:31'),
-(83,0,1,'日志管理','','',0,'table',1,'2019-10-20 21:22:56','2019-10-20 21:22:56'),
-(84,83,1,'登录日志','/logs/log_login','/logs/log_login',1,'clipboard',1,'2019-10-20 21:25:06','2019-10-20 21:25:06'),
-(85,83,1,'操作日志','/logs/log_operation','/logs/log_operation',1,'documentation',1,'2019-10-20 21:25:39','2019-10-20 21:25:39'),
-(86,84,1,'浏览','','/logs/log_login:show',2,'',1,'2019-10-20 21:30:09','2019-10-20 21:30:09'),
-(87,84,1,'添加','','/logs/log_login:add',2,'',1,'2019-10-20 21:30:53','2019-10-20 21:30:53'),
-(88,84,1,'修改','','/logs/log_login:edit',2,'',1,'2019-10-20 21:31:17','2019-10-20 21:31:17'),
-(89,84,1,'删除','','/logs/log_login:del',2,'',1,'2019-10-20 21:31:39','2019-10-20 21:31:39'),
-(90,85,1,'浏览','','/logs/log_operation:show',2,'',1,'2019-10-20 21:32:36','2019-10-20 21:32:36'),
-(91,85,1,'添加','','/logs/log_operation:add',2,'',1,'2019-10-20 21:32:56','2019-10-20 21:32:56'),
-(92,85,1,'修改','','/logs/log_operation:edit',2,'',1,'2019-10-20 21:33:16','2019-10-20 21:33:16'),
-(93,85,1,'删除','','/logs/log_operation:del',2,'',1,'2019-10-20 21:33:44','2019-10-20 21:33:44');
+INSERT INTO `menu` VALUES (1, 0, 1, '权限管理', '/permission', '', '', 1, 'peoples', 1, '2018-12-29 16:15:09', '2019-03-20 13:01:46');
+INSERT INTO `menu` VALUES (2, 1, 1, '用户管理', '/permission/user', '', null, 1, 'peoples', 1, '2018-12-29 16:15:09', '2018-12-29 16:15:09');
+INSERT INTO `menu` VALUES (3, 2, 1, '浏览', '', '/permission/user:show', 'get@/v1/users,get@/v1/usres/:id,get@/v1/users/:id/roles', 2, '', 1, '2018-12-29 16:15:09', '2018-12-29 16:15:09');
+INSERT INTO `menu` VALUES (4, 2, 1, '添加', '', '/permission/user:add', 'post@/v1/users', 2, '', 2, '2018-12-29 16:15:09', '2018-12-29 16:15:09');
+INSERT INTO `menu` VALUES (5, 2, 1, '修改', '', '/permission/user:edit', 'put@/v1/users/:id,put@/v1/users/:id/status', 2, '', 3, '2018-12-29 16:15:09', '2018-12-29 16:15:09');
+INSERT INTO `menu` VALUES (6, 2, 1, '删除', '', '/permission/user:del', 'delete@/v1/users/:id', 2, '', 4, '2018-12-29 16:15:09', '2018-12-29 16:15:09');
+INSERT INTO `menu` VALUES (7, 1, 1, '部门管理', '/permission/dept', '', null, 1, 'peoples', 2, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (8, 7, 1, '浏览', '', '/permission/dept:show', 'get@/v1/depts,get@/v1/depts/:id', 2, '', 1, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (9, 7, 1, '添加', '', '/permission/dept:add', 'post@/v1/depts', 2, '', 2, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (10, 7, 1, '修改', '', '/permission/dept:edit', 'put@/v1/depts/:id', 2, '', 3, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (11, 7, 1, '删除', '', '/permission/dept:del', 'delete@/v1/depts/:id', 2, '', 4, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (12, 1, 1, '角色管理', '/permission/role', '', null, 1, 'peoples', 3, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (13, 12, 1, '浏览', '', '/permission/role:show', 'get@/v1/roles,get@/v1/roles/:id', 2, '', 1, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (14, 12, 1, '添加', '', '/permission/role:add', 'post@/v1/roles', 2, '', 2, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (15, 12, 1, '修改', '', '/permission/role:edit', 'put@/v1/roles/:id', 2, '', 3, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (16, 12, 1, '删除', '', '/permission/role:del', 'delete@/v1/roles/:id', 2, '', 4, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (17, 0, 1, '系统设置', '/auth-system', '', null, 1, 'nested', 2, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (18, 17, 1, '菜单管理', '/auth-system/menu', '', null, 1, 'peoples', 1, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (19, 18, 1, '浏览', '', '/auth-system/menu:show', 'get@/v1/menus,get@/v1/menus/:id', 2, '', 1, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (20, 18, 1, '添加', '', '/auth-system/menu:add', 'post@/v1/menus', 2, '', 2, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (21, 18, 1, '修改', '', '/auth-system/menu:edit', 'put@/v1/menus/:id', 2, '', 3, '2018-12-29 16:15:10', '2018-12-29 16:15:10');
+INSERT INTO `menu` VALUES (23, 17, 1, '项目管理', '/auth-system/domain', '', null, 1, 'peoples', 2, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (24, 23, 1, '浏览', '', '/auth-system/domain:show', 'get@/v1/domains,get@/v1/domains/:id', 2, '', 1, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (25, 23, 1, '添加', '', '/auth-system/domain:add', 'post@/v1/domains', 2, '', 2, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (26, 23, 1, '修改', '', '/auth-system/domain:edit', 'put@/v1/domains/:id', 2, '', 3, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (27, 23, 1, '删除', '', '/auth-system/domain:del', 'delete@/v1/domains/:id', 2, '', 4, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (29, 28, 1, '登录日志', '/logs/log_login', '', null, 1, 'peoples', 1, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (30, 29, 1, '浏览', '', '/logs/log_login:show', null, 2, '', 1, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (31, 29, 1, '添加', '', '/logs/log_login:add', null, 2, '', 2, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (32, 29, 1, '修改', '', '/logs/log_login:edit', null, 2, '', 3, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (33, 29, 1, '删除', '', '/logs/log_login:del', null, 2, '', 4, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (34, 28, 1, '操作日志', '/logs/log_operation', '', null, 1, 'peoples', 2, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (35, 34, 1, '浏览', '', '/logs/log_operation:show', null, 2, '', 1, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (36, 34, 1, '添加', '', '/logs/log_operation:add', null, 2, '', 2, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (37, 34, 1, '修改', '', '/logs/log_operation:edit', null, 2, '', 3, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (38, 34, 1, '删除', '', '/logs/log_operation:del', null, 2, '', 4, '2018-12-29 16:15:11', '2018-12-29 16:15:11');
+INSERT INTO `menu` VALUES (39, 28, 1, '异常日志', '/logs/log_error', '', null, 1, 'peoples', 3, '2018-12-29 16:15:12', '2018-12-29 16:15:12');
+INSERT INTO `menu` VALUES (40, 39, 1, '浏览', '', '/logs/log_error:show', null, 2, '', 1, '2018-12-29 16:15:12', '2018-12-29 16:15:12');
+INSERT INTO `menu` VALUES (41, 39, 1, '添加', '', '/logs/log_error:add', null, 2, '', 2, '2018-12-29 16:15:12', '2018-12-29 16:15:12');
+INSERT INTO `menu` VALUES (42, 39, 1, '修改', '', '/logs/log_error:edit', null, 2, '', 3, '2018-12-29 16:15:12', '2018-12-29 16:15:12');
+INSERT INTO `menu` VALUES (43, 39, 1, '删除', '', '/logs/log_error:del', null, 2, '', 4, '2018-12-29 16:15:12', '2018-12-29 16:15:12');
+INSERT INTO `menu` VALUES (66, 0, 0, '首页', 'admin/default', '', null, 1, 'size', 1, '2019-01-25 16:34:33', '2019-01-25 16:34:33');
+INSERT INTO `menu` VALUES (70, 69, 1, '编辑角色', '', '/permission/role:edit', null, 1, 'bug', 1, '2019-01-28 10:46:42', '2019-10-15 23:20:09');
+INSERT INTO `menu` VALUES (71, 17, 1, '数据权限', '/auth-system/dataPerm', '', null, 1, 'component', 1, '2019-07-08 10:53:55', '2019-07-08 10:53:55');
+INSERT INTO `menu` VALUES (72, 71, 1, '添加', '', '/auth-system/dataPerm:add', 'post@/v1/datas', 2, '', 1, '2019-07-08 02:54:28', '2019-07-08 02:54:28');
+INSERT INTO `menu` VALUES (73, 71, 1, '编辑', '', '/auth-system/dataPerm:edit', 'put@/v1/datas/:id', 2, '', 1, '2019-07-08 02:54:58', '2019-07-08 02:54:58');
+INSERT INTO `menu` VALUES (74, 71, 1, '删除', '', '/auth-system/dataPerm:del', 'delete@/v1/datas/:id', 2, '', 1, '2019-07-08 02:55:15', '2019-07-08 02:55:15');
+INSERT INTO `menu` VALUES (75, 71, 1, '浏览', '', '/auth-system/dataPerm:show', 'get@/v1/datas,get@/v1/datas/:id', 2, '', 1, '2019-07-08 02:55:33', '2019-07-08 02:55:33');
+INSERT INTO `menu` VALUES (76, 18, 1, '删除', '', '/auth-system/menu:del', 'delete@/v1/menus/:id', 2, '', 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `menu` VALUES (77, 0, 2, '任务管理', '', '', null, 0, 'component', 1, '2019-10-15 23:15:35', '2019-10-15 23:15:35');
+INSERT INTO `menu` VALUES (78, 77, 2, '任务管理', '/taskmanage/list', '/taskmanage/list', null, 1, 'clipboard', 1, '2019-10-15 23:17:22', '2019-10-15 23:17:30');
+INSERT INTO `menu` VALUES (79, 77, 2, '任务详情', '/taskmanage/details/:id', '/taskmanage/details/:id', null, 1, 'documentation', 1, '2019-10-15 23:18:08', '2019-10-15 23:18:08');
+INSERT INTO `menu` VALUES (80, 77, 2, '添加任务', '/taskmanage/create', '/taskmanage/create', null, 1, 'documentation', 1, '2019-10-15 23:18:31', '2019-10-15 23:18:31');
+INSERT INTO `menu` VALUES (83, 0, 1, '日志管理', '', '', null, 0, 'table', 1, '2019-10-20 21:22:56', '2019-10-20 21:22:56');
+INSERT INTO `menu` VALUES (84, 83, 1, '登录日志', '/logs/log_login', '', null, 1, 'clipboard', 1, '2019-10-20 21:25:06', '2019-10-20 21:25:06');
+INSERT INTO `menu` VALUES (85, 83, 1, '操作日志', '/logs/log_operation', '', null, 1, 'documentation', 1, '2019-10-20 21:25:39', '2019-10-20 21:25:39');
+INSERT INTO `menu` VALUES (86, 84, 1, '浏览', '', '/logs/log_login:show', 'get@/v1/log/logins,get@/v1/log/login/:id', 2, '', 1, '2019-10-20 21:30:09', '2019-10-20 21:30:09');
+INSERT INTO `menu` VALUES (87, 84, 1, '添加', '', '/logs/log_login:add', null, 2, '', 1, '2019-10-20 21:30:53', '2019-10-20 21:30:53');
+INSERT INTO `menu` VALUES (88, 84, 1, '修改', '', '/logs/log_login:edit', null, 2, '', 1, '2019-10-20 21:31:17', '2019-10-20 21:31:17');
+INSERT INTO `menu` VALUES (89, 84, 1, '删除', '', '/logs/log_login:del', null, 2, '', 1, '2019-10-20 21:31:39', '2019-10-20 21:31:39');
+INSERT INTO `menu` VALUES (90, 85, 1, '浏览', '', '/v1/log/operations:get', 'get@/v1/log/operations,get@/v1/log/operations/:id', 2, '', 1, '2019-10-20 21:32:36', '2019-10-20 21:32:36');
+INSERT INTO `menu` VALUES (91, 85, 1, '添加', '', '/logs/log_operation:add', null, 2, '', 1, '2019-10-20 21:32:56', '2019-10-20 21:32:56');
+INSERT INTO `menu` VALUES (92, 85, 1, '修改', '', '/logs/log_operation:edit', null, 2, '', 1, '2019-10-20 21:33:16', '2019-10-20 21:33:16');
+INSERT INTO `menu` VALUES (93, 85, 1, '删除', '', '/logs/log_operation:del', null, 2, '', 1, '2019-10-20 21:33:44', '2019-10-20 21:33:44');
+INSERT INTO `menu` VALUES (94, 0, 1, '配置管理', '', '', null, 0, 'dashboard', 1, null, null);
+INSERT INTO `menu` VALUES (95, 94, 1, 'Ldap设置', '/setting/auth', '/setting/auth', null, 1, 'lock', 1, null, null);
+INSERT INTO `menu` VALUES (96, 94, 1, 'Email设置', '/setting/email', '/setting/email', null, 1, 'lock', 1, null, null);
 
 /*Table structure for table `operation_log` */
 
@@ -506,3 +508,53 @@ insert  into `user_secret`(`id`,`user_id`,`account_name`,`secret`,`is_open`,`cre
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+/* Updated at 2019.11.02 */
+/* Menu alias table */
+DROP TABLE IF EXISTS `menu_perm_alias`;
+CREATE TABLE IF NOT EXISTS `menu_perm_alias` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `perms`  varchar(200) NOT NULL DEFAULT '' COMMENT '标识',
+    `alias`  VARCHAR(200) NOT NULL DEFAULT '' COMMENT '别名',
+    `domain_id`  int(11) DEFAULT '0' COMMENT '所属项目',
+    `created_time`  int(11),
+    `updated_time`  int(11),
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限alias表';
+ALTER TABLE `menu_perm_alias` ADD INDEX perms_index (`perms`);
+INSERT INTO `menu_perm_alias` VALUES (1, '/permission/user:edit', 'put@/v1/users/:id', 1, 1572605085, 1572605085);
+INSERT INTO `menu_perm_alias` VALUES (2, '/permission/user:edit', 'put@/v1/users/:id/status', 1, 1572605085, 1572605085);
+INSERT INTO `menu_perm_alias` VALUES (3, '/permission/user:add', 'post@/v1/users', 1, 1572605095, 1572605095);
+INSERT INTO `menu_perm_alias` VALUES (4, '/permission/user:del', 'delete@/v1/users/:id', 1, 1572605103, 1572605103);
+INSERT INTO `menu_perm_alias` VALUES (5, '/permission/dept:add', 'post@/v1/depts', 1, 1572605351, 1572605351);
+INSERT INTO `menu_perm_alias` VALUES (6, '/permission/dept:edit', 'put@/v1/depts/:id', 1, 1572605380, 1572605380);
+INSERT INTO `menu_perm_alias` VALUES (7, '/permission/dept:show', 'get@/v1/depts', 1, 1572605399, 1572605399);
+INSERT INTO `menu_perm_alias` VALUES (8, '/permission/dept:show', 'get@/v1/depts/:id', 1, 1572605399, 1572605399);
+INSERT INTO `menu_perm_alias` VALUES (9, '/permission/dept:del', 'delete@/v1/depts/:id', 1, 1572605425, 1572605425);
+INSERT INTO `menu_perm_alias` VALUES (10, '/permission/role:add', 'post@/v1/roles', 1, 1572605517, 1572605517);
+INSERT INTO `menu_perm_alias` VALUES (11, '/permission/role:edit', 'put@/v1/roles/:id', 1, 1572605530, 1572605530);
+INSERT INTO `menu_perm_alias` VALUES (12, '/permission/role:del', 'delete@/v1/roles/:id', 1, 1572605547, 1572605547);
+INSERT INTO `menu_perm_alias` VALUES (13, '/auth-system/menu:show', 'get@/v1/menus', 1, 1572605627, 1572605627);
+INSERT INTO `menu_perm_alias` VALUES (14, '/auth-system/menu:show', 'get@/v1/menus/:id', 1, 1572605627, 1572605627);
+INSERT INTO `menu_perm_alias` VALUES (15, '/auth-system/menu:add', 'post@/v1/menus', 1, 1572605647, 1572605647);
+INSERT INTO `menu_perm_alias` VALUES (16, '/auth-system/menu:edit', 'put@/v1/menus/:id', 1, 1572605660, 1572605660);
+INSERT INTO `menu_perm_alias` VALUES (17, '/auth-system/menu:del', 'delete@/v1/menus/:id', 1, 1572605672, 1572605672);
+INSERT INTO `menu_perm_alias` VALUES (18, '/auth-system/domain:show', 'get@/v1/domains', 1, 1572605721, 1572605721);
+INSERT INTO `menu_perm_alias` VALUES (19, '/auth-system/domain:show', 'get@/v1/domains/:id', 1, 1572605721, 1572605721);
+INSERT INTO `menu_perm_alias` VALUES (20, '/auth-system/domain:add', 'post@/v1/domains', 1, 1572605734, 1572605734);
+INSERT INTO `menu_perm_alias` VALUES (21, '/auth-system/domain:edit', 'put@/v1/domains/:id', 1, 1572605760, 1572605760);
+INSERT INTO `menu_perm_alias` VALUES (22, '/auth-system/domain:del', 'delete@/v1/domains/:id', 1, 1572605790, 1572605790);
+INSERT INTO `menu_perm_alias` VALUES (23, '/auth-system/dataPerm:show', 'get@/v1/datas', 1, 1572693705, 1572693705);
+INSERT INTO `menu_perm_alias` VALUES (24, '/auth-system/dataPerm:show', 'get@/v1/datas/:id', 1, 1572693705, 1572693705);
+INSERT INTO `menu_perm_alias` VALUES (25, '/auth-system/dataPerm:add', 'post@/v1/datas', 1, 1572693777, 1572693777);
+INSERT INTO `menu_perm_alias` VALUES (26, '/auth-system/dataPerm:edit', 'put@/v1/datas/:id', 1, 1572693793, 1572693793);
+INSERT INTO `menu_perm_alias` VALUES (27, '/auth-system/dataPerm:del', 'delete@/v1/datas/:id', 1, 1572693808, 1572693808);
+INSERT INTO `menu_perm_alias` VALUES (28, '/logs/log_login:show', 'get@/v1/log/logins', 1, 1572693965, 1572693965);
+INSERT INTO `menu_perm_alias` VALUES (29, '/logs/log_login:show', 'get@/v1/log/login/:id', 1, 1572693965, 1572693965);
+INSERT INTO `menu_perm_alias` VALUES (30, '/v1/log/operations:get', 'get@/v1/log/operations', 1, 1572694099, 1572694099);
+INSERT INTO `menu_perm_alias` VALUES (31, '/v1/log/operations:get', 'get@/v1/log/operations/:id', 1, 1572694099, 1572694099);
+INSERT INTO `menu_perm_alias` VALUES (32, '/permission/role:show', 'get@/v1/roles', 1, 1572694205, 1572694205);
+INSERT INTO `menu_perm_alias` VALUES (33, '/permission/role:show', 'get@/v1/roles/:id', 1, 1572694205, 1572694205);
+INSERT INTO `menu_perm_alias` VALUES (34, '/permission/user:show', 'get@/v1/users', 1, 1572694219, 1572694219);
+INSERT INTO `menu_perm_alias` VALUES (35, '/permission/user:show', 'get@/v1/usres/:id', 1, 1572694219, 1572694219);
+INSERT INTO `menu_perm_alias` VALUES (36, '/permission/user:show', 'get@/v1/users/:id/roles', 1, 1572694219, 1572694219);

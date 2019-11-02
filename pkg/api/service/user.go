@@ -262,6 +262,12 @@ func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
 
 //CheckPermission - check user's permission in specific domain with specific policy
 func (us UserService) CheckPermission(uid string, domain string, policy string) bool {
+	//Could it be an alias?
+	domainModel := domainDao.GetByCode(domain)
+	row := menuPermAliasDao.GetByAlias(policy, domainModel.Id)
+	if row.Id > 0 {
+		policy = row.Perms
+	}
 	return perm.Enforce(uid, policy, "*", domain)
 }
 

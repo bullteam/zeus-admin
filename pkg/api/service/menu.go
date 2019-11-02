@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+	"time"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/perm"
 	"zeus/pkg/api/dto"
@@ -9,6 +11,7 @@ import (
 )
 
 var menuDao = dao.Menu{}
+var menuPermAliasDao = dao.MenuPermAlias{}
 
 type MenuService struct {
 }
@@ -24,20 +27,30 @@ func (MenuService) List(treeDto dto.GeneralTreeDto) ([]model.Menu, int64) {
 }
 
 // Create - create a menu item
-func (ms MenuService) Create(dto dto.MenuCreateDto) model.Menu {
+func (ms MenuService) Create(menuDto dto.MenuCreateDto) model.Menu {
 	menuModel := model.Menu{
-		Name:     dto.Name,
-		ParentId: dto.ParentId,
-		DomainId: dto.DomainId,
-		Url:      dto.Url,
-		Perms:    dto.Perms,
-		MenuType: dto.MenuType,
-		Icon:     dto.Icon,
-		OrderNum: dto.OrderNum,
+		Name:     menuDto.Name,
+		ParentId: menuDto.ParentId,
+		DomainId: menuDto.DomainId,
+		Url:      menuDto.Url,
+		Perms:    menuDto.Perms,
+		Alias:    menuDto.Alias,
+		MenuType: menuDto.MenuType,
+		Icon:     menuDto.Icon,
+		OrderNum: menuDto.OrderNum,
 	}
 	c := menuDao.Create(&menuModel)
 	if c.Error != nil {
 		log.Error(c.Error.Error())
+	}
+	for _, alias := range strings.Split(menuDto.Alias, ",") {
+		menuPermAliasDao.Create(&model.MenuPermAlias{
+			Perms:       menuDto.Perms,
+			Alias:       alias,
+			DomainId:    menuDto.DomainId,
+			CreatedTime: time.Now().Unix(),
+			UpdatedTime: time.Now().Unix(),
+		})
 	}
 	return menuModel
 }
@@ -49,10 +62,23 @@ func (ms MenuService) Update(menuDto dto.MenuEditDto) int64 {
 		"name":      menuDto.Name,
 		"url":       menuDto.Url,
 		"perms":     menuDto.Perms,
+		"alias":     menuDto.Alias,
 		"order_num": menuDto.OrderNum,
 		"parent_id": menuDto.ParentId,
 		"icon":      menuDto.Icon,
 	})
+	// 1.Remove all alias
+	menuPermAliasDao.Delete(model.MenuPermAlias{Perms: menuDto.Perms, DomainId: menuDto.DomainId})
+	// 2.Save new alias again
+	for _, alias := range strings.Split(menuDto.Alias, ",") {
+		menuPermAliasDao.Create(&model.MenuPermAlias{
+			Perms:       menuDto.Perms,
+			Alias:       alias,
+			DomainId:    menuDto.DomainId,
+			CreatedTime: time.Now().Unix(),
+			UpdatedTime: time.Now().Unix(),
+		})
+	}
 	return c.RowsAffected
 }
 
@@ -76,6 +102,8 @@ func (ms MenuService) Delete(dto dto.GeneralDelDto) int64 {
 		if perms != "" {
 			perm.DelFilteredPerm(1, perms)
 		}
+		// Remove all alias
+		menuPermAliasDao.Delete(model.MenuPermAlias{Perms: menuModel.Perms, DomainId: menuModel.DomainId})
 	}
 	return c.RowsAffected
 }

@@ -18,10 +18,10 @@ const settingBlock = {
   },
   resource: {
     api: {
-      prefix: process.env['ZEUS_ADMIN_URL'],
+      prefix: process.env['ZEUS_ADMIN_URL'] || '/',
       contentType: 'form',
-      create: '/v1/setting/ldap',
-      read: '/v1/setting/ldap'
+      create: 'v1/setting/ldap',
+      read: 'v1/setting/ldap'
     },
     fields: {
       ldapUrl: {

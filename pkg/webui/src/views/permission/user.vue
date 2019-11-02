@@ -415,7 +415,8 @@ export default {
       this.getList()
     },
     handleModifyStatus(row, status) {
-      updateUserStatus(row.id, { id: row.id, status: status }).then(() => {
+      console.log(row)
+      updateUserStatus({ id: row.id, status: status }).then(() => {
         this.$message({
           message: '操作成功',
           type: 'success'
