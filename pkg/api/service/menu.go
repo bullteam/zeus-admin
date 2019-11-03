@@ -68,7 +68,7 @@ func (ms MenuService) Update(menuDto dto.MenuEditDto) int64 {
 		"icon":      menuDto.Icon,
 	})
 	// 1.Remove all alias
-	menuPermAliasDao.Delete(model.MenuPermAlias{Perms: menuDto.Perms, DomainId: menuDto.DomainId})
+	menuPermAliasDao.Delete(model.MenuPermAlias{Perms: menuModel.Perms, DomainId: menuModel.DomainId})
 	// 2.Save new alias again
 	for _, alias := range strings.Split(menuDto.Alias, ",") {
 		menuPermAliasDao.Create(&model.MenuPermAlias{

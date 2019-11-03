@@ -28,7 +28,7 @@ database:
     charset: utf8
     host: 127.0.0.1:3306
     name: zeus
-    password: 123456
+    password: root
     pool:
       max: 20
       min: 5
