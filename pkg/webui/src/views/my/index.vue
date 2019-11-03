@@ -1,7 +1,7 @@
 <template>
   <div class="personal_content">
     <el-row :gutter="12" type="flex" justify="center">
-      <el-col :span="4">
+      <el-col :span="7">
         <el-card shadow="always" class="user_top">
           <div class="user_inner">
             <img :src="user.avatar">
@@ -17,7 +17,7 @@
           </el-card>
         </router-link>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="14">
         <el-card shadow="always">
           <p class="title">{{ $t('route.' + $route.name) }}</p>
           <router-view/>
