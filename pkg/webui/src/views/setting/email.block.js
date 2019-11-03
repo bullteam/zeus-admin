@@ -10,7 +10,8 @@ const settingBlock = {
     api: {
       prefix: process.env['ZEUS_ADMIN_URL'],
       contentType: 'form',
-      update: '/v1/setting/email'
+      update: '/v1/setting/email',
+      read: '//v1/setting/email'
     },
     fields: {
       smtpServer: {

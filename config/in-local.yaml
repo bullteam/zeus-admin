@@ -23,12 +23,12 @@ cors:
   enable: false
   max_age: 7200
 database:
-  driver: sqlite
+  driver: mysql
   mysql:
     charset: utf8
     host: 127.0.0.1:3306
     name: zeus
-    password: root
+    password: 123456
     pool:
       max: 20
       min: 5
@@ -39,6 +39,12 @@ database:
 dingtalk:
   snsappid: dingoa1uudyxl2dcjvqpij
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
+  CorpId: dingd60a58f4e3be699235c2f4657eb6378f
+  SSOsecret: XU3oARxOHw731w4LYEJodPEPtppX5oMa7XPp5dv2VjTLak9I--glTDBLLbcl2VpQ
+  AgentId: 310135985
+  AppKey: dingvgvn9hdcp8qtarno
+  AppSecret: Sn887TtSQgGQNRcSaP-cNQXKYOkuT062vPgHoVvbTm5-HA2qnyew6xbdgZwhxD8N
+  CachePath: data/
 domain: bullteam.local
 email:
   smtp:

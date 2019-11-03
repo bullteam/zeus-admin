@@ -10,11 +10,19 @@ import (
 type DomainDao struct {
 }
 
-//Get - get single domain infoD
+// Get - get single domain infoD
 func (u DomainDao) Get(id int) model.Domain {
 	var domain model.Domain
 	db := GetDb()
 	db.Where("id = ?", id).First(&domain)
+	return domain
+}
+
+// GetByCode - get single domain by code
+func (u DomainDao) GetByCode(code string) model.Domain {
+	var domain model.Domain
+	db := GetDb()
+	db.Where("code = ?", code).First(&domain)
 	return domain
 }
 
