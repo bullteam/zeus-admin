@@ -52,10 +52,15 @@ database:
   sqlite:
     dsn: data/zeus.db
   mysql:
-    dsn: ${MYSQL_USERNAME}:${MYSQL_PASSWORD}@tcp(${MYSQL_HOST}:${MYSQL_PORT})/${MYSQL_DB}?charset=utf8&parseTime=True&loc=Local
+    charset: utf8
+    host: ${MYSQL_HOST}:${MYSQL_PORT}
+    name: ${MYSQL_DB}
+    password: ${MYSQL_PASSWORD}
     pool:
       max: 20
       min: 5
+    ssl: false
+    user: ${MYSQL_USERNAME}
 redis:
   host: 127.0.0.1:6379
   pool:
