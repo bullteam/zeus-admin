@@ -142,6 +142,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/setting/ldap", settingController.LdapUpdate)
 	v1.GET("/setting/email", settingController.EmailList)
 	v1.POST("/setting/email", settingController.EmailUpdate)
+	v1.GET("/setting/sync/dingtalk", settingController.SyncDingtalk)
 
 	if viper.GetBool("project.merge") {
 		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html
