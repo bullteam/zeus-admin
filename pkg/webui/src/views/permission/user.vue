@@ -344,9 +344,9 @@ export default {
         this.total = response.data.total
 
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        // setTimeout(() => {
+        this.listLoading = false
+        // }, 1.5 * 1000)
       })
     },
     toSearch() {
@@ -362,18 +362,18 @@ export default {
       fetchRoleList({ limit: 10000, q: '' }).then(response => {
         this.rolelist = response.data.result
         this.getDomainList()
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        // setTimeout(() => {
+        this.listLoading = false
+        // }, 1.5 * 1000)
       })
     },
     getDeptList() {
       fetchDeptList().then(response => {
         this.deptlist = response.data.result
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        // setTimeout(() => {
+        this.listLoading = false
+        // }, 1.5 * 1000)
       })
     },
     getDomainList() {
@@ -386,9 +386,9 @@ export default {
         //   o.id = 'domain_' + o.id
         // })
         // this.tree_data = menu
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        // setTimeout(() => {
+        this.listLoading = false
+        // }, 1.5 * 1000)
       })
     },
     setDomain() {
