@@ -86,7 +86,11 @@ func (u *UserController) Roles(c *gin.Context) {
 func (u *UserController) Create(c *gin.Context) {
 	var userDto dto.UserCreateDto
 	if u.BindAndValidate(c, &userDto) {
-		user := userService.Create(userDto)
+		user, err := userService.Create(userDto)
+		if err != nil {
+			fail(c, ErrInputData)
+			return
+		}
 		// TODO insert ldap user
 		// insert operation log
 		b, _ := json.Marshal(userDto)
