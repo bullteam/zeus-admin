@@ -18,7 +18,7 @@ const settingBlock = {
   },
   resource: {
     api: {
-      prefix: process.env['ZEUS_ADMIN_URL'],
+      prefix: process.env['ZEUS_ADMIN_URL'] || '/',
       contentType: 'form',
       update: '/v1/setting/ldap',
       read: '/v1/setting/ldap'
@@ -88,8 +88,9 @@ const settingBlock = {
   },
   actions: {
     async init() {
+      const host = process.env['ZEUS_ADMIN_URL'] || '/'
       const res = await this.$ams.request({
-        url: `${process.env['ZEUS_ADMIN_URL']}/v1/setting/ldap`
+        url: `${host}v1/setting/ldap`
       })
       this.data = res.data.data.list
     }
