@@ -28,6 +28,10 @@ build:
 	@echo -e ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>compile server<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 	$(BASE_PATH)/scripts/build.sh
 	@echo -e "\n"
+pack:
+	@echo -e ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>pack server and ui<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+	$(BASE_PATH)/scripts/pack.sh
+	@echo -e "\n"
 run:
 	@echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>run directly<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
 	$(shell $(BASE_PATH)/scripts/run.sh)
