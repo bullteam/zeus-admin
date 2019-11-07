@@ -25,6 +25,7 @@ config_dir=./config
 dist_dir=./pkg/webui/dist
 scripts_dir=./scripts
 doc_dir=./docs
+jwt_key_dir=./keys
 
 upx=${bash_dir}/scripts/upx/${os_name}/upx
 echo ${upx}
@@ -73,6 +74,9 @@ cp -rf ${bash_dir}/${scripts_dir}/init.sql ./
 
 echo "复制API文档"
 cp -rf  ${bash_dir}/${doc_dir} ./
+
+echo "复制jwt key文件"
+cp -rf  ${bash_dir}/${jwt_key_dir} ./
 
 echo "复制前端打包文件"
 mkdir -p ${dist_dir}
