@@ -181,24 +181,6 @@ insert  into `domain`(`id`,`name`,`callbackurl`,`remark`,`code`,`create_time`,`l
 (1,' 权限中心','http://admin.bullteam.cn',' 管理所有后台项目的菜单，权限，鉴权等','root','2019-09-30 11:38:15','2019-09-30 14:22:51'),
 (2,'crawlnovel小说','http://crawlnovel.bullteam.cn/admin','此项目用来测试','crawlnovel','2019-09-30 11:44:00','2019-10-17 00:01:30');
 
-/*Table structure for table `log` */
-
-DROP TABLE IF EXISTS `log`;
-
-CREATE TABLE `log` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户名',
-  `operation` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户操作',
-  `method` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求方法',
-  `params` varchar(5000) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求参数',
-  `time` bigint(20) NOT NULL COMMENT '执行时长(毫秒)',
-  `ip` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'IP地址',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `laste_update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='日志表';
-
-/*Data for the table `log` */
 
 /*Table structure for table `login_log` */
 
@@ -219,16 +201,7 @@ CREATE TABLE `login_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志';
-
-/*Data for the table `login_log` */
-
-insert  into `login_log`(`id`,`user_id`,`client`,`platform`,`login_result`,`login_status`,`login_time`,`ip`,`ip_location`,`operation_time`,`operation_content`,`create_time`,`last_update_time`) values 
-(1,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36','Standard Login','Standard Login Success',1,'2019-10-20 21:36:32','223.192.253.163','','2019-10-20 21:36:32','POST /v1/users/login','2019-10-20 21:36:32','2019-10-20 21:36:32'),
-(2,2,'PostmanRuntime/7.19.0','Standard Login','Standard Login Success',1,'2019-11-03 22:11:40','172.72.33.1','','2019-11-03 22:11:40','POST /v1/users/login','2019-11-03 22:11:40','2019-11-03 22:11:40'),
-(3,2,'PostmanRuntime/7.19.0','Standard Login','Standard Login Success',1,'2019-11-04 23:11:12','172.72.33.1','','2019-11-04 23:11:12','POST /v1/users/login','2019-11-04 23:11:12','2019-11-04 23:11:12'),
-(4,2,'PostmanRuntime/7.19.0','Standard Login','Standard Login Success',1,'2019-11-05 23:15:02','172.72.33.1','','2019-11-05 23:15:02','POST /v1/users/login','2019-11-05 23:15:02','2019-11-05 23:15:02'),
-(5,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-06 00:15:07','172.72.33.1','','2019-11-06 00:15:07','POST /v1/users/login','2019-11-06 00:15:07','2019-11-06 00:15:07');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志';
 
 /*Table structure for table `menu` */
 
@@ -303,7 +276,7 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`alias`,`m
 (73,71,1,'编辑','','/auth-system/dataPerm:edit','put@/v1/datas/:id',2,'',1,'2019-07-08 02:54:58','2019-07-08 02:54:58'),
 (74,71,1,'删除','','/auth-system/dataPerm:del','delete@/v1/datas/:id',2,'',1,'2019-07-08 02:55:15','2019-07-08 02:55:15'),
 (75,71,1,'浏览','','/auth-system/dataPerm:show','get@/v1/datas,get@/v1/datas/:id',2,'',1,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
-(76,18,1,'删除','','/auth-system/menu:del','delete@/v1/menus/:id',2,'',3,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
+(76,18,1,'删除','','/auth-system/menu:del','delete@/v1/menus/:id',2,'',3,'2019-07-08 02:55:33','2019-07-08 02:55:33'),
 (77,0,2,'任务管理','','',NULL,0,'component',1,'2019-10-15 23:15:35','2019-10-15 23:15:35'),
 (78,77,2,'任务管理','/taskmanage/list','/taskmanage/list',NULL,1,'clipboard',1,'2019-10-15 23:17:22','2019-10-15 23:17:30'),
 (79,77,2,'任务详情','/taskmanage/details/:id','/taskmanage/details/:id',NULL,1,'documentation',1,'2019-10-15 23:18:08','2019-10-15 23:18:08'),
@@ -410,39 +383,7 @@ CREATE TABLE `operation_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
-
-/*Data for the table `operation_log` */
-
-insert  into `operation_log`(`id`,`log_no`,`module`,`request_url`,`operation_method`,`params`,`exception_stack`,`operation_result`,`operation_success`,`user_id`,`ip`,`ip_location`,`operation_time`,`operation_content`,`create_time`,`last_update_time`) values 
-(2,'','','/v1/menus','POST','{\"name\":\"日志管理\",\"parent_id\":0,\"domain_id\":1,\"url\":\"\",\"perms\":\"\",\"menu_type\":0,\"icon\":\"table\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:22:56','Create Menu','2019-10-20 21:22:56','2019-10-20 21:22:56'),
-(3,'','','/v1/menus','POST','{\"name\":\"登录日志\",\"parent_id\":83,\"domain_id\":1,\"url\":\"/logs/log_login\",\"perms\":\"/logs/log_login\",\"menu_type\":1,\"icon\":\"clipboard\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:25:06','Create Menu','2019-10-20 21:25:06','2019-10-20 21:25:06'),
-(4,'','','/v1/menus','POST','{\"name\":\"操作日志\",\"parent_id\":83,\"domain_id\":1,\"url\":\"/logs/log_operation\",\"perms\":\"/logs/log_operation\",\"menu_type\":1,\"icon\":\"documentation\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:25:39','Create Menu','2019-10-20 21:25:39','2019-10-20 21:25:39'),
-(5,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,85,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,85,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:26:05','Edit Role','2019-10-20 21:26:05','2019-10-20 21:26:05'),
-(6,'','','/v1/roles/3','PUT','{\"id\":3,\"name\":\"日志管理\",\"domain_id\":1,\"remark\":\"日志管理\",\"menu_ids\":\"83,84,85\",\"menu_ids_ele\":\"83,84,85\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:26:29','Edit Role','2019-10-20 21:26:29','2019-10-20 21:26:29'),
-(7,'','','/v1/menus','POST','{\"name\":\"浏览\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:show\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:30:09','Create Menu','2019-10-20 21:30:09','2019-10-20 21:30:09'),
-(8,'','','/v1/menus','POST','{\"name\":\"添加\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:add\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:30:53','Create Menu','2019-10-20 21:30:53','2019-10-20 21:30:53'),
-(9,'','','/v1/menus','POST','{\"name\":\"修改\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:edit\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:31:17','Create Menu','2019-10-20 21:31:17','2019-10-20 21:31:17'),
-(10,'','','/v1/menus','POST','{\"name\":\"删除\",\"parent_id\":84,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_login:del\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:31:39','Create Menu','2019-10-20 21:31:39','2019-10-20 21:31:39'),
-(11,'','','/v1/menus','POST','{\"name\":\"浏览\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:show\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:32:36','Create Menu','2019-10-20 21:32:36','2019-10-20 21:32:36'),
-(12,'','','/v1/menus','POST','{\"name\":\"添加\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:add\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:32:56','Create Menu','2019-10-20 21:32:56','2019-10-20 21:32:56'),
-(13,'','','/v1/menus','POST','{\"name\":\"修改\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:edit\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:33:16','Create Menu','2019-10-20 21:33:16','2019-10-20 21:33:16'),
-(14,'','','/v1/menus','POST','{\"name\":\"删除\",\"parent_id\":85,\"domain_id\":1,\"url\":\"\",\"perms\":\"/logs/log_operation:del\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'223.192.253.163','','2019-10-20 21:33:44','Create Menu','2019-10-20 21:33:44','2019-10-20 21:33:44'),
-(15,'','','/v1/roles/3','PUT','{\"id\":3,\"name\":\"日志管理\",\"domain_id\":1,\"remark\":\"日志管理\",\"menu_ids\":\"83,84,86,87,88,89,85,90,91,92,93\",\"menu_ids_ele\":\"83,84,86,87,88,89,85,90,91,92,93\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:33:59','Edit Role','2019-10-20 21:33:59','2019-10-20 21:33:59'),
-(16,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,17,18,19,20,21,76,22,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'223.192.253.163','','2019-10-20 21:34:08','Edit Role','2019-10-20 21:34:08','2019-10-20 21:34:08'),
-(17,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,96,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,96,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'172.72.33.1','','2019-11-02 23:06:09','Edit Role','2019-11-02 23:06:09','2019-11-02 23:06:09'),
-(18,'','','/v1/menus','POST','{\"name\":\"详情\",\"parent_id\":96,\"domain_id\":1,\"url\":\"\",\"perms\":\"/setting/auth:show\",\"alias\":\"get@/v1/setting/email\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-03 11:17:54','Create Menu','2019-11-03 11:17:54','2019-11-03 11:17:54'),
-(19,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'172.72.33.1','','2019-11-03 11:18:02','Edit Role','2019-11-03 11:18:02','2019-11-03 11:18:02'),
-(20,'','','/v1/menus/97','PUT','{\"id\":97,\"name\":\"详情\",\"parent_id\":96,\"domain_id\":1,\"url\":\"\",\"perms\":\"/setting/auth:show\",\"alias\":\"get@/v1/setting/email,post@/v1/setting/email\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-03 11:19:42','Edit Menu','2019-11-03 11:19:42','2019-11-03 11:19:42'),
-(21,'','','/v1/menus','POST','{\"name\":\"详情\",\"parent_id\":95,\"domain_id\":1,\"url\":\"\",\"perms\":\"/setting/ldap\",\"alias\":\"get@/v1/setting/ldap,post/v1/setting/ldap\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-03 11:23:16','Create Menu','2019-11-03 11:23:16','2019-11-03 11:23:16'),
-(22,'','','/v1/menus/98','PUT','{\"id\":98,\"name\":\"详情\",\"parent_id\":95,\"domain_id\":1,\"url\":\"\",\"perms\":\"/setting/ldap\",\"alias\":\"get@/v1/setting/ldap,post@/v1/setting/ldap\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-03 11:27:54','Edit Menu','2019-11-03 11:27:54','2019-11-03 11:27:54'),
-(23,'','','/v1/menus/98','PUT','{\"id\":98,\"name\":\"详情\",\"parent_id\":95,\"domain_id\":1,\"url\":\"\",\"perms\":\"/setting/ldap:show\",\"alias\":\"get@/v1/setting/ldap,post@/v1/setting/ldap\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-03 11:28:06','Edit Menu','2019-11-03 11:28:06','2019-11-03 11:28:06'),
-(24,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'172.72.33.1','','2019-11-03 11:28:51','Edit Role','2019-11-03 11:28:51','2019-11-03 11:28:51'),
-(25,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'172.72.33.1','','2019-11-03 11:29:20','Edit Role','2019-11-03 11:29:20','2019-11-03 11:29:20'),
-(26,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'172.72.33.1','','2019-11-03 11:38:10','Edit Role','2019-11-03 11:38:10','2019-11-03 11:38:10'),
-(27,'','','/v1/menus','POST','{\"name\":\"钉钉设置\",\"parent_id\":94,\"domain_id\":1,\"url\":\"/setting/dingtalk\",\"perms\":\"\",\"alias\":\"\",\"menu_type\":1,\"icon\":\"example\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-06 00:16:36','Create Menu','2019-11-06 00:16:36','2019-11-06 00:16:36'),
-(28,'','','/v1/menus','POST','{\"name\":\"同步\",\"parent_id\":99,\"domain_id\":1,\"url\":\"\",\"perms\":\"/setting/auth:sync\",\"alias\":\"get@/v1/setting/sync/dingtalk\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'172.72.33.1','','2019-11-06 00:17:58','Create Menu','2019-11-06 00:17:58','2019-11-06 00:17:58'),
-(29,'','','/v1/roles/1','PUT','{\"id\":1,\"name\":\"超级管理员\",\"domain_id\":1,\"remark\":\"超级管理员\",\"menu_ids\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,99,100,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"menu_ids_ele\":\"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,99,100,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27\",\"data_perm_ids\":\"\"}','','success',1,2,'172.72.33.1','','2019-11-06 00:18:11','Edit Role','2019-11-06 00:18:11','2019-11-06 00:18:11');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
 
 /*Table structure for table `role` */
 
@@ -542,12 +483,12 @@ CREATE TABLE `user_oauth` (
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='用户第三方登陆关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='用户第三方登陆关联表';
 
 /*Data for the table `user_oauth` */
 
-insert  into `user_oauth`(`id`,`from`,`user_id`,`name`,`openid`,`unionid`,`avatar`,`extra`,`create_time`,`update_time`) values 
-(3,1,2,'黄福祥','WnXRUXZZQCZQdx8t4yJSxQiEiE','ajq7lrBOMtB0u134Fkl4KgiEiE','','','2019-10-08 09:48:22','2019-10-08 09:48:22');
+insert  into `user_oauth`(`id`,`from`,`user_id`,`name`,`openid`,`unionid`,`avatar`,`extra`,`create_time`,`update_time`) values
+(1,1,2,'黄福祥','WnXRUXZZQCZQdx8t4yJSxQiEiE','ajq7lrBOMtB0u134Fkl4KgiEiE','','','2019-10-08 09:48:22','2019-10-08 09:48:22');
 
 /*Table structure for table `user_secret` */
 
@@ -562,12 +503,7 @@ CREATE TABLE `user_secret` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户安全设置-Google 2fa两步验证';
-
-/*Data for the table `user_secret` */
-
-insert  into `user_secret`(`id`,`user_id`,`account_name`,`secret`,`is_open`,`create_time`,`update_time`) values 
-(2,2,'Zeus:2','2VMIIAS4TYELTF4Z',0,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户安全设置-Google 2fa两步验证';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
