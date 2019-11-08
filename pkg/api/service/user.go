@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 	"zeus/pkg/api/dao"
@@ -34,7 +35,14 @@ func (us UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
 }
 
 // Create - create a new account
-func (us UserService) Create(userDto dto.UserCreateDto) model.User {
+func (us UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
+
+	//if username is exits,it can't create this user
+	u := userDao.GetByUserName(userDto.Username)
+	if u.Username == userDto.Username {
+		return nil, errors.New("username is exits")
+	}
+
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(userDto.Password, salt)
 	userModel := model.User{
@@ -52,12 +60,14 @@ func (us UserService) Create(userDto dto.UserCreateDto) model.User {
 	c := userDao.Create(&userModel)
 	if c.Error != nil {
 		log.Error(c.Error.Error())
-	} else {
-		if userDto.Roles != "" {
-			us.AssignRole(strconv.Itoa(userModel.Id), strings.Split(userDto.Roles, ","))
-		}
+		return nil, errors.New("create user failed")
 	}
-	return userModel
+
+	if userDto.Roles != "" {
+		us.AssignRole(strconv.Itoa(userModel.Id), strings.Split(userDto.Roles, ","))
+	}
+
+	return &userModel, nil
 }
 
 // Update - update user's information

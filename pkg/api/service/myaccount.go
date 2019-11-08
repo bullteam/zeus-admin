@@ -96,5 +96,3 @@ func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid s
 	s.oauthdao.Create(&userOAuth)
 	return Info.Openid, nil
 }
-
-

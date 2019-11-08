@@ -78,3 +78,16 @@ func (s *SettingController) EmailUpdate(c *gin.Context) {
 		"result": EmailSettingDTO,
 	})
 }
+
+// @Tags Department
+// @Summary 同步钉钉部门信息
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":""}"
+// @Router /v1/depts/sync/dingtalk [get]
+func (d *SettingController) SyncDingtalk(c *gin.Context) {
+	data := SettingService.SyncDingtalk()
+	resp(c, map[string]interface{}{
+		"result": data,
+	})
+}

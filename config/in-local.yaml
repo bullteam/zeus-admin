@@ -23,12 +23,12 @@ cors:
   enable: false
   max_age: 7200
 database:
-  driver: mysql
+  driver: sqlite
   mysql:
     charset: utf8
     host: 127.0.0.1:3306
     name: zeus
-    password: 123456
+    password: root
     pool:
       max: 20
       min: 5
@@ -37,22 +37,22 @@ database:
   sqlite:
     dsn: data/zeus.db
 dingtalk:
+  agentid: 310135985
+  appkey: dingvgvn9hdcp8qtarno
+  appsecret: Sn887TtSQgGQNRcSaP-cNQXKYOkuT062vPgHoVvbTm5-HA2qnyew6xbdgZwhxD8N
+  cachepath: data/
+  corpid: dingd60a58f4e3be699235c2f4657eb6378f
   snsappid: dingoa1uudyxl2dcjvqpij
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
-  CorpId: dingd60a58f4e3be699235c2f4657eb6378f
-  SSOsecret: XU3oARxOHw731w4LYEJodPEPtppX5oMa7XPp5dv2VjTLak9I--glTDBLLbcl2VpQ
-  AgentId: 310135985
-  AppKey: dingvgvn9hdcp8qtarno
-  AppSecret: Sn887TtSQgGQNRcSaP-cNQXKYOkuT062vPgHoVvbTm5-HA2qnyew6xbdgZwhxD8N
-  CachePath: data/
+  ssosecret: XU3oARxOHw731w4LYEJodPEPtppX5oMa7XPp5dv2VjTLak9I--glTDBLLbcl2VpQ
 domain: bullteam.local
 email:
   smtp:
-    address: "ss@163.com"
-    password: "xxxxxx"
+    address: ss@163.com
+    password: xxxxxx
     port: 25
-    server: "smtp.163.com"
-    user: "ss@163.com"
+    server: smtp.163.com
+    user: vcoso@163.com
 jwt:
   expiresat: 3600*24*1
   key:

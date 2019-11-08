@@ -1,6 +1,6 @@
 module zeus
 
-go 1.12
+go 1.13
 
 require (
 	cloud.google.com/go v0.39.0 // indirect
@@ -10,7 +10,7 @@ require (
 	github.com/astaxie/beego v1.11.1
 	github.com/beego/i18n v0.0.0-20161101132742-e9308947f407
 	github.com/billcobbler/casbin-redis-watcher v0.0.0-20180829182704-69cab1cdcf44
-	github.com/bullteam/go-dingtalk v0.0.0-20191101170053-a81fcfa9edf9
+	github.com/bullteam/go-dingtalk v0.0.0-20191103124359-201d069950ae
 	github.com/casbin/casbin v1.8.3
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/garyburd/redigo v1.6.0 // indirect

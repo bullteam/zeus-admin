@@ -207,9 +207,9 @@ export default {
         this.total = response.data.total
 
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        // setTimeout(() => {
+        this.listLoading = false
+        // }, 1.5 * 1000)
       })
     },
     toSearch() {
@@ -251,9 +251,9 @@ export default {
       fetchDomainList().then(response => {
         this.domainlist = response.data.result
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        // setTimeout(() => {
+        this.listLoading = false
+        // }, 1.5 * 1000)
       })
     },
     o(data, id) {

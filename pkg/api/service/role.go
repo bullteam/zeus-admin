@@ -19,23 +19,25 @@ type RoleService struct {
 }
 
 // InfoOfId - get role info by id
-func (rs RoleService) InfoOfId(dto dto.GeneralGetDto) model.Role {
+func (RoleService) InfoOfId(dto dto.GeneralGetDto) model.Role {
 	return roleDao.Get(dto.Id, true)
 }
 
 // List - users list with pagination
-func (rs RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
+func (RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
 	return roleDao.List(dto)
 }
 
 // AssignPermission - assign permissions
-func (rs RoleService) AssignPermission(roleId int, menuIds string) {
+func (RoleService) AssignPermission(roleId int, menuIds string) {
 	roleData := roleDao.Get(roleId, true)
 	menus := menuDao.GetMenusPermByIds(menuIds)
 	if len(menus) > 0 {
 		var policies [][]string
 		for _, m := range menus {
 			if m.Url == "" && m.Perms != "" {
+				//Do not allow comma which would cause panic error with casbin rules
+				m.Perms = strings.Replace(m.Perms,",","|",-1)
 				policies = append(policies, []string{roleData.RoleName, m.Perms, "*", roleData.Domain.Code})
 			}
 		}

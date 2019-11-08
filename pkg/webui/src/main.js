@@ -22,6 +22,7 @@ import './icons' // icon
 import config from '@/config'
 import installPlugin from '@/plugin'
 import importDirective from '@/directive'
+import { getToken } from '@/utils/auth'
 
 import * as filters from './filters' // global filters
 
@@ -31,7 +32,22 @@ Vue.use(Element, {
 })
 
 Vue.use(ams)
-ams.config({ resource: { api: { successCode: 200 }}})
+ams.config({
+  resource: {
+    requestInterceptor(options) {
+      console.log('requestInterceptor', options)
+      options.headers = {
+        ...options.headers,
+        Authorization: 'Bearer ' + getToken()
+      }
+      return options
+    },
+    api: {
+      successCode: 200,
+      withCredentials: false
+    }
+  }
+})
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

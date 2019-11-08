@@ -20,8 +20,8 @@ const settingBlock = {
     api: {
       prefix: process.env['ZEUS_ADMIN_URL'] || '/',
       contentType: 'form',
-      create: 'v1/setting/ldap',
-      read: 'v1/setting/ldap'
+      update: '/v1/setting/ldap',
+      read: '/v1/setting/ldap'
     },
     fields: {
       ldapUrl: {
@@ -86,8 +86,14 @@ const settingBlock = {
       }
     }
   },
-  events: {
-    init: '@read'
+  actions: {
+    async init() {
+      const host = process.env['ZEUS_ADMIN_URL'] || '/'
+      const res = await this.$ams.request({
+        url: `${host}v1/setting/ldap`
+      })
+      this.data = res.data.data.list
+    }
   },
   style: {
     width: '60%'
