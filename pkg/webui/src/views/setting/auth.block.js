@@ -90,7 +90,7 @@ const settingBlock = {
     async init() {
       const host = process.env['ZEUS_ADMIN_URL'] || '/'
       const res = await this.$ams.request({
-        url: `${host}v1/setting/ldap`
+        url: `${host}/v1/setting/ldap`
       })
       this.data = res.data.data.list
     }
