@@ -10,7 +10,7 @@
         @click="handleCreate">{{ $t('table.add') }}
       </el-button>
     </div>
-
+    <!--
     <el-table
       v-loading="listLoading"
       :key="tableKey"
@@ -30,16 +30,6 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <!--<el-table-column :label="$t('dept.remark')" width="120px">-->
-      <!--<template slot-scope="scope">-->
-      <!--{{ scope.row.remark }}-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column :label="$t('dept.updated_time')" width="150px" align="center">-->
-      <!--<template slot-scope="scope">-->
-      <!--<span>{{ scope.row.updated_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column :label="$t('dept.actions')" align="center" width="280" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -66,14 +56,54 @@
         </template>
       </el-table-column>
     </el-table>
-
+    -->
+    <tree-table
+      :data="treeList"
+      :eval-func="func"
+      :eval-args="args"
+      :columns="columns"
+      :expand-all="expandAll"
+      border
+    >
+      <el-table-column :label="$t('dept.id')" prop="id" align="center" width="65">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('dept.actions')" align="center" width="280" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            v-permission="['/permission/dept:edit']"
+            type="primary"
+            size="mini"
+            style="width: 80px;"
+            @click="handleLook(scope.row)">{{ $t('table.look') }}
+          </el-button>
+          <el-button
+            v-permission="['/permission/dept:edit']"
+            v-if="scope.row.name!=='未分配'"
+            type="primary"
+            size="mini"
+            @click="handleUpdate(scope.row)">{{ $t('table.edit') }}
+          </el-button>
+          <el-button
+            v-permission="['/permission/dept:del']"
+            v-if="scope.row.name!=='未分配'"
+            type="danger"
+            size="mini"
+            @click="handleDelete(scope.row)">{{ $t('table.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </tree-table>
+    <!--
     <pagination
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
       @pagination="getList"/>
-
+    -->
     <el-dialog :title="$t('user.'+ textMap[dialogStatus])" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
@@ -102,15 +132,26 @@
 </template>
 
 <script>
+import treeTable from '@/components/TreeTable'
+import treeToArray from '@/directive/customEval'
 import { fetchDeptList, createDept, updateDept, deleteDept, checkMemberDept } from '@/api/dept'
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
   name: 'Dept',
-  components: { Pagination },
+  components: { Pagination, treeTable },
   data() {
     return {
+      func: treeToArray,
+      args: [null, null, 'timeLine'],
+      columns: [{
+        value: 'name',
+        text: this.$t('dept.name')
+      }],
+      expandAll: false,
+      treeList: {},
+      index: 1,
       tableKey: 0,
       list: null,
       total: 0,
@@ -131,7 +172,8 @@ export default {
         id: undefined,
         name: '',
         remark: '',
-        callbackurl: ''
+        callbackurl: '',
+        parents: ['0']
       },
       dialogFormVisible: false,
       dialogStatus: 'create',
@@ -162,7 +204,7 @@ export default {
       fetchDeptList(this.listQuery).then(response => {
         this.list = response.data.result
         this.total = response.data.total
-
+        this.treeList = this.o(response.data.result, 0)
         // Just to simulate the time of the request
         // setTimeout(() => {
         this.listLoading = false
@@ -199,7 +241,8 @@ export default {
         id: undefined,
         name: '',
         remark: '',
-        callbackurl: ''
+        callbackurl: '',
+        parents: ['0']
       }
     },
     handleCreate() {
@@ -215,6 +258,8 @@ export default {
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
+          this.temp.parent_id = this.temp.parents[this.temp.parents.length - 1]
+          delete this.temp.parent
           createDept(this.temp).then(() => {
             // this.list.unshift(this.temp)
             this.getList()
@@ -236,6 +281,9 @@ export default {
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
+      this.temp.parents = []
+      this.findParent(this.temp.id, this.temp.parents, this.list)
+      this.temp.parents.reverse()
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
@@ -243,8 +291,11 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          delete this.temp.children
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          tempData.parent_id = tempData.parents[this.temp.parents.length - 1]
+          delete tempData.parent
           updateDept(this.temp.id, tempData).then(() => {
             this.getList()
             this.dialogFormVisible = false
@@ -292,6 +343,82 @@ export default {
     },
     handleLook(row) {
       this.$router.push({ path: '/permission/dept/member?dept=' + row.id })
+    },
+
+    o(data, id) {
+      const menu = data.filter(o => o.parent_id === id)
+      menu.forEach(o => {
+        console.log(o.id)
+        const children = this.o(data, o.id)
+        if (children && children.length > 0) {
+          o.children = children
+        }
+      })
+      return menu
+    },
+    recursive(obj, parent) {
+      const output = []
+      let temp = []
+      let index = 1
+      obj.forEach(o => {
+        if (o.permission || o.permission !== false) {
+          temp = {
+            name: this.$t('route.' + o.meta.title),
+            label: this.$t('route.' + o.meta.title),
+            icon: o.meta.icon,
+            id: this.index,
+            value: this.index,
+            order_num: index,
+            url: JSON.stringify(parent) === '{}' ? o.path : parent.url + '/' + o.path,
+            parent_id: JSON.stringify(parent) === '{}' ? 0 : parent.id,
+            perms: '',
+            alias: '',
+            menu_type: '1'
+          }
+          this.index += 1
+          index += 1
+          if (o.children && Array.isArray(o.children)) {
+            temp.children = this.recursive(o.children, temp)
+          }
+          if (o.auth && Array.isArray(o.auth)) {
+            const items = []
+            let item = {}
+            let item_index = 1
+            o.auth.forEach(o => {
+              item = {
+                name: o.name,
+                label: o.name,
+                icon: '',
+                id: this.index,
+                value: this.index,
+                order_num: item_index,
+                url: '',
+                parent_id: temp.id,
+                perms: temp.url + ':' + o.code,
+                menu_type: '2'
+              }
+              items.push(item)
+              this.index += 1
+              item_index += 1
+            })
+            temp.children = items
+          }
+          output.push(temp)
+        }
+      })
+      return output
+    },
+    findParent(id, output, data) {
+      data.forEach(o => {
+        if (o.id === id) {
+          output.push(o.parent_id)
+          this.findParent(o.parent_id, output, this.treeList)
+        }
+        if (o.children && Array.isArray(o.children)) {
+          this.findParent(id, output, o.children)
+        }
+      })
+      return output
     }
   }
 }
