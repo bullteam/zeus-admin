@@ -25,6 +25,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	e.Use(middleware.SetLangVer())
 	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	e.GET("/healthcheck", controllers.Healthy)
+	e.Static("/file", "./data/images/") // 添加图片资源路径
 
 	//version fragment
 	v1 := e.Group("/v1")
@@ -73,6 +74,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/account/check-google-2fa-code", accountController.CheckGoogle2faCode)
 	v1.GET("/account/find-code-open", accountController.FindCodeOpen) // is check google 2fa code
 	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // add ldap user
+	v1.POST("/account/upload-avatar", accountController.UploadAvatar)
 
 	v1.Use(middleware.PermCheck)
 	//user

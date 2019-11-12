@@ -450,6 +450,7 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 		errs := userService.UnBindUserDingtalk(oauthType, userId)
 		if errs != nil {
 			fail(c, ErrUnBindDingtalk)
+			return
 		}
 		data := map[string]bool{
 			"state": true,
@@ -480,5 +481,25 @@ func (a *AccountController) LdapAddUser(c *gin.Context) {
 	rr := ldapConn.Add("zeus", "zeus@bullteam.cn", "10111", "10111", "123456")
 	resp(c, map[string]interface{}{
 		"result": rr,
+	})
+}
+
+//upload avatar
+func (a *AccountController) UploadAvatar(c *gin.Context) {
+	file, header, err := c.Request.FormFile("file")
+	if err != nil {
+		//c.String(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		fail(c, ErrUploadAvatar)
+		return
+	}
+	filename := header.Filename
+	Account := service.MyAccountService{}
+	result, err := Account.UploadAvatar(file, filename)
+	if err != nil {
+		fail(c, ErrUploadAvatar)
+		return
+	}
+	resp(c, map[string]interface{}{
+		"result": result,
 	})
 }
