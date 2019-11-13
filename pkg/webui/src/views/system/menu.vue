@@ -351,13 +351,11 @@ export default {
       })
     },
     handleUpdate(row) {
-      // this.$message.info(row)
-      // this.dialogFormVisible = true
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
-      this.temp.parents = []
+      this.temp.parents = ['0']
       this.findParent(this.temp.id, this.temp.parents, this.list)
-      this.temp.parents.reverse()
+      // this.temp.parents.reverse()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
     },
