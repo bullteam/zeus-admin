@@ -494,7 +494,7 @@ func (a *AccountController) UploadAvatar(c *gin.Context) {
 	}
 	filename := header.Filename
 	Account := service.MyAccountService{}
-	result, err := Account.UploadAvatar(file, filename)
+	result, err := Account.UploadAvatar(file, filename, int(c.Value("userId").(float64)))
 	if err != nil {
 		fail(c, ErrUploadAvatar)
 		return

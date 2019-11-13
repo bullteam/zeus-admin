@@ -3,12 +3,12 @@ package service
 import (
 	"crypto/rand"
 	"encoding/base32"
+	"errors"
 	"fmt"
 	"github.com/nfnt/resize"
 	"github.com/spf13/viper"
 	"image/jpeg"
 	"strconv"
-
 	//"io"
 	"mime/multipart"
 	"os"
@@ -106,7 +106,7 @@ func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid s
 }
 
 //上传头像
-func (s MyAccountService) UploadAvatar(file multipart.File, filename string) (filepath string, err error) {
+func (s MyAccountService) UploadAvatar(file multipart.File, filename string, uid int) (filepath string, err error) {
 
 	img, err := jpeg.Decode(file)
 	if err != nil {
@@ -124,7 +124,17 @@ func (s MyAccountService) UploadAvatar(file multipart.File, filename string) (fi
 	}
 	defer out.Close()
 	jpeg.Encode(out, m, nil)
-	doamain := viper.GetString("base.apiurl")
-	filepath = doamain + "/file/" + filename
-	return filepath, nil
+	filepath = "/file/" + filename
+
+	userModel := model.User{
+		Id: uid,
+	}
+	c := userDao.Update(&userModel, map[string]interface{}{
+		"faceicon": filepath,
+	})
+
+	if c.RowsAffected >= 1 {
+		return filepath, nil
+	}
+	return filepath, errors.New("update faceicon error")
 }
