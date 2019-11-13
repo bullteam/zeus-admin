@@ -24,6 +24,7 @@ require (
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/icepy/go-dingtalk v0.0.0-20180430151047-e8997a391814
 	github.com/jinzhu/gorm v1.9.11
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/pkg/errors v0.8.1

@@ -61,6 +61,7 @@ export default {
 <style lang="scss" scoped>
 .personal_content {
   width: 100%;
+  overflow: auto;
   height: calc(100vh - 84px);
   background: #f5f5f5;
   padding: 30px;

@@ -4,6 +4,14 @@ import (
 	"crypto/rand"
 	"encoding/base32"
 	"fmt"
+	"github.com/nfnt/resize"
+	"github.com/spf13/viper"
+	"image/jpeg"
+	"strconv"
+
+	//"io"
+	"mime/multipart"
+	"os"
 	"time"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account/login"
@@ -95,4 +103,28 @@ func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid s
 	}
 	s.oauthdao.Create(&userOAuth)
 	return Info.Openid, nil
+}
+
+//上传头像
+func (s MyAccountService) UploadAvatar(file multipart.File, filename string) (filepath string, err error) {
+
+	img, err := jpeg.Decode(file)
+	if err != nil {
+		return "", err
+	}
+	file.Close()
+	width := viper.GetInt("account.avatar.width")
+	height := viper.GetInt("account.avatar.height")
+	m := resize.Resize(uint(width), uint(height), img, resize.Lanczos3)
+	timenow := time.Now().Unix()
+	filename = strconv.FormatInt(timenow, 10) + ".jpg"
+	out, err := os.Create("./data/images/" + filename)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	jpeg.Encode(out, m, nil)
+	doamain := viper.GetString("base.apiurl")
+	filepath = doamain + "/file/" + filename
+	return filepath, nil
 }

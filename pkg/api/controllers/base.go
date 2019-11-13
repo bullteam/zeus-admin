@@ -57,6 +57,7 @@ var (
 	ErrValidation         = &ControllerError{13011, "err.ErrValidate", "", ""}
 	ErrNoRecord           = &ControllerError{13012, "err.ErrNoRecord", "", ""}
 	ErrHasSubRecord       = &ControllerError{13013, "err.ErrHasSubRecord", "", ""}
+	ErrUploadAvatar       = &ControllerError{13014, "err.ErrUploadAvatar", "", ""}
 )
 
 var logService = service.LogService{}
