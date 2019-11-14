@@ -20,7 +20,7 @@ func (LogService) LoginLogDetail(dto dto.GeneralGetDto) LoginLog {
 }
 
 // List - users list with pagination
-func (LogService) LoginLogLists(dto dto.GeneralListDto) ([]LoginLog, int64) {
+func (LogService) LoginLogLists(dto dto.LoginLogListDto) ([]dao.LoginLogList, int64) {
 	return loginLogDao.Lists(dto)
 }
 
@@ -29,7 +29,7 @@ func (LogService) OperationLogDetail(dto dto.GeneralGetDto) OperationLog {
 }
 
 // List - users list with pagination
-func (LogService) OperationLogLists(dto dto.GeneralListDto) ([]OperationLog, int64) {
+func (LogService) OperationLogLists(dto dto.OperationLogListDto) ([]dao.OperationLogList, int64) {
 	return operationLogDao.Lists(dto)
 }
 

@@ -3,16 +3,22 @@
     <div class="filter-container">
       <el-form inline>
         <el-form-item label="用户名">
-          <el-input v-model="userName" />
+          <el-input v-model="listQuery.username" />
         </el-form-item>
         <el-form-item label="IP">
-          <el-input v-model="ip" />
+          <el-input v-model="listQuery.ip" />
         </el-form-item>
-        <el-form-item label="操作时间" label-width="120px" class="postInfo-container-item">
-          <el-date-picker v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select start datetime" />
-        </el-form-item>
-        <el-form-item label="">
-          <el-date-picker v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select end datetime" />
+        <el-form-item label="操作时间">
+          <el-date-picker
+            v-model="dateValue"
+            :picker-options="pickerOptions"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            type="datetimerange"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            align="right">
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="toSearch">
@@ -20,10 +26,6 @@
           </el-button>
         </el-form-item>
       </el-form>
-      <el-alert
-        :closable="false"
-        :title="`总共有${total}个结果`"
-        type="success"/>
     </div>
 
     <el-table
@@ -42,7 +44,7 @@
       </el-table-column>
       <el-table-column :label="$t('log.user_id')" min-width="100px" width="100px">
         <template slot-scope="scope">
-          {{ scope.row.user_id }}
+          {{ scope.row.username }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('log.request_url')" width="250px">
@@ -95,6 +97,7 @@
 <script>
 import { fetchOperationLogList } from '@/api/log'
 import Pagination from '@/components/Pagination'
+import moment from 'moment'
 
 export default {
   name: 'LogsOperation',
@@ -111,62 +114,72 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: {
+        username: '',
+        ip: '',
+        start_time: '',
+        end_time: '',
         page: 1,
         skip: 0,
-        limit: 20,
-        importance: undefined,
-        type: undefined,
+        limit: 10,
         sort: '+id'
       },
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       showReviewer: false,
       downloadLoading: false,
       status: 0,
-      userName: '',
-      ip: '',
-      display_time: undefined // 前台展示时间
-    }
-  },
-  computed: {
-    displayTime: {
-      // set and get is useful when the data
-      // returned by the back end api is different from the front end
-      // back end return => "2013-06-25 06:59:25"
-      // front end need timestamp => 1372114765000
-      get() {
-        return (+new Date(this.display_time))
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
       },
-      set(val) {
-        this.display_time = new Date(val)
-      }
+      dateValue: []
     }
   },
   created() {
-    if (this.$route.query.dept) {
-      this.listQuery.q = 'd=' + this.$route.query.dept
-    }
+    this.dateValue = this.lastMonth()
     this.getList()
   },
   methods: {
     getList() {
       this.listLoading = true
       this.listQuery.skip = (this.listQuery.page - 1) * this.listQuery.limit
+      if (this.dateValue) {
+        this.listQuery.start_time = this.dateValue[0]
+        this.listQuery.end_time = this.dateValue[1]
+      }
       fetchOperationLogList(this.listQuery).then(response => {
         this.list = response.data.result
         this.total = response.data.total
 
         // Just to simulate the time of the request
-        // setTimeout(() => {
-        this.listLoading = false
-        // }, 1.5 * 1000)
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
       })
     },
     toSearch() {
-      if (this.search_department_id !== '') {
-        this.listQuery.q = 'd=' + this.search_department_id
-      } else {
-        delete this.listQuery.q
-      }
       this.getList()
     },
     handleFilter() {
@@ -186,6 +199,12 @@ export default {
         this.listQuery.sort = '-id'
       }
       this.handleFilter()
+    },
+    lastMonth() {
+      return [
+        moment().subtract(1, 'months').format('YYYY-MM-DD 00:00:00'),
+        moment().format('YYYY-MM-DD 00:00:00')
+      ]
     }
   }
 }
