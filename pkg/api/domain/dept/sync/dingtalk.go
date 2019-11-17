@@ -7,7 +7,7 @@ import (
 
 func GetDingTalkUserInfo() (deptInfos interface{}, err error) {
 	c := GetCompanyDingTalkClient()
-	c.RefreshCompanyAccessToken()
+	_ = c.RefreshCompanyAccessToken()
 	list, err := c.DepartmentList(1, "zh_CN")
 	if err != nil {
 		return nil, err
