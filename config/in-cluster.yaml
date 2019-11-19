@@ -1,3 +1,7 @@
+account:
+  avatar:
+    width: 150
+    height: 150
 base:
   baseurl: http://localhost:8082/
   isenableaccess: false
@@ -5,35 +9,36 @@ base:
   logpath: /data/log
   port: 8082
   sitename: Zeus 宙斯权限后台管理系统
+  apiurl: http://api.auth.bullteam.local
 casbin:
   model:
     rule_0: config/casbin/rbac_model_0.conf
 cors:
   allow_credentials: false
   allow_headers:
-  - '*'
+    - '*'
   allow_methods:
-  - GET
-  - POST
-  - OPTIONS
-  - PUT
-  - DELETE
+    - GET
+    - POST
+    - OPTIONS
+    - PUT
+    - DELETE
   allow_origins:
-  - '*'
+    - '*'
   enable: false
   max_age: 7200
 database:
   driver: mysql
   mysql:
     charset: utf8
-    host: ${MYSQL_HOST}:${MYSQL_PORT}
-    name: ${MYSQL_DB}
-    password: ${MYSQL_PASSWORD}
+    host: zeus_mysql:3306
+    name: zeus
+    password: zeusadmin@xaer
     pool:
       max: 20
       min: 5
     ssl: false
-    user: ${MYSQL_USERNAME}
+    user: root
   sqlite:
     dsn: data/zeus.db
 dingtalk:
@@ -64,9 +69,9 @@ lang:
 ldap:
   addr: 127.0.0.1:389
   attributes:
-  - cn
-  - displayName
-  - mail
+    - cn
+    - displayName
+    - mail
   authfilter: (&(uid=%s))
   basedn: dc=bullteam,dc=com
   binddn: cn=admin,dc=bullteam,dc=com
