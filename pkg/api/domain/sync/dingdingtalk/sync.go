@@ -7,8 +7,8 @@ import (
 
 var dingTalkClient *dingtalk.DingTalkClient
 
-// SetUp - connect to dingding api
-func SetUp(){
+// connect to dingding api
+func SetUp() {
 	dingTalkClient = dingtalk.NewDingTalkCompanyClient(&dingtalk.DTConfig{
 		AppKey:    viper.GetString("dingtalk.appkey"),
 		AppSecret: viper.GetString("dingtalk.appsecret"),
@@ -17,17 +17,21 @@ func SetUp(){
 }
 
 // GetDepartment - get departments of dingding
-func GetDepartments() (interface{},error) {
+func GetDepartments() (interface{}, error) {
 	_ = dingTalkClient.RefreshCompanyAccessToken()
+	var treeDepartment = map[int][]dingtalk.Department{}
 	list, err := dingTalkClient.DepartmentList(1, "zh_CN")
 	if err != nil {
 		return nil, err
 	}
-	return list.Department, nil
+	for _, d := range list.Department {
+		treeDepartment[d.ParentId] = append(treeDepartment[d.ParentId], d)
+	}
+	return treeDepartment, nil
 }
 
 // GetUsers - get users of dingding
-func GetUsers(departmentId int) (interface{},error) {
+func GetUsers(departmentId int) (interface{}, error) {
 	list, err := dingTalkClient.UserList(departmentId)
 	if err != nil {
 		return nil, err

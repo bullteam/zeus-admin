@@ -2,7 +2,7 @@ package dto
 
 type LoginLogListDto struct {
 	Username  string `form:"username"`
-	Ip 		  string `form:"ip"`
+	Ip        string `form:"ip"`
 	StartTime string `form:"start_time"`
 	EndTime   string `form:"end_time"`
 	Skip      int    `form:"skip,default=0" json:"skip"`

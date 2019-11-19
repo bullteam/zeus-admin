@@ -13,7 +13,7 @@ type OperationLog = model.OperationLog
 type LoginLogList struct {
 	Id               int       `json:"id"`
 	UserId           int       `json:"user_id" binding:"required"`
-	User   		     User 	   `json:"user"`
+	User             User      `json:"user"`
 	Client           string    `json:"client"`
 	Platform         string    `json:"platform"`
 	LoginResult      string    `json:"login_result"`
@@ -25,7 +25,7 @@ type LoginLogList struct {
 	OperationContent string    `json:"operation_content"`
 	CreateTime       time.Time `json:"-"`
 	LastUpdateTime   time.Time `json:"-"`
-	Username 		 string    `json:"username"`
+	Username         string    `json:"username"`
 }
 
 type OperationLogList struct {
@@ -45,7 +45,7 @@ type OperationLogList struct {
 	OperationContent string    `json:"operation_content"`
 	CreateTime       time.Time `json:"create_time"`
 	LastUpdateTime   time.Time `json:"updated_time"`
-	Username 		 string    `json:"username"`
+	Username         string    `json:"username"`
 }
 
 type LoginLogDao struct {
@@ -67,16 +67,16 @@ func (LoginLogDao) Lists(listDto dto.LoginLogListDto) ([]LoginLogList, int64) {
 	var total int64
 	db := GetDb()
 	if len(listDto.Username) > 0 {
-		db = db.Where("user.username LIKE ?","%"+listDto.Username+"%")
+		db = db.Where("user.username LIKE ?", "%"+listDto.Username+"%")
 	}
 	if len(listDto.Ip) > 0 {
-		db = db.Where("login_log.ip = ?",listDto.Ip)
+		db = db.Where("login_log.ip = ?", listDto.Ip)
 	}
 	if len(listDto.StartTime) > 0 {
-		db = db.Where("login_log.login_time >= ?",listDto.StartTime)
+		db = db.Where("login_log.login_time >= ?", listDto.StartTime)
 	}
 	if len(listDto.EndTime) > 0 {
-		db = db.Where("login_log.login_time <= ?",listDto.EndTime)
+		db = db.Where("login_log.login_time <= ?", listDto.EndTime)
 	}
 	db.Table("login_log").
 		Select("login_log.*,user.username").
@@ -118,16 +118,16 @@ func (OperationLogDao) Lists(listDto dto.OperationLogListDto) ([]OperationLogLis
 	var total int64
 	db := GetDb()
 	if len(listDto.Username) > 0 {
-		db = db.Where("user.username LIKE ?","%"+listDto.Username+"%")
+		db = db.Where("user.username LIKE ?", "%"+listDto.Username+"%")
 	}
 	if len(listDto.Ip) > 0 {
-		db = db.Where("operation_log.ip = ?",listDto.Ip)
+		db = db.Where("operation_log.ip = ?", listDto.Ip)
 	}
 	if len(listDto.StartTime) > 0 {
-		db = db.Where("operation_log.operation_time >= ?",listDto.StartTime)
+		db = db.Where("operation_log.operation_time >= ?", listDto.StartTime)
 	}
 	if len(listDto.EndTime) > 0 {
-		db = db.Where("operation_log.operation_time <= ?",listDto.EndTime)
+		db = db.Where("operation_log.operation_time <= ?", listDto.EndTime)
 	}
 	db.Table("operation_log").
 		Select("operation_log.*,user.username").

@@ -33,7 +33,7 @@ var (
 	ErrSystem             = &ControllerError{10011, "err.ErrSystem", "", ""}
 	ErrExpired            = &ControllerError{10012, "err.ErrExpired", "", ""}
 	ErrPermission         = &ControllerError{10013, "err.ErrPermission", "", ""}
-	Actionsuccess         = &ControllerError{90000, "ok.Actionsuccess", "", ""}
+	Actionsuccess         = &ControllerError{90000, "ok.ActionSuccess", "", ""}
 	ErrGenJwt             = &ControllerError{10014, "err.ErrGenJwt", "", ""}
 	ErrChkJwt             = &ControllerError{10012, "err.ErrChkJwt", "", ""}
 	ErrIdData             = &ControllerError{10016, "err.ErrIdData", "", ""}

@@ -12,6 +12,7 @@ import (
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/domain/perm"
+	"zeus/pkg/api/domain/sync/dingdingtalk"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/middleware"
 	"zeus/pkg/api/router"
@@ -83,6 +84,9 @@ func setup() {
 	ldap.Setup()
 	//7.Set up permission handler
 	perm.SetUp(cluster)
+	//8.DingTalk client setup
+	dingdingtalk.SetUp()
+	//9.Initialize language
 	middleware.InitLang()
 }
 
