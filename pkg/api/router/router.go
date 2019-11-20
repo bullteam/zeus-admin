@@ -146,6 +146,10 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/setting/email", settingController.EmailUpdate)
 	v1.GET("/setting/sync/dingtalk", settingController.SyncDingtalk)
 
+	// Sync actions
+	syncController := controllers.SyncController{}
+	v1.POST("/sync/dingtalk", syncController.SyncDingTalk)
+
 	if viper.GetBool("project.merge") {
 		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html
 		//e.LoadHTMLFiles("./pkg/webui/dist/static/*/*")   // 添加资源路径

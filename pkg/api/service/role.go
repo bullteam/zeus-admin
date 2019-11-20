@@ -37,7 +37,7 @@ func (RoleService) AssignPermission(roleId int, menuIds string) {
 		for _, m := range menus {
 			if m.Url == "" && m.Perms != "" {
 				//Do not allow comma which would cause panic error with casbin rules
-				m.Perms = strings.Replace(m.Perms,",","|",-1)
+				m.Perms = strings.Replace(m.Perms, ",", "|", -1)
 				policies = append(policies, []string{roleData.RoleName, m.Perms, "*", roleData.Domain.Code})
 			}
 		}

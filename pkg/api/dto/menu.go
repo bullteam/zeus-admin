@@ -42,7 +42,7 @@ type MenuEditDto struct {
 
 func permsValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
 	if val, ok := field.Interface().(string); ok {
-		if strings.Contains(val,",") {
+		if strings.Contains(val, ",") {
 			return false
 		}
 	}

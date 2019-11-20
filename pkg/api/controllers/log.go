@@ -30,7 +30,7 @@ func (LogController) LoginLogDetail(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
 // @Router /v1/log/login [get]
 func (LogController) LoginLogLists(c *gin.Context) {
-	var listDto dto.GeneralListDto
+	var listDto dto.LoginLogListDto
 	_ = dto.Bind(c, &listDto)
 	data, total := logService.LoginLogLists(listDto)
 	resp(c, map[string]interface{}{
@@ -60,7 +60,7 @@ func (LogController) OperationLogDetail(c *gin.Context) {
 // @Success 200 {string} json "{"code":200,"data":{"id":1,"name":"test"}}"
 // @Router /v1/log/operation/{logId} [get]
 func (LogController) OperationLogLists(c *gin.Context) {
-	var listDto dto.GeneralListDto
+	var listDto dto.OperationLogListDto
 	_ = dto.Bind(c, &listDto)
 	data, total := logService.OperationLogLists(listDto)
 	resp(c, map[string]interface{}{

@@ -130,7 +130,7 @@ insert  into `data_perm`(`id`,`domain_id`,`parent_id`,`name`,`perms`,`perms_rule
 DROP TABLE IF EXISTS `department`;
 
 CREATE TABLE `department` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '部门名称',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级部门id',
   `order_num` int(11) DEFAULT '1' COMMENT '排序',
@@ -358,7 +358,7 @@ insert  into `menu_perm_alias`(`id`,`perms`,`alias`,`domain_id`,`created_time`,`
 (49,'/setting/auth:show','post@/v1/setting/email',1,1572752275,1572752275),
 (50,'/setting/ldap:show','get@/v1/setting/ldap',1,1572752282,1572752282),
 (51,'/setting/ldap:show','post@/v1/setting/ldap',1,1572752282,1572752282),
-(52,'','',1,1572970596,1572970596),
+(52,'/permission/dept:del','post@/v1/depts/:id/check-no-member',1,1572605425,1572605425),
 (53,'/setting/auth:sync','get@/v1/setting/sync/dingtalk',1,1572970678,1572970678);
 
 /*Table structure for table `operation_log` */
