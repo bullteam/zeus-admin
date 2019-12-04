@@ -15,6 +15,7 @@ import (
 	"strconv"
 	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 	"zeus/pkg/api/utils/mailTemplate"
 )
@@ -394,8 +395,8 @@ func (a *AccountController) EmailVerify(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/thirdbind [get]
-func (a *AccountController) Thirdbind(c *gin.Context) {
+// @Router /v1/account/third-bind/from/:from [get]
+func (a *AccountController) ThirdBind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
 	if a.BindAndValidate(c, &bindThirdDto) {
 		from := bindThirdDto.From
@@ -404,14 +405,15 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 		}
 		userId := int(c.Value("userId").(float64))
 		myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
-		openid, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
+		_, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
 		if err != nil {
+			log.Error(err.Error())
 			fail(c, ErrBindDingtalk)
 			return
 		}
-		data := map[string]string{
-			"openid": openid,
-		}
+		//data := map[string]string{
+		//	"openid": openid,
+		//}
 		// insert operation log
 		b, _ := json.Marshal(bindThirdDto)
 		orLogDto := dto.OperationLogDto{
@@ -426,9 +428,10 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 			OperationContent: "Bind third account",
 		}
 		_ = logService.InsertOperationLog(&orLogDto)
-		resp(c, map[string]interface{}{
-			"result": data,
-		})
+		//resp(c, map[string]interface{}{
+		//	"result": data,
+		//})
+		c.Redirect(301,"/#/my/third")
 	}
 }
 

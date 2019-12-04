@@ -10,18 +10,18 @@ type LoginDto struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
-//oauth login
+// LoginOAuthDto - oauth login
 type LoginOAuthDto struct {
 	Code string `form:"code" binding:"required"`
 	Type int    `form:"type" binding:"required"`
 }
-
+// BindThirdDto - bind third-part account
 type BindThirdDto struct {
 	From int    `form:"from"`
-	Code string `form:"code"`
+	Code string `form:"code" binding:"required"`
 }
 
-//unbind
+// UnBindThirdDto - unbind third-part account
 type UnBindThirdDto struct {
 	OAuthType int `form:"from"`
 }

@@ -85,8 +85,11 @@ export default {
           this.getBindList()
         })
       } else {
+        const callbackUri = location.origin + '/v1/account/third-bind/from/1'
+        // const callbackUri = location.origin + '#/my/third/from/1'
         switch (from) {
-          case 1: location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoa1uudyxl2dcjvqpij&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + location.origin + '/my/third/from/1'
+          case 1:
+            location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoa1uudyxl2dcjvqpij&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + callbackUri
             break
         }
       }

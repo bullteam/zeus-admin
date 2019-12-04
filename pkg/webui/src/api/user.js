@@ -86,7 +86,7 @@ export function deleteUser(data) {
 export function bind(data) {
   return request({
     url: 'v1/account/third-bind',
-    method: 'post',
+    method: 'POST',
     data: qs.stringify(data)
   })
 }

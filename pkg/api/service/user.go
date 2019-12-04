@@ -265,7 +265,9 @@ func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
 	roles := us.GetAllRoles(uid)
 	mids := []string{}
 	for _, r := range roleDao.GetRolesByNames(roles) {
-		mids = append(mids, r.MenuIds)
+		if r.Domain.Code == domain {
+			mids = append(mids, r.MenuIds)
+		}
 	}
 	return menuDao.GetMenusByIds(strings.Join(mids, ","))
 }

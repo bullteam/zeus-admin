@@ -9,8 +9,10 @@ import (
 
 func init() {
 	dingTalkClient = dingtalk.NewDingTalkCompanyClient(&dingtalk.DTConfig{
-		AppKey:    `dingvgvn9hdcp8qtarno`,
-		AppSecret: `Sn887TtSQgGQNRcSaP-cNQXKYOkuT062vPgHoVvbTm5-HA2qnyew6xbdgZwhxD8N`,
+		//AppKey:    `dingvgvn9hdcp8qtarno`,
+		//AppSecret: `Sn887TtSQgGQNRcSaP-cNQXKYOkuT062vPgHoVvbTm5-HA2qnyew6xbdgZwhxD8N`,
+		AppKey:    `dingv5ktecv1nwpu7whw`,
+		AppSecret: `JvA3uaRSUn4KSzmlGT_AXktNlPpqgzHlZx6Uwj_nxw0Jhp6sorI1MikrDLwOJooL`,
 		CachePath: `data/`,
 	})
 }

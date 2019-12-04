@@ -63,7 +63,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
 	v1.POST("/account/bind-google-2fa-code", accountController.BindGoogle2faCode)
-	v1.POST("/account/third-bind", accountController.Thirdbind)
+	v1.GET("/account/third-bind/from/:from", accountController.ThirdBind)
 	v1.POST("/account/third-unbind", accountController.ThirdUnbind)
 	v1.GET("/account/thirds", accountController.ThirdList)
 	v1.POST("/account/send-verify-email", accountController.SendVerifymail)
