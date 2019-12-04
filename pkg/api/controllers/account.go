@@ -431,7 +431,7 @@ func (a *AccountController) ThirdBind(c *gin.Context) {
 		//resp(c, map[string]interface{}{
 		//	"result": data,
 		//})
-		c.Redirect(301,"/#/my/third")
+		c.Redirect(301, "/#/my/third")
 	}
 }
 

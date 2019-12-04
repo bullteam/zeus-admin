@@ -15,6 +15,7 @@ type LoginOAuthDto struct {
 	Code string `form:"code" binding:"required"`
 	Type int    `form:"type" binding:"required"`
 }
+
 // BindThirdDto - bind third-part account
 type BindThirdDto struct {
 	From int    `form:"from"`
