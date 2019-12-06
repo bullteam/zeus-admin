@@ -29,7 +29,6 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//version fragment
 	v1 := e.Group("/v1")
-
 	//install
 	InstallController := controllers.InstallController{}
 	v1.POST("/install", InstallController.Install)
@@ -49,6 +48,8 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
+	v1.Use(middleware.AccessLog)
+
 	userController := &controllers.UserController{}
 	accountController := &controllers.AccountController{}
 

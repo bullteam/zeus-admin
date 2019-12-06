@@ -60,12 +60,13 @@ type UserMoveDepartmentDto struct {
 // UserEditPasswordDto - User update password only
 type UserEditPasswordDto struct {
 	Id       int    `uri:"id" json:"id" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required,pwdValidate"`
+	Password string `form:"new_password" json:"password" binding:"required,pwdValidate"`
+	//RePassword string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
 }
 
 //Account edit password only
 type AccountEditPasswordDto struct {
-	Id          int    `uri:"id" json:"id" binding:"required"`
+	Id          int
 	RePassword  string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
 	NewPassword string `form:"new_password" json:"new_password" binding:"required,pwdValidate"`
 }
@@ -78,7 +79,7 @@ type UserInDomainDto struct {
 // password validator
 func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
 	if val, ok := field.Interface().(string); ok {
-		if len(val) < 6 {
+		if len(val) < 8 || len(val) > 16 {
 			return false
 		}
 	}

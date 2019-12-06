@@ -52,7 +52,7 @@ export function updateUserStatus(data) {
 
 export function updateUserPassWord(data) {
   return request({
-    url: 'v1/users/' + data.id + '/password',
+    url: 'v1/account/password',
     method: 'put',
     data: qs.stringify(data)
   })

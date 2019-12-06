@@ -14,6 +14,7 @@ import (
 	"net/url"
 	"strconv"
 	"zeus/pkg/api/domain/account/ldap"
+	"zeus/pkg/api/domain/account/login"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
@@ -77,9 +78,16 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 	var accountDto dto.AccountEditPasswordDto
 	var userDto dto.UserEditPasswordDto
 	accountDto.Id = int(c.Value("userId").(float64))
+
 	if a.BindAndValidate(c, &accountDto) {
 		if accountDto.NewPassword != accountDto.RePassword {
 			fail(c, ErrDifferentPasswords)
+			return
+		}
+		//check if equal to old password
+		userModel := userService.InfoOfId(dto.GeneralGetDto{Id: accountDto.Id})
+		if login.VerifyPassword(accountDto.NewPassword, userModel) {
+			fail(c,ErrSamePasswords)
 			return
 		}
 		userDto.Id = accountDto.Id

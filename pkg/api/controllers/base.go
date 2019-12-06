@@ -38,6 +38,7 @@ var (
 	ErrChkJwt             = &ControllerError{10012, "err.ErrChkJwt", "", ""}
 	ErrIdData             = &ControllerError{10016, "err.ErrIdData", "", ""}
 	ErrDifferentPasswords = &ControllerError{10017, "err.ErrDifferentPasswords", "", ""}
+	ErrSamePasswords      = &ControllerError{10018, "err.ErrSamePasswords", "", ""}
 	ErrAddFail            = &ControllerError{11000, "err.ErrAddFail", "", ""}
 	ErrEditFail           = &ControllerError{11001, "err.ErrEditFail", "", ""}
 	ErrDelFail            = &ControllerError{11002, "err.ErrDelFail", "", ""}
