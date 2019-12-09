@@ -93,7 +93,7 @@ func (s MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAut
 //绑定第三方应用
 func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid string, err error) {
 	Info, err := login.GetDingTalkUserInfo(code)
-	log.Info(fmt.Sprintf("%#v",Info))
+	log.Info(fmt.Sprintf("%#v", Info))
 	if err != nil {
 		return "", err
 	}
