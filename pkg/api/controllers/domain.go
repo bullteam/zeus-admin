@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
@@ -68,20 +67,6 @@ func (d *DomainController) Create(c *gin.Context) {
 			fail(c, ErrAddFail)
 			return
 		}
-		// insert operation log
-		b, _ := json.Marshal(domainDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           int(c.Value("userId").(float64)),
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Create Domain",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"id": created.Id,
 		})
@@ -103,20 +88,6 @@ func (d *DomainController) Delete(c *gin.Context) {
 			fail(c, ErrDelFail)
 			return
 		}
-		// insert operation log
-		b, _ := json.Marshal(domainDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           int(c.Value("userId").(float64)),
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Delete Domain",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.DeletedDone")
 	}
 }
@@ -133,20 +104,6 @@ func (d *DomainController) Edit(c *gin.Context) {
 	if d.BindAndValidate(c, &domainDto) {
 		affected := domainService.Update(domainDto)
 		if affected > 0 {
-			// insert operation log
-			b, _ := json.Marshal(domainDto)
-			orLogDto := dto.OperationLogDto{
-				UserId:           int(c.Value("userId").(float64)),
-				RequestUrl:       c.Request.RequestURI,
-				OperationMethod:  c.Request.Method,
-				Params:           string(b),
-				Ip:               c.ClientIP(),
-				IpLocation:       "", //TODO...待接入获取ip位置服务
-				OperationResult:  "success",
-				OperationSuccess: 1,
-				OperationContent: "Edit Domain",
-			}
-			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}

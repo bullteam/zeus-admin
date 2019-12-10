@@ -90,3 +90,6 @@ redis:
     min: 3
 security:
   install_lock: false
+  2fa:
+    enabled: true
+    handler: "sms"

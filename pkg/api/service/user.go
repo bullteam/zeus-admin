@@ -2,8 +2,10 @@ package service
 
 import (
 	"errors"
+	"github.com/spf13/viper"
 	"strconv"
 	"strings"
+	"time"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/ldap"
@@ -123,17 +125,30 @@ func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
 	return c.RowsAffected
 }
 
-//VerifyAndReturnUserInfo - login and return user info
-func (UserService) VerifyAndReturnUserInfo(dto dto.LoginDto) (bool, model.User) {
-	userModel := userDao.GetByUserName(dto.Username)
-	if login.VerifyPassword(dto.Password, userModel) {
+// VerifyAndReturnUserInfo - login and return user info
+func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, model.User) {
+	userModel := userDao.GetByUserName(loginDto.Username)
+	if login.VerifyPassword(loginDto.Password, userModel) {
+		u.Verify2FaHandler(userModel)
+		// update last login time
+		u.UpdateLoginTime(dto.UserEditDto{Id:userModel.Id})
 		return true, userModel
 	}
 	return false, model.User{}
 }
 
-//Verfy Ldap userinfo
-func (UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.User) {
+// UpdateLoginTime update last login time after user successfully sign in
+func (UserService) UpdateLoginTime(user dto.UserEditDto) int64 {
+	u := userDao.Get(user.Id, false)
+	//u.Status = dto.Status
+	c := userDao.Update(&u, map[string]interface{}{
+		"last_login_time": time.Now(),
+	})
+	return c.RowsAffected
+}
+
+// VerifyAndReturnLdapUserInfo - Verify Ldap user
+func (u UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.User) {
 	ldapConn := ldap.GetLdap()
 	_, err := ldapConn.Auth(dto.Username, dto.Password)
 	if err != nil {
@@ -142,7 +157,21 @@ func (UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.Us
 	return true, userDao.GetByUserName(dto.Username)
 }
 
-//AssignRoleByRoleIds - assign roles to specific user
+// Verify2Fa do custom 2fa verification
+func (UserService) Verify2FaHandler(user model.User) {
+	if viper.GetBool("security.2fa.enabled") {
+		switch viper.GetString("security.2fa.handler") {
+		default:
+		case "sms":
+			//u := userDao.GetByUserName(twoFaDto.Username)
+			// get verify code in redis
+			// if redis.getcode == twoFaDto.Code
+
+		}
+	}
+}
+
+// AssignRoleByRoleIds - assign roles to specific user
 func (UserService) AssignRoleByRoleIds(userId string, roles string) {
 	// update roles
 	rs := roleDao.GetRolesByIds(roles)
@@ -153,7 +182,7 @@ func (UserService) AssignRoleByRoleIds(userId string, roles string) {
 	user.OverwriteRoles(userId, groups)
 }
 
-//AssignRole - assign roles to specific user
+// AssignRole - assign roles to specific user
 // 这个方法同时作用与用户角色，用户用户组
 func (UserService) AssignRole(userId string, roleNames []string) {
 	var roles [][]string
@@ -166,7 +195,7 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 	user.OverwriteRoles(userId, roles)
 }
 
-//GetRelatedDomains - get related domains
+// GetRelatedDomains - get related domains
 func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	var domains []model.Domain
 	//1.get roles by user

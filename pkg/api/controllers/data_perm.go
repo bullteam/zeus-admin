@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
@@ -70,20 +69,6 @@ func (d *DatePermController) Create(c *gin.Context) {
 			fail(c, ErrAddFail)
 			return
 		}
-		// insert operation log
-		b, _ := json.Marshal(dataPermAddDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           int(c.Value("userId").(float64)),
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Create Data Permission",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"id": created.Id,
 		})
@@ -106,20 +91,6 @@ func (d *DatePermController) Delete(c *gin.Context) {
 			fail(c, ErrDelFail)
 			return
 		}
-		// insert operation log
-		b, _ := json.Marshal(dataPermDelDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           int(c.Value("userId").(float64)),
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Delete Data Permission",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.DeletedDone")
 	}
 }
@@ -137,20 +108,6 @@ func (d *DatePermController) Edit(c *gin.Context) {
 	if d.BindAndValidate(c, &dataPermEditDto) {
 		affected := dataPermService.Update(dataPermEditDto)
 		if affected > 0 {
-			// insert operation log
-			b, _ := json.Marshal(dataPermEditDto)
-			orLogDto := dto.OperationLogDto{
-				UserId:           int(c.Value("userId").(float64)),
-				RequestUrl:       c.Request.RequestURI,
-				OperationMethod:  c.Request.Method,
-				Params:           string(b),
-				Ip:               c.ClientIP(),
-				IpLocation:       "", //TODO...待接入获取ip位置服务
-				OperationResult:  "success",
-				OperationSuccess: 1,
-				OperationContent: "Edit Data Permission",
-			}
-			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}

@@ -40,15 +40,18 @@ export default {
         return
       }
       updateUserPassWord(this.form).then(() => {
-        this.$message.success('密码修改成功')
-        // this.$confirm('登录已失效, 请重新登录！', '密码修改成功', {
-        //   confirmButtonText: '确定',
-        //   showCancelButton: false,
-        //   type: 'success'
-        // }).then(() => {
-        //   this.logout()
-        // }).catch(() => {
-        // })
+        // this.$message.success('密码修改成功')
+        this.$confirm('登录已失效, 请重新登录！', '密码修改成功', {
+          confirmButtonText: '确定',
+          showCancelButton: false,
+          type: 'success'
+        }).then(() => {
+          // this.logout()
+          this.$store.dispatch('LogOut').then(() => {
+            location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+          })
+        }).catch(() => {
+        })
       }).catch((res) => {
         // this.$message.error(res.msg)
       })

@@ -34,16 +34,16 @@ func (ds DingTalkService) SyncRecursive(departments map[int][]dingtalk.Departmen
 		for _, u := range users.([]dingtalk.UDetailedList) {
 			userName := u.Name
 			if u.Email != "" {
-				userName = strings.Split(u.Email,"@")[0]
+				userName = strings.Split(u.Email, "@")[0]
 			}
 			_, _ = UserService.Create(UserService{}, dto.UserCreateDto{
 				Username:     userName,
-				Realname: 	  u.Name,
+				Realname:     u.Name,
 				Mobile:       u.Mobile,
-				Email: 		  u.Email,
-				Title: 		  u.Position,
+				Email:        u.Email,
+				Title:        u.Position,
 				Status:       1,
-				Sex: 		  0,
+				Sex:          0,
 				DepartmentId: created.Id,
 				Password:     viper.GetString("dingtalk.defaultPwd"),
 			})

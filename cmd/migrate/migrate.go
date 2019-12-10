@@ -16,13 +16,13 @@ import (
 )
 
 var (
-	config   string
-	from 	string
-    dingTalkService service.DingTalkService
-	hang = make(chan struct{})
-	MigrateCmd = &cobra.Command{
-		Use: "migrate",
-		Short: "Initialize data before whole system ready(run once)",
+	config          string
+	from            string
+	dingTalkService service.DingTalkService
+	hang            = make(chan struct{})
+	MigrateCmd      = &cobra.Command{
+		Use:     "migrate",
+		Short:   "Initialize data before whole system ready(run once)",
 		Example: "migrate -f dingtalk -c config/in-local.yaml",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			dingTalkService = service.DingTalkService{}
@@ -35,6 +35,7 @@ var (
 		},
 	}
 )
+
 func init() {
 	MigrateCmd.PersistentFlags().StringVarP(&config, "config", "c", "./config/in-local.yaml", "Start server with provided configuration file")
 	MigrateCmd.PersistentFlags().StringVarP(&from, "from", "f", "dingtalk", "dingtalk-钉钉数据,wx-微信数据(not ready)")
@@ -62,5 +63,3 @@ func setup() {
 	//4.Set up dingdingtalk client
 	dingdingtalk.SetUp()
 }
-
-

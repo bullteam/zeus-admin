@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/appleboy/gin-jwt/v2"
+	"github.com/beego/i18n"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
@@ -105,6 +106,7 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 			loginLogDto.Platform = "LDAP Login"
 			loginLogDto.LoginResult = "LDAP Login Success"
 			_ = accountService.InsertLoginLog(&loginLogDto)
+
 			return model.UserClaims{
 				Id:   u.Id,
 				Name: u.Username,
@@ -113,17 +115,18 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 		return nil, jwt.ErrFailedAuthentication
 	}
 	ok, u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
+
 	if ok {
 		loginLogDto.UserId = u.Id
 		loginLogDto.Platform = "Standard Login"
 		loginLogDto.LoginResult = "Standard Login Success"
-		_ = accountService.InsertLoginLog(&loginLogDto)
 		return model.UserClaims{
 			Id:   u.Id,
 			Name: u.Username,
 		}, nil
 	}
-	return nil, jwt.ErrFailedAuthentication
+	//return nil, jwt.ErrFailedAuthentication
+	return nil, errors.New(i18n.Tr(GetLang(), "err.ErrLogin"))
 }
 
 func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
