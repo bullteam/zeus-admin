@@ -163,6 +163,7 @@ func (UserService) Verify2FaHandler(user model.User) {
 		switch viper.GetString("security.2fa.handler") {
 		default:
 		case "sms":
+
 			//u := userDao.GetByUserName(twoFaDto.Username)
 			// get verify code in redis
 			// if redis.getcode == twoFaDto.Code
