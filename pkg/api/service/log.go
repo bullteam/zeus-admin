@@ -52,4 +52,3 @@ func (LogService) CheckAccountIdleTooLong(uDto dto.GeneralGetDto) bool {
 	}
 	return true
 }
-
