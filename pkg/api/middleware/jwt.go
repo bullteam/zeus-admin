@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/appleboy/gin-jwt/v2"
-	"github.com/beego/i18n"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
@@ -114,19 +113,19 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 		}
 		return nil, jwt.ErrFailedAuthentication
 	}
-	ok, u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
-
+	ok, err,u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
 	if ok {
 		loginLogDto.UserId = u.Id
 		loginLogDto.Platform = "Standard Login"
 		loginLogDto.LoginResult = "Standard Login Success"
+		//todo 如果开启双因子，验证code是否正确
 		return model.UserClaims{
 			Id:   u.Id,
 			Name: u.Username,
 		}, nil
 	}
 	//return nil, jwt.ErrFailedAuthentication
-	return nil, errors.New(i18n.Tr(GetLang(), "err.ErrLogin"))
+	return nil, err
 }
 
 func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {

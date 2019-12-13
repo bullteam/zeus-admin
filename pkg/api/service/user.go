@@ -2,10 +2,12 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"github.com/spf13/viper"
 	"strconv"
 	"strings"
 	"time"
+	"zeus/pkg/api/cache"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account"
 	"zeus/pkg/api/domain/account/ldap"
@@ -19,35 +21,49 @@ import (
 
 const pwHashBytes = 64
 
-var userDao = dao.User{}
-var userOauthDao = dao.UserOAuthDao{}
-var logDao = dao.LoginLogDao{}
+var (
+	/* Dao layer */
+	userDao = dao.User{}
+    userOauthDao = dao.UserOAuthDao{}
+    logDao = dao.LoginLogDao{}
+    smsHandler = &login.SmsSendChebao{}
+    errInvalidAccount = errors.New("账号或密码错误")
+    errInvalidCode = errors.New("请输入正确验证码")
+    errAccountLocked = errors.New("账号已被锁定,请联系管理员")
+)
+
+const (
+	UserStatusNotPub = iota
+    UserStatusNormal
+	UserStatusLock
+)
+
 
 type UserService struct {
 	//oauthdao *dao.UserOAuthDao
 }
 
-func (us UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
+func (u UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
 	return userDao.Get(dto.Id, true)
 }
 
 // List - users list with pagination
-func (us UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
+func (u UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
 	return userDao.List(dto)
 }
 
 // Create - create a new account
-func (us UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
+func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 
 	//if username is exits,it can't create this user
-	u := userDao.GetByUserName(userDto.Username)
-	if u.Username == userDto.Username {
+	userModel := userDao.GetByUserName(userDto.Username)
+	if userModel.Username == userDto.Username {
 		return nil, errors.New("username is exits")
 	}
 
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(userDto.Password, salt)
-	userModel := model.User{
+	c := userDao.Create(&model.User{
 		Username:     userDto.Username,
 		Mobile:       userDto.Mobile,
 		Password:     pwd,
@@ -58,22 +74,21 @@ func (us UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 		Title:        userDto.Title,
 		Realname:     userDto.Realname,
 		Status:       userDto.Status,
-	}
-	c := userDao.Create(&userModel)
+	})
 	if c.Error != nil {
 		log.Error(c.Error.Error())
 		return nil, errors.New("create user failed")
 	}
 
 	if userDto.Roles != "" {
-		us.AssignRole(strconv.Itoa(userModel.Id), strings.Split(userDto.Roles, ","))
+		u.AssignRole(strconv.Itoa(userModel.Id), strings.Split(userDto.Roles, ","))
 	}
 
 	return &userModel, nil
 }
 
 // Update - update user's information
-func (us UserService) Update(userDto dto.UserEditDto) int64 {
+func (u UserService) Update(userDto dto.UserEditDto) int64 {
 	userModel := model.User{
 		Id: userDto.Id,
 	}
@@ -85,7 +100,7 @@ func (us UserService) Update(userDto dto.UserEditDto) int64 {
 		"real_name":     userDto.Realname,
 		"email":         userDto.Email,
 	})
-	us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles, ","))
+	u.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles, ","))
 	return c.RowsAffected
 }
 
@@ -114,7 +129,7 @@ func (UserService) UpdatePassword(dto dto.UserEditPasswordDto) int64 {
 }
 
 // Delete - delete user
-func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
+func (UserService) Delete(dto dto.GeneralDelDto) int64 {
 	userModel := model.User{
 		Id: dto.Id,
 	}
@@ -123,18 +138,6 @@ func (us UserService) Delete(dto dto.GeneralDelDto) int64 {
 		user.DeleteUser(strconv.Itoa(dto.Id))
 	}
 	return c.RowsAffected
-}
-
-// VerifyAndReturnUserInfo - login and return user info
-func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, model.User) {
-	userModel := userDao.GetByUserName(loginDto.Username)
-	if login.VerifyPassword(loginDto.Password, userModel) {
-		u.Verify2FaHandler(userModel)
-		// update last login time
-		u.UpdateLoginTime(dto.UserEditDto{Id:userModel.Id})
-		return true, userModel
-	}
-	return false, model.User{}
 }
 
 // UpdateLoginTime update last login time after user successfully sign in
@@ -148,7 +151,7 @@ func (UserService) UpdateLoginTime(user dto.UserEditDto) int64 {
 }
 
 // VerifyAndReturnLdapUserInfo - Verify Ldap user
-func (u UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.User) {
+func (UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.User) {
 	ldapConn := ldap.GetLdap()
 	_, err := ldapConn.Auth(dto.Username, dto.Password)
 	if err != nil {
@@ -157,19 +160,109 @@ func (u UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.
 	return true, userDao.GetByUserName(dto.Username)
 }
 
+// NeedToVerifySmsCode  - check if account need to display sms code input
+func (u UserService) VerifySmsCodeIfNeedToShow(twoFaDto dto.TwoFaDto) bool {
+	if viper.GetBool("security.2fa.enabled") {
+		userModel := userDao.GetByUserName(twoFaDto.Username)
+		return u.VerifySmsCodeIfNeeded(userModel)
+	}
+	return false
+}
+
+// VerifySmsCodeIfNeeded  - check if account need sms code verification
+func (UserService) VerifySmsCodeIfNeeded(userModel model.User) bool {
+	// first time login then means sms code needed
+	if userModel.CreateTime == userModel.LastLoginTime {
+		return true
+	}
+	p,err := cache.HashGet(viper.GetString("security.2fa.smsConfigHash"),viper.GetString("security.2fa.smsConfigHashKey"))
+	if err != nil {
+		return true
+	}
+	period, _ := strconv.Atoi(p)
+	// 0 means need sms code forever
+	if period < 1 {
+		return true
+	}
+	if time.Now().Sub(userModel.LastLoginTime).Seconds() > float64(24 * 3600 * period) {
+		return true
+	}
+	return false
+}
+
+// VerifyAndReturnUserInfo - login and return user info
+func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error, model.User) {
+	userModel := userDao.GetByUserName(loginDto.Username)
+	// Account not exits
+	if userModel.Id < 1 {
+		return false, errInvalidAccount,model.User{}
+	}
+	if userModel.Status == UserStatusLock {
+		return false, errAccountLocked,model.User{}
+	}
+	locKey := fmt.Sprintf(viper.GetString("login.failRecordKey"),userModel.Username)
+	if login.VerifyPassword(loginDto.Password, userModel) {
+		// destroy time records
+		_ = cache.Del(locKey)
+		if u.VerifySmsCodeIfNeeded(userModel) {
+			if err := u.Verify2Fa(loginDto.Code, userModel); err != nil {
+				return false, errInvalidCode,model.User{}
+			}
+		}
+		// update last login time
+		u.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
+		return true, nil,userModel
+	} else {
+		t,_ := cache.Get(locKey)
+		failTimes, _ := strconv.Atoi(t)
+		if failTimes >= viper.GetInt("login.failUntilLock") {
+			// lock
+			if u.UpdateStatus(dto.UserEditStatusDto{Id:userModel.Id,Status:UserStatusLock}) > 0 {
+				// recount
+				_ = cache.Del(locKey)
+			}
+		} else {
+			// increase locks let user just can try several times
+			_ = cache.Increase(locKey)
+			return false, fmt.Errorf("密码输入错误，您还有%d次机会",viper.GetInt("login.failUntilLock")-failTimes),model.User{}
+		}
+	}
+	return false, errInvalidAccount,model.User{}
+}
+
 // Verify2Fa do custom 2fa verification
-func (UserService) Verify2FaHandler(user model.User) {
+func (UserService) Verify2Fa(code string,userModel model.User) error {
+	if viper.GetBool("security.2fa.enabled") {
+		switch viper.GetString("security.2fa.handler") {
+		case "sms":
+			// Get verify code in redis and verify it
+			storageCode,err := cache.Get(fmt.Sprintf(viper.GetString("security.2fa.smsCodeKey"),userModel.Mobile))
+			if err != nil {
+				return err
+			}
+			if storageCode != code {
+				return errors.New("verify code not correct")
+			}
+		}
+	}
+	return nil
+}
+
+// Verify2FaHandler do custom 2fa verification action
+func (UserService) Verify2FaHandler(twoFaDto dto.TwoFaDto) error {
+	userModel := userDao.GetByUserName(twoFaDto.Username)
 	if viper.GetBool("security.2fa.enabled") {
 		switch viper.GetString("security.2fa.handler") {
 		default:
 		case "sms":
-
-			//u := userDao.GetByUserName(twoFaDto.Username)
-			// get verify code in redis
-			// if redis.getcode == twoFaDto.Code
-
+			// send sms code
+			if userModel.Mobile == "" {
+				return errors.New("mobile not valid")
+			}
+			return smsHandler.Send(userModel.Mobile)
 		}
 	}
+	return errors.New("not found handler")
 }
 
 // AssignRoleByRoleIds - assign roles to specific user
@@ -270,7 +363,7 @@ func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 }
 
 //VerifyDTAndReturnUserInfo - verify dingtalk and return user info
-func (us UserService) VerifyDTAndReturnUserInfo(code string) (user model.UserOAuth, err error) {
+func (u UserService) VerifyDTAndReturnUserInfo(code string) (user model.UserOAuth, err error) {
 	dtUser, err := login.GetDingTalkUserInfo(code)
 	if err != nil {
 		return model.UserOAuth{}, err
@@ -282,17 +375,17 @@ func (us UserService) VerifyDTAndReturnUserInfo(code string) (user model.UserOAu
 	return model.UserOAuth{}, err
 }
 
-func (us UserService) UnBindUserDingtalk(from int, uid int) error {
+func (u UserService) UnBindUserDingtalk(from int, uid int) error {
 	return userOauthDao.DeleteByUseridAndFrom(from, uid)
 }
 
-func (us UserService) GetBindOauthUserInfo(uid int) (UserInfo model.UserOAuth) {
+func (u UserService) GetBindOauthUserInfo(uid int) (UserInfo model.UserOAuth) {
 	return userOauthDao.Get(uid)
 }
 
 //GetDomainMenu -  get specific user's menus of specific domain
-func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
-	roles := us.GetAllRoles(uid)
+func (u UserService) GetDomainMenu(uid string, domain string) []model.Menu {
+	roles := u.GetAllRoles(uid)
 	mids := []string{}
 	for _, r := range roleDao.GetRolesByNames(roles) {
 		if r.Domain.Code == domain {
@@ -303,7 +396,7 @@ func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
 }
 
 //CheckPermission - check user's permission in specific domain with specific policy
-func (us UserService) CheckPermission(uid string, domain string, policy string) bool {
+func (u UserService) CheckPermission(uid string, domain string, policy string) bool {
 	//Could it be an alias?
 	domainModel := domainDao.GetByCode(domain)
 	row := menuPermAliasDao.GetByAlias(policy, domainModel.Id)
@@ -313,7 +406,7 @@ func (us UserService) CheckPermission(uid string, domain string, policy string) 
 	return perm.Enforce(uid, policy, "*", domain)
 }
 
-//insert login log
-func (us UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
+// insert login log
+func (u UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
 	return logDao.Create(loginLogDto)
 }

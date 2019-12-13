@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"zeus/pkg/api/cache"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/domain/account/ldap"
 	"zeus/pkg/api/domain/perm"
@@ -79,7 +80,7 @@ func setup() {
 	//4.Set up database connection
 	dao.Setup()
 	//5.Set up cache
-	//cache.SetUp()
+	cache.SetUp()
 	//6.Set up ldap
 	ldap.Setup()
 	//7.Set up permission handler

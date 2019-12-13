@@ -24,7 +24,7 @@ func Setup() {
 	case DRIVER_SQLITE:
 		db, err = gorm.Open("sqlite3", viper.GetString("database.sqlite.dsn"))
 		if err != nil {
-			log.Error(fmt.Sprintf("Failed to connect sqlite %s", err.Error()))
+			log.Fatal(fmt.Sprintf("Failed to connect sqlite %s", err.Error()))
 		} else {
 			db.LogMode(true)
 		}
@@ -39,7 +39,7 @@ func Setup() {
 		log.Info(dsn)
 		db, err = gorm.Open("mysql", dsn)
 		if err != nil {
-			log.Error(fmt.Sprintf("Failed to connect mysql %s", err.Error()))
+			log.Fatal(fmt.Sprintf("Failed to connect mysql %s", err.Error()))
 		} else {
 			db.DB().SetMaxIdleConns(viper.GetInt("database.mysql.pool.min"))
 			db.DB().SetMaxOpenConns(viper.GetInt("database.mysql.pool.max"))

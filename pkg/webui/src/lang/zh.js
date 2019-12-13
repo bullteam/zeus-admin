@@ -48,7 +48,8 @@ export default {
     code: '验证码',
     googleAuths: '两步验证・谷歌身份验证器',
     ldap: 'LDAP',
-    standard: '常规登录'
+    standard: '常规登录',
+    smsSend: '获取验证码'
   },
   documentation: {
     documentation: '文档',

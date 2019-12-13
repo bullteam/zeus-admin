@@ -444,6 +444,34 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 
 }
 
+// check if need to send sms code
+func (a *AccountController) SmsSendCheck(c *gin.Context) {
+	twoFaDto := dto.TwoFaDto{}
+	if a.BindAndValidate(c, &twoFaDto) {
+		resp(c, map[string]interface{}{
+			"show": userService.VerifySmsCodeIfNeedToShow(twoFaDto),
+		})
+	}
+}
+
+// SmsSendCheck send sms code
+func (a *AccountController) SmsSendCode(c *gin.Context) {
+	twoFaDto := dto.TwoFaDto{}
+	var err error
+	if a.BindAndValidate(c, &twoFaDto) {
+		if err = userService.Verify2FaHandler(twoFaDto);err != nil {
+			ErrSmsSendCode.Moreinfo = err.Error()
+		} else {
+			resp(c, map[string]interface{}{
+				"send": "ok",
+			})
+			return
+		}
+	}
+	fail(c,ErrSmsSendCode)
+	//ErrSmsSendCode.Moreinfo = ""
+}
+
 func (a *AccountController) LdapAddUser(c *gin.Context) {
 	ldapConn := ldap.GetLdap()
 	rr := ldapConn.Add("zeus", "zeus@bullteam.cn", "10111", "10111", "123456")
@@ -469,5 +497,13 @@ func (a *AccountController) UploadAvatar(c *gin.Context) {
 	}
 	resp(c, map[string]interface{}{
 		"result": result,
+	})
+}
+
+// CheckIdle check if user is idle
+func (a *AccountController) CheckIdle(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	resp(c, map[string]interface{}{
+		"idle" : logService.CheckAccountIdleTooLong(dto.GeneralGetDto{Id:userId}),
 	})
 }

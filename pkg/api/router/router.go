@@ -37,6 +37,12 @@ func SetUp(e *gin.Engine, cors bool) {
 	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
 	//api handlers
+	userController := &controllers.UserController{}
+	accountController := &controllers.AccountController{}
+
+	v1.POST("/account/sms-send-check", accountController.SmsSendCheck)
+	v1.POST("/account/sms-send-code", accountController.SmsSendCode)
+
 	v1.POST("/users/login", jwtAuth.LoginHandler)
 	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 	// oauth login
@@ -50,9 +56,6 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
 	v1.Use(middleware.AccessLog)
 
-	userController := &controllers.UserController{}
-	accountController := &controllers.AccountController{}
-
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
 	v1.POST("/user/perm/check", userController.DomainPermCheck)
@@ -60,6 +63,7 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
+	v1.GET("/account/idle", accountController.CheckIdle)
 	v1.GET("/account/permissions", accountController.GetPermissionsWithMenu)
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
@@ -76,6 +80,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.GET("/account/find-code-open", accountController.FindCodeOpen) // is check google 2fa code
 	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // add ldap user
 	v1.POST("/account/upload-avatar", accountController.UploadAvatar)
+
 
 	v1.Use(middleware.PermCheck)
 	//user

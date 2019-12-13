@@ -156,3 +156,10 @@ func (ol OperationLogDao) Create(orLogDto *dto.OperationLogDto) error {
 	}
 	return db.Create(&operationLogModel).Error
 }
+
+func (OperationLogDao) GetLatestLogOfAccount(uid int) model.OperationLog {
+	db := GetDb()
+	var oLog model.OperationLog
+	db.Where("user_id=?",uid).Order("-id").First(&oLog)
+	return oLog
+}

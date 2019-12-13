@@ -23,6 +23,7 @@
           name="username"
           type="text"
           auto-complete="on"
+          @blur="checkAccount"
         />
       </el-form-item>
 
@@ -41,6 +42,24 @@
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
+      <el-row v-show="checkForm.smsShow">
+        <el-col :span="18">
+          <el-form-item prop="code" >
+            <span class="svg-container">
+              <svg-icon icon-class="code" />
+            </span>
+            <el-input
+              v-model="loginForm.code"
+              :placeholder="$t('login.code')"
+              name="code"
+              auto-complete="on"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-button :loading="loading" type="primary" @click.native.prevent="handleSmsSend">{{ $t('login.smsSend') }}</el-button>
+        </el-col>
+      </el-row>
       <el-form-item v-if="captchaUrl!=''">
         <span class="svg-container">
           <svg-icon icon-class="password" />
@@ -60,7 +79,7 @@
       <br>
       <br>
       <br>
-      <el-button class="thirdparty-button" type="primary" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
+      <el-button class="thirdparty-button" type="primary" style="margin-top:30px;" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
     </el-form>
     <el-form v-else ref="checkForm" class="login-form" label-position="left" >
       <div class="title-container">
@@ -98,7 +117,7 @@
 <script>
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
-import { checkGoogle2faCode, FindCodeOpen } from '@/api/user'
+import { checkGoogle2faCode, FindCodeOpen, checkSmsSend, sendSmsCode } from '@/api/user'
 // import { getUserCaptcha } from '@/api/login'
 // import { getPrefix } from '@/utils/auth'
 
@@ -126,10 +145,12 @@ export default {
         password: '',
         captchaid: '',
         captchaval: '',
+        code: '',
         loginType: 1// 登录类型，1常规登录，2LDAP
       },
       checkForm: {
-        code: ''
+        code: '',
+        smsShow: false
       },
       step: 1,
       captchaUrl: '',
@@ -181,6 +202,23 @@ export default {
         this.passwordType = 'password'
       }
     },
+    checkAccount() {
+      checkSmsSend({ username: this.loginForm.username }).then(res => {
+        this.checkForm.smsShow = res.data.show
+      })
+    },
+    handleSmsSend() {
+      this.loading = true
+      sendSmsCode({ username: this.loginForm.username }).then(res => {
+        this.loading = false
+        if (res.code === 200) {
+          this.$message.success('验证码发送成功,请及时填写')
+        }
+      }).catch(res => {
+        this.loading = false
+        this.$message.error(res.moreinfo)
+      })
+    },
     // showCaptcha() {
     //   this.loginForm.captchaval = ''
     //   getUserCaptcha().then((json) => {
@@ -213,9 +251,11 @@ export default {
                 }
                 this.$router.push({ path: this.redirect || '/' })
               }
+            }).catch(res => {
+              console.log(res)
             })
           }).catch((res) => {
-            // console.log(res)
+            console.log(res)
             if (res.code === 13001) {
               this.showCaptcha()
             } else {

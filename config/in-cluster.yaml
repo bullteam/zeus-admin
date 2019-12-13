@@ -42,11 +42,10 @@ database:
   sqlite:
     dsn: data/zeus.db
 dingtalk:
-  agentid: 326710381
-  appkey: dingv5ktecv1nwpu7whw
-  appsecret: JvA3uaRSUn4KSzmlGT_AXktNlPpqgzHlZx6Uwj_nxw0Jhp6sorI1MikrDLwOJooL
+  agentid: 310135985
+  appkey: dingvgvn9hdcp8qtarno
+  appsecret: Sn887TtSQgGQNRcSaP-cNQXKYOkuT062vPgHoVvbTm5-HA2qnyew6xbdgZwhxD8N
   cachepath: data/
-  defaultPwd: Chebao@2020
   corpid: dingd60a58f4e3be699235c2f4657eb6378f
   snsappid: dingoa1uudyxl2dcjvqpij
   snssecret: o8YvDT5l2zb9dikuCbz0HXOiOaVwdyVResrDVyFaqojv0EwZp8ygAemFyoSBh_lz
@@ -85,6 +84,8 @@ project:
   merge: true
 redis:
   host: 127.0.0.1:6379
+  auth:
+  db: 0
   pool:
     max: 20
     min: 3
@@ -92,4 +93,3 @@ security:
   install_lock: false
   2fa:
     enabled: false
-    handler: "sms"

@@ -8,10 +8,11 @@ import (
 type LoginDto struct {
 	Username string `form:"username" json:"username" binding:"required,customValidate"`
 	Password string `form:"password" json:"password" binding:"required"`
+	Code string `form:"code" json:"code"`
 }
+
 type TwoFaDto struct {
 	Username string `form:"username" json:"username" binding:"required"`
-	Code string `form:"code" json:"code" binding:"required"`
 }
 // LoginOAuthDto - oauth login
 type LoginOAuthDto struct {
