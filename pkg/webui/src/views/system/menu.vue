@@ -128,7 +128,7 @@ import icons from '@/utils/requireIcons'
 // import { asyncRouterMap } from '@/router/routers'
 import { fetchMenuList, createMenu, updateMenu, deleteMenu } from '@/api/menu'
 import { fetchDomainList } from '@/api/domain'
-
+import PreCheck from '../layout/mixin/PreCheck'
 export default {
   name: 'Menu',
   components: { treeTable },
@@ -137,6 +137,7 @@ export default {
       return type === 0 ? '目录' : type === 1 ? '菜单' : '权限'
     }
   },
+  mixins: [PreCheck],
   data() {
     return {
       func: treeToArray,

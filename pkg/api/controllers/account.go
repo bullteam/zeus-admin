@@ -3,6 +3,7 @@ package controllers
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/utils"
 	"github.com/dgryski/dgoogauth"
@@ -92,9 +93,23 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 		userDto.Id = accountDto.Id
 		userDto.Password = accountDto.RePassword
 		affected := userService.UpdatePassword(userDto)
-		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+		if affected > 0 {
+			// 修改密码只有成功时才进入日志
+			// 因为需要这条日志判断用户上次更新密码的时间
+			// 故特殊处理
+			b, _ := json.Marshal(accountDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           userDto.Id,
+				RequestUrl:       c.Request.URL.Path,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Bind third account",
+			}
+			_ = logService.InsertOperationLog(orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}
@@ -457,18 +472,16 @@ func (a *AccountController) SmsSendCheck(c *gin.Context) {
 // SmsSendCheck send sms code
 func (a *AccountController) SmsSendCode(c *gin.Context) {
 	twoFaDto := dto.TwoFaDto{}
-	var err error
 	if a.BindAndValidate(c, &twoFaDto) {
-		if err = userService.Verify2FaHandler(twoFaDto);err != nil {
+		if mobile, err := userService.Verify2FaHandler(twoFaDto); err != nil {
 			ErrSmsSendCode.Moreinfo = err.Error()
 		} else {
-			resp(c, map[string]interface{}{
-				"send": "ok",
-			})
+			secureMobileShow := mobile[:3] + "****" + mobile[8:]
+			rawOk(c, "已向"+secureMobileShow+"下发短信验证码，请注意查收，短信十分钟内有效！")
 			return
 		}
 	}
-	fail(c,ErrSmsSendCode)
+	fail(c, ErrSmsSendCode)
 	//ErrSmsSendCode.Moreinfo = ""
 }
 
@@ -504,6 +517,16 @@ func (a *AccountController) UploadAvatar(c *gin.Context) {
 func (a *AccountController) CheckIdle(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
 	resp(c, map[string]interface{}{
-		"idle" : logService.CheckAccountIdleTooLong(dto.GeneralGetDto{Id:userId}),
+		"idle": logService.CheckAccountIdleTooLong(dto.GeneralGetDto{Id: userId}),
+	})
+}
+
+// CheckIfNeedToChangePwd check if user need to change password
+func (a *AccountController) CheckIfNeedToChangePwd(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	needed, days := userService.GetLastPwdChangeDaySinceNow(dto.GeneralGetDto{Id: userId})
+	resp(c, map[string]interface{}{
+		"needed": needed,
+		"days":   days,
 	})
 }

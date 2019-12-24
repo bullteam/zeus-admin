@@ -11,8 +11,17 @@ import (
 )
 
 var logService = service.LogService{}
-
+var ignoreRoutes = map[string] bool {
+	"/v1/account/idle" : true,
+	"/v1/account/password" : true,
+	"/v1/account/require-change-pwd" : true,
+}
 func AccessLog(c *gin.Context) {
+	//too much useless or some important logs
+	if _,ok := ignoreRoutes[c.Request.URL.Path];ok {
+		c.Next()
+		return
+	}
 	b, _ := json.Marshal(c.Request.URL.Query())
 	body, _ := ioutil.ReadAll(c.Request.Body)
 	c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
@@ -31,7 +40,7 @@ func AccessLog(c *gin.Context) {
 		OperationSuccess: 1,
 		OperationContent: "-",
 	}
-	err := logService.InsertOperationLog(&orLogDto)
+	err := logService.InsertOperationLog(orLogDto)
 	if err != nil {
 		log.Error(err.Error())
 	}

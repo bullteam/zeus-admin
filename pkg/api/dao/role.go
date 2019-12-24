@@ -34,6 +34,7 @@ func (Role) GetRolesByIds(ids string) []model.Role {
 func (Role) GetRolesByNames(names []string) []model.Role {
 	var roles []model.Role
 	db := GetDb()
+	db = db.Preload("Domain")
 	db.Where("role_name in (?)", names).Find(&roles)
 	return roles
 }

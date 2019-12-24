@@ -13,6 +13,7 @@
 <script>
 import { Navbar, Sidebar, AppMain, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import PwdChangeCheck from './mixin/PwdChangeCheck'
 
 export default {
   name: 'Layout',
@@ -22,7 +23,7 @@ export default {
     AppMain,
     TagsView
   },
-  mixins: [ResizeMixin],
+  mixins: [ResizeMixin, PwdChangeCheck],
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar

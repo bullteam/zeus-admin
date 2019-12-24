@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/spf13/viper"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -17,27 +18,27 @@ import (
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
+	"zeus/pkg/api/utils"
 )
 
 const pwHashBytes = 64
 
 var (
 	/* Dao layer */
-	userDao = dao.User{}
-    userOauthDao = dao.UserOAuthDao{}
-    logDao = dao.LoginLogDao{}
-    smsHandler = &login.SmsSendChebao{}
-    errInvalidAccount = errors.New("账号或密码错误")
-    errInvalidCode = errors.New("请输入正确验证码")
-    errAccountLocked = errors.New("账号已被锁定,请联系管理员")
+	userDao           = dao.User{}
+	userOauthDao      = dao.UserOAuthDao{}
+	logDao            = dao.LoginLogDao{}
+	smsHandler        = &login.SmsSendChebao{}
+	errInvalidAccount = errors.New("账号或密码错误")
+	errInvalidCode    = errors.New("请输入正确验证码")
+	errAccountLocked  = errors.New("账号已被锁定,请联系管理员")
 )
 
 const (
 	UserStatusNotPub = iota
-    UserStatusNormal
+	UserStatusNormal
 	UserStatusLock
 )
-
 
 type UserService struct {
 	//oauthdao *dao.UserOAuthDao
@@ -54,7 +55,6 @@ func (u UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
 
 // Create - create a new account
 func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
-
 	//if username is exits,it can't create this user
 	userModel := userDao.GetByUserName(userDto.Username)
 	if userModel.Username == userDto.Username {
@@ -63,7 +63,7 @@ func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(userDto.Password, salt)
-	c := userDao.Create(&model.User{
+	newUser := &model.User{
 		Username:     userDto.Username,
 		Mobile:       userDto.Mobile,
 		Password:     pwd,
@@ -74,14 +74,15 @@ func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 		Title:        userDto.Title,
 		Realname:     userDto.Realname,
 		Status:       userDto.Status,
-	})
+	}
+	c := userDao.Create(newUser)
 	if c.Error != nil {
 		log.Error(c.Error.Error())
 		return nil, errors.New("create user failed")
 	}
 
 	if userDto.Roles != "" {
-		u.AssignRole(strconv.Itoa(userModel.Id), strings.Split(userDto.Roles, ","))
+		u.AssignRole(strconv.Itoa(newUser.Id), strings.Split(userDto.Roles, ","))
 	}
 
 	return &userModel, nil
@@ -97,7 +98,8 @@ func (u UserService) Update(userDto dto.UserEditDto) int64 {
 		"department_id": userDto.DepartmentId,
 		"status":        userDto.Status,
 		"title":         userDto.Title,
-		"real_name":     userDto.Realname,
+		"realname":      userDto.Realname,
+		"sex":           userDto.Sex,
 		"email":         userDto.Email,
 	})
 	u.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles, ","))
@@ -128,6 +130,21 @@ func (UserService) UpdatePassword(dto dto.UserEditPasswordDto) int64 {
 	return c.RowsAffected
 }
 
+// ResetPassword - automatically make a password
+func (UserService) ResetPassword(gDto dto.GeneralGetDto) string {
+	salt, _ := account.MakeSalt()
+	//pwd, _ := account.HashPassword(dto.Password, salt)
+	u := userDao.Get(gDto.Id, false)
+	autoPwd := utils.RandomPwd(10)
+	pwd,_ := account.HashPassword(autoPwd,salt)
+	//u.Password = pwd
+	//u.Salt = salt
+	userDao.Update(&u, map[string]interface{}{
+		"password": pwd,
+		"salt":     salt,
+	})
+	return autoPwd
+}
 // Delete - delete user
 func (UserService) Delete(dto dto.GeneralDelDto) int64 {
 	userModel := model.User{
@@ -170,24 +187,34 @@ func (u UserService) VerifySmsCodeIfNeedToShow(twoFaDto dto.TwoFaDto) bool {
 }
 
 // VerifySmsCodeIfNeeded  - check if account need sms code verification
-func (UserService) VerifySmsCodeIfNeeded(userModel model.User) bool {
+func (u UserService) VerifySmsCodeIfNeeded(userModel model.User) bool {
 	// first time login then means sms code needed
 	if userModel.CreateTime == userModel.LastLoginTime {
 		return true
 	}
-	p,err := cache.HashGet(viper.GetString("security.2fa.smsConfigHash"),viper.GetString("security.2fa.smsConfigHashKey"))
-	if err != nil {
-		return true
-	}
-	period, _ := strconv.Atoi(p)
+	//p, err := cache.HashGet(viper.GetString("security.2fa.smsConfigHash"), viper.GetString("security.2fa.smsConfigHashKey"))
+	//if err != nil {
+	//	return true
+	//}
+	//period, _ := strconv.Atoi(p)
+	period := u.GetNoSmsCodeDurationDay()
 	// 0 means need sms code forever
 	if period < 1 {
 		return true
 	}
-	if time.Now().Sub(userModel.LastLoginTime).Seconds() > float64(24 * 3600 * period) {
+	if time.Now().Sub(userModel.LastLoginTime).Seconds() > float64(24*3600*period) {
 		return true
 	}
 	return false
+}
+
+func (UserService) GetNoSmsCodeDurationDay() int {
+	p, err := cache.HashGet(viper.GetString("security.2fa.smsConfigHash"), viper.GetString("security.2fa.smsConfigHashKey"))
+	if err != nil {
+		return 0
+	}
+	period, _ := strconv.Atoi(p)
+	return period
 }
 
 // VerifyAndReturnUserInfo - login and return user info
@@ -195,48 +222,63 @@ func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error
 	userModel := userDao.GetByUserName(loginDto.Username)
 	// Account not exits
 	if userModel.Id < 1 {
-		return false, errInvalidAccount,model.User{}
+		return false, errInvalidAccount, model.User{}
 	}
 	if userModel.Status == UserStatusLock {
-		return false, errAccountLocked,model.User{}
+		return false, errAccountLocked, model.User{}
 	}
-	locKey := fmt.Sprintf(viper.GetString("login.failRecordKey"),userModel.Username)
+	locKey := fmt.Sprintf(viper.GetString("login.failRecordKey"), userModel.Username)
 	if login.VerifyPassword(loginDto.Password, userModel) {
 		// destroy time records
 		_ = cache.Del(locKey)
 		if u.VerifySmsCodeIfNeeded(userModel) {
 			if err := u.Verify2Fa(loginDto.Code, userModel); err != nil {
-				return false, errInvalidCode,model.User{}
+				return false, errInvalidCode, model.User{}
 			}
 		}
 		// update last login time
-		u.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
-		return true, nil,userModel
+		// 判断是否超过了设置的天数间隔，超过再更新登录时间
+		// 这样将实现强制在间隔时间内进行2fa验证
+		if viper.GetBool("security.2fa.enabled") {
+			period := u.GetNoSmsCodeDurationDay()
+			if time.Now().Sub(userModel.LastLoginTime).Seconds() >= float64(24*3600*period) {
+				u.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
+			}
+		} else {
+			u.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
+		}
+		return true, nil, userModel
 	} else {
-		t,_ := cache.Get(locKey)
+		t, _ := cache.Get(locKey)
 		failTimes, _ := strconv.Atoi(t)
-		if failTimes >= viper.GetInt("login.failUntilLock") {
+		// 累计此次错误，已到达错误上限，所以-1
+		if failTimes >= viper.GetInt("login.failUntilLock")-1 {
 			// lock
-			if u.UpdateStatus(dto.UserEditStatusDto{Id:userModel.Id,Status:UserStatusLock}) > 0 {
+			if u.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
 				// recount
 				_ = cache.Del(locKey)
+				return false, errAccountLocked, model.User{}
 			}
 		} else {
 			// increase locks let user just can try several times
 			_ = cache.Increase(locKey)
-			return false, fmt.Errorf("密码输入错误，您还有%d次机会",viper.GetInt("login.failUntilLock")-failTimes),model.User{}
+			// set ttl at first time
+			if failTimes == 0 {
+				_ = cache.Expire(locKey, time.Second*24*3600)
+			}
+			return false, fmt.Errorf("密码输入错误，您还有%d次机会", viper.GetInt("login.failUntilLock")-failTimes-1), model.User{}
 		}
 	}
-	return false, errInvalidAccount,model.User{}
+	return false, errInvalidAccount, model.User{}
 }
 
 // Verify2Fa do custom 2fa verification
-func (UserService) Verify2Fa(code string,userModel model.User) error {
+func (UserService) Verify2Fa(code string, userModel model.User) error {
 	if viper.GetBool("security.2fa.enabled") {
 		switch viper.GetString("security.2fa.handler") {
 		case "sms":
 			// Get verify code in redis and verify it
-			storageCode,err := cache.Get(fmt.Sprintf(viper.GetString("security.2fa.smsCodeKey"),userModel.Mobile))
+			storageCode, err := cache.Get(fmt.Sprintf(viper.GetString("security.2fa.smsCodeKey"), userModel.Mobile))
 			if err != nil {
 				return err
 			}
@@ -249,7 +291,7 @@ func (UserService) Verify2Fa(code string,userModel model.User) error {
 }
 
 // Verify2FaHandler do custom 2fa verification action
-func (UserService) Verify2FaHandler(twoFaDto dto.TwoFaDto) error {
+func (UserService) Verify2FaHandler(twoFaDto dto.TwoFaDto) (string, error) {
 	userModel := userDao.GetByUserName(twoFaDto.Username)
 	if viper.GetBool("security.2fa.enabled") {
 		switch viper.GetString("security.2fa.handler") {
@@ -257,12 +299,12 @@ func (UserService) Verify2FaHandler(twoFaDto dto.TwoFaDto) error {
 		case "sms":
 			// send sms code
 			if userModel.Mobile == "" {
-				return errors.New("mobile not valid")
+				return "", errors.New("mobile not valid")
 			}
-			return smsHandler.Send(userModel.Mobile)
+			return userModel.Mobile, smsHandler.Send(userModel.Mobile)
 		}
 	}
-	return errors.New("not found handler")
+	return "", errors.New("not found handler")
 }
 
 // AssignRoleByRoleIds - assign roles to specific user
@@ -292,6 +334,7 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 // GetRelatedDomains - get related domains
 func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	var domains []model.Domain
+	var single  = map[string] bool{}
 	//1.get roles by user
 	roles := perm.GetGroupsByUser(uid)
 	//2.get domains by roles
@@ -300,7 +343,10 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 		if role.Domain.Code == "root" {
 			continue
 		}
-		domains = append(domains, role.Domain)
+		if _,ok := single[role.Domain.Code];!ok {
+			single[role.Domain.Code] = true
+			domains = append(domains, role.Domain)
+		}
 	}
 	return domains
 }
@@ -403,10 +449,35 @@ func (u UserService) CheckPermission(uid string, domain string, policy string) b
 	if row.Id > 0 {
 		policy = row.Perms
 	}
+	log.Info(fmt.Sprintf("check permission for : %#v,%#v,%#v", uid, policy, domain))
 	return perm.Enforce(uid, policy, "*", domain)
 }
 
 // insert login log
 func (u UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
 	return logDao.Create(loginLogDto)
+}
+
+// GetLastPwdChangeDaySinceNow check when user changed pwd
+// if account did not change pwd until 90 days later,should use user created time instead
+func (u UserService) GetLastPwdChangeDaySinceNow(uDto dto.GeneralGetDto) (ok bool, days int) {
+	if viper.GetInt("security.level") == 0 {
+		return false,-1
+	}
+	oLog := operationLogDao.GetLatestPwdLogOfAccount(uDto.Id)
+	// Got action log
+	var lastTime time.Time
+	if oLog.Id > 0 {
+		lastTime = oLog.CreateTime
+	} else {
+		userInfo := userDao.Get(uDto.Id, false)
+		lastTime = userInfo.CreateTime
+	}
+	deadLineTime := lastTime.Add(time.Second * 24 * 3600 * viper.GetDuration("login.pwdExpiredDays"))
+	diff := deadLineTime.Sub(time.Now()).Seconds()
+	//less then 7 days,should warn login user to change his/her password
+	if diff <= 24*3600*viper.GetFloat64("login.pwdWarningDays") {
+		return true, int(math.Ceil(diff / (24 * 3600)))
+	}
+	return false, -1
 }

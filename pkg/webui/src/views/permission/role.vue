@@ -141,10 +141,12 @@ import { fetchMenuList } from '@/api/menu'
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { dataPermList } from '@/api/dataPerm'
+import PreCheck from '../layout/mixin/PreCheck'
 
 export default {
   name: 'Role',
   components: { Pagination },
+  mixins: [PreCheck],
   data() {
     return {
       tableKey: 0,
@@ -324,7 +326,8 @@ export default {
           this.$refs.treeData.getCheckedKeys().forEach(o => {
             data_perm_ids.push(o)
           })
-          this.temp.menu_ids = Array.from(new Set(menu_ids)).join(',')
+          // this.temp.menu_ids = Array.from(new Set(menu_ids)).join(',')
+          this.temp.menu_ids = [].concat(this.$refs.tree.getCheckedKeys()).concat(this.$refs.tree.getHalfCheckedKeys()).join(',')
           this.temp.data_perm_ids = Array.from(new Set(data_perm_ids)).join(',')
           this.temp.domain_id = this.domain_id
           createRole(this.temp).then(() => {
@@ -357,8 +360,12 @@ export default {
     },
     findParentMenus(menus, id) {
       const s = this.menuslist.find(i => i.id === id)
-      if (s && s.parent_id !== '0') {
+      if (s) {
+        console.log(s.parent_id)
         menus.push(s.parent_id)
+        if (s.parent_id === 0) {
+          return
+        }
         this.findParentMenus(menus, s.parent_id)
       }
     },
@@ -367,21 +374,19 @@ export default {
         if (valid) {
           this.temp.role_name = this.temp.name
           this.temp.menu_ids_ele = this.$refs.tree.getCheckedKeys().join(',')
-          const menu_ids = []
-          const data_perm_ids = []
-          this.$refs.tree.getCheckedKeys().forEach(o => {
-            menu_ids.push(o)
-            this.findParentMenus(menu_ids, o)
-            // const s = this.menuslist.find(i => i.id === o)
-            // if (s) {
-            //   menu_ids.push(s.parent_id)
-            // }
-          })
-          this.$refs.treeData.getCheckedKeys().forEach(o => {
-            data_perm_ids.push(o)
-          })
-          this.temp.menu_ids = Array.from(new Set(menu_ids)).join(',')
-          this.temp.data_perm_ids = Array.from(new Set(data_perm_ids)).join(',')
+          // console.log(this.$refs.tree.getHalfCheckedKeys())
+          // const menu_ids = []
+          // this.$refs.tree.getCheckedKeys().forEach(o => {
+          //   menu_ids.push(o)
+          //   this.findParentMenus(menu_ids, o)
+          //   // const s = this.menuslist.find(i => i.id === o)
+          //   // if (s) {
+          //   //   menu_ids.push(s.parent_id)
+          //   // }
+          // })
+          // console.log(menu_ids)
+          // this.temp.menu_ids = Array.from(new Set(menu_ids)).join(',')
+          this.temp.menu_ids = [].concat(this.$refs.tree.getCheckedKeys()).concat(this.$refs.tree.getHalfCheckedKeys()).join(',')
           this.temp.domain_id = this.domain_id
           delete this.temp.domain
           const tempData = Object.assign({}, this.temp)

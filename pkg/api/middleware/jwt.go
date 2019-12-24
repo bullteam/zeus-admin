@@ -16,7 +16,8 @@ import (
 )
 
 var accountService = service.UserService{}
-var loginType int
+
+//var logService = service.LogService{}
 
 //todo : 用单独的claims model去掉user model
 func JwtAuth(LoginType int) *jwt.GinJWTMiddleware {
@@ -32,8 +33,10 @@ func JwtAuth(LoginType int) *jwt.GinJWTMiddleware {
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(model.UserClaims); ok {
 				return jwt.MapClaims{
-					"id":   v.Id,
-					"name": v.Name,
+					"id":    v.Id,
+					"name":  v.Name,
+					"uid":   v.Id,
+					"uname": v.Name,
 				}
 			}
 			return jwt.MapClaims{}
@@ -97,7 +100,6 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 		LoginStatus:      1,
 		OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
 	}
-
 	if LoginType == account.LoginLdap { // LDAP login
 		ok, u := accountService.VerifyAndReturnLdapUserInfo(loginDto)
 		if ok {
@@ -105,7 +107,6 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 			loginLogDto.Platform = "LDAP Login"
 			loginLogDto.LoginResult = "LDAP Login Success"
 			_ = accountService.InsertLoginLog(&loginLogDto)
-
 			return model.UserClaims{
 				Id:   u.Id,
 				Name: u.Username,
@@ -113,12 +114,13 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 		}
 		return nil, jwt.ErrFailedAuthentication
 	}
-	ok, err,u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
+	ok, err, u := accountService.VerifyAndReturnUserInfo(loginDto) // Standard login
 	if ok {
 		loginLogDto.UserId = u.Id
 		loginLogDto.Platform = "Standard Login"
 		loginLogDto.LoginResult = "Standard Login Success"
-		//todo 如果开启双因子，验证code是否正确
+		_ = accountService.InsertLoginLog(&loginLogDto)
+
 		return model.UserClaims{
 			Id:   u.Id,
 			Name: u.Username,

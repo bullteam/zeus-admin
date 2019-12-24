@@ -7,8 +7,9 @@
 <script>
 import ams from '@ams-team/ams'
 import block from './email.block'
-
+import PreCheck from '../layout/mixin/PreCheck'
 export default {
+  mixins: [PreCheck],
   data() {
     return {
       ready: false

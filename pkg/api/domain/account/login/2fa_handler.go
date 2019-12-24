@@ -15,43 +15,43 @@ import (
 )
 
 // TwoFaHandlerSms do sms code sending with custom handler
-func TwoFaHandlerSms(mobile string,pk string) string {
+func TwoFaHandlerSms(mobile string, pk string) string {
 	postData := keySortMd5Sign(map[string]string{
-		"mobile" : mobile,
-		"password" : "",
-		"scene" : "10",
-		"ts" : fmt.Sprintf("%d",time.Now().Unix()),
-		"version" : "3.2.0",
-	},pk)
+		"mobile":   mobile,
+		"password": "",
+		"scene":    "10",
+		"ts":       fmt.Sprintf("%d", time.Now().Unix()),
+		"version":  "3.2.0",
+	}, pk)
 	resp, err := http.Post("http://passport-dev.etcchebao.com/passport/user/user-sms",
 		"application/x-www-form-urlencoded",
 		strings.NewReader(postData))
 	var content []byte
 	if err == nil {
-		content,_ = ioutil.ReadAll(resp.Body)
+		content, _ = ioutil.ReadAll(resp.Body)
 		_ = resp.Body.Close()
 	}
 	return string(content)
 }
 
-func keySortMd5Sign(params map[string]string,privateKey string) string {
+func keySortMd5Sign(params map[string]string, privateKey string) string {
 	var keys []string
 	var strToSign = ""
 	var rawRequest []string
-	for k := range params{
-		keys = append(keys,k)
+	for k := range params {
+		keys = append(keys, k)
 	}
 	sort.Strings(keys)
-	for _,key := range keys {
-		rawRequest = append(rawRequest,key + "=" + params[key])
+	for _, key := range keys {
+		rawRequest = append(rawRequest, key+"="+params[key])
 		strToSign = strToSign + key + params[key]
 	}
-	signed := fmt.Sprintf("%x",md5.Sum([]byte(strToSign + privateKey)))
-	return strings.Join(rawRequest,"&") + "&sign=" + signed
+	signed := fmt.Sprintf("%x", md5.Sum([]byte(strToSign+privateKey)))
+	return strings.Join(rawRequest, "&") + "&sign=" + signed
 }
 
 type SmsSendAdapter interface {
-	SignQuery(mobile string,privateKey string) string
+	SignQuery(mobile string, privateKey string) string
 	Send(mobile string) error
 }
 
@@ -65,22 +65,22 @@ func (ssc *SmsSendChebao) SignQuery(mobile string) string {
 	var strToSign = ""
 	var rawRequest []string
 	params := map[string]string{
-		"mobile" : mobile,
-		"password" : "",
-		"scene" : "10",
-		"ts" : fmt.Sprintf("%d",time.Now().Unix()),
-		"version" : "3.2.0",
+		"mobile":   mobile,
+		"password": "",
+		"scene":    "10",
+		"ts":       fmt.Sprintf("%d", time.Now().Unix()),
+		"version":  "3.2.0",
 	}
-	for k := range params{
-		keys = append(keys,k)
+	for k := range params {
+		keys = append(keys, k)
 	}
 	sort.Strings(keys)
-	for _,key := range keys {
-		rawRequest = append(rawRequest,key + "=" + params[key])
+	for _, key := range keys {
+		rawRequest = append(rawRequest, key+"="+params[key])
 		strToSign = strToSign + key + params[key]
 	}
-	signed := fmt.Sprintf("%x",md5.Sum([]byte(strToSign + ssc.PrivateKey)))
-	return strings.Join(rawRequest,"&") + "&sign=" + signed
+	signed := fmt.Sprintf("%x", md5.Sum([]byte(strToSign+ssc.PrivateKey)))
+	return strings.Join(rawRequest, "&") + "&sign=" + signed
 }
 
 // Send code
@@ -101,17 +101,17 @@ func (ssc *SmsSendChebao) Send(mobile string) error {
 		strings.NewReader(query))
 	var content []byte
 	if err == nil {
-		content,_ = ioutil.ReadAll(resp.Body)
+		content, _ = ioutil.ReadAll(resp.Body)
 		_ = resp.Body.Close()
 	}
 	result := string(content)
-	if strings.Index(result,`"code":0`) > 0 {
+	if strings.Index(result, `"code":0`) > 0 {
 		return nil
 	} else {
 		//log.Error(result)
 		var rs map[string]interface{}
-		_ = json.Unmarshal([]byte(result),&rs)
-		if _,ok := rs["msg"];ok {
+		_ = json.Unmarshal([]byte(result), &rs)
+		if _, ok := rs["msg"]; ok {
 			log.Error(rs["msg"].(string))
 			return errors.New(rs["msg"].(string))
 		}

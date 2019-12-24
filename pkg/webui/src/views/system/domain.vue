@@ -89,10 +89,11 @@
 import { fetchDomainList, createDomain, updateDomain, deleteDomain } from '@/api/domain'
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-
+import PreCheck from '../layout/mixin/PreCheck'
 export default {
   name: 'Domain',
   components: { Pagination },
+  mixins: [PreCheck],
   data() {
     return {
       tableKey: 0,

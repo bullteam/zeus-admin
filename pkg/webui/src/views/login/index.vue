@@ -2,12 +2,10 @@
   <div class="login-container">
 
     <el-form v-if="step === 1" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
-      <el-radio-group v-model="loginForm.loginType" class="login-type">
-        <el-radio-button :label="1">{{ $t('login.standard') }}</el-radio-button>
-        <el-radio-button :label="2">{{ $t('login.ldap') }}</el-radio-button>
-      </el-radio-group>
-
+      <!--      <el-radio-group v-model="loginForm.loginType" class="login-type">-->
+      <!--        <el-radio-button :label="1">{{ $t('login.standard') }}</el-radio-button>-->
+      <!--        <el-radio-button :label="2">{{ $t('login.ldap') }}</el-radio-button>-->
+      <!--      </el-radio-group>-->
       <div class="title-container">
         <h3 class="title">{{ $t('login.title') }}</h3>
         <!--<lang-select class="set-language"/>-->
@@ -79,7 +77,7 @@
       <br>
       <br>
       <br>
-      <el-button class="thirdparty-button" type="primary" style="margin-top:30px;" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
+      <!--      <el-button class="thirdparty-button" type="primary" style="margin-top:30px;" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>-->
     </el-form>
     <el-form v-else ref="checkForm" class="login-form" label-position="left" >
       <div class="title-container">
@@ -212,7 +210,7 @@ export default {
       sendSmsCode({ username: this.loginForm.username }).then(res => {
         this.loading = false
         if (res.code === 200) {
-          this.$message.success('验证码发送成功,请及时填写')
+          this.$message.success(res.msg)
         }
       }).catch(res => {
         this.loading = false

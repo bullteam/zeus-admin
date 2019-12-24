@@ -8,12 +8,13 @@ import (
 type LoginDto struct {
 	Username string `form:"username" json:"username" binding:"required,customValidate"`
 	Password string `form:"password" json:"password" binding:"required"`
-	Code string `form:"code" json:"code"`
+	Code     string `form:"code" json:"code"`
 }
 
 type TwoFaDto struct {
 	Username string `form:"username" json:"username" binding:"required"`
 }
+
 // LoginOAuthDto - oauth login
 type LoginOAuthDto struct {
 	Code string `form:"code" binding:"required"`
@@ -30,7 +31,6 @@ type BindThirdDto struct {
 type UnBindThirdDto struct {
 	OAuthType int `form:"from"`
 }
-
 
 // demo usage
 func customValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {

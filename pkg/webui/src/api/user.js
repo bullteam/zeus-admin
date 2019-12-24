@@ -82,14 +82,6 @@ export function deleteUser(data) {
   })
 }
 
-// 判断用户是否过长时间无任何操作
-export function checkIdle(query) {
-  return request({
-    url: 'v1/account/idle',
-    method: 'get',
-    params: query
-  })
-}
 // 绑定钉钉
 export function bind(data) {
   return request({
@@ -151,22 +143,6 @@ export function close2fa(data) {
   })
 }
 
-// 检查用户是否需要输入验证码
-export function checkSmsSend(data) {
-  return request({
-    url: 'v1/account/sms-send-check',
-    method: 'post',
-    data: qs.stringify(data)
-  })
-}
-// 验证码发送
-export function sendSmsCode(data) {
-  return request({
-    url: 'v1/account/sms-send-code',
-    method: 'post',
-    data: qs.stringify(data)
-  })
-}
 // 两步验证-校验code
 export function checkGoogle2faCode(data) {
   return request({
@@ -181,5 +157,38 @@ export function FindCodeOpen() {
   return request({
     url: 'v1/account/find-code-open',
     method: 'get'
+  })
+}
+
+export function checkIdle(query) {
+  return request({
+    url: 'v1/account/idle',
+    method: 'get',
+    params: query
+  })
+}
+
+// 判断用户是否需要修改密码
+export function checkChangePwd(query) {
+  return request({
+    url: 'v1/account/require-change-pwd',
+    method: 'get',
+    params: query
+  })
+}
+// 检查用户是否需要输入验证码
+export function checkSmsSend(data) {
+  return request({
+    url: 'v1/account/sms-send-check',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+// 验证码发送
+export function sendSmsCode(data) {
+  return request({
+    url: 'v1/account/sms-send-code',
+    method: 'post',
+    data: qs.stringify(data)
   })
 }

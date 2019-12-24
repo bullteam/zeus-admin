@@ -64,6 +64,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
 	v1.GET("/account/idle", accountController.CheckIdle)
+	v1.GET("/account/require-change-pwd", accountController.CheckIfNeedToChangePwd)
 	v1.GET("/account/permissions", accountController.GetPermissionsWithMenu)
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
@@ -81,7 +82,6 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/account/ldap-adduser", accountController.LdapAddUser)   // add ldap user
 	v1.POST("/account/upload-avatar", accountController.UploadAvatar)
 
-
 	v1.Use(middleware.PermCheck)
 	//user
 	v1.GET("/users", userController.List)
@@ -90,7 +90,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/users", userController.Create)
 	v1.PUT("/users/:id", userController.Edit)
 	v1.PUT("/users/:id/status", userController.EditStatus)
-	// v1.PUT("/users/:id/password", userController.EditPassword)
+	v1.PUT("/users/:id/password", userController.ResetPassword)
 	v1.GET("/users/:id/roles", userController.Roles)
 
 	v1.DELETE("/users/:id", userController.Delete)

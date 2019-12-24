@@ -45,13 +45,13 @@ func (r *Redis) Del(key string) error {
 }
 
 // HashGet from key
-func (r *Redis) HashGet(hk,key string) (string, error) {
-	return r.client.HGet(hk,key).Result()
+func (r *Redis) HashGet(hk, key string) (string, error) {
+	return r.client.HGet(hk, key).Result()
 }
 
 // HashDel delete key in specify redis's hashtable
-func (r *Redis) HashDel(hk,key string) error {
-	return r.client.HDel(hk,key).Err()
+func (r *Redis) HashDel(hk, key string) error {
+	return r.client.HDel(hk, key).Err()
 }
 
 // Increase
@@ -59,3 +59,7 @@ func (r *Redis) Increase(key string) error {
 	return r.client.Incr(key).Err()
 }
 
+// Set ttl
+func (r *Redis) Expire(key string, dur time.Duration) error {
+	return r.client.Expire(key, dur).Err()
+}

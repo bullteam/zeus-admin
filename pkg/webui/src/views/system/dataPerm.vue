@@ -108,6 +108,7 @@ import 'jsoneditor/dist/jsoneditor.min.css'
 import Jsoneditor from 'jsoneditor'
 import treeTable from '@/components/TreeTable'
 import treeToArray from '@/directive/customEval'
+import PreCheck from '../layout/mixin/PreCheck'
 // import { asyncRouterMap } from '@/router/routers'
 import { fetchDomainList } from '@/api/domain'
 import { dataPermList, dataPermAdd, dataPermEdit, dataPermDel } from '@/api/dataPerm'
@@ -132,6 +133,7 @@ export default {
       return parseInt(type) === 1 ? '分类' : '数据权限'
     }
   },
+  mixins: [PreCheck],
   data() {
     return {
       func: treeToArray,

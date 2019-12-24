@@ -2,10 +2,10 @@
   <div>
     <el-form :model="form">
       <el-form-item label-width="100px" label="新密码">
-        <el-input v-model="form.re_password" type="password" placeholder="请输入" autocomplete="off"/>
+        <el-input v-model="form.re_password" type="password" placeholder="请输入" autocomplete="off" @blur="handleBlur($event)"/>
       </el-form-item>
       <el-form-item label-width="100px" label="确认新密码">
-        <el-input v-model="form.new_password" type="password" placeholder="请输入" autocomplete="off"/>
+        <el-input v-model="form.new_password" type="password" placeholder="请输入" autocomplete="off" @blur="handleBlur($event)"/>
       </el-form-item>
       <el-form-item label-width="100px">
         <el-button type="primary" @click="toUpWord">确 定</el-button>
@@ -25,6 +25,12 @@ export default {
     }
   },
   methods: {
+    handleBlur(event) {
+      if (event.target.value.length < 6) {
+        this.$message.error('密码长度不能少于 6 位')
+        event.target.value = ''
+      }
+    },
     toUpWord() {
       if (this.form.re_password === '') {
         this.$message.error('请输入新密码')
@@ -32,6 +38,10 @@ export default {
       }
       if (this.form.new_password === '') {
         this.$message.error('请输入确认新密码')
+        return
+      }
+      if (this.form.re_password.length < 6 || this.form.new_password.length < 6) {
+        this.$message.error('密码长度不能少于 6 位')
         return
       }
       var patt1 = new RegExp(/\s+/g)

@@ -140,20 +140,13 @@ func (u *UserController) EditStatus(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
 // @Router /v1/users/{id}/password [put]
-func (u *UserController) EditPassword(c *gin.Context) {
-	var accountDto dto.AccountEditPasswordDto
-	var userDto dto.UserEditPasswordDto
-	if u.BindAndValidate(c, &accountDto) {
-		if accountDto.NewPassword != accountDto.RePassword {
-			fail(c, ErrDifferentPasswords)
-			return
-		}
-		userDto.Id = accountDto.Id
-		userDto.Password = accountDto.RePassword
-		affected := userService.UpdatePassword(userDto)
-		if affected > 0 {
-		}
-		ok(c, "ok.UpdateDone")
+func (u *UserController) ResetPassword(c *gin.Context) {
+	var userDto dto.GeneralGetDto
+	if u.BindAndValidate(c, &userDto) {
+		pwd := userService.ResetPassword(userDto)
+		resp(c, map[string]interface{}{
+			"newPwd" : pwd,
+		})
 	}
 }
 

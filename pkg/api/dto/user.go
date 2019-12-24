@@ -3,6 +3,7 @@ package dto
 import (
 	"gopkg.in/go-playground/validator.v8"
 	"reflect"
+	"regexp"
 	"time"
 )
 
@@ -16,7 +17,7 @@ var UserListSearchMapping = map[string]string{
 type UserCreateDto struct {
 	Id            int       `json:"id"`
 	Username      string    `form:"username" json:"username" binding:"required"`
-	Mobile        string    `form:"mobile" json:"mobile"`
+	Mobile        string    `form:"mobile" json:"mobile" binding:"required"`
 	Sex           int       `form:"sex" json:"sex"`
 	Realname      string    `form:"realname" json:"realname"`
 	Password      string    `form:"password" json:"password" binding:"required,pwdValidate"`
@@ -78,8 +79,9 @@ type UserInDomainDto struct {
 
 // password validator
 func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
+	reg := regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&*]{6,}$`)
 	if val, ok := field.Interface().(string); ok {
-		if len(val) < 8 || len(val) > 16 {
+		if !reg.Match([]byte(val)) {
 			return false
 		}
 	}

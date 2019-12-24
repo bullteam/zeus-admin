@@ -1,5 +1,7 @@
 package cache
 
+import "time"
+
 var adapter Adapter
 
 type Adapter interface {
@@ -7,9 +9,10 @@ type Adapter interface {
 	Get(key string) (string, error)
 	Set(key string, val string, expire int) error
 	Del(key string) error
-	HashGet(hk,key string) (string,error)
-	HashDel(hk,key string) error
+	HashGet(hk, key string) (string, error)
+	HashDel(hk, key string) error
 	Increase(key string) error
+	Expire(key string, dur time.Duration) error
 }
 
 func SetUp() {
@@ -33,13 +36,13 @@ func Del(key string) error {
 }
 
 // HashGet get val in hashtable cache
-func HashGet(hk,key string) (string, error) {
-	return adapter.HashGet(hk,key)
+func HashGet(hk, key string) (string, error) {
+	return adapter.HashGet(hk, key)
 }
 
 // HashDel delete one key:value pair in hashtable cache
-func HashDel(hk,key string) error {
-	return adapter.HashDel(hk,key)
+func HashDel(hk, key string) error {
+	return adapter.HashDel(hk, key)
 }
 
 // Increase value
@@ -47,3 +50,6 @@ func Increase(key string) error {
 	return adapter.Increase(key)
 }
 
+func Expire(key string, dur time.Duration) error {
+	return adapter.Expire(key, dur)
+}
