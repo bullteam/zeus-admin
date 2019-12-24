@@ -14,26 +14,6 @@ import (
 	"zeus/pkg/api/log"
 )
 
-// TwoFaHandlerSms do sms code sending with custom handler
-func TwoFaHandlerSms(mobile string, pk string) string {
-	postData := keySortMd5Sign(map[string]string{
-		"mobile":   mobile,
-		"password": "",
-		"scene":    "10",
-		"ts":       fmt.Sprintf("%d", time.Now().Unix()),
-		"version":  "3.2.0",
-	}, pk)
-	resp, err := http.Post("http://passport-dev.etcchebao.com/passport/user/user-sms",
-		"application/x-www-form-urlencoded",
-		strings.NewReader(postData))
-	var content []byte
-	if err == nil {
-		content, _ = ioutil.ReadAll(resp.Body)
-		_ = resp.Body.Close()
-	}
-	return string(content)
-}
-
 func keySortMd5Sign(params map[string]string, privateKey string) string {
 	var keys []string
 	var strToSign = ""
