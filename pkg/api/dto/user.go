@@ -3,6 +3,7 @@ package dto
 import (
 	"gopkg.in/go-playground/validator.v8"
 	"reflect"
+	"regexp"
 	"time"
 )
 
@@ -16,7 +17,7 @@ var UserListSearchMapping = map[string]string{
 type UserCreateDto struct {
 	Id            int       `json:"id"`
 	Username      string    `form:"username" json:"username" binding:"required"`
-	Mobile        string    `form:"mobile" json:"mobile"`
+	Mobile        string    `form:"mobile" json:"mobile" binding:"required"`
 	Sex           int       `form:"sex" json:"sex"`
 	Realname      string    `form:"realname" json:"realname"`
 	Password      string    `form:"password" json:"password" binding:"required,pwdValidate"`
@@ -60,12 +61,13 @@ type UserMoveDepartmentDto struct {
 // UserEditPasswordDto - User update password only
 type UserEditPasswordDto struct {
 	Id       int    `uri:"id" json:"id" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required,pwdValidate"`
+	Password string `form:"new_password" json:"password" binding:"required,pwdValidate"`
+	//RePassword string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
 }
 
 //Account edit password only
 type AccountEditPasswordDto struct {
-	Id          int    `uri:"id" json:"id" binding:"required"`
+	Id          int
 	RePassword  string `form:"re_password" json:"re_password" binding:"required,pwdValidate"`
 	NewPassword string `form:"new_password" json:"new_password" binding:"required,pwdValidate"`
 }
@@ -77,8 +79,9 @@ type UserInDomainDto struct {
 
 // password validator
 func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
+	reg := regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&*]{6,}$`)
 	if val, ok := field.Interface().(string); ok {
-		if len(val) < 6 {
+		if !reg.Match([]byte(val)) {
 			return false
 		}
 	}

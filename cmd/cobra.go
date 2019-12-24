@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"zeus/cmd/api"
+	"zeus/cmd/migrate"
 )
 
 var rootCmd = &cobra.Command{
@@ -17,6 +18,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(api.StartCmd)
+	rootCmd.AddCommand(migrate.MigrateCmd)
 }
 
 //Execute : run commands

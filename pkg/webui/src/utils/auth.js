@@ -3,7 +3,7 @@ import {
   getDomainHost
 } from '@/utils'
 
-const TokenKey = 'Admin-Token'
+const TokenKey = 'jwt'
 export function getToken() {
   return Cookies.get(TokenKey) || ''
 }

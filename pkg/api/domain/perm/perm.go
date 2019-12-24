@@ -4,12 +4,14 @@ import (
 	rediswatcher "github.com/billcobbler/casbin-redis-watcher"
 	"github.com/casbin/casbin"
 	"github.com/spf13/viper"
+	"sync"
 	"zeus/pkg/api/domain/perm/adapter"
 	"zeus/pkg/api/log"
 )
 
 var (
-	enforcer *casbin.Enforcer
+	enforcer     *casbin.Enforcer
+	enforcerLock = &sync.Mutex{}
 )
 
 // SetUp permission handler
@@ -23,7 +25,9 @@ func SetUp(cluster bool) {
 		// See if policy changed and do distributed notification
 		_ = w.SetUpdateCallback(func(s string) {
 			log.Info("Casbin policies changed")
+			enforcerLock.Lock()
 			_ = enforcer.LoadPolicy()
+			enforcerLock.Unlock()
 		})
 	}
 }
@@ -78,6 +82,8 @@ func DelFilteredPerm(fieldIndex int, params ...string) bool {
 
 // Enforce : check permission
 func Enforce(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.Enforce(params...)
 }
 

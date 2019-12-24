@@ -4,7 +4,7 @@ const installBlock = {
   data: {
     sqlType: 'sqlite',
     dataPath: '/data/zeus.db',
-    siteName: 'Zeus 宙斯权限后台管理系统',
+    siteName: '车宝权限后台管理系统',
     port: '8082',
     baseUrl: 'http://localhost:8082/',
     logPath: '/data/log'

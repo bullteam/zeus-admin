@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/viper"
 	"image/jpeg"
 	"strconv"
+	"zeus/pkg/api/log"
+
 	//"io"
 	"mime/multipart"
 	"os"
@@ -91,6 +93,7 @@ func (s MyAccountService) GetThirdList(dto dto.GeneralListDto) ([]model.UserOAut
 //绑定第三方应用
 func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid string, err error) {
 	Info, err := login.GetDingTalkUserInfo(code)
+	log.Info(fmt.Sprintf("%#v", Info))
 	if err != nil {
 		return "", err
 	}

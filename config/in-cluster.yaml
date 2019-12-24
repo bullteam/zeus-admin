@@ -84,8 +84,12 @@ project:
   merge: true
 redis:
   host: 127.0.0.1:6379
+  auth:
+  db: 0
   pool:
     max: 20
     min: 3
 security:
   install_lock: false
+  2fa:
+    enabled: false

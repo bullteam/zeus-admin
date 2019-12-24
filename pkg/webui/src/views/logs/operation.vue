@@ -98,6 +98,7 @@
 import { fetchOperationLogList } from '@/api/log'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
+import PreCheck from '../layout/mixin/PreCheck'
 
 export default {
   name: 'LogsOperation',
@@ -107,6 +108,7 @@ export default {
       return type === 1 ? 'success' : 'failed'
     }
   },
+  mixins: [PreCheck],
   data() {
     return {
       tableKey: 0,

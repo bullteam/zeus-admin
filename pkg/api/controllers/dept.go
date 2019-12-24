@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
@@ -67,20 +66,6 @@ func (d *DeptController) Create(c *gin.Context) {
 			fail(c, ErrAddFail)
 			return
 		}
-		// insert operation log
-		b, _ := json.Marshal(deptDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           int(c.Value("userId").(float64)),
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Create Department",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"id": created.Id,
 		})
@@ -102,20 +87,6 @@ func (d *DeptController) Delete(c *gin.Context) {
 			fail(c, ErrDelFail)
 			return
 		}
-		// insert operation log
-		b, _ := json.Marshal(deptDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           int(c.Value("userId").(float64)),
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Delete Department",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		ok(c, "ok.DeletedDone")
 	}
 }
@@ -132,20 +103,6 @@ func (d *DeptController) Edit(c *gin.Context) {
 	if d.BindAndValidate(c, &deptDto) {
 		affected := deptService.Update(deptDto)
 		if affected > 0 {
-			// insert operation log
-			b, _ := json.Marshal(deptDto)
-			orLogDto := dto.OperationLogDto{
-				UserId:           int(c.Value("userId").(float64)),
-				RequestUrl:       c.Request.RequestURI,
-				OperationMethod:  c.Request.Method,
-				Params:           string(b),
-				Ip:               c.ClientIP(),
-				IpLocation:       "", //TODO...待接入获取ip位置服务
-				OperationResult:  "success",
-				OperationSuccess: 1,
-				OperationContent: "Edit Department",
-			}
-			_ = logService.InsertOperationLog(&orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}

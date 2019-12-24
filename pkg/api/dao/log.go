@@ -141,7 +141,7 @@ func (OperationLogDao) Lists(listDto dto.OperationLogListDto) ([]OperationLogLis
 }
 
 // Insert OperationLog
-func (ol OperationLogDao) Create(orLogDto *dto.OperationLogDto) error {
+func (ol OperationLogDao) Create(orLogDto dto.OperationLogDto) error {
 	db := GetDb()
 	operationLogModel := model.OperationLog{
 		RequestUrl:       orLogDto.RequestUrl,
@@ -155,4 +155,20 @@ func (ol OperationLogDao) Create(orLogDto *dto.OperationLogDto) error {
 		OperationContent: orLogDto.OperationContent,
 	}
 	return db.Create(&operationLogModel).Error
+}
+
+// GetLatestLogOfAccount get latest access log
+func (OperationLogDao) GetLatestLogOfAccount(uid int) model.OperationLog {
+	db := GetDb()
+	var oLog model.OperationLog
+	db.Where("user_id=?", uid).Order("-id").First(&oLog)
+	return oLog
+}
+
+// GetLatestPwdLogOfAccount get latest pwd change log
+func (OperationLogDao) GetLatestPwdLogOfAccount(uid int) model.OperationLog {
+	db := GetDb()
+	var oLog model.OperationLog
+	db.Where("user_id=? and request_url=? and operation_method=?", uid, "/v1/account/password", "PUT").Order("-id").First(&oLog)
+	return oLog
 }

@@ -84,8 +84,17 @@ project:
   merge: true
 redis:
   host: 127.0.0.1:6379
+  auth:
+  db: 0
   pool:
     max: 20
     min: 3
 security:
   install_lock: false
+  2fa:
+    enabled: false
+  #0 - normal
+  #1 - safe
+  # check if user has been not doing anything in 1 hour then sign out automatically
+  # force user to change password in 90 days
+  level: 0

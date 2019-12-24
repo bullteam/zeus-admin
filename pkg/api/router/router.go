@@ -29,7 +29,6 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//version fragment
 	v1 := e.Group("/v1")
-
 	//install
 	InstallController := controllers.InstallController{}
 	v1.POST("/install", InstallController.Install)
@@ -38,6 +37,12 @@ func SetUp(e *gin.Engine, cors bool) {
 	jwtAuth = middleware.JwtAuth(account.LoginStandard)
 	//authController := &controllers.AuthController{}
 	//api handlers
+	userController := &controllers.UserController{}
+	accountController := &controllers.AccountController{}
+
+	v1.POST("/account/sms-send-check", accountController.SmsSendCheck)
+	v1.POST("/account/sms-send-code", accountController.SmsSendCode)
+
 	v1.POST("/users/login", jwtAuth.LoginHandler)
 	v1.POST("/users/login/refresh", jwtAuth.RefreshHandler)
 	// oauth login
@@ -49,8 +54,7 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	v1.Use(jwtAuths.MiddlewareFunc(), middleware.JwtPrepare)
 	v1.Use(jwtAuth.MiddlewareFunc(), middleware.JwtPrepare)
-	userController := &controllers.UserController{}
-	accountController := &controllers.AccountController{}
+	v1.Use(middleware.AccessLog)
 
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
@@ -59,11 +63,13 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//account - login user
 	v1.GET("/account/info", accountController.Info)
+	v1.GET("/account/idle", accountController.CheckIdle)
+	v1.GET("/account/require-change-pwd", accountController.CheckIfNeedToChangePwd)
 	v1.GET("/account/permissions", accountController.GetPermissionsWithMenu)
 	v1.PUT("/account/password", accountController.EditPassword)
 	v1.GET("/account/domains", accountController.GetDomains)
 	v1.POST("/account/bind-google-2fa-code", accountController.BindGoogle2faCode)
-	v1.POST("/account/third-bind", accountController.Thirdbind)
+	v1.GET("/account/third-bind/from/:from", accountController.ThirdBind)
 	v1.POST("/account/third-unbind", accountController.ThirdUnbind)
 	v1.GET("/account/thirds", accountController.ThirdList)
 	v1.POST("/account/send-verify-email", accountController.SendVerifymail)
@@ -84,7 +90,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/users", userController.Create)
 	v1.PUT("/users/:id", userController.Edit)
 	v1.PUT("/users/:id/status", userController.EditStatus)
-	// v1.PUT("/users/:id/password", userController.EditPassword)
+	v1.PUT("/users/:id/password", userController.ResetPassword)
 	v1.GET("/users/:id/roles", userController.Roles)
 
 	v1.DELETE("/users/:id", userController.Delete)

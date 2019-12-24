@@ -52,7 +52,7 @@ export function updateUserStatus(data) {
 
 export function updateUserPassWord(data) {
   return request({
-    url: 'v1/users/' + data.id + '/password',
+    url: 'v1/account/password',
     method: 'put',
     data: qs.stringify(data)
   })
@@ -86,7 +86,7 @@ export function deleteUser(data) {
 export function bind(data) {
   return request({
     url: 'v1/account/third-bind',
-    method: 'post',
+    method: 'POST',
     data: qs.stringify(data)
   })
 }
@@ -157,5 +157,38 @@ export function FindCodeOpen() {
   return request({
     url: 'v1/account/find-code-open',
     method: 'get'
+  })
+}
+
+export function checkIdle(query) {
+  return request({
+    url: 'v1/account/idle',
+    method: 'get',
+    params: query
+  })
+}
+
+// 判断用户是否需要修改密码
+export function checkChangePwd(query) {
+  return request({
+    url: 'v1/account/require-change-pwd',
+    method: 'get',
+    params: query
+  })
+}
+// 检查用户是否需要输入验证码
+export function checkSmsSend(data) {
+  return request({
+    url: 'v1/account/sms-send-check',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+// 验证码发送
+export function sendSmsCode(data) {
+  return request({
+    url: 'v1/account/sms-send-code',
+    method: 'post',
+    data: qs.stringify(data)
   })
 }

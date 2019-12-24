@@ -11,9 +11,10 @@
 <script>
 import { getUserDomain } from '@/api/login'
 import { getToken } from '@/utils/auth'
-
+import PreCheck from '../layout/mixin/PreCheck'
 export default {
   name: 'Dashboard',
+  mixins: [PreCheck],
   data() {
     return {
       domainlist: []

@@ -14,7 +14,9 @@ import (
 	"net/url"
 	"strconv"
 	"zeus/pkg/api/domain/account/ldap"
+	"zeus/pkg/api/domain/account/login"
 	"zeus/pkg/api/dto"
+	"zeus/pkg/api/log"
 	"zeus/pkg/api/service"
 	"zeus/pkg/api/utils/mailTemplate"
 )
@@ -76,17 +78,38 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 	var accountDto dto.AccountEditPasswordDto
 	var userDto dto.UserEditPasswordDto
 	accountDto.Id = int(c.Value("userId").(float64))
+
 	if a.BindAndValidate(c, &accountDto) {
 		if accountDto.NewPassword != accountDto.RePassword {
 			fail(c, ErrDifferentPasswords)
 			return
 		}
+		//check if equal to old password
+		userModel := userService.InfoOfId(dto.GeneralGetDto{Id: accountDto.Id})
+		if login.VerifyPassword(accountDto.NewPassword, userModel) {
+			fail(c, ErrSamePasswords)
+			return
+		}
 		userDto.Id = accountDto.Id
 		userDto.Password = accountDto.RePassword
 		affected := userService.UpdatePassword(userDto)
-		if affected <= 0 {
-			//fail(c,ErrEditFail)
-			//return
+		if affected > 0 {
+			// 修改密码只有成功时才进入日志
+			// 因为需要这条日志判断用户上次更新密码的时间
+			// 故特殊处理
+			b, _ := json.Marshal(accountDto)
+			orLogDto := dto.OperationLogDto{
+				UserId:           userDto.Id,
+				RequestUrl:       c.Request.URL.Path,
+				OperationMethod:  c.Request.Method,
+				Params:           string(b),
+				Ip:               c.ClientIP(),
+				IpLocation:       "", //TODO...待接入获取ip位置服务
+				OperationResult:  "success",
+				OperationSuccess: 1,
+				OperationContent: "Bind third account",
+			}
+			_ = logService.InsertOperationLog(orLogDto)
 		}
 		ok(c, "ok.UpdateDone")
 	}
@@ -243,20 +266,6 @@ func (a *AccountController) Close2fa(c *gin.Context) {
 
 	myAccountService.Update2FaStatus(userId, 0) //更新状态
 
-	// insert operation log
-	b, _ := json.Marshal(bindCodeDto)
-	orLogDto := dto.OperationLogDto{
-		UserId:           userId,
-		RequestUrl:       c.Request.RequestURI,
-		OperationMethod:  c.Request.Method,
-		Params:           string(b),
-		Ip:               c.ClientIP(),
-		IpLocation:       "", //TODO...待接入获取ip位置服务
-		OperationResult:  "success",
-		OperationSuccess: 1,
-		OperationContent: "Close Google 2fa",
-	}
-	_ = logService.InsertOperationLog(&orLogDto)
 	resp(c, map[string]interface{}{
 		"result": "update success!",
 	})
@@ -394,8 +403,8 @@ func (a *AccountController) EmailVerify(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/thirdbind [get]
-func (a *AccountController) Thirdbind(c *gin.Context) {
+// @Router /v1/account/third-bind/from/:from [get]
+func (a *AccountController) ThirdBind(c *gin.Context) {
 	bindThirdDto := &dto.BindThirdDto{}
 	if a.BindAndValidate(c, &bindThirdDto) {
 		from := bindThirdDto.From
@@ -404,31 +413,19 @@ func (a *AccountController) Thirdbind(c *gin.Context) {
 		}
 		userId := int(c.Value("userId").(float64))
 		myAccountService := service.MyAccountService{} //switch case from  1 钉钉 2 微信 TODO
-		openid, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
+		_, err := myAccountService.BindDingtalk(bindThirdDto.Code, userId, from)
 		if err != nil {
+			log.Error(err.Error())
 			fail(c, ErrBindDingtalk)
 			return
 		}
-		data := map[string]string{
-			"openid": openid,
-		}
-		// insert operation log
-		b, _ := json.Marshal(bindThirdDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           userId,
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Bind third account",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
-		resp(c, map[string]interface{}{
-			"result": data,
-		})
+		//data := map[string]string{
+		//	"openid": openid,
+		//}
+		//resp(c, map[string]interface{}{
+		//	"result": data,
+		//})
+		c.Redirect(301, "/#/my/third")
 	}
 }
 
@@ -455,25 +452,37 @@ func (a *AccountController) ThirdUnbind(c *gin.Context) {
 		data := map[string]bool{
 			"state": true,
 		}
-		// insert operation log
-		b, _ := json.Marshal(UnBindDingtalkDto)
-		orLogDto := dto.OperationLogDto{
-			UserId:           userId,
-			RequestUrl:       c.Request.RequestURI,
-			OperationMethod:  c.Request.Method,
-			Params:           string(b),
-			Ip:               c.ClientIP(),
-			IpLocation:       "", //TODO...待接入获取ip位置服务
-			OperationResult:  "success",
-			OperationSuccess: 1,
-			OperationContent: "Unbind third account",
-		}
-		_ = logService.InsertOperationLog(&orLogDto)
 		resp(c, map[string]interface{}{
 			"result": data,
 		})
 	}
 
+}
+
+// check if need to send sms code
+func (a *AccountController) SmsSendCheck(c *gin.Context) {
+	twoFaDto := dto.TwoFaDto{}
+	if a.BindAndValidate(c, &twoFaDto) {
+		resp(c, map[string]interface{}{
+			"show": userService.VerifySmsCodeIfNeedToShow(twoFaDto),
+		})
+	}
+}
+
+// SmsSendCheck send sms code
+func (a *AccountController) SmsSendCode(c *gin.Context) {
+	twoFaDto := dto.TwoFaDto{}
+	if a.BindAndValidate(c, &twoFaDto) {
+		if mobile, err := userService.Verify2FaHandler(twoFaDto); err != nil {
+			ErrSmsSendCode.Moreinfo = err.Error()
+		} else {
+			secureMobileShow := mobile[:3] + "****" + mobile[8:]
+			rawOk(c, "已向"+secureMobileShow+"下发短信验证码，请注意查收，短信十分钟内有效！")
+			return
+		}
+	}
+	fail(c, ErrSmsSendCode)
+	//ErrSmsSendCode.Moreinfo = ""
 }
 
 func (a *AccountController) LdapAddUser(c *gin.Context) {
@@ -501,5 +510,23 @@ func (a *AccountController) UploadAvatar(c *gin.Context) {
 	}
 	resp(c, map[string]interface{}{
 		"result": result,
+	})
+}
+
+// CheckIdle check if user is idle
+func (a *AccountController) CheckIdle(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	resp(c, map[string]interface{}{
+		"idle": logService.CheckAccountIdleTooLong(dto.GeneralGetDto{Id: userId}),
+	})
+}
+
+// CheckIfNeedToChangePwd check if user need to change password
+func (a *AccountController) CheckIfNeedToChangePwd(c *gin.Context) {
+	userId := int(c.Value("userId").(float64))
+	needed, days := userService.GetLastPwdChangeDaySinceNow(dto.GeneralGetDto{Id: userId})
+	resp(c, map[string]interface{}{
+		"needed": needed,
+		"days":   days,
 	})
 }

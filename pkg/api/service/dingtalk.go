@@ -2,6 +2,8 @@ package service
 
 import (
 	dingtalk "github.com/bullteam/go-dingtalk/src"
+	"github.com/spf13/viper"
+	"strings"
 	"zeus/pkg/api/domain/sync/dingdingtalk"
 	"zeus/pkg/api/dto"
 )
@@ -30,11 +32,20 @@ func (ds DingTalkService) SyncRecursive(departments map[int][]dingtalk.Departmen
 			continue
 		}
 		for _, u := range users.([]dingtalk.UDetailedList) {
+			userName := u.Name
+			if u.Email != "" {
+				userName = strings.Split(u.Email, "@")[0]
+			}
 			_, _ = UserService.Create(UserService{}, dto.UserCreateDto{
-				Username:     u.Name,
+				Username:     userName,
+				Realname:     u.Name,
 				Mobile:       u.Mobile,
+				Email:        u.Email,
+				Title:        u.Position,
+				Status:       1,
+				Sex:          0,
 				DepartmentId: created.Id,
-				Password:     "zeus@2019",
+				Password:     viper.GetString("dingtalk.defaultPwd"),
 			})
 		}
 	}

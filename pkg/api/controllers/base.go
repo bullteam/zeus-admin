@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/middleware"
-	"zeus/pkg/api/service"
 )
 
 type ControllerError struct {
@@ -38,6 +37,7 @@ var (
 	ErrChkJwt             = &ControllerError{10012, "err.ErrChkJwt", "", ""}
 	ErrIdData             = &ControllerError{10016, "err.ErrIdData", "", ""}
 	ErrDifferentPasswords = &ControllerError{10017, "err.ErrDifferentPasswords", "", ""}
+	ErrSamePasswords      = &ControllerError{10018, "err.ErrSamePasswords", "", ""}
 	ErrAddFail            = &ControllerError{11000, "err.ErrAddFail", "", ""}
 	ErrEditFail           = &ControllerError{11001, "err.ErrEditFail", "", ""}
 	ErrDelFail            = &ControllerError{11002, "err.ErrDelFail", "", ""}
@@ -58,9 +58,8 @@ var (
 	ErrNoRecord           = &ControllerError{13012, "err.ErrNoRecord", "", ""}
 	ErrHasSubRecord       = &ControllerError{13013, "err.ErrHasSubRecord", "", ""}
 	ErrUploadAvatar       = &ControllerError{13014, "err.ErrUploadAvatar", "", ""}
+	ErrSmsSendCode        = &ControllerError{13015, "err.ErrSendCode", "", ""}
 )
-
-var logService = service.LogService{}
 
 type BaseController struct {
 }
@@ -83,6 +82,13 @@ func ok(c *gin.Context, langKey string) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  i18n.Tr(middleware.GetLang(), langKey),
+	})
+}
+
+func rawOk(c *gin.Context, message string) {
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  message,
 	})
 }
 func fail(c *gin.Context, errs *ControllerError) {

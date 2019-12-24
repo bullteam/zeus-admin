@@ -6,9 +6,10 @@
 <script>
 import ams from '@ams-team/ams'
 import personalBlock from './personal.block'
-
+import PreCheck from '../layout/mixin/PreCheck'
 export default {
   name: 'Personal',
+  mixins: [PreCheck],
   data() {
     return {
       ready: false

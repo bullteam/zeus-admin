@@ -137,10 +137,12 @@ import treeToArray from '@/directive/customEval'
 import { fetchDeptList, createDept, updateDept, deleteDept, checkMemberDept } from '@/api/dept'
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import PreCheck from '../layout/mixin/PreCheck'
 
 export default {
   name: 'Dept',
   components: { Pagination, treeTable },
+  mixins: [PreCheck],
   data() {
     return {
       func: treeToArray,
@@ -348,7 +350,6 @@ export default {
     o(data, id) {
       const menu = data.filter(o => o.parent_id === id)
       menu.forEach(o => {
-        console.log(o.id)
         const children = this.o(data, o.id)
         if (children && children.length > 0) {
           o.children = children

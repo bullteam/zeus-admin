@@ -114,9 +114,9 @@
               type="success">更多 ↓
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <!--              <el-dropdown-item v-permission="['/permission/user:edit']">-->
-              <!--                <span style="display:block;" @click="handleResetUpdate(scope.row)">{{ $t('table.reset') }}</span>-->
-              <!--              </el-dropdown-item>-->
+              <el-dropdown-item v-permission="['/permission/user:edit']">
+                <span style="display:block;" @click="handleResetUpdate(scope.row)">{{ $t('table.reset') }}</span>
+              </el-dropdown-item>
               <el-dropdown-item v-permission="['/permission/user:edit']" divided>
                 <span style="display:block;" @click="handleCopyUpdate(scope.row)">{{ $t('table.copy') }}</span>
               </el-dropdown-item>
@@ -156,11 +156,26 @@
         <el-form-item :label="$t('user.username')" prop="username">
           <el-input :disabled="dialogStatus==='update'" v-model="temp.username"/>
         </el-form-item>
-        <el-form-item :label="$t('user.department')">
+        <el-form-item :label="$t('user.mobile')" prop="mobile">
+          <el-input v-model="temp.mobile"/>
+        </el-form-item>
+        <!-- <el-form-item :label="$t('user.department')">
           <el-select v-model="department_id" class="filter-item" placeholder="Please select">
             <el-option v-for="item in deptlist" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
+        </el-form-item> -->
+
+        <el-form-item :label="$t('user.department')">
+          <el-cascader
+            :style="{'width':'100%'}"
+            :options="data_options"
+            :props="cascader_props"
+            v-model="temp.parents"
+            change-on-select
+            @change="handleSetDepId"
+          />
         </el-form-item>
+
         <el-form-item v-show="!(temp.id>0)" :label="$t('user.password')" >
           <el-input v-model="temp.password" type="password"/>
         </el-form-item>
@@ -180,9 +195,7 @@
         <el-form-item :label="$t('user.email')">
           <el-input v-model="temp.email"/>
         </el-form-item>
-        <el-form-item :label="$t('user.mobile')">
-          <el-input v-model="temp.mobile"/>
-        </el-form-item>
+
         <el-form-item :label="$t('user.status')">
           <el-radio-group v-model="temp.status">
             <el-radio-button label="1">{{ $t('table.enable') }}</el-radio-button>
@@ -248,7 +261,7 @@ import { fetchDomainList } from '@/api/domain'
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 import { fetchUserRoles } from '../../api/user' // Secondary package based on el-pagination
-
+import PreCheck from '../layout/mixin/PreCheck'
 export default {
   name: 'User',
   components: { Pagination },
@@ -257,7 +270,20 @@ export default {
       return type === 1 ? '正常' : '停用'
     }
   },
+  mixins: [PreCheck],
   data() {
+    const checkPhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('手机号不能为空'))
+      } else {
+        const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+        if (reg.test(value)) {
+          callback()
+        } else {
+          return callback(new Error('请输入正确的手机号'))
+        }
+      }
+    }
     return {
       tableKey: 0,
       list: null,
@@ -290,8 +316,9 @@ export default {
         realname: '',
         faceicon: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
         sex: '1',
-        remark: ''
-        // roles: []
+        remark: '',
+        // roles: [],
+        parents: ['0']
       },
       department_id: '',
       roles: [1],
@@ -309,7 +336,7 @@ export default {
         title: [{ required: true, message: '职位必须填写', trigger: 'blur' }],
         realname: [{ required: true, message: '真实姓名必须填写', trigger: 'blur' }],
         email: [{ required: true, message: '邮箱必须填写', trigger: 'blur' }],
-        mobile: [{ required: true, message: '手机号码必须填写', trigger: 'blur' }]
+        mobile: [{ validator: checkPhone, message: '手机号码必须填写,并保证格式正确', trigger: 'blur' }]
       },
       downloadLoading: false,
       rolelist: [],
@@ -322,7 +349,14 @@ export default {
       tree_props: {
         children: 'children',
         label: 'name'
-      }
+      },
+
+      data_options: [],
+      cascader_props: {
+        value: 'id',
+        label: 'name'
+      },
+      parentsList: {}
     }
   },
   created() {
@@ -374,6 +408,21 @@ export default {
         // setTimeout(() => {
         this.listLoading = false
         // }, 1.5 * 1000)
+
+        if (this.deptlist && this.deptlist.length > 0) {
+          this.parentsList = this.o(this.deptlist, 0)
+          this.data_options = [{
+            id: '0',
+            name: '请选择',
+            children: this.parentsList
+          }]
+        } else {
+          this.parentsList = []
+          this.data_options = [{
+            id: '0',
+            name: '请选择'
+          }]
+        }
       })
     },
     getDomainList() {
@@ -456,11 +505,12 @@ export default {
         realname: '',
         faceicon: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
         sex: '1',
-        remark: ''
-        // roles: []
+        remark: '',
+        // roles: [],
+        parents: ['0']
       }
       this.roles = []
-      // this.department_id = ''
+      this.department_id = ''
       this.domain_id = ''
       const dept = this.deptlist.find(o => o.name === '未分配')
       dept ? this.department_id = dept.id : ''
@@ -553,6 +603,8 @@ export default {
       this.department_id = this.temp.department.id
       this.temp.faceicon = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
       this.temp.timestamp = new Date(this.temp.timestamp)
+      this.temp.parents = ['0']
+      this.findParent(this.temp.department_id, this.temp.parents, this.parentsList)
       this.dialogStatus = 'update'
       this.rules.password[0].required = false
       this.dialogFormVisible = true
@@ -625,18 +677,23 @@ export default {
       })
     },
     handleResetUpdate(row) {
-      this.$confirm('将该用户的密码重置为初始密码123456', '重置该用户的密码', {
+      this.$confirm('您确定需要重置该用户密码吗？', '重置该用户的密码', {
         confirmButtonText: '确定重置',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        changeUserPassword(row.id, { user_id: row.id, new_password: '123456', re_password: '123456' }).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '重置成功',
-            type: 'success',
-            duration: 2000
-          })
+        changeUserPassword(row).then((res) => {
+          // eslint-disable-next-line eqeqeq,no-empty
+          if (res.code === 200) {
+            this.$alert('此账户密码已被重置为' + res.data.newPwd, '提醒')
+          } else {
+            this.$notify({
+              title: '失败',
+              message: '密码重置失败',
+              type: 'error',
+              duration: 2000
+            })
+          }
           this.getList()
           // const index = this.list.indexOf(row)
           // this.list.splice(index, 1)
@@ -645,6 +702,85 @@ export default {
         })
       }).catch(() => {
       })
+    },
+    findParent(id, output, data) {
+      data.forEach(o => {
+        if (o.id === id) {
+          output.push(o.parent_id)
+          this.findParent(o.parent_id, output, this.list)
+        }
+        if (o.children && Array.isArray(o.children)) {
+          this.findParent(id, output, o.children)
+        }
+      })
+      return output
+    },
+    o(data, id) {
+      const menu = data.filter(o => o.parent_id === id)
+      menu.forEach(o => {
+        console.log(o.id)
+        const children = this.o(data, o.id)
+        if (children && children.length > 0) {
+          o.children = children
+        }
+      })
+      return menu
+    },
+    handleSetDepId(val) {
+      const department_id = [...this.temp.parents].pop()
+      this.department_id = department_id
+    },
+    recursive(obj, parent) {
+      const output = []
+      let temp = []
+      let index = 1
+      obj.forEach(o => {
+        if (o.permission || o.permission !== false) {
+          temp = {
+            name: this.$t('route.' + o.meta.title),
+            label: this.$t('route.' + o.meta.title),
+            icon: o.meta.icon,
+            id: this.index,
+            value: this.index,
+            order_num: index,
+            url: JSON.stringify(parent) === '{}' ? o.path : parent.url + '/' + o.path,
+            parent_id: JSON.stringify(parent) === '{}' ? 0 : parent.id,
+            perms: '',
+            alias: '',
+            menu_type: '1'
+          }
+          this.index += 1
+          index += 1
+          if (o.children && Array.isArray(o.children)) {
+            temp.children = this.recursive(o.children, temp)
+          }
+          if (o.auth && Array.isArray(o.auth)) {
+            const items = []
+            let item = {}
+            let item_index = 1
+            o.auth.forEach(o => {
+              item = {
+                name: o.name,
+                label: o.name,
+                icon: '',
+                id: this.index,
+                value: this.index,
+                order_num: item_index,
+                url: '',
+                parent_id: temp.id,
+                perms: temp.url + ':' + o.code,
+                menu_type: '2'
+              }
+              items.push(item)
+              this.index += 1
+              item_index += 1
+            })
+            temp.children = items
+          }
+          output.push(temp)
+        }
+      })
+      return output
     }
   }
 }
