@@ -1,6 +1,6 @@
 /*
 SQLyog Enterprise v13.1.1 (64 bit)
-MySQL - 5.6.28-log : Database - zeus
+MySQL - 5.7.26 : Database - zeus
 *********************************************************************
 */
 
@@ -30,7 +30,7 @@ CREATE TABLE `casbin_rule` (
   `v4` varchar(255) NOT NULL DEFAULT '',
   `v5` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `casbin_rule` */
 
@@ -97,7 +97,9 @@ insert  into `casbin_rule`(`id`,`p_type`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`) values
 (100,'p','超级管理员','/v1/log/operations:get','*','root','',''),
 (101,'p','超级管理员','/setting/auth:show','*','root','',''),
 (102,'p','超级管理员','/setting/ldap:show','*','root','',''),
-(103,'p','超级管理员','/setting/auth:sync','*','root','','');
+(103,'p','超级管理员','/setting/auth:sync','*','root','',''),
+(104,'g','2','zeus配置中心','','','',''),
+(105,'p','zeus配置中心','/configlist/list','*','zeus-config','','');
 
 /*Table structure for table `data_perm` */
 
@@ -138,13 +140,13 @@ CREATE TABLE `department` (
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='组织架构表';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='组织架构表';
 
 /*Data for the table `department` */
 
 insert  into `department`(`id`,`name`,`parent_id`,`order_num`,`extend_field`,`create_time`,`update_time`) values 
 (1,'公牛开源联盟',0,0,'{\"Id\":1,\"Name\":\"公牛开源联盟\",\"ParentId\":0,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(2,'人事部',1,0,'{\"Id\":142415941,\"Name\":\"人事部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
+(2,'人事部1',1,0,'{\"Id\":142415941,\"Name\":\"人事部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-12-06 20:44:07'),
 (3,'商务部',1,0,'{\"Id\":142520460,\"Name\":\"商务部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
 (4,'运营部',1,0,'{\"Id\":142522511,\"Name\":\"运营部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
 (5,'市场部',1,0,'{\"Id\":142567183,\"Name\":\"市场部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
@@ -173,14 +175,14 @@ CREATE TABLE `domain` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='项目域表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='项目域表';
 
 /*Data for the table `domain` */
 
 insert  into `domain`(`id`,`name`,`callbackurl`,`remark`,`code`,`create_time`,`last_update_time`) values 
 (1,' 权限中心','http://admin.bullteam.cn',' 管理所有后台项目的菜单，权限，鉴权等','root','2019-09-30 11:38:15','2019-09-30 14:22:51'),
-(2,'crawlnovel小说','http://crawlnovel.bullteam.cn/admin','此项目用来测试','crawlnovel','2019-09-30 11:44:00','2019-10-17 00:01:30');
-
+(2,'crawlnovel小说','http://crawlnovel.bullteam.cn/admin','此项目用来测试','crawlnovel','2019-09-30 11:44:00','2019-10-17 00:01:30'),
+(3,'配置中心(demo)','http://zeus-admin-config.bullteam.cn','配置中心(demo)','zeus-config','2019-11-23 21:18:20','2019-11-23 21:18:20');
 
 /*Table structure for table `login_log` */
 
@@ -201,7 +203,23 @@ CREATE TABLE `login_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='登录日志';
+
+/*Data for the table `login_log` */
+
+insert  into `login_log`(`id`,`user_id`,`client`,`platform`,`login_result`,`login_status`,`login_time`,`ip`,`ip_location`,`operation_time`,`operation_content`,`create_time`,`last_update_time`) values 
+(1,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-23 21:16:51','124.15.122.53','','2019-11-23 21:16:51','POST /v1/users/login','2019-11-23 21:16:51','2019-11-23 21:16:51'),
+(2,2,'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0','Standard Login','Standard Login Success',1,'2019-11-23 23:12:55','27.209.123.0','','2019-11-23 23:12:55','POST /v1/users/login','2019-11-23 23:12:55','2019-11-23 23:12:55'),
+(3,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-23 23:36:45','113.200.205.160','','2019-11-23 23:36:45','POST /v1/users/login','2019-11-23 23:36:45','2019-11-23 23:36:45'),
+(4,2,'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-24 09:06:40','111.193.7.65','','2019-11-24 09:06:40','POST /v1/users/login','2019-11-24 09:06:40','2019-11-24 09:06:40'),
+(5,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-24 09:31:43','183.238.79.10','','2019-11-24 09:31:43','POST /v1/users/login','2019-11-24 09:31:43','2019-11-24 09:31:43'),
+(6,2,'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-24 11:22:02','113.65.33.144','','2019-11-24 11:22:02','POST /v1/users/login','2019-11-24 11:22:02','2019-11-24 11:22:02'),
+(7,2,'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36','Standard Login','Standard Login Success',1,'2019-11-24 15:35:24','124.64.19.87','','2019-11-24 15:35:24','POST /v1/users/login','2019-11-24 15:35:24','2019-11-24 15:35:24'),
+(8,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36','Standard Login','Standard Login Success',1,'2019-12-06 19:46:56','218.19.46.219','','2019-12-06 19:46:56','POST /v1/users/login','2019-12-06 19:46:56','2019-12-06 19:46:56'),
+(9,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36','Standard Login','Standard Login Success',1,'2019-12-06 20:13:05','113.66.230.112','','2019-12-06 20:13:05','POST /v1/users/login','2019-12-06 20:13:05','2019-12-06 20:13:05'),
+(10,2,'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36','Standard Login','Standard Login Success',1,'2019-12-06 20:41:35','203.187.160.86','','2019-12-06 20:41:35','POST /v1/users/login','2019-12-06 20:41:35','2019-12-06 20:41:35'),
+(11,2,'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36','Standard Login','Standard Login Success',1,'2019-12-06 22:30:44','180.174.182.126','','2019-12-06 22:30:44','POST /v1/users/login','2019-12-06 22:30:44','2019-12-06 22:30:44'),
+(12,2,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36','Standard Login','Standard Login Success',1,'2019-12-06 23:01:04','124.15.122.53','','2019-12-06 23:01:04','POST /v1/users/login','2019-12-06 23:01:04','2019-12-06 23:01:04');
 
 /*Table structure for table `menu` */
 
@@ -223,7 +241,7 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   KEY `idx_menu_domain_id` (`domain_id`) USING BTREE,
   KEY `perms_index` (`perms`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='菜单表';
 
 /*Data for the table `menu` */
 
@@ -298,7 +316,10 @@ insert  into `menu`(`id`,`parent_id`,`domain_id`,`name`,`url`,`perms`,`alias`,`m
 (97,96,1,'详情','','/setting/auth:show','get@/v1/setting/email,post@/v1/setting/email',2,'',1,'2019-11-03 11:17:54','2019-11-03 11:19:42'),
 (98,95,1,'详情','','/setting/ldap:show','get@/v1/setting/ldap,post@/v1/setting/ldap',2,'',1,'2019-11-03 11:23:15','2019-11-03 11:28:06'),
 (99,94,1,'钉钉设置','/setting/dingtalk','','',1,'example',1,'2019-11-06 00:16:36','2019-11-06 00:16:36'),
-(100,99,1,'同步','','/setting/auth:sync','get@/v1/setting/sync/dingtalk',2,'',1,'2019-11-06 00:17:58','2019-11-06 00:17:58');
+(100,99,1,'同步','','/setting/auth:sync','get@/v1/setting/sync/dingtalk',2,'',1,'2019-11-06 00:17:58','2019-11-06 00:17:58'),
+(101,0,3,'配置管理','','','',0,'component',1,'2019-11-23 21:18:49','2019-11-23 21:18:49'),
+(103,101,3,'配置列表','/configlist/list','','',1,'',1,'2019-12-06 20:15:01','2019-12-06 20:15:01'),
+(104,103,3,'查看','','/configlist/list','',2,'',1,'2019-12-06 20:15:17','2019-12-06 20:15:27');
 
 /*Table structure for table `menu_perm_alias` */
 
@@ -313,7 +334,7 @@ CREATE TABLE `menu_perm_alias` (
   `updated_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `perms_index` (`perms`(191))
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限alias表';
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限alias表';
 
 /*Data for the table `menu_perm_alias` */
 
@@ -359,7 +380,9 @@ insert  into `menu_perm_alias`(`id`,`perms`,`alias`,`domain_id`,`created_time`,`
 (50,'/setting/ldap:show','get@/v1/setting/ldap',1,1572752282,1572752282),
 (51,'/setting/ldap:show','post@/v1/setting/ldap',1,1572752282,1572752282),
 (52,'/permission/dept:del','post@/v1/depts/:id/check-no-member',1,1572605425,1572605425),
-(53,'/setting/auth:sync','get@/v1/setting/sync/dingtalk',1,1572970678,1572970678);
+(53,'/setting/auth:sync','get@/v1/setting/sync/dingtalk',1,1572970678,1572970678),
+(56,'','',3,1575634501,1575634501),
+(58,'/configlist/list','',3,1575634527,1575634527);
 
 /*Table structure for table `operation_log` */
 
@@ -383,7 +406,25 @@ CREATE TABLE `operation_log` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志';
+
+/*Data for the table `operation_log` */
+
+insert  into `operation_log`(`id`,`log_no`,`module`,`request_url`,`operation_method`,`params`,`exception_stack`,`operation_result`,`operation_success`,`user_id`,`ip`,`ip_location`,`operation_time`,`operation_content`,`create_time`,`last_update_time`) values 
+(1,'','','/v1/domains','POST','{\"id\":0,\"name\":\"配置中心(demo)\",\"callbackurl\":\"http://zeus-admin-config.bullteam.cn\",\"remark\":\"配置中心(demo)\",\"code\":\"zeus-config\",\"CreateTime\":\"0001-01-01T00:00:00Z\",\"LastLoginTime\":\"0001-01-01T00:00:00Z\"}','','success',1,2,'124.15.122.53','','2019-11-23 21:18:20','Create Domain','2019-11-23 21:18:20','2019-11-23 21:18:20'),
+(2,'','','/v1/menus','POST','{\"name\":\"配置管理\",\"parent_id\":0,\"domain_id\":3,\"url\":\"\",\"perms\":\"\",\"alias\":\"\",\"menu_type\":0,\"icon\":\"component\",\"order_num\":1}','','success',1,2,'124.15.122.53','','2019-11-23 21:18:49','Create Menu','2019-11-23 21:18:49','2019-11-23 21:18:49'),
+(3,'','','/v1/menus','POST','{\"name\":\"配置列表\",\"parent_id\":101,\"domain_id\":3,\"url\":\"/configlist/list\",\"perms\":\"\",\"alias\":\"\",\"menu_type\":1,\"icon\":\"chart\",\"order_num\":1}','','success',1,2,'124.15.122.53','','2019-11-23 21:19:52','Create Menu','2019-11-23 21:19:52','2019-11-23 21:19:52'),
+(4,'','','/v1/roles','POST','{\"name\":\"zeus配置中心\",\"domain_id\":3,\"role_name\":\"zeus配置中心\",\"remark\":\"\",\"menu_ids\":\"101,102\",\"menu_ids_ele\":\"101,102\",\"data_perm_ids\":\"\"}','','success',1,2,'124.15.122.53','','2019-11-23 21:28:26','Create Role','2019-11-23 21:28:26','2019-11-23 21:28:26'),
+(5,'','','/v1/depts','POST','{\"id\":0,\"name\":\"test\",\"parent_id\":0,\"order_num\":0,\"CreateTime\":\"0001-01-01T00:00:00Z\",\"UpdateTime\":\"0001-01-01T00:00:00Z\"}','','success',1,2,'120.229.9.224','','2019-11-24 00:53:01','Create Department','2019-11-24 00:53:01','2019-11-24 00:53:01'),
+(6,'','','/v1/menus/102','DELETE','{\"id\":102}','','success',1,2,'113.66.230.112','','2019-12-06 20:14:44','Delete Menu','2019-12-06 20:14:44','2019-12-06 20:14:44'),
+(7,'','','/v1/menus','POST','{\"name\":\"配置列表\",\"parent_id\":101,\"domain_id\":3,\"url\":\"/configlist/list\",\"perms\":\"\",\"alias\":\"\",\"menu_type\":1,\"icon\":\"\",\"order_num\":1}','','success',1,2,'113.66.230.112','','2019-12-06 20:15:01','Create Menu','2019-12-06 20:15:01','2019-12-06 20:15:01'),
+(8,'','','/v1/menus','POST','{\"name\":\"查看\",\"parent_id\":0,\"domain_id\":3,\"url\":\"\",\"perms\":\"/configlist/list\",\"alias\":\"\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'113.66.230.112','','2019-12-06 20:15:17','Create Menu','2019-12-06 20:15:17','2019-12-06 20:15:17'),
+(9,'','','/v1/menus/104','PUT','{\"id\":104,\"name\":\"查看\",\"parent_id\":103,\"domain_id\":3,\"url\":\"\",\"perms\":\"/configlist/list\",\"alias\":\"\",\"menu_type\":2,\"icon\":\"\",\"order_num\":1}','','success',1,2,'113.66.230.112','','2019-12-06 20:15:27','Edit Menu','2019-12-06 20:15:27','2019-12-06 20:15:27'),
+(10,'','','/v1/depts/2','PUT','{\"id\":2,\"name\":\"人事部1\",\"order_num\":0}','','success',1,2,'203.187.160.86','','2019-12-06 20:44:07','Edit Department','2019-12-06 20:44:07','2019-12-06 20:44:07'),
+(11,'','','/v1/domains','POST','{\"id\":0,\"name\":\"的说法\",\"callbackurl\":\"mxd.com\",\"remark\":\"的说法\",\"code\":\"xccxxc\",\"CreateTime\":\"0001-01-01T00:00:00Z\",\"LastLoginTime\":\"0001-01-01T00:00:00Z\"}','','success',1,2,'203.187.160.86','','2019-12-06 20:44:52','Create Domain','2019-12-06 20:44:52','2019-12-06 20:44:52'),
+(12,'','','/v1/roles/5','PUT','{\"id\":5,\"name\":\"zeus配置中心\",\"domain_id\":3,\"remark\":\"\",\"menu_ids\":\"101,103,104\",\"menu_ids_ele\":\"101,103,104\",\"data_perm_ids\":\"\"}','','success',1,2,'124.15.122.53','','2019-12-06 23:01:37','Edit Role','2019-12-06 23:01:37','2019-12-06 23:01:37'),
+(13,'','','/v1/domains/4','DELETE','{\"id\":4}','','success',1,2,'124.15.122.53','','2019-12-06 23:28:32','Delete Domain','2019-12-06 23:28:32','2019-12-06 23:28:32'),
+(14,'','','/v1/depts/17','DELETE','{\"id\":17}','','success',1,2,'124.15.122.53','','2019-12-06 23:29:25','Delete Department','2019-12-06 23:29:25','2019-12-06 23:29:25');
 
 /*Table structure for table `role` */
 
@@ -399,7 +440,7 @@ CREATE TABLE `role` (
   `menu_ids_ele` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `domain_role` (`domain_id`,`role_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='角色表';
 
 /*Data for the table `role` */
 
@@ -407,7 +448,8 @@ insert  into `role`(`id`,`name`,`domain_id`,`role_name`,`remark`,`menu_ids`,`men
 (1,'超级管理员',1,'超级管理员','超级管理员','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,99,100,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,83,84,86,87,88,89,85,90,91,92,93,94,95,98,96,97,99,100,17,18,19,20,21,76,71,72,73,74,75,23,24,25,26,27'),
 (2,'系统设置',1,'系统设置','系统设置','17,18,19,20,21,22,23,24,25,26,27','17,18,19,20,21,22,23,24,25,26,27'),
 (3,'日志管理',1,'日志管理','日志管理','83,84,86,87,88,89,85,90,91,92,93','83,84,86,87,88,89,85,90,91,92,93'),
-(4,'crawlnovel管理员',2,'crawlnovel管理员','','77,78,79,80','77,78,79,80');
+(4,'crawlnovel管理员',2,'crawlnovel管理员','','77,78,79,80','77,78,79,80'),
+(5,'zeus配置中心',3,'zeus配置中心','','101,103,104','101,103,104');
 
 /*Table structure for table `role_data_perm` */
 
@@ -487,7 +529,7 @@ CREATE TABLE `user_oauth` (
 
 /*Data for the table `user_oauth` */
 
-insert  into `user_oauth`(`id`,`from`,`user_id`,`name`,`openid`,`unionid`,`avatar`,`extra`,`create_time`,`update_time`) values
+insert  into `user_oauth`(`id`,`from`,`user_id`,`name`,`openid`,`unionid`,`avatar`,`extra`,`create_time`,`update_time`) values 
 (1,1,2,'黄福祥','WnXRUXZZQCZQdx8t4yJSxQiEiE','ajq7lrBOMtB0u134Fkl4KgiEiE','','','2019-10-08 09:48:22','2019-10-08 09:48:22');
 
 /*Table structure for table `user_secret` */
@@ -503,7 +545,12 @@ CREATE TABLE `user_secret` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户安全设置-Google 2fa两步验证';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户安全设置-Google 2fa两步验证';
+
+/*Data for the table `user_secret` */
+
+insert  into `user_secret`(`id`,`user_id`,`account_name`,`secret`,`is_open`,`create_time`,`update_time`) values 
+(1,2,'Zeus:2','5KPRMCCZFDX4YKWE',0,'2019-11-23 21:16:51','2019-11-23 21:16:51');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
