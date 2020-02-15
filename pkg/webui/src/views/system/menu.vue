@@ -47,11 +47,11 @@
         </el-table-column>
         <el-table-column :label="$t('menu.actions')" width="200" align="center">
           <template v-if="scope.row.id" slot-scope="scope">
-            <el-button v-permission="['/auth-system/menu:edit']" type="text" @click="handleUpdate(scope.row)">{{
-            $t('table.edit') }}
+            <el-button v-permission="['/auth-system/menu:edit']" type="text" @click="handleUpdate(scope.row)">
+              {{ $t('table.edit') }}
             </el-button>
-            <el-button v-permission="['/auth-system/menu:del']" type="text" @click="handleDelete(scope.row)">{{
-            $t('table.delete') }}
+            <el-button v-permission="['/auth-system/menu:del']" type="text" @click="handleDelete(scope.row)">
+              {{ $t('table.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -81,8 +81,7 @@
             :options="data_options"
             :props="cascader_props"
             v-model="temp.parents"
-            change-on-select
-          />
+            change-on-select></el-cascader>
         </el-form-item>
         <el-form-item v-if="temp.menu_type!=='2'" :label="$t('menu.topnum')" prop="order_num">
           <el-input v-model="temp.order_num"/>
@@ -143,6 +142,7 @@ export default {
       func: treeToArray,
       expandAll: false,
       list: {},
+      parentHash: {},
       args: [null, null, 'timeLine'],
       columns: [{
         value: 'name',
@@ -229,6 +229,11 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    makeParentHash(treeData) {
+      treeData.forEach(o => {
+        this.parentHash[o.id] = o.parent_id
+      })
+    },
     getList() {
       this.listLoading = true
       fetchMenuList({ q: 'd=' + this.domain_id }).then(res => {
@@ -238,6 +243,7 @@ export default {
         // const menu = this.o(res_menus, 0)
         if (res_menus && res_menus.length > 0) {
           this.list = this.o(res_menus, 0)
+          this.makeParentHash(res_menus)
           this.data_options = [{
             id: '0',
             name: '一级菜单',
@@ -259,7 +265,6 @@ export default {
     o(data, id) {
       const menu = data.filter(o => o.parent_id === id)
       menu.forEach(o => {
-        console.log(o.id)
         const children = this.o(data, o.id)
         if (children && children.length > 0) {
           o.children = children
@@ -319,18 +324,30 @@ export default {
       })
       return output
     },
-    findParent(id, output, data) {
-      data.forEach(o => {
-        if (o.id === id) {
-          output.push(o.parent_id)
-          this.findParent(o.parent_id, output, this.list)
-        }
-        if (o.children && Array.isArray(o.children)) {
-          this.findParent(id, output, o.children)
-        }
-      })
+    findParent(id) {
+      const output = []
+      let c = this.parentHash[id] || 0
+      // eslint-disable-next-line no-empty
+      while (c !== 0) {
+        output.unshift(c)
+        // eslint-disable-next-line no-const-assign
+        c = this.parentHash[c] || 0
+      }
       return output
     },
+    // findParent(id, output, data) {
+    //   data.forEach(o => {
+    //     if (o.id === id) {
+    //       output.push(o.parent_id)
+    //       this.findParent(o.parent_id, output, this.list)
+    //     }
+    //     // if (o.children && Array.isArray(o.children)) {
+    //     //   // output.push(o.parent_id)
+    //     //   this.findParent(id, output, o.children)
+    //     // }
+    //   })
+    //   return output
+    // },
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -355,7 +372,9 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.temp.parents = ['0']
-      this.findParent(this.temp.id, this.temp.parents, this.list)
+      // this.findParent(this.temp.id, this.temp.parents, this.list)
+      this.temp.parents = this.temp.parents.concat(this.findParent(this.temp.id))
+      // console.log(this.temp.parents)
       // this.temp.parents.reverse()
       this.dialogStatus = 'update'
       this.dialogFormVisible = true

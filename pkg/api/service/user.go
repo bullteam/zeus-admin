@@ -136,7 +136,7 @@ func (UserService) ResetPassword(gDto dto.GeneralGetDto) string {
 	//pwd, _ := account.HashPassword(dto.Password, salt)
 	u := userDao.Get(gDto.Id, false)
 	autoPwd := utils.RandomPwd(10)
-	pwd,_ := account.HashPassword(autoPwd,salt)
+	pwd, _ := account.HashPassword(autoPwd, salt)
 	//u.Password = pwd
 	//u.Salt = salt
 	userDao.Update(&u, map[string]interface{}{
@@ -145,6 +145,7 @@ func (UserService) ResetPassword(gDto dto.GeneralGetDto) string {
 	})
 	return autoPwd
 }
+
 // Delete - delete user
 func (UserService) Delete(dto dto.GeneralDelDto) int64 {
 	userModel := model.User{
@@ -249,24 +250,26 @@ func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error
 		}
 		return true, nil, userModel
 	} else {
-		t, _ := cache.Get(locKey)
-		failTimes, _ := strconv.Atoi(t)
-		// 累计此次错误，已到达错误上限，所以-1
-		if failTimes >= viper.GetInt("login.failUntilLock")-1 {
-			// lock
-			if u.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
-				// recount
-				_ = cache.Del(locKey)
-				return false, errAccountLocked, model.User{}
+		if viper.GetBool("security.2fa.enabled") {
+			t, _ := cache.Get(locKey)
+			failTimes, _ := strconv.Atoi(t)
+			// 累计此次错误，已到达错误上限，所以-1
+			if failTimes >= viper.GetInt("login.failUntilLock")-1 {
+				// lock
+				if u.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
+					// recount
+					_ = cache.Del(locKey)
+					return false, errAccountLocked, model.User{}
+				}
+			} else {
+				// increase locks let user just can try several times
+				_ = cache.Increase(locKey)
+				// set ttl at first time
+				if failTimes == 0 {
+					_ = cache.Expire(locKey, time.Second*24*3600)
+				}
+				return false, fmt.Errorf("密码输入错误，您还有%d次机会", viper.GetInt("login.failUntilLock")-failTimes-1), model.User{}
 			}
-		} else {
-			// increase locks let user just can try several times
-			_ = cache.Increase(locKey)
-			// set ttl at first time
-			if failTimes == 0 {
-				_ = cache.Expire(locKey, time.Second*24*3600)
-			}
-			return false, fmt.Errorf("密码输入错误，您还有%d次机会", viper.GetInt("login.failUntilLock")-failTimes-1), model.User{}
 		}
 	}
 	return false, errInvalidAccount, model.User{}
@@ -334,7 +337,7 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 // GetRelatedDomains - get related domains
 func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	var domains []model.Domain
-	var single  = map[string] bool{}
+	var single = map[string]bool{}
 	//1.get roles by user
 	roles := perm.GetGroupsByUser(uid)
 	//2.get domains by roles
@@ -343,7 +346,7 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 		if role.Domain.Code == "root" {
 			continue
 		}
-		if _,ok := single[role.Domain.Code];!ok {
+		if _, ok := single[role.Domain.Code]; !ok {
 			single[role.Domain.Code] = true
 			domains = append(domains, role.Domain)
 		}
@@ -462,7 +465,7 @@ func (u UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
 // if account did not change pwd until 90 days later,should use user created time instead
 func (u UserService) GetLastPwdChangeDaySinceNow(uDto dto.GeneralGetDto) (ok bool, days int) {
 	if viper.GetInt("security.level") == 0 {
-		return false,-1
+		return false, -1
 	}
 	oLog := operationLogDao.GetLatestPwdLogOfAccount(uDto.Id)
 	// Got action log

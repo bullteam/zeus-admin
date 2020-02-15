@@ -27,6 +27,14 @@ export function createRole(data) {
   })
 }
 
+export function copyRole(data) {
+  return request({
+    url: 'v1/roles/' + data.id + '/copy',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
 export function updateRole(data) {
   return request({
     url: 'v1/roles/' + data.id,

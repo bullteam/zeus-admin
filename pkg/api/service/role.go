@@ -48,7 +48,7 @@ func (RoleService) AssignPermission(roleId int, menuIds string) {
 }
 
 // assign data permission
-func (rs RoleService) AssignDataPerm(roleId int, dataPermIds string) error {
+func (RoleService) AssignDataPerm(roleId int, dataPermIds string) error {
 	var (
 		dtos           []dto.AssignDataPermDto
 		dtoOne         dto.AssignDataPermDto
@@ -110,6 +110,32 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 	return roleModel, nil
 }
 
+// Copy - copy role and permissions belong to it
+func (rs RoleService) Copy(roleDto dto.GeneralGetDto) (model.Role, error) {
+	roleInfo := roleDao.Get(roleDto.Id, false)
+	roleModel := model.Role{
+		Name:       roleInfo.Name + " - Copy",
+		RoleName:   roleInfo.RoleName + "- Copy",
+		Remark:     roleInfo.Remark,
+		DomainId:   roleInfo.DomainId,
+		MenuIds:    roleInfo.MenuIds,
+		MenuIdsEle: roleInfo.MenuIdsEle,
+	}
+	c := roleDao.Create(&roleModel)
+	if c == nil {
+		return model.Role{}, errors.New("Duplicated role")
+	} else {
+		if c.Error != nil {
+			log.Error(c.Error.Error())
+			return model.Role{}, c.Error
+		}
+		if roleModel.MenuIds != "" {
+			rs.AssignPermission(roleModel.Id, roleModel.MenuIds)
+		}
+	}
+	return roleModel, nil
+}
+
 // Update - update role's information
 func (rs RoleService) Update(roleDto dto.RoleEditDto) int64 {
 	c := roleDao.Update(&model.Role{Id: roleDto.Id}, map[string]interface{}{
@@ -120,9 +146,9 @@ func (rs RoleService) Update(roleDto dto.RoleEditDto) int64 {
 		"menu_ids_ele": roleDto.MenuIdsEle,
 	})
 	rs.AssignPermission(roleDto.Id, roleDto.MenuIds)
-	if roleDto.DataPermIds != "" {
-		_ = rs.AssignDataPerm(roleDto.Id, roleDto.DataPermIds)
-	}
+	//if roleDto.DataPermIds != "" {
+	_ = rs.AssignDataPerm(roleDto.Id, roleDto.DataPermIds)
+	//}
 
 	return c.RowsAffected
 }

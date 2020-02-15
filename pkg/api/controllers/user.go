@@ -145,7 +145,7 @@ func (u *UserController) ResetPassword(c *gin.Context) {
 	if u.BindAndValidate(c, &userDto) {
 		pwd := userService.ResetPassword(userDto)
 		resp(c, map[string]interface{}{
-			"newPwd" : pwd,
+			"newPwd": pwd,
 		})
 	}
 }

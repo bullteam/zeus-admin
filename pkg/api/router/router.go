@@ -103,6 +103,8 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/roles", roleController.Create)
 	v1.PUT("/roles/:id", roleController.Edit)
 	v1.DELETE("/roles/:id", roleController.Delete)
+	v1.POST("/roles/:id/copy", roleController.Copy)
+
 	//menu
 	menuController := &controllers.MenuController{}
 	v1.GET("/menus", menuController.List)

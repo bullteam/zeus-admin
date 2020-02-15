@@ -82,6 +82,29 @@ func (r *RoleController) Create(c *gin.Context) {
 	}
 }
 
+// @Tags Role
+// @Summary 复制角色
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{"id":1}}"
+// @Router /v1/roles/:id/copy [post]
+func (r *RoleController) Copy(c *gin.Context) {
+	var roleDto dto.GeneralGetDto
+	if r.BindAndValidate(c, &roleDto) {
+		copyRole, err := roleService.Copy(roleDto)
+		if err != nil {
+			ErrAddFail.Moreinfo = err.Error()
+			fail(c, ErrAddFail)
+			ErrAddFail.Moreinfo = ""
+			return
+		}
+
+		resp(c, map[string]interface{}{
+			"result": copyRole,
+		})
+	}
+}
+
 // @Summary 更新角色信息
 // @Tags Role
 // @Security ApiKeyAuth

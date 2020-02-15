@@ -93,8 +93,15 @@ security:
   install_lock: false
   2fa:
     enabled: false
-  #0 - normal
-  #1 - safe
-  # check if user has been not doing anything in 1 hour then sign out automatically
-  # force user to change password in 90 days
   level: 0
+login:
+  # redis记录连续登录失败次数
+  failRecordKey: "login:fail:times:%s"
+  # 5次登录失败被锁
+  failUntilLock: 5
+  # 密码有效时间
+  pwdExpiredDays: 90
+  # 在截至多少天内提醒更新密码
+  pwdWarningDays: 7
+  # 多久未操作退出账号
+  idleDuration: 3600

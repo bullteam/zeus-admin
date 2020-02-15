@@ -54,7 +54,13 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	for sk, sv := range dto.TransformSearch(listDto.Q, dto.RoleListSearchMapping) {
 		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
 	}
+	db = db.Preload("DataPerm")
 	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)
+	//for k,r := range roles {
+	//	var row []model.RoleDataPerm
+	//	db.Where("role_id = ?",r.Id).Find(&row)
+	//	roles[k].DataPerm = row
+	//}
 	db.Model(&model.Role{}).Count(&total)
 	return roles, total
 }

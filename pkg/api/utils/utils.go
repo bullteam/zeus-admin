@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"time"
 )
+
 const charset = "abcdefghijklmnopqrstuvwxyz" +
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" +
 	"@#$%^&*(~)"

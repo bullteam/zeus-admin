@@ -11,14 +11,15 @@ import (
 )
 
 var logService = service.LogService{}
-var ignoreRoutes = map[string] bool {
-	"/v1/account/idle" : true,
-	"/v1/account/password" : true,
-	"/v1/account/require-change-pwd" : true,
+var ignoreRoutes = map[string]bool{
+	"/v1/account/idle":               true,
+	"/v1/account/password":           true,
+	"/v1/account/require-change-pwd": true,
 }
+
 func AccessLog(c *gin.Context) {
 	//too much useless or some important logs
-	if _,ok := ignoreRoutes[c.Request.URL.Path];ok {
+	if _, ok := ignoreRoutes[c.Request.URL.Path]; ok {
 		c.Next()
 		return
 	}
