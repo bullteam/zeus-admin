@@ -43,3 +43,9 @@ export function deleteRole(data) {
   })
 }
 
+export function fetchRoleDetail(data) {
+  return request({
+    url: 'v1/roles/' + data.id,
+    method: 'get'
+  })
+}

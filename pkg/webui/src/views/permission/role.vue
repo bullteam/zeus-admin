@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { fetchRoleList, createRole, updateRole, deleteRole } from '@/api/role'
+import { fetchRoleList, createRole, updateRole, deleteRole, fetchRoleDetail } from '@/api/role'
 import { fetchDomainList } from '@/api/domain'
 import { fetchMenuList } from '@/api/menu'
 // import { parseTime } from '@/utils'
@@ -193,7 +193,8 @@ export default {
       domain_id: '',
       search_domain_id: '',
       menuslist: [],
-      scopeType: 1
+      scopeType: 1,
+      role_id: ''
     }
   },
   created() {
@@ -230,10 +231,13 @@ export default {
         start: 0,
         limit: 20,
         q: 'd=' + this.domain_id
+      }), fetchRoleDetail({
+        id: this.role_id
       })]).then(response => {
-        console.log(response)
         const res_menus = response[0].data.result
         const result = response[1].data.result
+        const res_perm_date = response[2].data.result.data_perms
+        const res_perm_data_ids = []
         if (res_menus && res_menus.length > 0) {
           this.tree_data = this.o(res_menus, 0)
         } else {
@@ -244,9 +248,14 @@ export default {
         } else {
           this.tree_data_perm = []
         }
-        const { menu_ids_ele = '', data_perm_ids = '' } = this.temp
+        if (res_perm_date && res_perm_date.length > 0) {
+          res_perm_date.forEach(o => {
+            res_perm_data_ids.push(o.id)
+          })
+        }
+        const { menu_ids_ele = '' } = this.temp
         this.$refs.tree.setCheckedKeys(menu_ids_ele.split(','))
-        this.$refs.treeData.setCheckedKeys(data_perm_ids.split(','))
+        this.$refs.treeData.setCheckedKeys(res_perm_data_ids)
       })
     },
     getDeptList() {
@@ -349,9 +358,12 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      console.log('get row')
+      console.log(this.temp)
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.domain_id = this.temp.domain.id
+      this.role_id = this.temp.id
       this.getPermList()
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -374,7 +386,10 @@ export default {
         if (valid) {
           this.temp.role_name = this.temp.name
           this.temp.menu_ids_ele = this.$refs.tree.getCheckedKeys().join(',')
-          // console.log(this.$refs.tree.getHalfCheckedKeys())
+          const data_perm_ids = []
+          this.$refs.treeData.getCheckedKeys().forEach(o => {
+            data_perm_ids.push(o)
+          })
           // const menu_ids = []
           // this.$refs.tree.getCheckedKeys().forEach(o => {
           //   menu_ids.push(o)
@@ -387,6 +402,7 @@ export default {
           // console.log(menu_ids)
           // this.temp.menu_ids = Array.from(new Set(menu_ids)).join(',')
           this.temp.menu_ids = [].concat(this.$refs.tree.getCheckedKeys()).concat(this.$refs.tree.getHalfCheckedKeys()).join(',')
+          this.temp.data_perm_ids = Array.from(new Set(data_perm_ids)).join(',')
           this.temp.domain_id = this.domain_id
           delete this.temp.domain
           const tempData = Object.assign({}, this.temp)
