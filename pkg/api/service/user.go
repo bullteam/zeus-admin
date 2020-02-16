@@ -396,6 +396,29 @@ func (UserService) GetPermissionsOfDomain(uid string, domain string) []string {
 	return polices
 }
 
+//GetDataPermissionsOfDomain - Get data permission list  in specific domain(another backend system)
+func (UserService) GetDataPermissionsOfDomain(uid string, domain string) []map[string]string {
+	gs := perm.GetGroupsByUser(uid)
+	var (
+		polices []map[string]string
+		roles []string
+	)
+	for _, p := range gs {
+		roles = append(roles,p[1])
+	}
+	for _,r := range roleDao.GetRolesByNames(roles){
+		for _,dp := range r.DataPerm {
+			if dp.PermsType == 2 {
+				polices = append(polices, map[string]string{
+					"perm": dp.Perms,
+					"rule": dp.PermsRule,
+				})
+			}
+		}
+	}
+	return polices
+}
+
 //GetMenusOfDomain - get menus in specific domain
 func (UserService) GetMenusOfDomain(uid string, domain string) []model.Role {
 	roles := perm.GetGroupsByUser(uid)

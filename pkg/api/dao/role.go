@@ -34,7 +34,7 @@ func (Role) GetRolesByIds(ids string) []model.Role {
 func (Role) GetRolesByNames(names []string) []model.Role {
 	var roles []model.Role
 	db := GetDb()
-	db = db.Preload("Domain")
+	db = db.Preload("Domain").Preload("DataPerm")
 	db.Where("role_name in (?)", names).Find(&roles)
 	return roles
 }
@@ -56,11 +56,6 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 	}
 	db = db.Preload("DataPerm")
 	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)
-	//for k,r := range roles {
-	//	var row []model.RoleDataPerm
-	//	db.Where("role_id = ?",r.Id).Find(&row)
-	//	roles[k].DataPerm = row
-	//}
 	db.Model(&model.Role{}).Count(&total)
 	return roles, total
 }

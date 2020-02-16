@@ -58,6 +58,7 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
+	v1.GET("/user/data-perm/list", userController.GetDomainDataPermissions)
 	v1.POST("/user/perm/check", userController.DomainPermCheck)
 	v1.GET("/user/menu", userController.GetDomainMenus)
 
