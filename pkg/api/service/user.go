@@ -60,7 +60,6 @@ func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 	if userModel.Username == userDto.Username {
 		return nil, errors.New("username is exits")
 	}
-
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(userDto.Password, salt)
 	newUser := &model.User{

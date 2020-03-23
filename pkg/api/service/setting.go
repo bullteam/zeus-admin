@@ -7,8 +7,6 @@ import (
 	"zeus/pkg/api/domain/dept/sync"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
-
-	//"zeus/pkg/api/log"
 	"zeus/pkg/api/model"
 )
 
@@ -35,7 +33,6 @@ func (s SettingService) GetLdap() model.LdapSetting {
 
 func (s SettingService) LdapUpdate(SettingDTO dto.SettingDTO) bool {
 	viper.Set("ldap.addr", SettingDTO.LdapUrl)
-	//viper.Set("ldap.attributes", "")
 	viper.Set("ldap.authfilter", SettingDTO.LdapFilter)
 	viper.Set("ldap.basedn", SettingDTO.LdapBaseDN)
 	viper.Set("ldap.binddn", SettingDTO.LdapSearchDN)

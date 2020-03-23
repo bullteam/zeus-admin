@@ -29,7 +29,7 @@ func (RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
 }
 
 // AssignPermission - assign permissions
-func (RoleService) AssignPermission(roleId int, menuIds string) {
+func (RoleService) AssignPermission(roleId int, menuIds string,dataPermCount int) {
 	roleData := roleDao.Get(roleId, true)
 	menus := menuDao.GetMenusPermByIds(menuIds)
 	if len(menus) > 0 {
@@ -43,7 +43,13 @@ func (RoleService) AssignPermission(roleId int, menuIds string) {
 		}
 		role.OverwritePerm(roleData.RoleName, roleData.Domain.Code, policies)
 	} else {
-		role.DeletePerm(roleData.RoleName)
+		// if we have data permission sets , should not remove entire role relative records
+		// fixed issue #23
+		if dataPermCount > 0 {
+			role.DeletePermPolicy(roleData.RoleName)
+		} else {
+			role.DeletePerm(roleData.RoleName)
+		}
 	}
 }
 
@@ -99,11 +105,12 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 			log.Error(c.Error.Error())
 			return model.Role{}, c.Error
 		}
+		dataPermCount := len(dto.DataPermIds)
 		if dto.MenuIds != "" {
-			rs.AssignPermission(roleModel.Id, dto.MenuIds)
+			rs.AssignPermission(roleModel.Id, dto.MenuIds,dataPermCount)
 		}
 		// insert data permissions
-		if len(dto.DataPermIds) > 0 {
+		if dataPermCount > 0 {
 			_ = rs.AssignDataPerm(roleModel.Id, dto.DataPermIds)
 		}
 	}
@@ -130,7 +137,7 @@ func (rs RoleService) Copy(roleDto dto.GeneralGetDto) (model.Role, error) {
 			return model.Role{}, c.Error
 		}
 		if roleModel.MenuIds != "" {
-			rs.AssignPermission(roleModel.Id, roleModel.MenuIds)
+			rs.AssignPermission(roleModel.Id, roleModel.MenuIds,0)
 		}
 	}
 	return roleModel, nil
@@ -145,10 +152,8 @@ func (rs RoleService) Update(roleDto dto.RoleEditDto) int64 {
 		"menu_ids":     roleDto.MenuIds,
 		"menu_ids_ele": roleDto.MenuIdsEle,
 	})
-	rs.AssignPermission(roleDto.Id, roleDto.MenuIds)
-	//if roleDto.DataPermIds != "" {
+	rs.AssignPermission(roleDto.Id, roleDto.MenuIds,len(roleDto.DataPermIds))
 	_ = rs.AssignDataPerm(roleDto.Id, roleDto.DataPermIds)
-	//}
 
 	return c.RowsAffected
 }
