@@ -99,10 +99,10 @@ func (s MyAccountService) BindDingtalk(code string, uid int, from int) (openid s
 	}
 	userOAuth := model.UserOAuth{
 		From:    from, // 1表示钉钉
-		User_id: uid,
+		UserId:  uid,
 		Name:    Info.Nick,
 		Openid:  Info.Openid,
-		Unionid: Info.Unionid,
+		UnionId: Info.Unionid,
 	}
 	s.oauthdao.Create(&userOAuth)
 	return Info.Openid, nil

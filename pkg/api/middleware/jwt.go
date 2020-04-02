@@ -144,17 +144,17 @@ func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 		OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
 	}
 	if oauthDto.Type == account.OAuthDingTalk { //dingtalk
-		userOauth, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
-		if err != nil || userOauth.Id < 1 {
+		user, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
+		if err != nil || user.Id < 1 {
 			return "", err
 		}
 		loginLogDto.LoginResult = "DingTalk login success"
-		loginLogDto.UserId = userOauth.Id
+		loginLogDto.UserId = user.Id
 		loginLogDto.Platform = "DingTalk Login"
 		_ = accountService.InsertLoginLog(&loginLogDto)
 		return model.UserClaims{
-			Id:   userOauth.User_id,
-			Name: userOauth.Name,
+			Id:   user.Id,
+			Name: user.Username,
 		}, nil
 	}
 	return "", errors.New("")
