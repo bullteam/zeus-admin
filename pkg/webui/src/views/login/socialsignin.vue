@@ -3,12 +3,12 @@
     <div class="sign-btn" @click="handleClick(1)">
       <img src="@/assets/images/dingtalk.png" style="background-color: #03a9f4"> 钉钉
     </div>
-    <div class="sign-btn" @click="handleClick(2)">
-      <img src="@/assets/images/github.png" style="background-color: #555"> GitHub
-    </div>
-    <div class="sign-btn" @click="handleClick(3)">
-      <img src="@/assets/images/wechat.png" style="background-color: #79C700"> 微信
-    </div>
+    <!--    <div class="sign-btn" @click="handleClick(2)">-->
+    <!--      <img src="@/assets/images/github.png" style="background-color: #555"> GitHub-->
+    <!--    </div>-->
+    <!--    <div class="sign-btn" @click="handleClick(3)">-->
+    <!--      <img src="@/assets/images/wechat.png" style="background-color: #79C700"> 微信-->
+    <!--    </div>-->
   </div>
 </template>
 

@@ -7,7 +7,7 @@ type UserOAuth struct {
 	From       int       `json:"from"`
 	UserId     int       `json:"user_id"`
 	Openid     string    `json:"openid"`
-	UnionId    string    `json:"unionid"`
+	UnionId    string    `json:"unionid" gorm:"column:unionid"`
 	Avatar     string    `json:"avatar"`
 	Extra      string    `json:"extra"`
 	Name       string    `json:"name"`

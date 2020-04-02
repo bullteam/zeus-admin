@@ -184,14 +184,14 @@ export default {
       // const code = this.$route.query.code
       const code = m[1]
       if (code) {
-        this.$message.info('第三方登录验证中,请稍后...')
+        this.$notify.warning('第三方登录验证中,请等待页面跳转...')
         this.$store.dispatch('LoginByThird', { code: code, type: 0 }).then(() => {
           this.block = false
           location.href = '/#/dashboard'
           // this.$router.push('/dashboard')
         }).catch(res => {
           this.block = false
-          this.$message.error(res.msg)
+          this.$message.error('此钉钉号暂未绑定后台用户,请账号密码登录后绑定钉钉账号')
         }).finally(() => {
           this.block = false
         })
