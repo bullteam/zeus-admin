@@ -17,8 +17,6 @@ import (
 
 var accountService = service.UserService{}
 
-//var logService = service.LogService{}
-
 //todo : 用单独的claims model去掉user model
 func JwtAuth(LoginType int) *jwt.GinJWTMiddleware {
 	jwtMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{

@@ -77,7 +77,7 @@
       <br>
       <br>
       <br>
-      <!--      <el-button class="thirdparty-button" type="primary" style="margin-top:30px;" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>-->
+      <el-button class="thirdparty-button" type="primary" style="margin-top:30px;" @click="showDialog=true">{{ $t('login.thirdparty') }}</el-button>
     </el-form>
     <el-form v-else ref="checkForm" class="login-form" label-position="left" >
       <div class="title-container">
