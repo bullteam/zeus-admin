@@ -131,6 +131,7 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 	oauthDto := &dto.LoginOAuthDto{}
 	if err := dto.Bind(c, &oauthDto); err != nil {
+		log.Error(err.Error())
 		return "", err
 	}
 	//TODO 支持微信、钉钉、QQ等登陆

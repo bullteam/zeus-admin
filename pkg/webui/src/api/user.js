@@ -108,15 +108,6 @@ export function unbind(data) {
   })
 }
 
-// 钉钉登录
-export function loginDingtalk(data) {
-  return request({
-    url: 'v1/users/login/oauth',
-    method: 'post',
-    data: qs.stringify(data)
-  })
-}
-
 // 两步验证-用户信息
 export function security() {
   return request({

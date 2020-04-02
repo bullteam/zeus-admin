@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div :loading="block" class="login-container">
 
     <el-form v-if="step === 1" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <!--      <el-radio-group v-model="loginForm.loginType" class="login-type">-->
@@ -158,6 +158,7 @@ export default {
       },
       passwordType: 'password',
       loading: false,
+      block: false,
       showDialog: false,
       redirect: undefined,
       // 返回的地址
@@ -177,16 +178,24 @@ export default {
     // window.addEventListener('hashchange', this.afterQRScan)
   },
   mounted() {
-    const code = this.$route.query.code
-    if (code) {
-      this.loading = true
-      this.$store.dispatch('LoginByThird', { code, type: 1 }).then(() => {
-        this.loading = false
-        this.$router.push('/dashboard')
-      }).catch(res => {
-        this.loading = false
-        this.$message.error(res.msg)
-      })
+    const m = location.href.match(/code=([^&]+)/)
+    if (m != null) {
+      this.block = true
+      // const code = this.$route.query.code
+      const code = m[1]
+      if (code) {
+        this.$message.info('第三方登录验证中,请稍后...')
+        this.$store.dispatch('LoginByThird', { code: code, type: 0 }).then(() => {
+          this.block = false
+          location.href = '/#/dashboard'
+          // this.$router.push('/dashboard')
+        }).catch(res => {
+          this.block = false
+          this.$message.error(res.msg)
+        }).finally(() => {
+          this.block = false
+        })
+      }
     }
   },
   destroyed() {

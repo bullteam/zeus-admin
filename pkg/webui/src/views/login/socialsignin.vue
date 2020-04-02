@@ -20,7 +20,9 @@ export default {
   methods: {
     handleClick(from) {
       switch (from) {
-        case 1: location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoa1uudyxl2dcjvqpij&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + location.origin + '/login'
+        case 1:
+          // location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoa1uudyxl2dcjvqpij&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + location.origin + '/v1/login/oauth'
+          location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoa1uudyxl2dcjvqpij&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + location.origin + '#/login'
           break
       }
     }
