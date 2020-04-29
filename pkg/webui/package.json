@@ -34,7 +34,7 @@
     "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
   },
   "dependencies": {
-    "@ams-team/ams": "^0.18.4",
+    "@ams-team/ams": "^0.24.16",
     "axios": ">=0.18.1",
     "clipboard": "1.7.1",
     "codemirror": "5.39.2",
