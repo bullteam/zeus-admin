@@ -41,21 +41,29 @@ func SetUpForTest(dir string) {
 //first : user
 //second : group
 func AddGroup(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.AddGroupingPolicy(params...)
 }
 
 // AddGroupRole : assign role to a user group
 func AddGroupRole(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.AddNamedGroupingPolicy("g2", params...)
 }
 
 // DelGroup : method of group policy deleting
 func DelGroup(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.RemoveGroupingPolicy(params...)
 }
 
 // DelGroupPerm : delete user group - role connection
 func DelGroupPerm(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.RemoveNamedGroupingPolicy("g2", params...)
 }
 
@@ -67,16 +75,22 @@ func GetGroupsByUser(userId string) [][]string {
 // AddPerm : method for permission policy adding
 //sub,obj,act,domain
 func AddPerm(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.AddPolicy(params...)
 }
 
 // DelPerm : delete permission policy
 func DelPerm(params ...interface{}) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.RemovePolicy(params...)
 }
 
 // DeleteFilteredPerm
 func DelFilteredPerm(fieldIndex int, params ...string) bool {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	return enforcer.RemoveFilteredPolicy(fieldIndex, params...)
 }
 
@@ -100,6 +114,8 @@ func DelRole(role string) {
 
 // DeleteRolePolicy : delete policy row
 func DeleteRolePolicy(role string) {
+	enforcerLock.Lock()
+	defer enforcerLock.Unlock()
 	DelFilteredPerm(0,role)
 }
 

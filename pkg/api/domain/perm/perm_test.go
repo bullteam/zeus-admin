@@ -254,6 +254,11 @@ func TestUserGroupPermission(t *testing.T) {
 			want:  true,
 			label: "Enforce with user group policy",
 		},
+		{
+			args:  []interface{}{"101", "zone-6", "*", "department-6"},
+			want:  true,
+			label: "Enforce with user group policy - 101 user group",
+		},
 	})
 }
 
