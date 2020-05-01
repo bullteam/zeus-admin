@@ -1,0 +1,47 @@
+{
+  "name": "zeusclient-php",
+  "description": "Zeus php client",
+  "keywords": [],
+  "type": "project",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "coso",
+      "email": "fuxiang.huang@xgo.one"
+    }
+  ],
+  "require": {
+    "php": "^7.2.8"
+  },
+  "replace": {
+  },
+  "conflict": {
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "files": [
+    ],
+    "psr-4": {
+      "Utils\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "files": [
+    ],
+    "psr-4": {
+      "Utils\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+    }
+  },
+  "suggest": {
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
