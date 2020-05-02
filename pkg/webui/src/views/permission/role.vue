@@ -38,7 +38,7 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('role.name')" min-width="150px">
+      <el-table-column :label="$t('role.name')" min-width="100px">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -58,13 +58,16 @@
       <!--<span>{{ scope.row.created_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>-->
       <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column :label="$t('role.actions')" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('role.actions')" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             v-permission="['/permission/role:edit']"
             type="primary"
             size="mini"
             @click="handleUpdate(scope.row)">{{ $t('table.edit') }}
+          </el-button>
+          <el-button v-permission="['/permission/role:edit']" type="warning" size="mini" @click="handleCopy(scope.row)">
+            {{ $t('table.copy') }}
           </el-button>
           <el-button v-permission="['/permission/role:del']" type="danger" size="mini" @click="handleDelete(scope.row)">
             {{ $t('table.delete') }}
@@ -135,7 +138,7 @@
 </template>
 
 <script>
-import { fetchRoleList, createRole, updateRole, deleteRole } from '@/api/role'
+import { fetchRoleList, createRole, updateRole, deleteRole, copyRole } from '@/api/role'
 import { fetchDomainList } from '@/api/domain'
 import { fetchMenuList } from '@/api/menu'
 // import { parseTime } from '@/utils'
@@ -168,7 +171,8 @@ export default {
         remark: '',
         role_name: '',
         menu_ids: [],
-        domain_id: ''
+        domain_id: '',
+        data_perm_ids: ''
       },
       dialogFormVisible: false,
       dialogStatus: 'create',
@@ -247,6 +251,8 @@ export default {
         const { menu_ids_ele = '', data_perm_ids = '' } = this.temp
         this.$refs.tree.setCheckedKeys(menu_ids_ele.split(','))
         this.$refs.treeData.setCheckedKeys(data_perm_ids.split(','))
+        // console.log(menu_ids_ele)
+        // console.log(data_perm_ids)
       })
     },
     getDeptList() {
@@ -330,6 +336,7 @@ export default {
           this.temp.menu_ids = [].concat(this.$refs.tree.getCheckedKeys()).concat(this.$refs.tree.getHalfCheckedKeys()).join(',')
           this.temp.data_perm_ids = Array.from(new Set(data_perm_ids)).join(',')
           this.temp.domain_id = this.domain_id
+          this.temp.data_perm_ids = data_perm_ids.join(',')
           createRole(this.temp).then(() => {
             // this.list.unshift(this.temp)
             this.getList()
@@ -349,6 +356,11 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      const dp = []
+      row.data_perm.forEach(o => {
+        dp.push(o.id)
+      })
+      this.temp.data_perm_ids = dp.join(',')
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.domain_id = this.temp.domain.id
@@ -386,11 +398,16 @@ export default {
           // })
           // console.log(menu_ids)
           // this.temp.menu_ids = Array.from(new Set(menu_ids)).join(',')
+          const data_perm_ids = []
+          this.$refs.treeData.getCheckedKeys().forEach(o => {
+            data_perm_ids.push(o)
+          })
           this.temp.menu_ids = [].concat(this.$refs.tree.getCheckedKeys()).concat(this.$refs.tree.getHalfCheckedKeys()).join(',')
           this.temp.domain_id = this.domain_id
           delete this.temp.domain
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp)
+          tempData.data_perm_ids = data_perm_ids.join(',')
           updateRole(tempData).then(() => {
             this.getList()
             this.tree_data = []
@@ -405,6 +422,29 @@ export default {
             this.$message.error(res.msg)
           })
         }
+      })
+    },
+    handleCopy(row) {
+      this.$confirm('是否拷贝角色以及相关权限', '拷贝角色', {
+        confirmButtonText: '继续',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        copyRole({ id: row.id }).then(() => {
+          this.$notify({
+            title: '成功',
+            message: '拷贝成功',
+            type: 'success',
+            duration: 2000
+          })
+          // const index = this.list.indexOf(row)
+          // this.list.splice(index, 1)
+          this.getList()
+        }).catch((res) => {
+          this.$message.error(res.msg)
+        })
+      }).catch(() => {
       })
     },
     handleDelete(row) {

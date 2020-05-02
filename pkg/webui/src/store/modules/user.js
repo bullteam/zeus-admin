@@ -1,6 +1,7 @@
 import {
   loginByUsername,
   loginLdapByUsername,
+  loginDingtalk,
   // logout,
   getUserPrem
 } from '@/api/login'
@@ -10,7 +11,6 @@ import {
   removeToken
 } from '@/utils/auth'
 import { setTagNavListInLocalstorage } from '@/utils'
-import { loginDingtalk } from '@/api/user'
 
 const user = {
   state: {

@@ -62,7 +62,7 @@ func (dao RoleDataPermDao) GetByRoleId(roleId int) ([]model.GetByRoleIdData, int
 	defer rows.Close()
 	for rows.Next() {
 		var data model.GetByRoleIdData
-		db.ScanRows(rows, &data)
+		_ = db.ScanRows(rows, &data)
 		rdps = append(rdps, data)
 	}
 

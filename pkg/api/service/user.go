@@ -60,7 +60,6 @@ func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 	if userModel.Username == userDto.Username {
 		return nil, errors.New("username is exits")
 	}
-
 	salt, _ := account.MakeSalt()
 	pwd, _ := account.HashPassword(userDto.Password, salt)
 	newUser := &model.User{
@@ -136,7 +135,7 @@ func (UserService) ResetPassword(gDto dto.GeneralGetDto) string {
 	//pwd, _ := account.HashPassword(dto.Password, salt)
 	u := userDao.Get(gDto.Id, false)
 	autoPwd := utils.RandomPwd(10)
-	pwd,_ := account.HashPassword(autoPwd,salt)
+	pwd, _ := account.HashPassword(autoPwd, salt)
 	//u.Password = pwd
 	//u.Salt = salt
 	userDao.Update(&u, map[string]interface{}{
@@ -145,6 +144,7 @@ func (UserService) ResetPassword(gDto dto.GeneralGetDto) string {
 	})
 	return autoPwd
 }
+
 // Delete - delete user
 func (UserService) Delete(dto dto.GeneralDelDto) int64 {
 	userModel := model.User{
@@ -249,24 +249,26 @@ func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error
 		}
 		return true, nil, userModel
 	} else {
-		t, _ := cache.Get(locKey)
-		failTimes, _ := strconv.Atoi(t)
-		// 累计此次错误，已到达错误上限，所以-1
-		if failTimes >= viper.GetInt("login.failUntilLock")-1 {
-			// lock
-			if u.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
-				// recount
-				_ = cache.Del(locKey)
-				return false, errAccountLocked, model.User{}
+		if viper.GetBool("security.2fa.enabled") {
+			t, _ := cache.Get(locKey)
+			failTimes, _ := strconv.Atoi(t)
+			// 累计此次错误，已到达错误上限，所以-1
+			if failTimes >= viper.GetInt("login.failUntilLock")-1 {
+				// lock
+				if u.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
+					// recount
+					_ = cache.Del(locKey)
+					return false, errAccountLocked, model.User{}
+				}
+			} else {
+				// increase locks let user just can try several times
+				_ = cache.Increase(locKey)
+				// set ttl at first time
+				if failTimes == 0 {
+					_ = cache.Expire(locKey, time.Second*24*3600)
+				}
+				return false, fmt.Errorf("密码输入错误，您还有%d次机会", viper.GetInt("login.failUntilLock")-failTimes-1), model.User{}
 			}
-		} else {
-			// increase locks let user just can try several times
-			_ = cache.Increase(locKey)
-			// set ttl at first time
-			if failTimes == 0 {
-				_ = cache.Expire(locKey, time.Second*24*3600)
-			}
-			return false, fmt.Errorf("密码输入错误，您还有%d次机会", viper.GetInt("login.failUntilLock")-failTimes-1), model.User{}
 		}
 	}
 	return false, errInvalidAccount, model.User{}
@@ -334,7 +336,7 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 // GetRelatedDomains - get related domains
 func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	var domains []model.Domain
-	var single  = map[string] bool{}
+	var single = map[string]bool{}
 	//1.get roles by user
 	roles := perm.GetGroupsByUser(uid)
 	//2.get domains by roles
@@ -343,7 +345,7 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 		if role.Domain.Code == "root" {
 			continue
 		}
-		if _,ok := single[role.Domain.Code];!ok {
+		if _, ok := single[role.Domain.Code]; !ok {
 			single[role.Domain.Code] = true
 			domains = append(domains, role.Domain)
 		}
@@ -393,6 +395,29 @@ func (UserService) GetPermissionsOfDomain(uid string, domain string) []string {
 	return polices
 }
 
+//GetDataPermissionsOfDomain - Get data permission list  in specific domain(another backend system)
+func (UserService) GetDataPermissionsOfDomain(uid string, domain string) []map[string]string {
+	gs := perm.GetGroupsByUser(uid)
+	var (
+		polices []map[string]string
+		roles []string
+	)
+	for _, p := range gs {
+		roles = append(roles,p[1])
+	}
+	for _,r := range roleDao.GetRolesByNames(roles){
+		for _,dp := range r.DataPerm {
+			if dp.PermsType == 2 {
+				polices = append(polices, map[string]string{
+					"perm": dp.Perms,
+					"rule": dp.PermsRule,
+				})
+			}
+		}
+	}
+	return polices
+}
+
 //GetMenusOfDomain - get menus in specific domain
 func (UserService) GetMenusOfDomain(uid string, domain string) []model.Role {
 	roles := perm.GetGroupsByUser(uid)
@@ -409,16 +434,17 @@ func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 }
 
 //VerifyDTAndReturnUserInfo - verify dingtalk and return user info
-func (u UserService) VerifyDTAndReturnUserInfo(code string) (user model.UserOAuth, err error) {
+func (u UserService) VerifyDTAndReturnUserInfo(code string) (model.User, error) {
 	dtUser, err := login.GetDingTalkUserInfo(code)
 	if err != nil {
-		return model.UserOAuth{}, err
+		return model.User{}, err
 	}
-	User, err := userOauthDao.GetUserByOpenId(dtUser.Openid, 1)
+	thirdUser, err := userOauthDao.GetUserByOpenId(dtUser.Openid, 1)
+	user := u.InfoOfId(dto.GeneralGetDto{Id:thirdUser.UserId})
 	if err == nil {
-		return User, nil
+		return user, nil
 	}
-	return model.UserOAuth{}, err
+	return model.User{}, err
 }
 
 func (u UserService) UnBindUserDingtalk(from int, uid int) error {
@@ -462,7 +488,7 @@ func (u UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
 // if account did not change pwd until 90 days later,should use user created time instead
 func (u UserService) GetLastPwdChangeDaySinceNow(uDto dto.GeneralGetDto) (ok bool, days int) {
 	if viper.GetInt("security.level") == 0 {
-		return false,-1
+		return false, -1
 	}
 	oLog := operationLogDao.GetLatestPwdLogOfAccount(uDto.Id)
 	// Got action log

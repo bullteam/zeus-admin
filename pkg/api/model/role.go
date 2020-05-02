@@ -2,12 +2,13 @@ package model
 
 // Role model
 type Role struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	DomainId int    `json:"domain_id"`
-	Domain   Domain `json:"domain"`
-	RoleName string `json:"role_name"`
-	Remark   string `json:"remark"`
+	Id       int        `json:"id"`
+	Name     string     `json:"name"`
+	DomainId int        `json:"domain_id"`
+	Domain   Domain     `json:"domain"`
+	DataPerm []DataPerm `json:"data_perm" gorm:"many2many:role_data_perm";"ForeignKey:RoleId"`
+	RoleName string     `json:"role_name"`
+	Remark   string     `json:"remark"`
 	//Users      []*User `json:"users" orm:"reverse(many)"`
 	MenuIds    string `json:"menu_ids"`
 	MenuIdsEle string `json:"menu_ids_ele"`

@@ -17,12 +17,13 @@ var (
 )
 
 //login oauth type
-var (
-	OAuthDingTalk = 1
-	OAuthWechat   = 2
-	OAuthQQ       = 3
-	OAuthFacebook = 4
-	OAuthGoogle   = 5
+const (
+	OAuthDingTalk = iota
+	//todo : ...
+	OAuthWechat
+	OAuthQQ
+	OAuthFacebook
+	OAuthGoogle
 )
 
 // HashPassword : password hashing

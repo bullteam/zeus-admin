@@ -31,6 +31,10 @@ type BindThirdDto struct {
 type UnBindThirdDto struct {
 	OAuthType int `form:"from"`
 }
+// LoginDingtalkDto - ding talk login
+type LoginDingtalkDto struct {
+	Code string `form:"code"`
+}
 
 // demo usage
 func customValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {

@@ -58,6 +58,7 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
+	v1.GET("/user/data-perm/list", userController.GetDomainDataPermissions)
 	v1.POST("/user/perm/check", userController.DomainPermCheck)
 	v1.GET("/user/menu", userController.GetDomainMenus)
 
@@ -103,6 +104,8 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/roles", roleController.Create)
 	v1.PUT("/roles/:id", roleController.Edit)
 	v1.DELETE("/roles/:id", roleController.Delete)
+	v1.POST("/roles/:id/copy", roleController.Copy)
+
 	//menu
 	menuController := &controllers.MenuController{}
 	v1.GET("/menus", menuController.List)

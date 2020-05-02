@@ -145,7 +145,7 @@ func (u *UserController) ResetPassword(c *gin.Context) {
 	if u.BindAndValidate(c, &userDto) {
 		pwd := userService.ResetPassword(userDto)
 		resp(c, map[string]interface{}{
-			"newPwd" : pwd,
+			"newPwd": pwd,
 		})
 	}
 }
@@ -185,10 +185,10 @@ func (u *UserController) GetUserPermissionsWithMenu(c *gin.Context) {
 	}
 }
 
+
 // @Tags Users
 // @Summary 获取用户权限列表
 // @Security ApiKeyAuth
-// @Param id int true "用户id"
 // @Param domain string ""
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":{"id":1}}"
@@ -199,6 +199,23 @@ func (u *UserController) GetDomainPermissions(c *gin.Context) {
 	if u.BindAndValidate(c, &permDto) {
 		resp(c, map[string]interface{}{
 			"result": userService.GetPermissionsOfDomain(strconv.Itoa(userId), permDto.Domain),
+		})
+	}
+}
+
+// @Tags Users
+// @Summary 获取用户数据权限列表
+// @Security ApiKeyAuth
+// @Param domain string ""
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"result":[["route","rules"]]}"
+// @Router /v1/user/data-perm/list [get]
+func (u *UserController) GetDomainDataPermissions(c *gin.Context) {
+	var permDto dto.UserInDomainDto
+	userId := int(c.Value("userId").(float64))
+	if u.BindAndValidate(c, &permDto) {
+		resp(c, map[string]interface{}{
+			"result": userService.GetDataPermissionsOfDomain(strconv.Itoa(userId), permDto.Domain),
 		})
 	}
 }

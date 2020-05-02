@@ -17,8 +17,6 @@ import (
 
 var accountService = service.UserService{}
 
-//var logService = service.LogService{}
-
 //todo : 用单独的claims model去掉user model
 func JwtAuth(LoginType int) *jwt.GinJWTMiddleware {
 	jwtMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
@@ -133,6 +131,7 @@ func Authenticator(c *gin.Context, LoginType int) (interface{}, error) {
 func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 	oauthDto := &dto.LoginOAuthDto{}
 	if err := dto.Bind(c, &oauthDto); err != nil {
+		log.Error(err.Error())
 		return "", err
 	}
 	//TODO 支持微信、钉钉、QQ等登陆
@@ -145,17 +144,17 @@ func AuthenticatorOAuth(c *gin.Context) (interface{}, error) {
 		OperationContent: fmt.Sprintf("%s %s", c.Request.Method, c.Request.RequestURI),
 	}
 	if oauthDto.Type == account.OAuthDingTalk { //dingtalk
-		userOauth, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
-		if err != nil || userOauth.Id < 1 {
+		user, err := accountService.VerifyDTAndReturnUserInfo(oauthDto.Code)
+		if err != nil || user.Id < 1 {
 			return "", err
 		}
 		loginLogDto.LoginResult = "DingTalk login success"
-		loginLogDto.UserId = userOauth.Id
+		loginLogDto.UserId = user.Id
 		loginLogDto.Platform = "DingTalk Login"
 		_ = accountService.InsertLoginLog(&loginLogDto)
 		return model.UserClaims{
-			Id:   userOauth.User_id,
-			Name: userOauth.Name,
+			Id:   user.Id,
+			Name: user.Username,
 		}, nil
 	}
 	return "", errors.New("")

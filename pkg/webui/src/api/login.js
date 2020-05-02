@@ -18,6 +18,15 @@ export function loginLdapByUsername(data) {
   })
 }
 
+// 钉钉登录
+export function loginDingtalk(data) {
+  return request({
+    url: 'v1/users/login/oauth',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
 export function logout() {
   return request({
     url: 'login/logout',

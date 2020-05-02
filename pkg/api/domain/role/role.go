@@ -19,6 +19,11 @@ func DeletePerm(roleName string) {
 	perm.DelRole(roleName)
 }
 
+// DeletePermPolicy : delete role in casbin policies
+func DeletePermPolicy(roleName string) {
+	perm.DeleteRolePolicy(roleName)
+}
+
 // OverwritePerm : overwrite permissions
 // remove or create policy
 func OverwritePerm(roleName, domainCode string, polices [][]string) {

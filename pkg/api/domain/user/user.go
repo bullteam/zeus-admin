@@ -22,8 +22,6 @@ func OverwriteRoles(userId string, newRoles [][]string) {
 	for k1, newRole := range newRoles {
 		for k2, currentRole := range currentRoles {
 			if newRole[0] == currentRole[0] && newRole[1] == currentRole[1] {
-				//utils.StringSliceRemove(newRoles, k1)
-				//utils.StringSliceRemove(currentRoles, k2)
 				newRoles[k1] = []string{"-skip"}
 				currentRoles[k2] = []string{"-skip"}
 			}

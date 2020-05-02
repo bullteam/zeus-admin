@@ -31,7 +31,6 @@ func (s *SettingController) LdapList(c *gin.Context) {
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"data":""}
 // @Router /v1/setting/ldap [post]
-
 func (s *SettingController) LdapUpdate(c *gin.Context) {
 	var SettingDTO dto.SettingDTO
 	if s.BindAndValidate(c, &SettingDTO) {
