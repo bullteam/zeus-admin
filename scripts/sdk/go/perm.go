@@ -1,11 +1,13 @@
 package ZeusSdk
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -13,15 +15,36 @@ import (
 /**
  * 权限接口地址
  **/
-const CENTERSERVICE = "http://api.admin.bullteam.cn"
-const API_PERM_LIST = "user/perm/list"
-const API_PERM_CHECK = "user/perm/check"
-var (
-	publicKey []byte
-)
+const CENTERSERVICE = "http://api.auth.bullteam.cn"
+const API_PERM_LIST = "v1/user/perm/list"
+const API_PERM_CHECK = "v1/user/perm/check"
+
 type UserClaims struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id   int    `json:"uid"`
+	Name string `json:"uname"`
+}
+
+type CheckPermRes struct {
+	Code int  `json:"code"`
+	Data *CheckResult `json:"data"`
+}
+type CheckResult struct {
+	Result bool `json:"result"`
+}
+
+type PermList struct {
+	Code int  `json:"code"`
+	Data *PermListResult `json:"data"`
+}
+
+type PermListResult struct {
+	Result interface{} `json:"result"`
+}
+
+var PermResFail struct{
+	Code int `json:"code"`
+	Detail string `json:"detail"`
+	Msg string `json:"msg"`
 }
 
 type CustomClaims struct {
@@ -29,16 +52,16 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-func init()  {
-	publicKey, _ = ioutil.ReadFile("./pub_key.pub")
+type ZeusSdkService struct {
 }
 
-func CheckPerm(tokenStr string) ([]byte, error) {
-	url := CENTERSERVICE + API_PERM_LIST
+func (Z ZeusSdkService) CheckPerm(tokenStr string, domain string, perm string) (bool, error) {
+	requestUrl := CENTERSERVICE + "/" + API_PERM_CHECK
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", url, strings.NewReader("name=cjb"))
+	data := url.Values{"domain": {domain}, "perm": {perm}}
+	req, err := http.NewRequest("POST", requestUrl, strings.NewReader(data.Encode()))
 	if err != nil {
-		//return nil, errors.New("post error")
+		return false, errors.New("remote api error")
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Authorization", "Bearer "+string(tokenStr))
@@ -46,40 +69,60 @@ func CheckPerm(tokenStr string) ([]byte, error) {
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		//return ""
+		return false,errors.New("error request body")
 	}
-	return body, nil
+	var p CheckPermRes
+	json.Unmarshal(body,&p)
+	if p.Data.Result == true {
+		return true,nil
+	}
+	return false, errors.New("error result")
 }
 
 /**
  * 获取用户权限列表（包括功能权限和数据权限）
  * 各自业务实现时，可缓存起来，减少网络io
  */
-func GetUserPerms(tokenStr string) {
-	url := CENTERSERVICE + API_PERM_CHECK
-	resp, err :=   http.Get(url)
+func (Z ZeusSdkService) GetUserPerms(tokenStr string, domain string) (interface{}, error) {
+	requestUrl := CENTERSERVICE + "/" + API_PERM_LIST + "?domain=" + domain
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", requestUrl, nil)
 	if err != nil {
-		// handle error
+		return false, errors.New("remote api error")
 	}
+	req.Header.Set("Authorization", "Bearer "+string(tokenStr))
+	resp, err := client.Do(req)
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		// handle error
+		return false,errors.New("error request body")
 	}
-	fmt.Println(string(body))
+	//fmt.Println(bytes.NewBuffer(body).String())
+	var p PermList
+	json.Unmarshal(body,&p)
+	return p.Data.Result, errors.New("error result")
 }
 
 /**
  * 验证jwt
  */
-func VerifyToken(tokenStr string) error {
-	fmt.Println(publicKey)
-	var myClaims CustomClaims
-	token, err := jwt.ParseWithClaims(tokenStr, &myClaims, func(token *jwt.Token) (interface{}, error) {
-		return publicKey, nil
+func (Z ZeusSdkService) VerifyToken(tokenStr string) error {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		verifyBytes, err := ioutil.ReadFile("./pub_key.pub")
+		if err != nil {
+			return nil, err
+		}
+		verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
+		if err != nil {
+			return nil, err
+		}
+		return verifyKey, nil
 	})
+
 	if err != nil {
-		fmt.Println("err !!!!")
 		return err
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
@@ -90,3 +133,43 @@ func VerifyToken(tokenStr string) error {
 	}
 	return nil
 }
+
+/**
+  获取用户信息
+ */
+func (Z ZeusSdkService) GetUserInfo(tokenStr string) (error,interface{}) {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		verifyBytes, err := ioutil.ReadFile("./pub_key.pub")
+		if err != nil {
+			return nil, err
+		}
+		verifyKey, err := jwt.ParseRSAPublicKeyFromPEM(verifyBytes)
+		if err != nil {
+			return nil, err
+		}
+		return verifyKey, nil
+	})
+
+	if err != nil {
+		return err,nil
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		if !claims.VerifyExpiresAt(time.Now().Unix(), true) {
+			return errors.New("VerifyExpiresAt"),nil
+		}
+	}
+	if token != nil {
+		if token.Valid {
+			claims, _ := token.Claims.(jwt.MapClaims)
+			//var user string = claims["uname"].(string)
+			return nil,claims
+		}
+	}
+	return errors.New("error token"),nil
+}
+
+

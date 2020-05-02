@@ -10,18 +10,27 @@ const tokenStr = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODg0Mjc5MTksI
 
 var (
 	err error
+	ZeusService = ZeusSdkService{}
 )
 
 func TestCheckPerm(t *testing.T) {
-	//CheckPerm(tokenStr)
+	str, _ := ZeusService.CheckPerm(tokenStr,"zeus-config","/configlist/list")
+	fmt.Print(str)
 	assert.Equal(t, nil, err)
 }
 func TestGetUserPerms(t *testing.T) {
-	//GetUserPerms(tokenStr)
+	str,_ := ZeusService.GetUserPerms(tokenStr,"zeus-config")
+	fmt.Print(str)
 	assert.Equal(t, nil, err)
 }
 func TestVerify(t *testing.T) {
-	str := VerifyToken(tokenStr)
+	str := ZeusService.VerifyToken(tokenStr)
+	fmt.Print(str)
+	assert.Equal(t, nil, err)
+}
+
+func TestGetUserInfo(t *testing.T) {
+	_, str := ZeusService.GetUserInfo(tokenStr)
 	fmt.Print(str)
 	assert.Equal(t, nil, err)
 }
