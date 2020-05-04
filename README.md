@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/bullteam/zeus-admin/master/docs/images/logo.png" height="145">
+    <img src="https://gitee.com/bullteam/zeus-admin/raw/master/docs/images/logo.png" height="145">
 </p>
 
 # Zeus 宙斯权限&账号管理系统
@@ -55,7 +55,7 @@
 可参考 [文档](http://doc.bullteam.cn/guide/install.html#%E4%BB%8Edocker%E5%AE%89%E8%A3%85)
 
 # 架构
-<img src="./docs/images/arch.png" height=920></img>
+<img src="https://gitee.com/bullteam/zeus-admin/raw/master/docs/images/arch.png" height=920></img>
 
 ### 快速开始
 > 该操作在linux 下生效，需要golang 1.11+ & node v9 + 编译环境,设置git clone 权限
@@ -141,9 +141,9 @@ mysql> source ./scripts/init.sql;
 
 ## 相关截图
 
-<img src="./docs/images/screenshot1.png"></img>
-<img src="./docs/images/screenshot2.png"></img>
-<img src="./docs/images/screenshot3.png"></img>
+<img src="https://gitee.com/bullteam/zeus-admin/raw/master/docs/images/screenshot1.png"></img>
+<img src="https://gitee.com/bullteam/zeus-admin/raw/master/docs/images/screenshot2.png"></img>
+<img src="https://gitee.com/bullteam/zeus-admin/raw/master/docs/images/screenshot3.png"></img>
 
 ## 开发者
 
@@ -165,6 +165,5 @@ mysql> source ./scripts/init.sql;
 如果您觉得 Zeus 对您有帮助，请扫描下方群二维码，如果群满，请加微信 `wutongci` 并注明`zeus 开源交流`，他会将你拉入群。
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/bullteam/zeus-admin/master/docs/images/wechatqun.jpg" height="360">
-    <img src="https://raw.githubusercontent.com/bullteam/zeus-admin/master/docs/images/wx.jpg" height="360">
+    <img src="https://gitee.com/bullteam/zeus-admin/raw/master/docs/images/wx.jpg" height="360">
 </p>
