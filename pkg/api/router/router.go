@@ -161,7 +161,6 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	if viper.GetBool("project.merge") {
 		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html
-		//e.LoadHTMLFiles("./pkg/webui/dist/static/*/*")   // 添加资源路径
 		e.Static("/static", "./pkg/webui/dist/static")   // 添加资源路径
 		e.StaticFile("/", "./pkg/webui/dist/index.html") //前端接口
 	}
