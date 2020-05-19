@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 	"github.com/pkg/errors"
-	"gopkg.in/go-playground/validator.v8"
 	"strings"
 	"zeus/pkg/api/log"
 )
@@ -17,7 +17,7 @@ func init() {
 		_ = v.RegisterValidation("pwdValidate", pwdValidate)
 		_ = v.RegisterValidation("permsValidate", permsValidate)
 	} else {
-		log.Fatal("Gin fail to registered custom validator(v8)")
+		log.Fatal("Gin fail to registered custom validator(v10)")
 	}
 }
 
@@ -28,8 +28,8 @@ func Bind(c *gin.Context, obj interface{}) error {
 		if fieldErr, ok := err.(validator.ValidationErrors); ok {
 			var tagErrorMsg []string
 			for _, v := range fieldErr {
-				if _, has := ValidateErrorMessage[v.Tag]; has {
-					tagErrorMsg = append(tagErrorMsg, fmt.Sprintf(ValidateErrorMessage[v.Tag], v.Field, v.Value))
+				if _, has := ValidateErrorMessage[v.Tag()]; has {
+					tagErrorMsg = append(tagErrorMsg, fmt.Sprintf(ValidateErrorMessage[v.Tag()], v.Field(), v.Value()))
 				} else {
 					tagErrorMsg = append(tagErrorMsg, err.Error())
 				}
@@ -45,5 +45,5 @@ var ValidateErrorMessage = map[string]string{
 	"customValidate": "%s can not be %s",
 	"required":       "%s is required,got empty %#v",
 	"pwdValidate":    "%s is not a valid password",
-	"permsValidate":  "%s contains comma",
+	"permsValidate":  "perms [%s] is not allow to contains comma",
 }

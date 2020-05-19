@@ -1,8 +1,7 @@
 package dto
 
 import (
-	"gopkg.in/go-playground/validator.v8"
-	"reflect"
+	"github.com/go-playground/validator/v10"
 	"strings"
 )
 
@@ -40,11 +39,16 @@ type MenuEditDto struct {
 	OrderNum int    `form:"order_num,default=1" json:"order_num"`
 }
 
-func permsValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
-	if val, ok := field.Interface().(string); ok {
-		if strings.Contains(val, ",") {
-			return false
-		}
-	}
-	return true
+//func permsValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
+//	if val, ok := field.Interface().(string); ok {
+//		if strings.Contains(val, ",") {
+//			return false
+//		}
+//	}
+//	return true
+//}
+
+func permsValidate (fl validator.FieldLevel) bool {
+	val := fl.Field().String()
+	return !strings.Contains(val,",")
 }
