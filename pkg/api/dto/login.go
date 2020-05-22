@@ -1,12 +1,7 @@
 package dto
 
-import (
-	"github.com/go-playground/validator/v10"
-	"zeus/pkg/api/log"
-)
-
 type LoginDto struct {
-	Username string `form:"username" json:"username" binding:"required,customValidate"`
+	Username string `form:"username" json:"username" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
 	Code     string `form:"code" json:"code"`
 }
@@ -34,23 +29,4 @@ type UnBindThirdDto struct {
 // LoginDingtalkDto - ding talk login
 type LoginDingtalkDto struct {
 	Code string `form:"code"`
-}
-
-// demo usage
-//func customValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
-//	if val, ok := field.Interface().(string); ok {
-//		if val == "superman@z1~2nick" {
-//			return false
-//		}
-//	}
-//	return true
-//}
-func customValidate(fl validator.FieldLevel) bool {
-	if val := fl.Field().String();val != "" {
-		if val == "superman@z1~2nick" {
-			log.Error("bingo!?")
-			return false
-		}
-	}
-	return true
 }
