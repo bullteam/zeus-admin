@@ -38,11 +38,11 @@
             {{ scope.row.perms_rule }}
           </template>
         </el-table-column>
-        <el-table-column :label="$t('dataPerm.remarks')" align="center">
+        <!-- <el-table-column :label="$t('dataPerm.remarks')" align="center">
           <template slot-scope="scope">
             {{ scope.row.remarks }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('dataPerm.actions')" width="200" align="center">
           <template v-if="scope.row.id" slot-scope="scope">
             <el-button v-permission="['/auth-system/dataPerm:edit']" type="text" @click="handleUpdate(scope.row)">{{
@@ -287,9 +287,9 @@ export default {
             return
           }
           try {
-            if (this.temp.perms_type === 2) {
-              this.temp.perms_rule = this.ruleVal
-            }
+            // if (this.temp.perms_type === 2) {
+            this.temp.perms_rule = JSON.stringify(this.ruleVal)
+            // }
             this.dialogStatus === 'create' ? await dataPermAdd(this.temp) : await dataPermEdit(this.temp)
             this.getList()
             this.dialogFormVisible = false
