@@ -186,8 +186,8 @@ export default {
       const type = parseInt(newVal)
       this.temp.perms_type = type
       if (type === 2) {
-        const json = this.temp.perms_rule
-        this.ruleVal = json ? JSON.parse(json) : {}
+        // const json = this.temp.perms_rule
+        // this.ruleVal = json ? JSON.parse(json) : {}
         this.$nextTick(function() {
 
           // new Jsoneditor(this.$refs.jsonEditor, this.options, json ? JSON.parse(json) : '')
@@ -252,6 +252,8 @@ export default {
       if (this.permsType === 1) {
         this.temp.perms = '-'
         this.temp.perms_rule = '{}'
+      } else {
+        this.ruleVal = JSON.parse(this.temp.perms_rule)
       }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -287,9 +289,11 @@ export default {
             return
           }
           try {
-            // if (this.temp.perms_type === 2) {
-            this.temp.perms_rule = JSON.stringify(this.ruleVal)
-            // }
+            if (typeof this.ruleVal === 'object') {
+              this.temp.perms_rule = JSON.stringify(this.ruleVal)
+            } else {
+              this.temp.perms_rule = this.ruleVal
+            }
             this.dialogStatus === 'create' ? await dataPermAdd(this.temp) : await dataPermEdit(this.temp)
             this.getList()
             this.dialogFormVisible = false
