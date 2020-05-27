@@ -2,6 +2,10 @@ package dto
 
 import "time"
 
+// DomainListSearchMapping - define search query keys in domain list page
+var DomainListSearchMapping = map[string]string{
+	"id": "id",
+}
 //DomainCreateDto - binding domain creation params
 type DomainCreateDto struct {
 	Id            int       `json:"id"`

@@ -20,6 +20,8 @@ func (us DomainService) InfoOfId(dto dto.GeneralGetDto) model.Domain {
 
 // List - users list with pagination
 func (us DomainService) List(dto dto.GeneralListDto) ([]model.Domain, int64) {
+	//dto.Q = "id=1"
+	//todo : data permission control here with a general handler
 	return domainDao.List(dto)
 }
 
