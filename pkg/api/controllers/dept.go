@@ -1,10 +1,9 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/gin"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/service"
-
-	"github.com/gin-gonic/gin"
 )
 
 var deptService = service.DeptService{}

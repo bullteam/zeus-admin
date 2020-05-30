@@ -1,8 +1,7 @@
 package dto
 
 import (
-	"gopkg.in/go-playground/validator.v8"
-	"reflect"
+	"github.com/go-playground/validator/v10"
 	"regexp"
 	"time"
 )
@@ -78,12 +77,21 @@ type UserInDomainDto struct {
 }
 
 // password validator
-func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
+//func pwdValidate(v *validator.Validate, topStruct reflect.Value, currentStructOrField reflect.Value, field reflect.Value, fieldType reflect.Type, fieldKind reflect.Kind, param string) bool {
+//	reg := regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&*]{6,}$`)
+//	if val, ok := field.Interface().(string); ok {
+//		if !reg.Match([]byte(val)) {
+//			return false
+//		}
+//	}
+//	return true
+//}
+func pwdValidate(fl validator.FieldLevel) bool {
 	reg := regexp.MustCompile(`^[a-zA-Z0-9!@#$%^&*]{6,}$`)
-	if val, ok := field.Interface().(string); ok {
-		if !reg.Match([]byte(val)) {
-			return false
-		}
+	val := fl.Field().String()
+	if !reg.Match([]byte(val)) {
+		return false
 	}
 	return true
 }
+

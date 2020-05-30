@@ -18,7 +18,7 @@ var ignoreRoutes = map[string]bool{
 }
 
 func AccessLog(c *gin.Context) {
-	//too much useless or some important logs
+	//ignore logs
 	if _, ok := ignoreRoutes[c.Request.URL.Path]; ok {
 		c.Next()
 		return

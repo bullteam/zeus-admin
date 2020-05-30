@@ -12,7 +12,7 @@ type Role struct {
 }
 
 //Get - get single roel info
-func (u Role) Get(id int, preload bool) model.Role {
+func (Role) Get(id int, preload bool) model.Role {
 	var role model.Role
 	db := GetDb()
 	if preload {
@@ -61,7 +61,7 @@ func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
 }
 
 // Create - new role
-func (r Role) Create(role *model.Role) *gorm.DB {
+func (u Role) Create(role *model.Role) *gorm.DB {
 	var row model.Role
 	db := GetDb()
 	db.Where("name = ? or role_name = ?", role.Name, role.RoleName).First(&row)
@@ -72,13 +72,13 @@ func (r Role) Create(role *model.Role) *gorm.DB {
 }
 
 // Update - update role
-func (r Role) Update(role *model.Role, ups map[string]interface{}) *gorm.DB {
+func (u Role) Update(role *model.Role, ups map[string]interface{}) *gorm.DB {
 	db := GetDb()
 	return db.Model(role).Update(ups)
 }
 
 // Delete - delete role
-func (r Role) Delete(role *model.Role) *gorm.DB {
+func (u Role) Delete(role *model.Role) *gorm.DB {
 	db := GetDb()
 	return db.Delete(role)
 }
