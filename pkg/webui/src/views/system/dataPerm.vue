@@ -38,11 +38,11 @@
             {{ scope.row.perms_rule }}
           </template>
         </el-table-column>
-        <el-table-column :label="$t('dataPerm.remarks')" align="center">
+        <!-- <el-table-column :label="$t('dataPerm.remarks')" align="center">
           <template slot-scope="scope">
             {{ scope.row.remarks }}
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column :label="$t('dataPerm.actions')" width="200" align="center">
           <template v-if="scope.row.id" slot-scope="scope">
             <el-button v-permission="['/auth-system/dataPerm:edit']" type="text" @click="handleUpdate(scope.row)">{{
@@ -88,7 +88,8 @@
           <el-input v-model="temp.perms"/>
         </el-form-item>
         <el-form-item v-if="parseInt(temp.perms_type) === 2" :label="$t('dataPerm.rules')">
-          <div ref="jsonEditor"/>
+          <!-- <div ref="jsonEditor"/> -->
+          <json-editor ref="jsonEditor" v-model="ruleVal" />
         </el-form-item>
         <el-form-item :label="$t('dataPerm.remarks')">
           <el-input v-model="temp.remarks"/>
@@ -105,7 +106,8 @@
 
 <script>
 import 'jsoneditor/dist/jsoneditor.min.css'
-import Jsoneditor from 'jsoneditor'
+// import Jsoneditor from 'jsoneditor'
+import JsonEditor from '@/components/JsonEditor'
 import treeTable from '@/components/TreeTable'
 import treeToArray from '@/directive/customEval'
 import PreCheck from '../layout/mixin/PreCheck'
@@ -127,7 +129,7 @@ const temp = function() {
 }
 export default {
   name: 'DataPerm',
-  components: { treeTable },
+  components: { treeTable, JsonEditor },
   filters: {
     tag(type) {
       return parseInt(type) === 1 ? '分类' : '数据权限'
@@ -153,6 +155,7 @@ export default {
         order_num: [{ required: true, message: '排序必须填写', trigger: 'blur' }],
         parent_id: [{ required: true, message: '分类必须选择', trigger: 'change' }]
       },
+      ruleVal: {},
       index: 1,
       data_copy: [],
       cascader_props: {
@@ -167,6 +170,7 @@ export default {
         statusBar: false,
         onChangeJSON: (json) => {
           this.temp.perms_rule = JSON.stringify(json)
+          console.log(this.temp.perms_rule)
         }
       },
       permsType: 1,
@@ -182,9 +186,11 @@ export default {
       const type = parseInt(newVal)
       this.temp.perms_type = type
       if (type === 2) {
-        const json = this.temp.perms_rule
+        // const json = this.temp.perms_rule
+        // this.ruleVal = json ? JSON.parse(json) : {}
         this.$nextTick(function() {
-          new Jsoneditor(this.$refs.jsonEditor, this.options, json ? JSON.parse(json) : '')
+
+          // new Jsoneditor(this.$refs.jsonEditor, this.options, json ? JSON.parse(json) : '')
         })
       }
     },
@@ -246,6 +252,8 @@ export default {
       if (this.permsType === 1) {
         this.temp.perms = '-'
         this.temp.perms_rule = '{}'
+      } else {
+        this.ruleVal = JSON.parse(this.temp.perms_rule)
       }
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -281,6 +289,11 @@ export default {
             return
           }
           try {
+            if (typeof this.ruleVal === 'object') {
+              this.temp.perms_rule = JSON.stringify(this.ruleVal)
+            } else {
+              this.temp.perms_rule = this.ruleVal
+            }
             this.dialogStatus === 'create' ? await dataPermAdd(this.temp) : await dataPermEdit(this.temp)
             this.getList()
             this.dialogFormVisible = false
