@@ -236,6 +236,7 @@ export default {
       return menu
     },
     handleCreate() {
+      this.ruleVal = {}
       this.temp = temp.apply(this)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true

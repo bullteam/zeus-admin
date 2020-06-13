@@ -10,6 +10,19 @@ import (
 type UserOAuthDao struct {
 }
 
+// List - userOAuth list
+func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth, int64) {
+	var UserOAuth []model.UserOAuth
+	var total int64
+	db := GetDb()
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
+		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	}
+	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&UserOAuth)
+	db.Model(&model.UserOAuth{}).Count(&total)
+	return UserOAuth, total
+}
+
 func (u UserOAuthDao) Get(id int) model.UserOAuth {
 	var userOAuth model.UserOAuth
 	db.Where("id = ?", id).First(&userOAuth)
@@ -24,20 +37,6 @@ func (u UserOAuthDao) Create(UserOAuth *model.UserOAuth) *gorm.DB {
 func (u UserOAuthDao) Delete(UserOAuth *model.UserOAuth) *gorm.DB {
 	db := GetDb()
 	return db.Delete(UserOAuth)
-}
-
-// List - userOAuth list
-func (u UserOAuthDao) List(listDto dto.GeneralListDto) ([]model.UserOAuth, int64) {
-	var UserOAuth []model.UserOAuth
-	var total int64
-	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
-		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
-	}
-	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&UserOAuth)
-	db.Model(&model.UserOAuth{}).Count(&total)
-	fmt.Println(total)
-	return UserOAuth, total
 }
 
 func (dao *UserOAuthDao) GetUserByOpenId(openid string, from int) (model.UserOAuth, error) {

@@ -58,7 +58,7 @@ func SetUp(e *gin.Engine, cors bool) {
 
 	//sdk related
 	v1.GET("/user/perm/list", userController.GetDomainPermissions)
-	v1.GET("/user/data-perm/list", userController.GetDomainDataPermissions)
+	v1.GET("/user/dataperm/list", userController.GetDomainDataPermissions)
 	v1.POST("/user/perm/check", userController.DomainPermCheck)
 	v1.GET("/user/menu", userController.GetDomainMenus)
 
@@ -160,7 +160,7 @@ func SetUp(e *gin.Engine, cors bool) {
 	v1.POST("/sync/dingtalk", syncController.SyncDingTalk)
 
 	if viper.GetBool("project.merge") {
-		e.LoadHTMLGlob("./pkg/webui/dist/*.html") // 添加入口index.html
+		e.LoadHTMLGlob("./pkg/webui/dist/*.html")        // 添加入口index.html
 		e.Static("/static", "./pkg/webui/dist/static")   // 添加资源路径
 		e.StaticFile("/", "./pkg/webui/dist/index.html") //前端接口
 	}

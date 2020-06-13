@@ -6,6 +6,7 @@ import "time"
 var DomainListSearchMapping = map[string]string{
 	"id": "id",
 }
+
 //DomainCreateDto - binding domain creation params
 type DomainCreateDto struct {
 	Id            int       `json:"id"`

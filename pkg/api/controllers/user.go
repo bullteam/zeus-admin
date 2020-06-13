@@ -185,7 +185,6 @@ func (u *UserController) GetUserPermissionsWithMenu(c *gin.Context) {
 	}
 }
 
-
 // @Tags Users
 // @Summary 获取用户权限列表
 // @Security ApiKeyAuth
@@ -209,7 +208,7 @@ func (u *UserController) GetDomainPermissions(c *gin.Context) {
 // @Param domain string ""
 // @Produce  json
 // @Success 200 {string} json "{"code":200,"result":[["route","rules"]]}"
-// @Router /v1/user/data-perm/list [get]
+// @Router /v1/user/dataperm/list [get]
 func (u *UserController) GetDomainDataPermissions(c *gin.Context) {
 	var permDto dto.UserInDomainDto
 	userId := int(c.Value("userId").(float64))

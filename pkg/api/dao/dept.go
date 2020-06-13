@@ -10,6 +10,19 @@ import (
 type Dept struct {
 }
 
+// List - Depts list
+func (u Dept) List(listDto dto.GeneralListDto) ([]model.Department, int64) {
+	var Depts []model.Department
+	var total int64
+	db := GetDb()
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
+		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	}
+	db.Find(&Depts)
+	db.Model(&model.Department{}).Count(&total)
+	return Depts, total
+}
+
 //func (Dept) GetByRole(role model.Role){
 //	db := GetDb()
 //	db.Where("code",role.Dept.Code)
@@ -20,20 +33,6 @@ func (u Dept) Get(id int) model.Department {
 	db := GetDb()
 	db.Where("id = ?", id).First(&Dept)
 	return Dept
-}
-
-// List - Depts list
-func (u Dept) List(listDto dto.GeneralListDto) ([]model.Department, int64) {
-	var Depts []model.Department
-	var total int64
-	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q, dto.UserListSearchMapping) {
-		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
-	}
-	//no need paging
-	db.Find(&Depts)
-	db.Model(&model.Department{}).Count(&total)
-	return Depts, total
 }
 
 // Create - new Dept

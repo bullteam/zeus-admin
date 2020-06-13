@@ -103,20 +103,18 @@ func Enforce(params ...interface{}) bool {
 
 // DelRoleByName : delete all specific role policy of domain
 func DelRoleByDomain(role string, domain string) {
-	DelFilteredPerm(0,role,"","",domain)
+	DelFilteredPerm(0, role, "", "", domain)
 }
 
 // DelRole : delete specific role
 func DelRole(role string) {
-	DelFilteredPerm(0,role)
+	DelFilteredPerm(0, role)
 	enforcer.RemoveFilteredGroupingPolicy(1, role)
 }
 
 // DeleteRolePolicy : delete policy row
 func DeleteRolePolicy(role string) {
-	enforcerLock.Lock()
-	defer enforcerLock.Unlock()
-	DelFilteredPerm(0,role)
+	DelFilteredPerm(0, role)
 }
 
 // GetAllPermsByRoleDomain : get policies by role and domain

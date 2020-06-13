@@ -45,7 +45,8 @@ func (d *DomainController) Get(c *gin.Context) {
 func (d *DomainController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if d.BindAndValidate(c, &listDto) {
-		data, total := domainService.List(listDto)
+		dataPermService.DtoAppendFilter(c, &listDto)
+		data, total := domainService.List(c, listDto)
 		resp(c, map[string]interface{}{
 			"result": data,
 			"total":  total,

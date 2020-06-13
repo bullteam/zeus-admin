@@ -12,7 +12,7 @@ import (
 
 func init() {
 	// Register custom validate methods
-	if v, ok := binding.Validator.Engine().(*validator.Validate);ok {
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("pwdValidate", pwdValidate)
 		_ = v.RegisterValidation("permsValidate", permsValidate)
 	} else {

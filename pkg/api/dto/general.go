@@ -1,6 +1,8 @@
 package dto
 
-import "strings"
+import (
+	"strings"
+)
 
 // GeneralListDto - General list request params
 type GeneralListDto struct {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
@@ -19,10 +20,15 @@ func (us DomainService) InfoOfId(dto dto.GeneralGetDto) model.Domain {
 }
 
 // List - users list with pagination
-func (us DomainService) List(dto dto.GeneralListDto) ([]model.Domain, int64) {
-	//dto.Q = "id=1"
+// @DataPermDtoFilter('DomainService.List')
+// @DataPermResultFilter('DomainService.List')
+func (us DomainService) List(ctx context.Context, gdto dto.GeneralListDto) ([]model.Domain, int64) {
+	//gdto.Q = "name=~权限"
 	//todo : data permission control here with a general handler
-	return domainDao.List(dto)
+	//gdto.Q = "id=(1)"
+	//dataperm.SurroundHandle('DomainService.List',ctx,dto)
+	//return UserService.GetRelatedDomains(UserService{},"2",false),1
+	return domainDao.List(gdto)
 }
 
 // Create - create a new domain
