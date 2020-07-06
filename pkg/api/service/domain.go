@@ -25,9 +25,8 @@ func (us DomainService) InfoOfId(dto dto.GeneralGetDto) model.Domain {
 func (us DomainService) List(ctx context.Context, gdto dto.GeneralListDto) ([]model.Domain, int64) {
 	//gdto.Q = "name=~权限"
 	//todo : data permission control here with a general handler
-	//gdto.Q = "id=(1)"
-	//dataperm.SurroundHandle('DomainService.List',ctx,dto)
 	//return UserService.GetRelatedDomains(UserService{},"2",false),1
+	// gdto.Q = "id=(1,2,3,4,5)"
 	return domainDao.List(gdto)
 }
 
