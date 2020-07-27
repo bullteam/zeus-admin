@@ -1,5 +1,5 @@
 <template>
-  <div :loading="block" class="login-container">
+  <div :loading="block" :style="'background-image:url('+ Background +');'" class="login-container">
 
     <el-form v-if="step === 1" ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <!--      <el-radio-group v-model="loginForm.loginType" class="login-type">-->
@@ -116,6 +116,7 @@
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import { checkGoogle2faCode, FindCodeOpen, checkSmsSend, sendSmsCode } from '@/api/user'
+import Background from '@/assets/images/background.jpg'
 // import { getUserCaptcha } from '@/api/login'
 // import { getPrefix } from '@/utils/auth'
 
@@ -138,6 +139,7 @@ export default {
       }
     }
     return {
+      Background: Background,
       loginForm: {
         username: '',
         password: '',
@@ -315,11 +317,10 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  $bg:#283443;
-  $light_gray:#eee;
-  $cursor: #fff;
+  $bg:#ffffff;
+  $light_gray:#bfbfbf;
+  $cursor: #707070;
   $dark_gray:#889aa4;
-  $light_gray:#eee;
 
   @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
     .login-container .el-input input{
@@ -334,10 +335,10 @@ export default {
   .login-container {
     .el-input {
       display: inline-block;
-      height: 47px;
-      width: 85%;
+      height: 40px;
+      width: 80%;
       input {
-        background: transparent;
+        // background: transparent;
         border: 0px;
         -webkit-appearance: none;
         border-radius: 0px;
@@ -355,7 +356,7 @@ export default {
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(0, 0, 0, 0.1);
       border-radius: 5px;
-      color: #454545;
+      color: rgb(29, 22, 22);
     }
   }
 
@@ -365,13 +366,15 @@ export default {
   width: 100%;
   background-color: $bg;
   .login-form {
+    border-radius: 6px;
+    background: #ffffff;
     position: absolute;
     left: 0;
     right: 0;
-    width: 520px;
+    width: 450px;
     max-width: 100%;
     padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    margin: 100px auto;
   }
   .tips {
     font-size: 14px;
@@ -428,79 +431,6 @@ export default {
     position: absolute;
     right: 35px;
     bottom: 28px;
-  }
-
-  /*海浪*/
-  @keyframes move_wave {
-    0% {
-      transform: translateX(0) translateZ(0) scaleY(1)
-    }
-    50% {
-      transform: translateX(-25%) translateZ(0) scaleY(0.55)
-    }
-    100% {
-      transform: translateX(-50%) translateZ(0) scaleY(1)
-    }
-  }
-  .wave-wrapper {
-    /*overflow: hidden;*/
-    position: relative;
-    /*left: 0;*/
-    /*right: 0;*/
-    bottom: 0;
-    /*top: 0;*/
-    margin: auto;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-  }
-  .wave-wrapper-inner {
-    position: absolute;
-    width: 100%;
-    overflow: hidden;
-    height: 100%;
-    bottom: -1px;
-    /*background-image: linear-gradient(to top, #86377b 20%, #27273c 80%);*/
-    border-bottom: 50px solid #ffffff;
-  }
-  .wave {
-    position: absolute;
-    left: 0;
-    width: 200%;
-    height: 100%;
-    background-repeat: repeat no-repeat;
-    background-position: 0 bottom;
-    transform-origin: center bottom;
-  }
-  .wave-top {
-    z-index: 15;
-    opacity: 0.5;
-    background-size: 50% 100px;
-    background-image: url('/static/images/wave-front.png');
-  }
-  .wave-animation .wave-top {
-    animation: move-wave 3s;
-    -webkit-animation: move-wave 3s;
-    -webkit-animation-delay: 1s;
-    animation-delay: 1s;
-  }
-  .wave-middle {
-    z-index: 10;
-    opacity: 0.75;
-    background-size: 50% 120px;
-    background-image: url('/static/images/wave-middle.png');
-  }
-  .wave-animation .wave-middle {
-    animation: move_wave 10s linear infinite;
-  }
-  .wave-back {
-    z-index: 5;
-    opacity: 0.9;
-    background-size: 50% 100px;
-    background-image: url('/static/images/wave-back.png');
-  }
-  .wave-animation .wave-back {
-    animation: move_wave 15s linear infinite;
   }
 
   /*登录类型*/
