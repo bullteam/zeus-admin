@@ -3,9 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"html/template"
 	"strconv"
-	"strings"
 	"zeus/pkg/api/dao"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/log"
@@ -74,39 +73,61 @@ func (DataPermService) Delete(dto dto.GeneralDelDto) int64 {
 	return c.RowsAffected
 }
 
-func (DataPermService) DtoAppendFilter(ctx *gin.Context, gdto *dto.GeneralListDto) {
-	uid := fmt.Sprintf("%#v", ctx.Value("userId").(float64))
-	//log.Info(fmt.Sprintf("%#v -> %#v",uid,ctx.Request.URL.Path))
-	// todo : check if uid has connection to current route,
-	// which means there was a data perm rule
-	// so may has a map struct serve for url route - handler stuff
-	// let program knows that how to deal with a specific route
-	dps := UserService.GetDataPermissionsOfDomain(UserService{}, uid, "root")
-	for _, dp := range dps {
-		if dp["perm"] == strings.TrimLeft(ctx.Request.URL.Path, "/") {
-			log.Info("I should do a filter here")
-			dpHandler[dp["perm"]+"@belong-to"](ctx, gdto)
-			log.Info(fmt.Sprintf("dto is %s", gdto.Q))
+// GetDataPerm
+func (DataPermService) GetDataPermByRoute(ctx context.Context,route string) map[string]string {
+	// 1. list all related
+	// 2. pick the top 1 according to ordering
+	dps := UserService.GetDataPermissionsOfDomain(UserService{},fmt.Sprintf("%#v",ctx.Value("userId")),RootDomainCode)
+	perms := map[string]string{}
+	weight := 0
+	for _,dp := range dps {
+		if dp["perm"] != route {
+			continue
+		}
+		w,_ := strconv.Atoi(dp["weight"])
+		if w > weight {
+			weight = w
+			perms = dp
 		}
 	}
-	//gdto.Q = "id=1"
+	return perms
 }
 
-var dpHandler = map[string]func(context.Context, *dto.GeneralListDto){
-	"v1/domains@belong-to": func(ctx context.Context, gdto *dto.GeneralListDto) {
-		uid := fmt.Sprintf("%#v", ctx.Value("userId").(float64))
-		dms := UserService.GetRelatedDomains(UserService{}, uid, false)
-		dids := []string{}
-		for _, dm := range dms {
-			dids = append(dids, strconv.Itoa(dm.Id))
-		}
-		gdto.Q = "(" + strings.Join(dids, ",") + ")"
-	},
+// GenerateDtoConditions
+func (DataPermService) GenerateConditionsSql(ctx context.Context,p string) string {
+	account := UserService.InfoOfId(UserService{},dto.GeneralGetDto{Id: int(ctx.Value("userId").(float64))})
+	tmpl,err := template.New(p).Parse(p)
+	if err != nil {
+		_ = tmpl.Execute(nil,account)
+	}
+	return ""
 }
+//func (DataPermService) DtoAppendFilter(ctx *gin.Context, gdto *dto.GeneralListDto) {
+//	uid := fmt.Sprintf("%#v", ctx.Value("userId").(float64))
+//	//log.Info(fmt.Sprintf("%#v -> %#v",uid,ctx.Request.URL.Path))
+//	// todo : check if uid has connection to current route,
+//	// which means there was a data perm rule
+//	// so may has a map struct serve for url route - handler stuff
+//	// let program knows that how to deal with a specific route
+//	dps := UserService.GetDataPermissionsOfDomain(UserService{}, uid, "root")
+//	for _, dp := range dps {
+//		if dp["perm"] == strings.TrimLeft(ctx.Request.URL.Path, "/") {
+//			log.Info("I should do a filter here")
+//			dpHandler[dp["perm"]+"@belong-to"](ctx, gdto)
+//			log.Info(fmt.Sprintf("dto is %s", gdto.Q))
+//		}
+//	}
+//	//gdto.Q = "id=1"
+//}
 
-//var handlers = map[string]func(ctx context.Context){
-//	"DomainService.List@belong-to" : func(ctx context.Context) {
-//		uid := int(ctx.Value("userId").(float64))
-//		domains :=
+//var dpHandler = map[string]func(context.Context, *dto.GeneralListDto){
+//	"v1/domains@belong-to": func(ctx context.Context, gdto *dto.GeneralListDto) {
+//		uid := fmt.Sprintf("%#v", ctx.Value("userId").(float64))
+//		dms := UserService.GetRelatedDomains(UserService{}, uid, false)
+//		dids := []string{}
+//		for _, dm := range dms {
+//			dids = append(dids, strconv.Itoa(dm.Id))
+//		}
+//		gdto.Q = "(" + strings.Join(dids, ",") + ")"
 //	},
 //}

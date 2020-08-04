@@ -422,6 +422,7 @@ func (us UserService) GetDataPermissionsOfDomain(uid, domain string) []map[strin
 					polices = append(polices, map[string]string{
 						"perm": dp.Perms,
 						"rule": dp.PermsRule,
+						"weight" : strconv.Itoa(dp.OrderNum),
 					})
 				}
 			}

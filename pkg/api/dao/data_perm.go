@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
+	"zeus/pkg/api/domain/search/parser"
 	"zeus/pkg/api/dto"
 	"zeus/pkg/api/model"
 )
@@ -14,8 +14,12 @@ func (dp DataPerm) List(listDto dto.GeneralListDto) ([]model.DataPerm, int64) {
 	var dataPerms []model.DataPerm
 	var total int64
 	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q, dto.DataPermListSearchMapping) {
-		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	ps, err := parser.Parse(listDto.Q)
+	if err == nil {
+		for _, sv := range searchAdapter.GenerateConditions(ps,dto.DataPermListSearchMapping) {
+			k := sv[0].(string)
+			db = db.Where(k, sv[1:]...)
+		}
 	}
 	db.Offset(listDto.Skip).Limit(listDto.Limit).Find(&dataPerms)
 	db.Model(&model.DataPerm{}).Count(&total)

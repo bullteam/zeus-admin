@@ -115,7 +115,7 @@ func (s MyAccountService) UploadAvatar(file multipart.File, filename string, uid
 	if err != nil {
 		return "", err
 	}
-	file.Close()
+	_ = file.Close()
 	width := viper.GetInt("account.avatar.width")
 	height := viper.GetInt("account.avatar.height")
 	m := resize.Resize(uint(width), uint(height), img, resize.Lanczos3)

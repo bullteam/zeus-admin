@@ -13,13 +13,14 @@ type DomainDao struct {
 // List - Domains list
 func (u DomainDao) List(gdto dto.GeneralListDto) ([]model.Domain, int64) {
 	// todo : dataperm.GenerateConditions("v1/domains",gdto)
-	//
+	// "domains"
+	// relatedDataPerm := DataPerm.GetDataPermsByRoute(DataPerm{},"domains")
 	var domains []model.Domain
 	var total int64
 	db := GetDb()
 	ps, err := parser.Parse(gdto.Q)
 	if err == nil {
-		for _, sv := range searchAdapter.GenerateConditions(ps) {
+		for _, sv := range searchAdapter.GenerateConditions(ps,dto.DomainListSearchMapping) {
 			db = db.Where(sv[0], sv[1:]...)
 		}
 	}
