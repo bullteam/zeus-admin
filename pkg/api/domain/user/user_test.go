@@ -36,5 +36,4 @@ func TestDeleteUser(t *testing.T) {
 	assert.Len(t, perm.GetGroupsByUser("lake"), 2, "Verify - user's deletion")
 	DeleteUser("lake")
 	assert.Len(t, perm.GetGroupsByUser("lake"), 0, "verify user's deletion")
-
 }

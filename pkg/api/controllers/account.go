@@ -124,19 +124,11 @@ func (a *AccountController) EditPassword(c *gin.Context) {
 // GetDomains - get user managing domains
 func (AccountController) GetDomains(c *gin.Context) {
 	userId := int(c.Value("userId").(float64))
-	domains := userService.GetRelatedDomains(strconv.Itoa(userId))
+	domains := userService.GetRelatedDomains(strconv.Itoa(userId), true)
 	resp(c, map[string]interface{}{
 		"result": domains,
 	})
 }
-
-// @Summary 获取登录用户权限列表
-// @Tags account
-// @Security ApiKeyAuth
-// @Produce  json
-// @Success 200 {string} json "{"code":200,"data":{"result":[]}}"
-// @Router /v1/account/domains [get]
-// GetDomains - get user managing domains
 
 // @Summary 获取个人中心用户信息
 // @Tags account

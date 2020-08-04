@@ -16,11 +16,12 @@ require (
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-contrib/cors v1.3.0
-	github.com/gin-gonic/gin v1.4.0
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-openapi/jsonpointer v0.19.0 // indirect
 	github.com/go-openapi/jsonreference v0.19.0 // indirect
 	github.com/go-openapi/spec v0.19.0 // indirect
 	github.com/go-openapi/swag v0.19.0 // indirect
+	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/google/go-cmp v0.3.0 // indirect
 	github.com/icepy/go-dingtalk v0.0.0-20180430151047-e8997a391814
@@ -44,7 +45,7 @@ require (
 	github.com/valyala/fasttemplate v1.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
-	golang.org/x/tools v0.0.0-20190525145741-7be61e1b0e51 // indirect
+	golang.org/x/tools/gopls v0.4.1 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2

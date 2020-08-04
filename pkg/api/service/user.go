@@ -32,6 +32,7 @@ var (
 	errInvalidAccount = errors.New("账号或密码错误")
 	errInvalidCode    = errors.New("请输入正确验证码")
 	errAccountLocked  = errors.New("账号已被锁定,请联系管理员")
+	RootDomainCode    = "root"
 )
 
 const (
@@ -334,7 +335,7 @@ func (UserService) AssignRole(userId string, roleNames []string) {
 }
 
 // GetRelatedDomains - get related domains
-func (UserService) GetRelatedDomains(uid string) []model.Domain {
+func (UserService) GetRelatedDomains(uid string, skipRoot bool) []model.Domain {
 	var domains []model.Domain
 	var single = map[string]bool{}
 	//1.get roles by user
@@ -342,8 +343,10 @@ func (UserService) GetRelatedDomains(uid string) []model.Domain {
 	//2.get domains by roles
 	for _, rn := range roles {
 		role := roleDao.GetByName(rn[1])
-		if role.Domain.Code == "root" {
-			continue
+		if skipRoot {
+			if role.Domain.Code == RootDomainCode {
+				continue
+			}
 		}
 		if _, ok := single[role.Domain.Code]; !ok {
 			single[role.Domain.Code] = true
@@ -396,22 +399,32 @@ func (UserService) GetPermissionsOfDomain(uid string, domain string) []string {
 }
 
 //GetDataPermissionsOfDomain - Get data permission list  in specific domain(another backend system)
-func (UserService) GetDataPermissionsOfDomain(uid string, domain string) []map[string]string {
+func (us UserService) GetDataPermissionsOfDomain(uid, domain string) []map[string]string {
 	gs := perm.GetGroupsByUser(uid)
 	var (
 		polices []map[string]string
-		roles []string
+		roles   []string
 	)
 	for _, p := range gs {
-		roles = append(roles,p[1])
+		roles = append(roles, p[1])
 	}
-	for _,r := range roleDao.GetRolesByNames(roles){
-		for _,dp := range r.DataPerm {
+	dmHash := map[int]bool{}
+	for _, dm := range us.GetRelatedDomains(uid, false) {
+		if dm.Code != domain {
+			continue
+		}
+		dmHash[dm.Id] = true
+	}
+	for _, r := range roleDao.GetRolesByNames(roles) {
+		for _, dp := range r.DataPerm {
 			if dp.PermsType == 2 {
-				polices = append(polices, map[string]string{
-					"perm": dp.Perms,
-					"rule": dp.PermsRule,
-				})
+				if _, ok := dmHash[dp.DomainId]; ok {
+					polices = append(polices, map[string]string{
+						"perm": dp.Perms,
+						"rule": dp.PermsRule,
+						"weight" : strconv.Itoa(dp.OrderNum),
+					})
+				}
 			}
 		}
 	}
@@ -440,7 +453,7 @@ func (u UserService) VerifyDTAndReturnUserInfo(code string) (model.User, error) 
 		return model.User{}, err
 	}
 	thirdUser, err := userOauthDao.GetUserByOpenId(dtUser.Openid, 1)
-	user := u.InfoOfId(dto.GeneralGetDto{Id:thirdUser.UserId})
+	user := u.InfoOfId(dto.GeneralGetDto{Id: thirdUser.UserId})
 	if err == nil {
 		return user, nil
 	}

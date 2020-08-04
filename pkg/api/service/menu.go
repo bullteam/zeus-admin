@@ -16,14 +16,14 @@ var menuPermAliasDao = dao.MenuPermAlias{}
 type MenuService struct {
 }
 
-// InfoOfId - get menu info by id
-func (MenuService) InfoOfId(dto dto.GeneralGetDto) model.Menu {
-	return menuDao.Get(dto.Id, true)
-}
-
 // List - users list with pagination
 func (MenuService) List(treeDto dto.GeneralTreeDto) ([]model.Menu, int64) {
 	return menuDao.List(treeDto)
+}
+
+// InfoOfId - get menu info by id
+func (MenuService) InfoOfId(dto dto.GeneralGetDto) model.Menu {
+	return menuDao.Get(dto.Id, true)
 }
 
 // Create - create a menu item

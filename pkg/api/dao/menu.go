@@ -11,6 +11,20 @@ import (
 type Menu struct {
 }
 
+// List
+func (m Menu) List(treeDto dto.GeneralTreeDto) ([]model.Menu, int64) {
+	var menus []model.Menu
+	var total int64
+	db := GetDb()
+	// todo: data permission control
+	for sk, sv := range dto.TransformSearch(treeDto.Q, dto.MenuListSearchMapping) {
+		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	}
+	db.Preload("Domain").Order("order_num asc").Find(&menus)
+	db.Model(&model.Menu{}).Count(&total)
+	return menus, total
+}
+
 // GetMenusByIds
 func (m Menu) GetMenusByIds(ids string) []model.Menu {
 	var menus []model.Menu
@@ -52,19 +66,6 @@ func (m Menu) GetSubMenus(id int) []model.Menu {
 	db := GetDb()
 	db.Where("parent_id=?", id).First(&menus)
 	return menus
-}
-
-// List
-func (m Menu) List(treeDto dto.GeneralTreeDto) ([]model.Menu, int64) {
-	var menus []model.Menu
-	var total int64
-	db := GetDb()
-	for sk, sv := range dto.TransformSearch(treeDto.Q, dto.MenuListSearchMapping) {
-		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
-	}
-	db.Preload("Domain").Order("order_num asc").Find(&menus)
-	db.Model(&model.Menu{}).Count(&total)
-	return menus, total
 }
 
 // Create - new menu
