@@ -65,33 +65,42 @@
       :expand-all="expandAll"
       border
     >
-      <el-table-column :label="$t('dept.id')" prop="id" align="center" width="65">
+      <!-- <el-table-column :label="$t('dept.id')" prop="id" align="center" width="65">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
-      </el-table-column>
-      <el-table-column :label="$t('dept.actions')" align="center" width="280" class-name="small-padding fixed-width">
+      </el-table-column> -->
+      <el-table-column :label="$t('dept.actions')" align="center" width="350">
         <template slot-scope="scope">
+          <el-button v-permission="['/auth-system/menu:edit']" type="text" size="mini" @click="handleCreate(scope.row)">
+            {{ $t('table.createchild') }}
+          </el-button>
           <el-button
             v-permission="['/permission/dept:edit']"
-            type="primary"
+            type="text"
             size="mini"
-            style="width: 80px;"
             @click="handleLook(scope.row)">{{ $t('table.look') }}
           </el-button>
           <el-button
             v-permission="['/permission/dept:edit']"
             v-if="scope.row.name!=='未分配'"
-            type="primary"
+            type="text"
             size="mini"
             @click="handleUpdate(scope.row)">{{ $t('table.edit') }}
           </el-button>
           <el-button
             v-permission="['/permission/dept:del']"
             v-if="scope.row.name!=='未分配'"
-            type="danger"
+            type="text"
             size="mini"
             @click="handleDelete(scope.row)">{{ $t('table.delete') }}
+          </el-button>
+          <el-button
+            v-permission="['/permission/dept:edit']"
+            v-show="scope.row.parent_id===0"
+            type="text"
+            size="mini"
+            @click="handleRebuild(scope.row)">{{ $t('table.rebuild') }}
           </el-button>
         </template>
       </el-table-column>
@@ -134,7 +143,7 @@
 <script>
 import treeTable from '@/components/TreeTable'
 import treeToArray from '@/directive/customEval'
-import { fetchDeptList, createDept, updateDept, deleteDept, checkMemberDept } from '@/api/dept'
+import { fetchDeptList, createDept, updateDept, deleteDept, checkMemberDept, rebuildDept } from '@/api/dept'
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import PreCheck from '../layout/mixin/PreCheck'
@@ -238,17 +247,27 @@ export default {
       }
       this.handleFilter()
     },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        name: '',
-        remark: '',
-        callbackurl: '',
-        parents: ['0']
+    resetTemp(data) {
+      if (typeof data !== undefined) {
+        this.temp = {
+          id: undefined,
+          name: '',
+          remark: '',
+          callbackurl: '',
+          parents: [data.id]
+        }
+      } else {
+        this.temp = {
+          id: undefined,
+          name: '',
+          remark: '',
+          callbackurl: '',
+          parents: ['0']
+        }
       }
     },
-    handleCreate() {
-      this.resetTemp()
+    handleCreate(data) {
+      this.resetTemp(data)
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -290,6 +309,13 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    handleRebuild(row) {
+      this.listLoading = true
+      rebuildDept({ id: row.id }).then((res) => {
+        this.listLoading = false
+        this.$message.success(res.msg)
+      })
+    },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -298,6 +324,7 @@ export default {
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           tempData.parent_id = tempData.parents[this.temp.parents.length - 1]
           delete tempData.parent
+          console.log(this.temp)
           updateDept(this.temp.id, tempData).then(() => {
             this.getList()
             this.dialogFormVisible = false

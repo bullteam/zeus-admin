@@ -1,15 +1,15 @@
 package token
 
 const (
-	TOKEN_EQUAL          = `=`
-	TOEKN_DELIMITER      = `|`
-	TOKEN_LIKE           = `~`
-	TOKEN_IN_LEFT        = `(`
-	TOKEN_IN_RIGHT       = `)`
-	TOKEN_BETWEEN_LEFT   = `[`
-	TOKEN_BETWEEN_RIGHT  = `]`
-	TOKEN_LT = `<`
-	TOKEN_GT = `>`
+	TOKEN_EQUAL         = `=`
+	TOEKN_DELIMITER     = `|`
+	TOKEN_LIKE          = `~`
+	TOKEN_IN_LEFT       = `(`
+	TOKEN_IN_RIGHT      = `)`
+	TOKEN_BETWEEN_LEFT  = `[`
+	TOKEN_BETWEEN_RIGHT = `]`
+	TOKEN_LT            = `<`
+	TOKEN_GT            = `>`
 )
 
 type TokenType int

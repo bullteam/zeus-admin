@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/spf13/viper"
@@ -45,13 +46,15 @@ type UserService struct {
 	//oauthdao *dao.UserOAuthDao
 }
 
-func (u UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
+func (UserService) InfoOfId(dto dto.GeneralGetDto) model.User {
 	return userDao.Get(dto.Id, true)
 }
 
 // List - users list with pagination
-func (u UserService) List(dto dto.GeneralListDto) ([]model.User, int64) {
-	return userDao.List(dto)
+func (UserService) List(ctx context.Context, gdto dto.GeneralListDto) ([]model.User, int64) {
+	cols := "*"
+	gdto.Q, cols = dataPermService.DataPermFilter(ctx, "users", gdto)
+	return userDao.List(gdto, cols)
 }
 
 // Create - create a new account
@@ -420,9 +423,9 @@ func (us UserService) GetDataPermissionsOfDomain(uid, domain string) []map[strin
 			if dp.PermsType == 2 {
 				if _, ok := dmHash[dp.DomainId]; ok {
 					polices = append(polices, map[string]string{
-						"perm": dp.Perms,
-						"rule": dp.PermsRule,
-						"weight" : strconv.Itoa(dp.OrderNum),
+						"perm":   dp.Perms,
+						"rule":   dp.PermsRule,
+						"weight": strconv.Itoa(dp.OrderNum),
 					})
 				}
 			}

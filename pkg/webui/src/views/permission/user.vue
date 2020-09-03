@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column :label="$t('user.department')" width="120px">
         <template slot-scope="scope">
-          {{ scope.row.department.name }}
+          {{ scope.row.department.path }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('user.title')" align="center" width="120px">
@@ -74,21 +74,20 @@
           <el-tag>{{ scope.row.status | status }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('user.date')" width="150px" align="center">
+      <!-- <el-table-column :label="$t('user.date')" width="150px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.created_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-          <!-- <span>{{ scope.row.create_time }}</span> -->
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         :label="$t('user.actions')"
         align="center"
-        min-width="120"
-        class-name="small-padding fixed-width">
+        fixed="right"
+        min-width="200">
         <template slot-scope="scope">
           <el-button
             v-permission="['/permission/user:edit']"
-            type="primary"
+            type="text"
             size="mini"
             @click="handleUpdate(scope.row)">{{ $t('table.edit') }}
           </el-button>
@@ -96,12 +95,13 @@
             v-permission="['/permission/user:edit']"
             v-if="scope.row.status!=1"
             size="mini"
-            type="success"
+            type="text"
             @click="handleModifyStatus(scope.row,1)">{{ $t('table.enable') }}
           </el-button>
           <el-button
             v-permission="['/permission/user:edit']"
             v-if="scope.row.status!=2"
+            type="text"
             size="mini"
             @click="handleModifyStatus(scope.row,2)">{{ $t('table.disable') }}
           </el-button>
@@ -111,7 +111,7 @@
             trigger="click">
             <el-button
               size="mini"
-              type="success">更多 ↓
+              type="text">更多 ↓
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-permission="['/permission/user:edit']">
@@ -125,15 +125,6 @@
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <!--<el-button-->
-          <!--v-permission="['/permission/user:edit']"-->
-          <!--type="primary"-->
-          <!--size="mini"-->
-          <!--@click="handleCopyUpdate(scope.row)">{{ $t('table.copy') }}-->
-          <!--</el-button>-->
-          <!--<el-button v-permission="['/permission/user:del']" type="danger" size="mini" @click="handleDelete(scope.row)">-->
-          <!--{{ $t('table.delete') }}-->
-          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -605,6 +596,7 @@ export default {
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.temp.parents = ['0']
       this.findParent(this.temp.department_id, this.temp.parents, this.parentsList)
+      console.log(this.temp.parents)
       this.dialogStatus = 'update'
       this.rules.password[0].required = false
       this.dialogFormVisible = true
