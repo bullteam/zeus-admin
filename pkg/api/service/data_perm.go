@@ -107,8 +107,15 @@ func (dps DataPermService) DataPermFilter(ctx context.Context, perms string, gdt
 	if len(ruleData["p"]) < 1 {
 		return gdto.Q, dtoCols
 	}
-	sqlQuery := strings.Join(ruleData["p"], " ")
 	uid := int(ctx.Value("userId").(float64))
+
+	//if len(ruleData["p"]) > 1 {
+	//	for _,rd := range ruleData["p"] {
+	//		r := dao.GetDb().Raw(strings.Replace(rd, "{@login.uid}", strconv.Itoa(uid), -1)).Row()
+	//		r.Scan()
+	//	}
+	//}
+	sqlQuery := strings.Join(ruleData["p"], " ")
 	// pretreatment
 	// todo: can it be an execution chain?
 	rows, _ := dao.GetDb().Raw(strings.Replace(sqlQuery, "{@login.uid}", strconv.Itoa(uid), -1)).Rows()

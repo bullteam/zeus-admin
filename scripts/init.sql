@@ -131,36 +131,34 @@ insert  into `data_perm`(`id`,`domain_id`,`parent_id`,`name`,`perms`,`perms_rule
 
 DROP TABLE IF EXISTS `department`;
 
-CREATE TABLE `department` (
+CREATE TABLE `department`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '部门名称',
-  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级部门id',
-  `order_num` int(11) DEFAULT '1' COMMENT '排序',
-  `extend_field` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '扩展字段',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='组织架构表';
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '部门名称',
+  `parent_id` int(11) NOT NULL DEFAULT 0 COMMENT '上级部门id',
+  `order_num` int(11) NULL DEFAULT 1 COMMENT '排序',
+  `extend_field` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '扩展字段',
+  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `lft` int(11) NULL DEFAULT NULL,
+  `rgt` int(11) NULL DEFAULT NULL,
+  `level` int(11) NULL DEFAULT NULL,
+  `path` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `lr`(`lft`, `rgt`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '组织架构表';
 
 /*Data for the table `department` */
-
-insert  into `department`(`id`,`name`,`parent_id`,`order_num`,`extend_field`,`create_time`,`update_time`) values 
-(1,'公牛开源联盟',0,0,'{\"Id\":1,\"Name\":\"公牛开源联盟\",\"ParentId\":0,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(2,'人事部1',1,0,'{\"Id\":142415941,\"Name\":\"人事部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-12-06 20:44:07'),
-(3,'商务部',1,0,'{\"Id\":142520460,\"Name\":\"商务部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(4,'运营部',1,0,'{\"Id\":142522511,\"Name\":\"运营部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(5,'市场部',1,0,'{\"Id\":142567183,\"Name\":\"市场部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(6,'法务部',1,0,'{\"Id\":142575192,\"Name\":\"法务部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(7,'财务部',1,0,'{\"Id\":142601103,\"Name\":\"财务部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(8,'总经办',1,0,'{\"Id\":142611064,\"Name\":\"总经办\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(9,'技术部',1,0,'{\"Id\":142620036,\"Name\":\"技术部\",\"ParentId\":1,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(10,'前端',9,0,'{\"Id\":139519414,\"Name\":\"前端\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(11,'后端',9,0,'{\"Id\":142341752,\"Name\":\"后端\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(12,'运维',9,0,'{\"Id\":142496071,\"Name\":\"运维\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(13,'UI设计',9,0,'{\"Id\":142496629,\"Name\":\"UI设计\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(14,'客户端',9,0,'{\"Id\":142515400,\"Name\":\"客户端\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(15,'产品',9,0,'{\"Id\":142540419,\"Name\":\"产品\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44'),
-(16,'测试',9,0,'{\"Id\":142562183,\"Name\":\"测试\",\"ParentId\":142620036,\"Children\":null}','2019-11-06 00:18:44','2019-11-06 00:18:44');
+-- ----------------------------
+-- Records of department
+-- ----------------------------
+INSERT INTO `department` VALUES (1, '总公司', 0, 0, '', '2020-08-07 18:08:31', '2020-09-08 18:01:27', 1, 16, 1, '总公司');
+INSERT INTO `department` VALUES (2, '业务部', 1, 0, '', '2020-08-14 09:35:00', '2020-09-08 18:01:39', 2, 9, 2, '总公司 / 业务部');
+INSERT INTO `department` VALUES (3, '商务部', 2, 0, '', '2020-08-14 09:37:57', '2020-09-08 18:01:51', 3, 6, 3, '总公司 / 业务部 / 商务部');
+INSERT INTO `department` VALUES (4, '法律部', 2, 0, '', '2020-08-14 09:40:58', '2020-09-08 18:02:03', 7, 8, 3, '总公司 / 业务部 / 法律部');
+INSERT INTO `department` VALUES (5, '电商部', 3, 0, '', '2020-08-14 09:41:28', '2020-09-08 18:02:06', 4, 5, 4, '总公司 / 业务部 / 商务部 / 电商部');
+INSERT INTO `department` VALUES (6, '研发部', 1, 0, '', '2020-08-15 08:45:31', '2020-09-08 18:02:10', 10, 15, 2, '总公司 / 研发部');
+INSERT INTO `department` VALUES (7, '后端开发组', 6, 0, '', '2020-08-15 08:45:48', '2020-09-08 18:02:18', 11, 12, 3, '总公司 / 研发部 / 后端开发组');
+INSERT INTO `department` VALUES (8, '运维组', 6, 0, '', '2020-08-15 08:46:00', '2020-09-08 18:02:22', 13, 14, 3, '总公司 / 研发部 / 运维组');
 
 /*Table structure for table `domain` */
 
@@ -490,8 +488,8 @@ CREATE TABLE `user` (
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`username`,`mobile`,`sex`,`realname`,`password`,`salt`,`department_id`,`faceicon`,`email`,`status`,`create_time`,`last_login_time`,`title`) values 
-(1,'wutongci','1862011114',0,'西西','19a5211e74936366f687c4dec5f2ee94a35e6c7122928bca1e8bac3b9ac526d70fdd48aeac23fd51313f68a9f1a07d95b5a131f8544c698caedb63c4c20d76fe','d795e0811e7836c87522165ea83891f53c8b5d533ea2b7841a3fe6c949b61a904b338e1f174864e1410ea4eb3ed4941d88711ddddecceafaf07d74c4d17397bb',1,'','lily@hotmail.com',1,'2019-09-30 11:40:36','2019-09-20 11:40:40','developer'),
-(2,'admin','123123123',1,'admin','26ddcd90cc116bee0034543c0798bec8217944c0ee67ef6c5b71d24aade4c02759f34446051508714f18219ba734ce4abf7cc8d90f1f10dfd99e102115201f43','6078b3372fb9628e2a02f1e0020b9a0af65aa0d03498e603a5dfc2e1ba119b742264858f7af07286140547ec5f1b02626792ddeac5ac30b836ac9dbde7f28c4b',1,'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif','111@123.com',1,'2019-02-18 01:30:11','2019-02-18 01:30:11','超管');
+(1,'wutongci','1862011114',0,'西西','19a5211e74936366f687c4dec5f2ee94a35e6c7122928bca1e8bac3b9ac526d70fdd48aeac23fd51313f68a9f1a07d95b5a131f8544c698caedb63c4c20d76fe','d795e0811e7836c87522165ea83891f53c8b5d533ea2b7841a3fe6c949b61a904b338e1f174864e1410ea4eb3ed4941d88711ddddecceafaf07d74c4d17397bb',7,'','lily@hotmail.com',1,'2019-09-30 11:40:36','2019-09-20 11:40:40','developer'),
+(2,'admin','123123123',1,'admin','26ddcd90cc116bee0034543c0798bec8217944c0ee67ef6c5b71d24aade4c02759f34446051508714f18219ba734ce4abf7cc8d90f1f10dfd99e102115201f43','6078b3372fb9628e2a02f1e0020b9a0af65aa0d03498e603a5dfc2e1ba119b742264858f7af07286140547ec5f1b02626792ddeac5ac30b836ac9dbde7f28c4b',7,'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif','111@123.com',1,'2019-02-18 01:30:11','2019-02-18 01:30:11','超管');
 
 /*Table structure for table `user_email` */
 
