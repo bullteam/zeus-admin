@@ -39,13 +39,13 @@ require (
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.6.1
 	github.com/swaggo/gin-swagger v1.1.0
 	github.com/swaggo/swag v1.5.0
 	github.com/valyala/fasttemplate v1.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
-	golang.org/x/tools v0.0.0-20190525145741-7be61e1b0e51 // indirect
+	golang.org/x/tools/gopls v0.4.1 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2

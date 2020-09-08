@@ -1,6 +1,8 @@
 package dto
 
-import "strings"
+import (
+	"strings"
+)
 
 // GeneralListDto - General list request params
 type GeneralListDto struct {
@@ -31,3 +33,16 @@ func TransformSearch(qs string, mapping map[string]string) (ss map[string]string
 	}
 	return
 }
+
+//
+//// TransformSearch - transform search query
+//func ReplaceSearch(qs string, mapping map[string]string) string {
+//	var ss = make(map[string]string)
+//	for _, v := range strings.Split(qs, ",") {
+//		vs := strings.Split(v, "=")
+//		if _, ok := mapping[vs[0]]; ok {
+//			ss[mapping[vs[0]]] = vs[1]
+//		}
+//	}
+//	return
+//}

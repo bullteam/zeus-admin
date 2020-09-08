@@ -48,7 +48,7 @@ type MenuEditDto struct {
 //	return true
 //}
 
-func permsValidate (fl validator.FieldLevel) bool {
+func permsValidate(fl validator.FieldLevel) bool {
 	val := fl.Field().String()
-	return !strings.Contains(val,",")
+	return !strings.Contains(val, ",")
 }

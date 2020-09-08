@@ -5,7 +5,7 @@ import (
 	"zeus/pkg/api/model"
 )
 
-type UserSecretDao struct {}
+type UserSecretDao struct{}
 
 func (u UserSecretDao) Get(uid int) model.UserSecret {
 	var userSecret model.UserSecret

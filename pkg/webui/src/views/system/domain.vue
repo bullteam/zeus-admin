@@ -40,10 +40,10 @@
           <span>{{ scope.row.updated_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('domain.actions')" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('domain.actions')" align="center" width="200">
         <template slot-scope="scope">
-          <el-button v-permission="['/auth-system/domain:edit']" type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
-          <el-button v-permission="['/auth-system/domain:del']" type="danger" size="mini" @click="handleDelete(scope.row)">{{ $t('table.delete') }}</el-button>
+          <el-button v-permission="['/auth-system/domain:edit']" type="text" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+          <el-button v-permission="['/auth-system/domain:del']" type="text" size="mini" @click="handleDelete(scope.row)">{{ $t('table.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>

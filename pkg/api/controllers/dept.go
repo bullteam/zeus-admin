@@ -109,6 +109,21 @@ func (d *DeptController) Edit(c *gin.Context) {
 }
 
 // @Tags Department
+// @Summary 重置部门树
+// @Security ApiKeyAuth
+// @Param id path int true "部门id"
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"msg":"done"}"
+// @Router /v1/depts/rebuild [put]
+func (d *DeptController) Rebuild(c *gin.Context) {
+	var deptDto dto.GeneralGetDto
+	if d.BindAndValidate(c, &deptDto) {
+		deptService.Rebuild(deptDto)
+		ok(c, "ok.UpdateDone")
+	}
+}
+
+// @Tags Department
 // @Summary 检查部门下面是否有用户
 // @Security ApiKeyAuth
 // @Param id path int true "部门id"

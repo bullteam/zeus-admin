@@ -14,8 +14,8 @@ type DeptCreateDto struct {
 
 //DeptEditDto - binding domain edition params
 type DeptEditDto struct {
-	Id   int    `uri:"id" json:"id" binding:"required"`
-	Name string `form:"name" json:"name" binding:"required"`
-	//ParentId int    `form:"parent_id" json:"parent_id" binding:"required"`
-	OrderNum int `form:"order_num" json:"order_num"`
+	Id       int    `uri:"id" json:"id" binding:"required"`
+	Name     string `form:"name" json:"name" binding:"required"`
+	ParentId int    `form:"parent_id" json:"parent_id" binding:"gte=0" `
+	OrderNum int    `form:"order_num" json:"order_num"`
 }

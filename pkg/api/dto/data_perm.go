@@ -3,6 +3,7 @@ package dto
 // DataPermListSearchMapping - define search query keys in data permission list page
 var DataPermListSearchMapping = map[string]string{
 	"d": "domain_id",
+	"r": "perms",
 }
 
 type DataPermAddDto struct {

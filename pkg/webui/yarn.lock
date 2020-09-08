@@ -7101,9 +7101,9 @@ range-parser@^1.2.1, range-parser@~1.2.0, range-parser@~1.2.1:
   resolved "https://registry.npm.taobao.org/range-parser/download/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha1-PPNwI9GZ4cJNGlW4SADC8+ZGgDE=
 
-"raphael@git+https://github.com/nhn/raphael.git#2.2.0-c":
+"raphael@https://github.com/nhn/raphael.git#2.2.0-c":
   version "2.2.0-c"
-  resolved "git+https://github.com/nhn/raphael.git#78a6ed3ec269f33b6457b0ec66f8c3d1f2ed70e0"
+  resolved "https://github.com/nhn/raphael.git#78a6ed3ec269f33b6457b0ec66f8c3d1f2ed70e0"
   dependencies:
     eve "git://github.com/adobe-webplatform/eve.git#eef80ed"
 

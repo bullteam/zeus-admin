@@ -1,0 +1,51 @@
+package token
+
+const (
+	TOKEN_EQUAL         = `=`
+	TOEKN_DELIMITER     = `|`
+	TOKEN_LIKE          = `~`
+	TOKEN_IN_LEFT       = `(`
+	TOKEN_IN_RIGHT      = `)`
+	TOKEN_BETWEEN_LEFT  = `[`
+	TOKEN_BETWEEN_RIGHT = `]`
+	TOKEN_LT            = `<`
+	TOKEN_GT            = `>`
+)
+
+type TokenType int
+
+const (
+	TOKEN_TYPE_ERROR TokenType = iota
+	TOKEN_TYPE_KEY
+	TOKEN_TYPE_EQUAL
+	TOKEN_TYPE_VAL
+	TOKEN_TYPE_LIKE
+	TOKEN_TYPE_VAL_LIKE
+	TOKEN_TYPE_GT
+	TOKEN_TYPE_VAL_GT
+	TOKEN_TYPE_LT
+	TOKEN_TYPE_VAL_LT
+	TOKEN_TYPE_VAL_IN
+	TOKEN_TYPE_VAL_BETWEEN
+	TOKEN_TYPE_IN_LEFT
+	TOKEN_TYPE_BETWEEN_LEFT
+	TOKEN_TYPE_DELIMITER
+	TOKEN_TYPE_END
+)
+
+type OpType int
+
+const (
+	TOKEN_OP_TYPE_EQ OpType = iota
+	TOKEN_OP_TYPE_LIKE
+	TOKEN_OP_TYPE_BETWEEN
+	TOKEN_OP_TYPE_IN
+	TOKEN_OP_TYPE_LT
+	TOKEN_OP_TYPE_GT
+)
+
+type Token struct {
+	Type   TokenType
+	Value  interface{}
+	OpType OpType
+}

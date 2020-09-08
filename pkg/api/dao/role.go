@@ -11,6 +11,20 @@ import (
 type Role struct {
 }
 
+// List - users list
+func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
+	var roles []model.Role
+	var total int64
+	db := GetDb()
+	for sk, sv := range dto.TransformSearch(listDto.Q, dto.RoleListSearchMapping) {
+		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
+	}
+	db = db.Preload("DataPerm")
+	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)
+	db.Model(&model.Role{}).Count(&total)
+	return roles, total
+}
+
 //Get - get single roel info
 func (Role) Get(id int, preload bool) model.Role {
 	var role model.Role
@@ -44,20 +58,6 @@ func (u Role) GetByName(name string) model.Role {
 	var role model.Role
 	db.Where("role_name = ?", name).Preload("Domain").First(&role)
 	return role
-}
-
-// List - users list
-func (u Role) List(listDto dto.GeneralListDto) ([]model.Role, int64) {
-	var roles []model.Role
-	var total int64
-	db := GetDb()
-	for sk, sv := range dto.TransformSearch(listDto.Q, dto.RoleListSearchMapping) {
-		db = db.Where(fmt.Sprintf("%s = ?", sk), sv)
-	}
-	db = db.Preload("DataPerm")
-	db.Preload("Domain").Offset(listDto.Skip).Limit(listDto.Limit).Find(&roles)
-	db.Model(&model.Role{}).Count(&total)
-	return roles, total
 }
 
 // Create - new role

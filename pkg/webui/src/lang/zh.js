@@ -108,7 +108,9 @@ export default {
     move: '移出',
     reset: '重置密码',
     look: '查看用户',
-    move_all: '批量移出'
+    move_all: '批量移出',
+    rebuild: '重置树结构',
+    createchild: '创建子部门'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
