@@ -33,6 +33,7 @@ func TransformSearch(qs string, mapping map[string]string) (ss map[string]string
 	}
 	return
 }
+
 //
 //// TransformSearch - transform search query
 //func ReplaceSearch(qs string, mapping map[string]string) string {

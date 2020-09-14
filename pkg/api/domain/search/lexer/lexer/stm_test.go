@@ -124,7 +124,7 @@ func TestStmValueGT(t *testing.T) {
 	fun = fun(lx)
 	tk = <-lx.Tokens
 	assert.Equal(t, "100", tk.Value)
-	assert.Equal(t,token.TOKEN_TYPE_VAL_GT,tk.Type)
+	assert.Equal(t, token.TOKEN_TYPE_VAL_GT, tk.Type)
 }
 
 func TestStmValueLT(t *testing.T) {
@@ -144,5 +144,5 @@ func TestStmValueLT(t *testing.T) {
 	fun = fun(lx)
 	tk = <-lx.Tokens
 	assert.Equal(t, "10", tk.Value)
-	assert.Equal(t,token.TOKEN_TYPE_VAL_LT,tk.Type)
+	assert.Equal(t, token.TOKEN_TYPE_VAL_LT, tk.Type)
 }

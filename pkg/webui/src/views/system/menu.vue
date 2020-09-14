@@ -47,10 +47,10 @@
         </el-table-column>
         <el-table-column :label="$t('menu.actions')" width="200" align="center">
           <template v-if="scope.row.id" slot-scope="scope">
-            <el-button v-permission="['/auth-system/menu:edit']" type="text" @click="handleUpdate(scope.row)">
+            <el-button v-permission="['/auth-system/menu:edit']" type="text" size="mini" @click="handleUpdate(scope.row)">
               {{ $t('table.edit') }}
             </el-button>
-            <el-button v-permission="['/auth-system/menu:del']" type="text" @click="handleDelete(scope.row)">
+            <el-button v-permission="['/auth-system/menu:del']" type="text" size="mini" @click="handleDelete(scope.row)">
               {{ $t('table.delete') }}
             </el-button>
           </template>

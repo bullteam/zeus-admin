@@ -16,7 +16,7 @@ func (dp DataPerm) List(listDto dto.GeneralListDto) ([]model.DataPerm, int64) {
 	db := GetDb()
 	ps, err := parser.Parse(listDto.Q)
 	if err == nil {
-		for _, sv := range searchAdapter.GenerateConditions(ps,dto.DataPermListSearchMapping) {
+		for _, sv := range searchAdapter.GenerateConditions(ps, dto.DataPermListSearchMapping) {
 			k := sv[0].(string)
 			db = db.Where(k, sv[1:]...)
 		}

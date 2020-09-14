@@ -93,7 +93,9 @@ export default {
     delete: 'Delete',
     cancel: 'Cancel',
     confirm: 'Confirm',
-    copy: 'Copy'
+    copy: 'Copy',
+    rebuild: 'Rebuild',
+    createchild: 'Create childnode'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

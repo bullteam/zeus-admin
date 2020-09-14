@@ -15,8 +15,8 @@ func init() {
 }
 func TestGetUsers(t *testing.T) {
 	depts, err := GetDepartments()
-	assert.NoError(t,err)
-	if err != nil && depts != nil{
+	assert.NoError(t, err)
+	if err != nil && depts != nil {
 		for _, depts := range depts.(map[int][]dingtalk.Department) {
 			for _, dept := range depts {
 				users, _ := GetUsers(dept.Id)

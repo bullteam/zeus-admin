@@ -11,7 +11,7 @@ type DomainDao struct {
 }
 
 // List - Domains list
-func (u DomainDao) List(gdto dto.GeneralListDto) ([]model.Domain, int64) {
+func (u DomainDao) List(gdto dto.GeneralListDto, cols string) ([]model.Domain, int64) {
 	// todo : dataperm.GenerateConditions("v1/domains",gdto)
 	// "domains"
 	// relatedDataPerm := DataPerm.GetDataPermsByRoute(DataPerm{},"domains")
@@ -20,9 +20,12 @@ func (u DomainDao) List(gdto dto.GeneralListDto) ([]model.Domain, int64) {
 	db := GetDb()
 	ps, err := parser.Parse(gdto.Q)
 	if err == nil {
-		for _, sv := range searchAdapter.GenerateConditions(ps,dto.DomainListSearchMapping) {
+		for _, sv := range searchAdapter.GenerateConditions(ps, dto.DomainListSearchMapping) {
 			db = db.Where(sv[0], sv[1:]...)
 		}
+	}
+	if len(cols) > 0 {
+		db = db.Select(cols)
 	}
 	//for sk, sv := range dto.TransformSearch(listDto.Q, dto.DomainListSearchMapping) {
 	//	db = db.Where(fmt.Sprintf("%s = ?", sk), sv)

@@ -1,4 +1,5 @@
 package dataperm
+
 // todo :
 // make a data perm rule system!
 // sample:

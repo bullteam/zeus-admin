@@ -66,12 +66,11 @@
       <el-table-column
         :label="$t('user.actions')"
         align="center"
-        width="80"
-        class-name="small-padding fixed-width">
+        width="80">
         <template slot-scope="scope">
           <el-button
             v-permission="['/permission/user:edit']"
-            type="primary"
+            type="text"
             size="mini"
             @click="handleUpdate(scope.row)">{{ $t('table.move') }}
           </el-button>

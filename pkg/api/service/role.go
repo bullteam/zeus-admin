@@ -36,7 +36,7 @@ func (RoleService) AssignPermission(roleId int, menuIds string, dataPermCount in
 		var policies [][]string
 		for _, m := range menus {
 			if m.Url == "" && m.Perms != "" {
-				//Do not allow comma which would cause panic error with casbin rules
+				//Do not allow comma which would cause panic error in casbin rules
 				m.Perms = strings.Replace(m.Perms, ",", "|", -1)
 				policies = append(policies, []string{roleData.RoleName, m.Perms, "*", roleData.Domain.Code})
 			}
@@ -45,10 +45,12 @@ func (RoleService) AssignPermission(roleId int, menuIds string, dataPermCount in
 	} else {
 		// if we have data permission sets , should not remove entire role relative records
 		// fixed issue #23
-		if dataPermCount > 0 {
-			role.DeletePermPolicy(roleData.RoleName)
-		} else {
-			role.DeletePerm(roleData.RoleName)
+		if roleData.RoleName != "" {
+			if dataPermCount > 0 {
+				role.DeletePermPolicy(roleData.RoleName)
+			} else {
+				role.DeletePerm(roleData.RoleName)
+			}
 		}
 	}
 }
@@ -117,7 +119,7 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 	return roleModel, nil
 }
 
-// Copy - copy role and permissions belong to it
+// Copy - copy role and permissions
 func (rs RoleService) Copy(roleDto dto.GeneralGetDto) (model.Role, error) {
 	roleInfo := roleDao.Get(roleDto.Id, false)
 	roleModel := model.Role{
@@ -176,7 +178,7 @@ func (rl RoleService) Delete(dto dto.GeneralDelDto) int64 {
 	return c.RowsAffected
 }
 
-// 通过角色id获取数据权限列表
+// GetRoleDataPermsByRoleId
 func (rl RoleService) GetRoleDataPermsByRoleId(roleId int) ([]model.GetByRoleIdData, int64) {
 	return roleDataPermDao.GetByRoleId(roleId)
 }

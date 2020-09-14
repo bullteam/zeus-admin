@@ -51,7 +51,7 @@ func (u *UserController) Get(c *gin.Context) {
 func (u *UserController) List(c *gin.Context) {
 	var listDto dto.GeneralListDto
 	if u.BindAndValidate(c, &listDto) {
-		data, total := userService.List(listDto)
+		data, total := userService.List(c, listDto)
 		resp(c, map[string]interface{}{
 			"result": data,
 			"total":  total,

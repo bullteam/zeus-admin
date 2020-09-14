@@ -35,6 +35,14 @@ export function updateDept(id, data) {
   })
 }
 
+export function rebuildDept(data) {
+  return request({
+    url: 'v1/depts/' + data.id + '/rebuild',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
 export function checkMemberDept(data) {
   return request({
     url: 'v1/depts/' + data.id + '/check-no-member',

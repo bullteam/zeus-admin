@@ -41,9 +41,9 @@ func Parse(source string) ([]ParsePair, error) {
 			key = ""
 		case token.TOKEN_TYPE_VAL_GT,
 			token.TOKEN_TYPE_VAL_LT:
-			val,err := strconv.Atoi(tk.Value.(string))
+			val, err := strconv.Atoi(tk.Value.(string))
 			if err != nil {
-				return tokens,err
+				return tokens, err
 			}
 			tokens = append(tokens, ParsePair{
 				Key:   key,
