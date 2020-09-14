@@ -3,7 +3,8 @@ export default {
   name: 'PreCheck',
   mounted() {
     // todo : check if password not chant for a long time
-    this.intervalCheckIdle()
+    // 如果此后台需要过等保3,可以开放下这个定时空闲检查函数
+    // this.intervalCheckIdle()
   },
   methods: {
     intervalCheckIdle: function() {

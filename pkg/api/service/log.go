@@ -18,8 +18,8 @@ var operationLogDao = dao.OperationLogDao{}
 type LogService struct {
 }
 
-// LoginLogDetail log login detail
-func (LogService) LoginLogDetail(dto dto.GeneralGetDto) LoginLog {
+// LoginLogInfoOfId log login detail
+func (LogService) LoginLogInfoOfId(dto dto.GeneralGetDto) LoginLog {
 	return loginLogDao.Detail(dto.Id)
 }
 
@@ -28,7 +28,7 @@ func (LogService) LoginLogLists(dto dto.LoginLogListDto) ([]dao.LoginLogList, in
 	return loginLogDao.Lists(dto)
 }
 
-func (LogService) OperationLogDetail(dto dto.GeneralGetDto) OperationLog {
+func (LogService) OperationLogInfoOfId(dto dto.GeneralGetDto) OperationLog {
 	return operationLogDao.Detail(dto.Id)
 }
 

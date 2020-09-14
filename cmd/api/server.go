@@ -92,6 +92,7 @@ func setup() {
 }
 
 func run() error {
+	//todo : enable pprof
 	engine := gin.Default()
 	router.SetUp(engine, cors)
 	return engine.Run(":" + port)

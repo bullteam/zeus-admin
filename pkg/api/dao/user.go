@@ -10,17 +10,6 @@ import (
 type User struct {
 }
 
-//Get - get single user info
-func (User) Get(id int, preload bool) model.User {
-	var user model.User
-	db := GetDb()
-	if preload {
-		db = db.Preload("Department")
-	}
-	db.Where("id = ?", id).First(&user)
-	return user
-}
-
 // List - users list
 func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	var users []model.User
@@ -32,6 +21,17 @@ func (User) List(listDto dto.GeneralListDto) ([]model.User, int64) {
 	db.Preload("Department"). /*Preload("Roles")*/ Offset(listDto.Skip).Limit(listDto.Limit).Find(&users)
 	db.Model(&model.User{}).Count(&total)
 	return users, total
+}
+
+//Get - get single user info
+func (User) Get(id int, preload bool) model.User {
+	var user model.User
+	db := GetDb()
+	if preload {
+		db = db.Preload("Department")
+	}
+	db.Where("id = ?", id).First(&user)
+	return user
 }
 
 // Create - new user

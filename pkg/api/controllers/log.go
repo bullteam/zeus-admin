@@ -20,7 +20,7 @@ type LogController struct {
 // @Router /v1/log/login/{logId} [get]
 func (LogController) LoginLogDetail(c *gin.Context) {
 	logId := int(c.Value("id").(float64))
-	data := logService.LoginLogDetail(dto.GeneralGetDto{Id: logId})
+	data := logService.LoginLogInfoOfId(dto.GeneralGetDto{Id: logId})
 	resp(c, map[string]interface{}{
 		"result": data,
 	})
@@ -50,7 +50,7 @@ func (LogController) LoginLogLists(c *gin.Context) {
 // @Router /v1/log/operation [get]
 func (LogController) OperationLogDetail(c *gin.Context) {
 	logId := int(c.Value("id").(float64))
-	data := logService.OperationLogDetail(dto.GeneralGetDto{Id: logId})
+	data := logService.OperationLogInfoOfId(dto.GeneralGetDto{Id: logId})
 	resp(c, map[string]interface{}{
 		"result": data,
 	})

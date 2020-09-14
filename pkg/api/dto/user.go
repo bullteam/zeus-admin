@@ -94,4 +94,3 @@ func pwdValidate(fl validator.FieldLevel) bool {
 	}
 	return true
 }
-

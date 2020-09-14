@@ -29,7 +29,7 @@ func (RoleService) List(dto dto.GeneralListDto) ([]model.Role, int64) {
 }
 
 // AssignPermission - assign permissions
-func (RoleService) AssignPermission(roleId int, menuIds string,dataPermCount int) {
+func (RoleService) AssignPermission(roleId int, menuIds string, dataPermCount int) {
 	roleData := roleDao.Get(roleId, true)
 	menus := menuDao.GetMenusPermByIds(menuIds)
 	if len(menus) > 0 {
@@ -107,7 +107,7 @@ func (rs RoleService) Create(dto dto.RoleCreateDto) (model.Role, error) {
 		}
 		dataPermCount := len(dto.DataPermIds)
 		if dto.MenuIds != "" {
-			rs.AssignPermission(roleModel.Id, dto.MenuIds,dataPermCount)
+			rs.AssignPermission(roleModel.Id, dto.MenuIds, dataPermCount)
 		}
 		// insert data permissions
 		if dataPermCount > 0 {
@@ -137,7 +137,7 @@ func (rs RoleService) Copy(roleDto dto.GeneralGetDto) (model.Role, error) {
 			return model.Role{}, c.Error
 		}
 		if roleModel.MenuIds != "" {
-			rs.AssignPermission(roleModel.Id, roleModel.MenuIds,0)
+			rs.AssignPermission(roleModel.Id, roleModel.MenuIds, 0)
 		}
 	}
 	return roleModel, nil
@@ -152,7 +152,7 @@ func (rs RoleService) Update(roleDto dto.RoleEditDto) int64 {
 		"menu_ids":     roleDto.MenuIds,
 		"menu_ids_ele": roleDto.MenuIdsEle,
 	})
-	rs.AssignPermission(roleDto.Id, roleDto.MenuIds,len(roleDto.DataPermIds))
+	rs.AssignPermission(roleDto.Id, roleDto.MenuIds, len(roleDto.DataPermIds))
 	_ = rs.AssignDataPerm(roleDto.Id, roleDto.DataPermIds)
 
 	return c.RowsAffected

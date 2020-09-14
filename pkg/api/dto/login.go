@@ -26,6 +26,7 @@ type BindThirdDto struct {
 type UnBindThirdDto struct {
 	OAuthType int `form:"from"`
 }
+
 // LoginDingtalkDto - ding talk login
 type LoginDingtalkDto struct {
 	Code string `form:"code"`

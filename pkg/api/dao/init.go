@@ -5,8 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	//_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/spf13/viper"
+	"zeus/pkg/api/domain/search/adapter/statement"
 	"zeus/pkg/api/log"
 )
 
@@ -14,8 +15,12 @@ var (
 	db *gorm.DB
 )
 
-const DRIVER_MYSQL = "mysql"
-const DRIVER_SQLITE = "sqlite"
+const (
+	DRIVER_MYSQL  = "mysql"
+	DRIVER_SQLITE = "sqlite"
+)
+
+var searchAdapter = &statement.SqlSearchAdapter{}
 
 // Setup : Connect to mysql database
 func Setup() {
@@ -36,7 +41,7 @@ func Setup() {
 		charset := viper.GetString("database.mysql.charset")
 
 		dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=Local", user, password, host, name, charset)
-		log.Info(dsn)
+		log.Debug(dsn)
 		db, err = gorm.Open("mysql", dsn)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Failed to connect mysql %s", err.Error()))
