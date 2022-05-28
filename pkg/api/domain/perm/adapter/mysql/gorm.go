@@ -1,8 +1,8 @@
 package mysql
 
 import (
-	"github.com/casbin/casbin/model"
-	"github.com/casbin/casbin/persist"
+	"github.com/casbin/casbin/v2/model"
+	"github.com/casbin/casbin/v2/persist"
 	"github.com/jinzhu/gorm"
 	"runtime"
 	"strings"
@@ -10,7 +10,7 @@ import (
 	apiModel "zeus/pkg/api/model"
 )
 
-// MysqlGormAdapter represents the Xorm adapter for policy storage.
+// GormAdapter MysqlGormAdapter represents the Xorm adapter for policy storage.
 type GormAdapter struct {
 	o *gorm.DB
 }
@@ -140,7 +140,7 @@ func (a *GormAdapter) RemovePolicy(sec string, ptype string, rule []string) erro
 func (a *GormAdapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error {
 	line := apiModel.CasbinRule{}
 	line.PType = ptype
-	filter := []string{}
+	var filter []string
 	filter = append(filter, "p_type=?")
 	val := []interface{}{line.PType}
 	if fieldIndex <= 0 && 0 < fieldIndex+len(fieldValues) {
@@ -186,7 +186,7 @@ func (a *GormAdapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex 
 		}
 	}
 	//_, err := a.o.Delete(&line, filter...)
-	params := []interface{}{}
+	var params []interface{}
 	params = append(params, strings.Join(filter, " and "))
 	params = append(params, val...)
 	//do := a.o.Delete(apiModel.CasbinRule{}, "p_type=? and v0=? and v1=? and v2=? and v3=? and v4=? and v5=?", line.PType,

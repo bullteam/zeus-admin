@@ -5,7 +5,7 @@ import (
 )
 
 // CheckPerm : check permission by role with domain
-func CheckPerm(roleName, zone, action, domain string) bool {
+func CheckPerm(roleName, zone, action, domain string) (bool, error) {
 	return perm.Enforce(roleName, zone, action, domain)
 }
 

@@ -58,7 +58,7 @@ func (UserService) List(ctx context.Context, gdto dto.GeneralListDto) ([]model.U
 }
 
 // Create - create a new account
-func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
+func (us UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 	//if username is exits,it can't create this user
 	userModel := userDao.GetByUserName(userDto.Username)
 	if userModel.Username == userDto.Username {
@@ -85,14 +85,14 @@ func (u UserService) Create(userDto dto.UserCreateDto) (*model.User, error) {
 	}
 
 	if userDto.Roles != "" {
-		u.AssignRole(strconv.Itoa(newUser.Id), strings.Split(userDto.Roles, ","))
+		us.AssignRole(strconv.Itoa(newUser.Id), strings.Split(userDto.Roles, ","))
 	}
 
 	return &userModel, nil
 }
 
 // Update - update user's information
-func (u UserService) Update(userDto dto.UserEditDto) int64 {
+func (us UserService) Update(userDto dto.UserEditDto) int64 {
 	userModel := model.User{
 		Id: userDto.Id,
 	}
@@ -105,7 +105,7 @@ func (u UserService) Update(userDto dto.UserEditDto) int64 {
 		"sex":           userDto.Sex,
 		"email":         userDto.Email,
 	})
-	u.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles, ","))
+	us.AssignRole(strconv.Itoa(userDto.Id), strings.Split(userDto.Roles, ","))
 	return c.RowsAffected
 }
 
@@ -181,17 +181,17 @@ func (UserService) VerifyAndReturnLdapUserInfo(dto dto.LoginDto) (bool, model.Us
 	return true, userDao.GetByUserName(dto.Username)
 }
 
-// NeedToVerifySmsCode  - check if account need to display sms code input
-func (u UserService) VerifySmsCodeIfNeedToShow(twoFaDto dto.TwoFaDto) bool {
+// VerifySmsCodeIfNeedToShow NeedToVerifySmsCode  - check if account need to display sms code input
+func (us UserService) VerifySmsCodeIfNeedToShow(twoFaDto dto.TwoFaDto) bool {
 	if viper.GetBool("security.2fa.enabled") {
 		userModel := userDao.GetByUserName(twoFaDto.Username)
-		return u.VerifySmsCodeIfNeeded(userModel)
+		return us.VerifySmsCodeIfNeeded(userModel)
 	}
 	return false
 }
 
 // VerifySmsCodeIfNeeded  - check if account need sms code verification
-func (u UserService) VerifySmsCodeIfNeeded(userModel model.User) bool {
+func (us UserService) VerifySmsCodeIfNeeded(userModel model.User) bool {
 	// first time login then means sms code needed
 	if userModel.CreateTime == userModel.LastLoginTime {
 		return true
@@ -201,7 +201,7 @@ func (u UserService) VerifySmsCodeIfNeeded(userModel model.User) bool {
 	//	return true
 	//}
 	//period, _ := strconv.Atoi(p)
-	period := u.GetNoSmsCodeDurationDay()
+	period := us.GetNoSmsCodeDurationDay()
 	// 0 means need sms code forever
 	if period < 1 {
 		return true
@@ -222,7 +222,7 @@ func (UserService) GetNoSmsCodeDurationDay() int {
 }
 
 // VerifyAndReturnUserInfo - login and return user info
-func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error, model.User) {
+func (us UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error, model.User) {
 	userModel := userDao.GetByUserName(loginDto.Username)
 	// Account not exits
 	if userModel.Id < 1 {
@@ -235,8 +235,8 @@ func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error
 	if login.VerifyPassword(loginDto.Password, userModel) {
 		// destroy time records
 		_ = cache.Del(locKey)
-		if u.VerifySmsCodeIfNeeded(userModel) {
-			if err := u.Verify2Fa(loginDto.Code, userModel); err != nil {
+		if us.VerifySmsCodeIfNeeded(userModel) {
+			if err := us.Verify2Fa(loginDto.Code, userModel); err != nil {
 				return false, errInvalidCode, model.User{}
 			}
 		}
@@ -244,12 +244,12 @@ func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error
 		// 判断是否超过了设置的天数间隔，超过再更新登录时间
 		// 这样将实现强制在间隔时间内进行2fa验证
 		if viper.GetBool("security.2fa.enabled") {
-			period := u.GetNoSmsCodeDurationDay()
+			period := us.GetNoSmsCodeDurationDay()
 			if time.Now().Sub(userModel.LastLoginTime).Seconds() >= float64(24*3600*period) {
-				u.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
+				us.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
 			}
 		} else {
-			u.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
+			us.UpdateLoginTime(dto.UserEditDto{Id: userModel.Id})
 		}
 		return true, nil, userModel
 	} else {
@@ -259,7 +259,7 @@ func (u UserService) VerifyAndReturnUserInfo(loginDto dto.LoginDto) (bool, error
 			// 累计此次错误，已到达错误上限，所以-1
 			if failTimes >= viper.GetInt("login.failUntilLock")-1 {
 				// lock
-				if u.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
+				if us.UpdateStatus(dto.UserEditStatusDto{Id: userModel.Id, Status: UserStatusLock}) > 0 {
 					// recount
 					_ = cache.Del(locKey)
 					return false, errAccountLocked, model.User{}
@@ -450,30 +450,30 @@ func (UserService) MoveToAnotherDepartment(uids []string, target int) error {
 }
 
 //VerifyDTAndReturnUserInfo - verify dingtalk and return user info
-func (u UserService) VerifyDTAndReturnUserInfo(code string) (model.User, error) {
+func (us UserService) VerifyDTAndReturnUserInfo(code string) (model.User, error) {
 	dtUser, err := login.GetDingTalkUserInfo(code)
 	if err != nil {
 		return model.User{}, err
 	}
 	thirdUser, err := userOauthDao.GetUserByOpenId(dtUser.Openid, 1)
-	user := u.InfoOfId(dto.GeneralGetDto{Id: thirdUser.UserId})
+	user := us.InfoOfId(dto.GeneralGetDto{Id: thirdUser.UserId})
 	if err == nil {
 		return user, nil
 	}
 	return model.User{}, err
 }
 
-func (u UserService) UnBindUserDingtalk(from int, uid int) error {
+func (us UserService) UnBindUserDingtalk(from int, uid int) error {
 	return userOauthDao.DeleteByUseridAndFrom(from, uid)
 }
 
-func (u UserService) GetBindOauthUserInfo(uid int) (UserInfo model.UserOAuth) {
+func (us UserService) GetBindOauthUserInfo(uid int) (UserInfo model.UserOAuth) {
 	return userOauthDao.Get(uid)
 }
 
 //GetDomainMenu -  get specific user's menus of specific domain
-func (u UserService) GetDomainMenu(uid string, domain string) []model.Menu {
-	roles := u.GetAllRoles(uid)
+func (us UserService) GetDomainMenu(uid string, domain string) []model.Menu {
+	roles := us.GetAllRoles(uid)
 	mids := []string{}
 	for _, r := range roleDao.GetRolesByNames(roles) {
 		if r.Domain.Code == domain {
@@ -484,7 +484,7 @@ func (u UserService) GetDomainMenu(uid string, domain string) []model.Menu {
 }
 
 //CheckPermission - check user's permission in specific domain with specific policy
-func (u UserService) CheckPermission(uid string, domain string, policy string) bool {
+func (us UserService) CheckPermission(uid string, domain string, policy string) (bool, error) {
 	//Could it be an alias?
 	domainModel := domainDao.GetByCode(domain)
 	row := menuPermAliasDao.GetByAlias(policy, domainModel.Id)
@@ -495,14 +495,14 @@ func (u UserService) CheckPermission(uid string, domain string, policy string) b
 	return perm.Enforce(uid, policy, "*", domain)
 }
 
-// insert login log
-func (u UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
+// InsertLoginLog insert login log
+func (us UserService) InsertLoginLog(loginLogDto *dto.LoginLogDto) error {
 	return logDao.Create(loginLogDto)
 }
 
 // GetLastPwdChangeDaySinceNow check when user changed pwd
 // if account did not change pwd until 90 days later,should use user created time instead
-func (u UserService) GetLastPwdChangeDaySinceNow(uDto dto.GeneralGetDto) (ok bool, days int) {
+func (us UserService) GetLastPwdChangeDaySinceNow(uDto dto.GeneralGetDto) (ok bool, days int) {
 	if viper.GetInt("security.level") == 0 {
 		return false, -1
 	}

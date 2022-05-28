@@ -20,7 +20,7 @@ type ParsePair struct {
 
 func Parse(source string) ([]ParsePair, error) {
 	lex := lexer.NewLexer(source)
-	tokens := []ParsePair{}
+	var tokens []ParsePair
 	key := ""
 	for {
 		tk := lex.Token()

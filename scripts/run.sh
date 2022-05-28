@@ -11,7 +11,7 @@ export REDIS_PASSWORD=""
 
 
 function SysTem() {
-a=`uname  -a`
+a="uname  $(-a)"
 
 if [[ $a =~ "Darwin" ]];then
     os_name="darwin"
@@ -23,7 +23,7 @@ fi
 }
 
 SysTem
-server_bin=`ls ${os_name}*`
-echo ${server_bin}
+server_bin="ls ${os_name}*"
+echo "${server_bin}"
 
-./${server_bin} server
+./"${server_bin}" server

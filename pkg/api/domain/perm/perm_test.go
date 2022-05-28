@@ -34,7 +34,8 @@ func init() {
 }
 func runTestCases(t *testing.T, cases []permissionCases) {
 	for _, cs := range cases {
-		assert.Equal(t, cs.want, Enforce(cs.args...), cs.label)
+		en, _ := Enforce(cs.args...)
+		assert.Equal(t, cs.want, en, cs.label)
 	}
 }
 func TestGetAllPermByRoleName(t *testing.T) {

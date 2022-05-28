@@ -8,7 +8,7 @@ import (
 type SqlSearchAdapter struct{}
 
 func (msa *SqlSearchAdapter) GenerateConditions(statement []parser.ParsePair, keyMapping map[string]string) [][]interface{} {
-	stmt := [][]interface{}{}
+	var stmt [][]interface{}
 	for _, p := range statement {
 		k := p.Key
 		if _, ok := keyMapping[k]; ok {

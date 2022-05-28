@@ -16,6 +16,7 @@ type UserController struct {
 	BaseController
 }
 
+// Get
 // @Tags Users
 // @Summary 用户信息
 // @Security ApiKeyAuth
@@ -40,6 +41,7 @@ func (u *UserController) Get(c *gin.Context) {
 	}
 }
 
+// List
 // @Tags Users
 // @Summary 用户列表[分页+搜索]
 // @Security ApiKeyAuth
@@ -59,6 +61,7 @@ func (u *UserController) List(c *gin.Context) {
 	}
 }
 
+// Roles
 // @Tags Users
 // @Summary 用户角色列表[分页+搜索]
 // @Security ApiKeyAuth
@@ -76,6 +79,7 @@ func (u *UserController) Roles(c *gin.Context) {
 	}
 }
 
+// Create
 // @Tags Users
 // @Summary 新增用户
 // @Security ApiKeyAuth
@@ -97,6 +101,7 @@ func (u *UserController) Create(c *gin.Context) {
 	}
 }
 
+// Edit
 // @Tags Users
 // @Summary 编辑用户
 // @Security ApiKeyAuth
@@ -116,6 +121,7 @@ func (u *UserController) Edit(c *gin.Context) {
 	}
 }
 
+// EditStatus
 // @Tags Users
 // @Summary 更新用户状态
 // @Security ApiKeyAuth
@@ -133,6 +139,7 @@ func (u *UserController) EditStatus(c *gin.Context) {
 	}
 }
 
+// ResetPassword
 // @Tags Users
 // @Summary 更新用户密码
 // @Security ApiKeyAuth
@@ -150,6 +157,7 @@ func (u *UserController) ResetPassword(c *gin.Context) {
 	}
 }
 
+// Delete
 // @Tags Users
 // @Summary 删除用户
 // @Security ApiKeyAuth
@@ -169,6 +177,7 @@ func (u *UserController) Delete(c *gin.Context) {
 	}
 }
 
+// GetUserPermissionsWithMenu
 // @Tags Users
 // @Summary 获取用户权限列表(带菜单)
 // @Security ApiKeyAuth
@@ -185,6 +194,7 @@ func (u *UserController) GetUserPermissionsWithMenu(c *gin.Context) {
 	}
 }
 
+// GetDomainPermissions
 // @Tags Users
 // @Summary 获取用户权限列表
 // @Security ApiKeyAuth
@@ -202,6 +212,7 @@ func (u *UserController) GetDomainPermissions(c *gin.Context) {
 	}
 }
 
+// GetDomainDataPermissions
 // @Tags Users
 // @Summary 获取用户数据权限列表
 // @Security ApiKeyAuth
@@ -219,6 +230,7 @@ func (u *UserController) GetDomainDataPermissions(c *gin.Context) {
 	}
 }
 
+// DomainPermCheck
 // @Tags Users
 // @Summary 检查用户权限
 // @Security ApiKeyAuth
@@ -231,14 +243,15 @@ func (u *UserController) GetDomainDataPermissions(c *gin.Context) {
 func (u *UserController) DomainPermCheck(c *gin.Context) {
 	var permDto dto.CheckPermDto
 	userId := int(c.Value("userId").(float64))
+	result, _ := userService.CheckPermission(strconv.Itoa(userId), permDto.Domain, permDto.Perm)
 	if u.BindAndValidate(c, &permDto) {
 		resp(c, map[string]interface{}{
-			"result": userService.CheckPermission(strconv.Itoa(userId), permDto.Domain, permDto.Perm),
+			"result": result,
 		})
 	}
 }
 
-// @Tags Users
+// GetDomainMenus @Tags Users
 // @Summary 获取用户特定域相关菜单
 // @Security ApiKeyAuth
 // @Param domain string ""

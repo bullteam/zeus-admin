@@ -4,8 +4,8 @@
 
 # Zeus 宙斯权限&账号管理系统
 
-[![golang](https://img.shields.io/badge/golang-1.12.1-green.svg?style=plastic)](https://www.golang.org/)
-[![casbin](https://img.shields.io/badge/casbin-1.8.1-brightgreen.svg?style=plastic)](https://github.com/casbin/casbin)
+[![golang](https://img.shields.io/badge/golang-1.18.2-green.svg?style=plastic)](https://www.golang.org/)
+[![casbin](https://img.shields.io/badge/casbin-2.47.1-brightgreen.svg?style=plastic)](https://github.com/casbin/casbin)
 
 ## 项目介绍
 > `Zeus 宙斯` 权限后台，为企业提供统一后台权限管理私有化Saas云服务。    

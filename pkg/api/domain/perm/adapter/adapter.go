@@ -1,7 +1,7 @@
 package adapter
 
 import (
-	"github.com/casbin/casbin/model"
+	"github.com/casbin/casbin/v2/model"
 	"zeus/pkg/api/domain/perm/adapter/mysql"
 )
 

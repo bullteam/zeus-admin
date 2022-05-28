@@ -5,10 +5,10 @@ import (
 	"zeus/pkg/api/log"
 )
 
-var ldapConn LDAP_CONFIG
+var ldapConn LdapConfig
 
 func Setup() {
-	ldapConn = LDAP_CONFIG{
+	ldapConn = LdapConfig{
 		Addr:       viper.GetString("ldap.addr"),
 		BaseDn:     viper.GetString("ldap.baseDn"),
 		UserDn:     viper.GetString("ldap.userDn"),
@@ -29,7 +29,7 @@ func ConnectLdap() {
 	}
 }
 
-func GetLdap() LDAP_CONFIG {
+func GetLdap() LdapConfig {
 	ConnectLdap()
 	return ldapConn
 }

@@ -1,8 +1,8 @@
 package perm
 
 import (
-	rediswatcher "github.com/billcobbler/casbin-redis-watcher"
-	"github.com/casbin/casbin"
+	rediswatcher "github.com/billcobbler/casbin-redis-watcher/v2"
+	"github.com/casbin/casbin/v2"
 	"github.com/spf13/viper"
 	"sync"
 	"zeus/pkg/api/domain/perm/adapter"
@@ -16,13 +16,17 @@ var (
 
 // SetUp permission handler
 func SetUp(cluster bool) {
-	enforcer = casbin.NewEnforcer(viper.GetString("casbin.model.rule_0"), adapter.NewMysqlAdapter())
+	enforcer, _ = casbin.NewEnforcer(viper.GetString("casbin.model.rule_0"), adapter.NewMysqlAdapter())
 	if cluster {
 		//Distributed watcher
 		w, _ := rediswatcher.NewWatcher(viper.GetString("redis.host"), rediswatcher.Password(viper.GetString("redis.auth")))
-		enforcer.SetWatcher(w)
+
+		err := enforcer.SetWatcher(w)
+		if err != nil {
+			return
+		}
 		// @Overwrite
-		// See if policy changed and do distributed notification
+		// See if policy changed and do distribute notification
 		_ = w.SetUpdateCallback(func(s string) {
 			log.Info("Casbin policies changed")
 			enforcerLock.Lock()
@@ -34,34 +38,34 @@ func SetUp(cluster bool) {
 
 // SetUpForTest : for unit tests
 func SetUpForTest(dir string) {
-	enforcer = casbin.NewEnforcer(dir+"/rbac_model_0.conf", dir+"/perm_test.csv")
+	enforcer, _ = casbin.NewEnforcer(dir+"/rbac_model_0.conf", dir+"/perm_test.csv")
 }
 
 // AddGroup : method of group policy adding
 //first : user
 //second : group
-func AddGroup(params ...interface{}) bool {
+func AddGroup(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.AddGroupingPolicy(params...)
 }
 
 // AddGroupRole : assign role to a user group
-func AddGroupRole(params ...interface{}) bool {
+func AddGroupRole(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.AddNamedGroupingPolicy("g2", params...)
 }
 
 // DelGroup : method of group policy deleting
-func DelGroup(params ...interface{}) bool {
+func DelGroup(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.RemoveGroupingPolicy(params...)
 }
 
 // DelGroupPerm : delete user group - role connection
-func DelGroupPerm(params ...interface{}) bool {
+func DelGroupPerm(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.RemoveNamedGroupingPolicy("g2", params...)
@@ -74,34 +78,34 @@ func GetGroupsByUser(userId string) [][]string {
 
 // AddPerm : method for permission policy adding
 //sub,obj,act,domain
-func AddPerm(params ...interface{}) bool {
+func AddPerm(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.AddPolicy(params...)
 }
 
 // DelPerm : delete permission policy
-func DelPerm(params ...interface{}) bool {
+func DelPerm(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.RemovePolicy(params...)
 }
 
-// DeleteFilteredPerm
-func DelFilteredPerm(fieldIndex int, params ...string) bool {
+// DelFilteredPerm : del filter perm
+func DelFilteredPerm(fieldIndex int, params ...string) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.RemoveFilteredPolicy(fieldIndex, params...)
 }
 
 // Enforce : check permission
-func Enforce(params ...interface{}) bool {
+func Enforce(params ...interface{}) (bool, error) {
 	enforcerLock.Lock()
 	defer enforcerLock.Unlock()
 	return enforcer.Enforce(params...)
 }
 
-// DelRoleByName : delete all specific role policy of domain
+// DelRoleByDomain  : delete all specific role policy of domain
 func DelRoleByDomain(role string, domain string) {
 	DelFilteredPerm(0, role, "", "", domain)
 }
@@ -140,7 +144,7 @@ func GetAllPermsByUser(uid string) [][]string {
 	return policies
 }
 
-//dangerous! do not call until you really need it
+// CommitChange dangerous! do not call until you really need it
 func CommitChange() {
 	_ = enforcer.SavePolicy()
 }

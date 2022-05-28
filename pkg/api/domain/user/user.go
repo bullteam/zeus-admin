@@ -12,7 +12,7 @@ type Permission struct {
 }
 
 // CheckPermission : check permission in all roles of account
-func CheckPermission(userId string, p Permission) bool {
+func CheckPermission(userId string, p Permission) (bool, error) {
 	return perm.Enforce(userId, p.Zone, p.Action, p.Domain)
 }
 
@@ -41,7 +41,7 @@ func OverwriteRoles(userId string, newRoles [][]string) {
 	}
 }
 
-// Delete user's group policies
+// DeleteUser Delete user's group policies
 func DeleteUser(uid string) {
 	groups := perm.GetGroupsByUser(uid)
 	for _, group := range groups {

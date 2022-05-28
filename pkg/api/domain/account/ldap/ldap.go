@@ -8,7 +8,7 @@ import (
 	ldap "gopkg.in/ldap.v3"
 )
 
-type LDAP_CONFIG struct {
+type LdapConfig struct {
 	Addr       string   `json:"addr"`
 	BaseDn     string   `json:"baseDn"`
 	UserDn     string   `json:"userDn"`
@@ -22,7 +22,7 @@ type LDAP_CONFIG struct {
 
 var Conn *ldap.Conn
 
-type LDAP_RESULT struct {
+type LdapResult struct {
 	DN         string              `json:"dn"`
 	Attributes map[string][]string `json:"attributes"`
 }
@@ -32,14 +32,14 @@ type Attribute struct {
 	Vals []string
 }
 
-func (lc *LDAP_CONFIG) Close() {
+func (lc *LdapConfig) Close() {
 	if Conn != nil {
 		Conn.Close()
 		Conn = nil
 	}
 }
 
-func (lc *LDAP_CONFIG) Connect() (err error) {
+func (lc *LdapConfig) Connect() (err error) {
 	if lc.TLS {
 		Conn, err = ldap.DialTLS("tcp", lc.Addr, &tls.Config{InsecureSkipVerify: true})
 	} else {
@@ -64,7 +64,7 @@ func (lc *LDAP_CONFIG) Connect() (err error) {
 	return err
 }
 
-func (lc *LDAP_CONFIG) Auth(username, password string) (success bool, err error) {
+func (lc *LdapConfig) Auth(username, password string) (success bool, err error) {
 	searchRequest := ldap.NewSearchRequest(
 		lc.UserDn,
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
@@ -97,7 +97,7 @@ func (lc *LDAP_CONFIG) Auth(username, password string) (success bool, err error)
 	return
 }
 
-func (lc *LDAP_CONFIG) Search_User(username string) (user LDAP_RESULT, err error) {
+func (lc *LdapConfig) Search_User(username string) (user LdapResult, err error) {
 	searchRequest := ldap.NewSearchRequest(
 		lc.UserDn,
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
@@ -128,7 +128,7 @@ func (lc *LDAP_CONFIG) Search_User(username string) (user LDAP_RESULT, err error
 	return
 }
 
-func (lc *LDAP_CONFIG) Search(SearchFilter string) (results []LDAP_RESULT, err error) {
+func (lc *LdapConfig) Search(SearchFilter string) (results []LdapResult, err error) {
 	searchRequest := ldap.NewSearchRequest(
 		lc.UserDn,
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
@@ -144,8 +144,8 @@ func (lc *LDAP_CONFIG) Search(SearchFilter string) (results []LDAP_RESULT, err e
 		err = errors.New("Cannot find such dn")
 		return
 	}
-	results = []LDAP_RESULT{}
-	var result LDAP_RESULT
+	results = []LdapResult{}
+	var result LdapResult
 	for _, entry := range sr.Entries {
 		attributes := make(map[string][]string)
 		for _, attr := range entry.Attributes {
@@ -158,7 +158,7 @@ func (lc *LDAP_CONFIG) Search(SearchFilter string) (results []LDAP_RESULT, err e
 	return
 }
 
-func (lc *LDAP_CONFIG) Add(username, mail, uidNumber, gidNumber, password string) error {
+func (lc *LdapConfig) Add(username, mail, uidNumber, gidNumber, password string) error {
 	add := ldap.NewAddRequest(
 		"cn="+username+","+lc.UserDn,
 		nil,

@@ -24,7 +24,8 @@ func PermCheck(c *gin.Context) {
 		c.Next()
 		return
 	}
-	if !accountService.CheckPermission(uid, "root", route) {
+	check, _ := accountService.CheckPermission(uid, "root", route)
+	if !check {
 		log.Warn(fmt.Sprintf("No permission for %s", route))
 		c.JSON(http.StatusOK, gin.H{
 			"code": 403,
