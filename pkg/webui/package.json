@@ -50,7 +50,7 @@
     "jszip": "3.1.5",
     "less": "^3.9.0",
     "mockjs": "1.0.1-beta3",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "screenfull": "3.3.3",
